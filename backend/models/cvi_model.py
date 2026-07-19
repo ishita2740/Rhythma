@@ -29,7 +29,7 @@ def _load_model():
         try:
             import joblib
             _model = joblib.load(_MODEL_PATH)
-        except FileNotFoundError:
+        except Exception:
             _model = None  # Model not yet trained — use heuristic fallback
     return _model
 

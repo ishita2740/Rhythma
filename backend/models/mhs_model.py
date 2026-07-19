@@ -14,8 +14,25 @@ anonymized synthetic data. This module provides the scoring logic
 and a placeholder for the trained .joblib artifact.
 """
 
+import os
+import numpy as np
 from typing import Optional
 from .cvi_model import predict_cvi
+
+# Lazy-load the model to avoid import-time overhead
+_model = None
+_MODEL_PATH = os.path.join(os.path.dirname(__file__), "mhs_model.joblib")
+
+
+def _load_model():
+    global _model
+    if _model is None:
+        try:
+            import joblib
+            _model = joblib.load(_MODEL_PATH)
+        except Exception:
+            _model = None  # Model not yet trained — use heuristic fallback
+    return _model
 
 
 def predict_mhs(cycle_logs: list[dict], profile: Optional[dict] = None) -> Optional[float]:
@@ -56,7 +73,26 @@ def predict_mhs(cycle_logs: list[dict], profile: Optional[dict] = None) -> Optio
     # 5. Lifestyle placeholder (will use profile data when available)
     lifestyle_score = 70.0  # Default until tracking is wired
 
-    # Weighted composite
+    # Check if we can use the trained model
+    model = _load_model()
+    if model is not None:
+        try:
+            import pandas as pd
+            features = pd.DataFrame([[
+                cvi_score,
+                sleep_score,
+                stress_score,
+                symptom_score,
+                lifestyle_score
+            ]], columns=[
+                'cvi_score', 'sleep_score', 'stress_score', 'symptom_score', 'lifestyle_score'
+            ])
+            prob_healthy = float(model.predict_proba(features)[0][1])
+            return round(prob_healthy * 100, 1)
+        except Exception:
+            pass  # Fall back to heuristic if inference fails
+
+    # Weighted composite fallback
     mhs = (
         cvi_score       * 0.30
         + sleep_score   * 0.20

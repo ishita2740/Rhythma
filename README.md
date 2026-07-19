@@ -232,14 +232,14 @@ Legend: ✅ **Done** (real, working, no mocks) · 🟡 **Partial / Needs Attenti
 | `POST /cycle/quick-log` (single-field upsert, discussed in issue #50) | ❌ Not Implemented | Not present in `api/cycle.py` — only the full-log endpoint exists server-side |
 | `GET /dashboard` (CVI, MHS, cycle day, next period) | ✅ Done | Real feature extraction from Firestore logs, real model calls, `hasEnoughDataForInsights` flag |
 | `GET /{user_id}/scores` (Insights endpoint) | ❌ Not Implemented | `api/insights.py` is 12 lines, returns `{"message": "Scores for user X"}` — literal placeholder |
-| CVI model (`cvi_model.py`) | 🟡 Partial | Real feature engineering + XGBoost inference path exists, but **no trained `.joblib` file is committed** — every request currently falls back to a hardcoded heuristic (`std_dev * 8 + 30`) |
-| MHS model (`mhs_model.py`) | 🟡 Partial | Real weighted composite of CVI/sleep/stress/symptoms, but **`lifestyle_score` is hardcoded to `70.0`** pending lifestyle tracking |
+| CVI model (`cvi_model.py`) | ✅ Done | Real feature engineering + trained XGBoost inference path with safe heuristic fallback support. |
+| MHS model (`mhs_model.py`) | ✅ Done | Trained Logistic Regression inference path using component scores with fallback weighted composite heuristic. |
 | AI Assistant (`POST /assistant/chat`) | 🟡 Partial | Real Gemini API call with a real system prompt; **no grounding in a sourced medical dataset**, no conversation persistence (history is client-passed only, lost on restart), no per-user rate limiting |
 | SMS settings + send (`api/sms.py`) | 🟡 Partial | Real Twilio call, real rate limiting, real phone validation — but **the message body must be supplied by the caller**; there's no backend logic that generates the summary content from real MHS/CVI data |
 | Server-side Firestore service (`firestore_service.py`) | ✅ Done | Real read/write for users and cycle logs |
 | Health check endpoint | ✅ Done | `api/health.py` exists and is wired into `main.py` |
 | CORS config | 🟡 Partial | Hardcoded localhost origins in `main.py` with an explicit `# TODO: Tighten this in production` |
-| Backend test coverage | 🟡 Partial | Only `test_auth.py` exists; no tests for cycle, dashboard, sms, or assistant endpoints |
+| Backend test coverage | 🟡 Partial | `test_auth.py` and `test_ml_models.py` exist; no tests for cycle, dashboard, sms, or assistant endpoints |
 | API documentation (OpenAPI descriptions) | 🟡 Partial | FastAPI auto-generates `/docs`, but most routes lack descriptive docstrings/response models beyond basic type hints |
 
 ### Mobile (Flutter)
@@ -299,8 +299,8 @@ Legend: ✅ **Done** (real, working, no mocks) · 🟡 **Partial / Needs Attenti
 | CI — Backend | ✅ Done (`backend.yml`) |
 | CI — Flutter | ✅ Done (`flutter.yml`) |
 | CI — Web / Landing Page | ❌ Not Implemented |
-| Architecture documentation | 🟡 Partial — `docs/architecture.md` exists but is only 67 lines, high-level; no documented CVI/MHS methodology, no API reference doc, no data-flow diagrams |
-| CVI/MHS methodology write-up | ❌ Not Implemented |
+| Architecture documentation | 🟡 Partial — `docs/architecture.md` exists but is only 67 lines, high-level; has documented CVI/MHS methodology link, but no API reference doc, no data-flow diagrams |
+| CVI/MHS methodology write-up | ✅ Done — Documented in [docs/cvi_mhs_methodology.md](docs/cvi_mhs_methodology.md) |
 | Sourced medical/symptom reference dataset | ❌ Not Implemented — nothing resembling this exists in `backend/` or `rhythma_flutter/assets/` |
 | PR template enforcing source citations for health content | ❌ Not Implemented |
 | Issue templates / CODEOWNERS | ❌ Not Implemented |
