@@ -113,6 +113,8 @@ async def login_for_access_token(
         )
 
     user = UserService.get_user_by_username(form_data.username)
+    if not user:
+        user = UserService.get_user_by_email(form_data.username)
 
     # Generic error message: same for missing user or wrong password
     if not user or not verify_password(form_data.password, user["password"]):
