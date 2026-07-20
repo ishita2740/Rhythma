@@ -61,8 +61,21 @@ Future<void> main() async {
   );
 }
 
-class RhythmaApp extends StatelessWidget {
+class RhythmaApp extends StatefulWidget {
   const RhythmaApp({super.key});
+
+  @override
+  State<RhythmaApp> createState() => _RhythmaAppState();
+}
+
+class _RhythmaAppState extends State<RhythmaApp> {
+  late Future<String?> _validationFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _validationFuture = AuthService().validateSession();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +105,7 @@ class RhythmaApp extends StatelessWidget {
         // Confirms the stored token is still genuinely valid (not merely
         // present) via a lightweight /auth/me check, and scopes local
         // storage to the resulting account — see AuthService.validateSession.
-        future: AuthService().validateSession(),
+        future: _validationFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const SplashScreen();
