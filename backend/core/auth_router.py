@@ -8,7 +8,7 @@ from core.auth import (
     verify_password,
     get_current_user,
 )
-from models.user import UserCreate, UserResponse
+from models.user import UserCreate, UserResponse, UserProfileUpdate, UserProfileResponse
 from services.firestore_service import UserService
 from typing import Dict, List
 
@@ -141,3 +141,51 @@ async def get_me(current_user: dict = Depends(get_current_user)):
     good (used by the Flutter app at launch, see main.dart).
     """
     return current_user
+
+
+@router.get("/profile", response_model=UserProfileResponse)
+async def get_profile(current_user: dict = Depends(get_current_user)):
+    """Returns the full profile for the authenticated user.
+
+    Fetches the complete Firestore user document which contains both the
+    authentication fields (username, email) and any health/preference
+    fields written during onboarding or Edit Profile (age, height, cycle
+    data, avatar, language, etc.).
+    """
+    user = UserService.get_user_by_id(current_user["id"])
+    if not user:
+        from fastapi import HTTPException, status
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+    user.pop("password", None)
+    return user
+
+
+@router.patch("/profile", response_model=UserProfileResponse)
+async def update_profile(
+    profile_data: UserProfileUpdate,
+    current_user: dict = Depends(get_current_user),
+):
+    """Merges profile fields onto the authenticated user's Firestore document.
+
+    Uses PATCH semantics: only fields explicitly provided (non-None) are
+    written.  This allows the Flutter app to send partial updates (e.g.
+    just avatar or just cycle_length) without clobbering unrelated fields.
+
+    Reuses the existing UserService.update_user() method — no new
+    service layer introduced.
+    """
+    updates = {k: v for k, v in profile_data.model_dump().items() if v is not None}
+    if updates:
+        UserService.update_user(current_user["id"], updates)
+    user = UserService.get_user_by_id(current_user["id"])
+    if not user:
+        from fastapi import HTTPException, status
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+    user.pop("password", None)
+    return user

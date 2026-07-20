@@ -14,7 +14,8 @@ import '../config/theme.dart';
 class ShellBackground extends StatelessWidget {
   final Widget child;
   final bool showBackButton;
-  const ShellBackground({super.key, required this.child, this.showBackButton = true});
+  const ShellBackground(
+      {super.key, required this.child, this.showBackButton = true});
 
   @override
   Widget build(BuildContext context) {
@@ -118,10 +119,14 @@ class GradientBox extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: colors ??
-                    [RhythmaColors.primary, RhythmaColors.primary.withOpacity(0.6)],
+                    [
+                      RhythmaColors.primary,
+                      RhythmaColors.primary.withOpacity(0.6)
+                    ],
               ),
         color: isDark ? primaryColor.withOpacity(0.15) : null,
-        border: isDark ? Border.all(color: primaryColor.withOpacity(0.3)) : null,
+        border:
+            isDark ? Border.all(color: primaryColor.withOpacity(0.3)) : null,
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: isDark
             ? null

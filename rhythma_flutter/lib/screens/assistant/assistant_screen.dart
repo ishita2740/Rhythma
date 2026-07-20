@@ -33,10 +33,12 @@ class _AssistantScreenState extends State<AssistantScreen> {
   };
 
   String _personalizedWelcome(String rawWelcome) {
-    final placeholder = _placeholderNames[LocalStorageService.preferredLanguage];
+    final placeholder =
+        _placeholderNames[LocalStorageService.preferredLanguage];
     final name = (LocalStorageService.getProfile()?['name'] as String?)?.trim();
-    if (placeholder == null || name == null || name.isEmpty) return rawWelcome;
-    return rawWelcome.replaceFirst(placeholder, name);
+    if (placeholder == null) return rawWelcome;
+    final displayName = (name != null && name.isNotEmpty) ? name : 'User';
+    return rawWelcome.replaceFirst(placeholder, displayName);
   }
 
   @override
@@ -70,7 +72,9 @@ class _AssistantScreenState extends State<AssistantScreen> {
         _messages = restored;
       } else {
         _messages = [
-          _Msg(role: 'model', content: _personalizedWelcome(l10n.assistantWelcome)),
+          _Msg(
+              role: 'model',
+              content: _personalizedWelcome(l10n.assistantWelcome)),
         ];
       }
       _initialized = true;
@@ -135,7 +139,8 @@ class _AssistantScreenState extends State<AssistantScreen> {
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _messages.add(_Msg(role: 'model', content: 'Error: ${e.toString()}', isError: true));
+        _messages.add(_Msg(
+            role: 'model', content: 'Error: ${e.toString()}', isError: true));
       });
     }
     _scrollToBottom();
@@ -183,27 +188,41 @@ class _AssistantScreenState extends State<AssistantScreen> {
             child: Row(
               children: [
                 Container(
-                  width: 40, height: 40,
-                  decoration: BoxDecoration(gradient: RhythmaGradients.primary, shape: BoxShape.circle),
-                  child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 20),
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      gradient: RhythmaGradients.primary,
+                      shape: BoxShape.circle),
+                  child: const Icon(Icons.favorite_rounded,
+                      color: Colors.white, size: 20),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(l10n.assistantTitle,
-                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: RhythmaColors.foreground)),
-                    Text(l10n.assistantSubtitle,
-                        style: TextStyle(fontSize: 12, color: RhythmaColors.mutedFg)),
-                  ]),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(l10n.assistantTitle,
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700,
+                                color: RhythmaColors.foreground)),
+                        Text(l10n.assistantSubtitle,
+                            style: TextStyle(
+                                fontSize: 12, color: RhythmaColors.mutedFg)),
+                      ]),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: RhythmaColors.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(lang.toUpperCase(),
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: RhythmaColors.primary)),
+                      style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: RhythmaColors.primary)),
                 ),
               ],
             ),
@@ -235,13 +254,16 @@ class _AssistantScreenState extends State<AssistantScreen> {
                 itemBuilder: (_, i) => GestureDetector(
                   onTap: () => _send(_suggested[i]),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     decoration: BoxDecoration(
                       color: RhythmaColors.surfaceMuted,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: RhythmaColors.border),
                     ),
-                    child: Text(_suggested[i], style: TextStyle(fontSize: 12, color: RhythmaColors.foreground)),
+                    child: Text(_suggested[i],
+                        style: TextStyle(
+                            fontSize: 12, color: RhythmaColors.foreground)),
                   ),
                 ),
               ),
@@ -261,18 +283,21 @@ class _AssistantScreenState extends State<AssistantScreen> {
                 decoration: BoxDecoration(
                   color: RhythmaColors.surface.withOpacity(0.85),
                   borderRadius: BorderRadius.circular(28),
-                  border: Border.all(color: RhythmaColors.lavender.withOpacity(0.5)),
+                  border: Border.all(
+                      color: RhythmaColors.lavender.withOpacity(0.5)),
                 ),
                 child: Row(
                   children: [
                     Expanded(
                       child: TextField(
                         controller: _ctrl,
-                        style: TextStyle(fontSize: 14, color: RhythmaColors.foreground),
+                        style: TextStyle(
+                            fontSize: 14, color: RhythmaColors.foreground),
                         decoration: InputDecoration(
                           hintText: l10n.assistantInputHint,
                           border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 14),
                         ),
                         onSubmitted: _send,
                         textInputAction: TextInputAction.send,
@@ -283,13 +308,18 @@ class _AssistantScreenState extends State<AssistantScreen> {
                       child: GestureDetector(
                         onTap: _isLoading ? null : () => _send(_ctrl.text),
                         child: Container(
-                          width: 40, height: 40,
+                          width: 40,
+                          height: 40,
                           decoration: BoxDecoration(
-                            gradient: _isLoading ? null : RhythmaGradients.primary,
-                            color: _isLoading ? RhythmaColors.mutedFg.withOpacity(0.25) : null,
+                            gradient:
+                                _isLoading ? null : RhythmaGradients.primary,
+                            color: _isLoading
+                                ? RhythmaColors.mutedFg.withOpacity(0.25)
+                                : null,
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.send_rounded, color: Colors.white, size: 18),
+                          child: const Icon(Icons.send_rounded,
+                              color: Colors.white, size: 18),
                         ),
                       ),
                     ),
@@ -328,14 +358,18 @@ class _ChatBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
-        mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment:
+            isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (!isUser) ...[
             Container(
-              width: 28, height: 28,
-              decoration: BoxDecoration(gradient: RhythmaGradients.primary, shape: BoxShape.circle),
-              child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 14),
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                  gradient: RhythmaGradients.primary, shape: BoxShape.circle),
+              child: const Icon(Icons.favorite_rounded,
+                  color: Colors.white, size: 14),
             ),
             const SizedBox(width: 8),
           ],
@@ -365,10 +399,13 @@ class _ChatBubble extends StatelessWidget {
               ),
               child: isUser
                   ? Text(msg.content,
-                      style: const TextStyle(fontSize: 14, height: 1.5, color: Colors.white))
+                      style: const TextStyle(
+                          fontSize: 14, height: 1.5, color: Colors.white))
                   : _FormattedMessage(
                       text: msg.content,
-                      color: msg.isError ? Colors.red.shade700 : RhythmaColors.foreground,
+                      color: msg.isError
+                          ? Colors.red.shade700
+                          : RhythmaColors.foreground,
                     ),
             ),
           ),
@@ -392,7 +429,8 @@ class _FormattedMessage extends StatelessWidget {
     int last = 0;
     for (final match in _boldPattern.allMatches(line)) {
       if (match.start > last) {
-        spans.add(TextSpan(text: line.substring(last, match.start), style: base));
+        spans.add(
+            TextSpan(text: line.substring(last, match.start), style: base));
       }
       spans.add(TextSpan(
         text: match.group(1),
@@ -442,7 +480,8 @@ class _FormattedMessage extends StatelessWidget {
       }
     }
 
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: children);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start, children: children);
   }
 }
 
@@ -453,9 +492,12 @@ class _TypingBubble extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(children: [
         Container(
-          width: 28, height: 28,
-          decoration: BoxDecoration(gradient: RhythmaGradients.primary, shape: BoxShape.circle),
-          child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 14),
+          width: 28,
+          height: 28,
+          decoration: BoxDecoration(
+              gradient: RhythmaGradients.primary, shape: BoxShape.circle),
+          child:
+              const Icon(Icons.favorite_rounded, color: Colors.white, size: 14),
         ),
         const SizedBox(width: 8),
         Container(
@@ -463,14 +505,18 @@ class _TypingBubble extends StatelessWidget {
           decoration: BoxDecoration(
             color: RhythmaColors.surface.withOpacity(0.85),
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(18), topRight: Radius.circular(18),
-              bottomRight: Radius.circular(18), bottomLeft: Radius.circular(4),
+              topLeft: Radius.circular(18),
+              topRight: Radius.circular(18),
+              bottomRight: Radius.circular(18),
+              bottomLeft: Radius.circular(4),
             ),
             border: Border.all(color: RhythmaColors.lavender.withOpacity(0.4)),
           ),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
-            _dot(0), const SizedBox(width: 4),
-            _dot(150), const SizedBox(width: 4),
+            _dot(0),
+            const SizedBox(width: 4),
+            _dot(150),
+            const SizedBox(width: 4),
             _dot(300),
           ]),
         ),
@@ -488,22 +534,35 @@ class _AnimatedDot extends StatefulWidget {
   State<_AnimatedDot> createState() => _AnimatedDotState();
 }
 
-class _AnimatedDotState extends State<_AnimatedDot> with SingleTickerProviderStateMixin {
+class _AnimatedDotState extends State<_AnimatedDot>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _c;
   late final Animation<double> _a;
   @override
   void initState() {
     super.initState();
-    _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..repeat(reverse: true);
+    _c = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 600))
+      ..repeat(reverse: true);
     _a = CurvedAnimation(parent: _c, curve: Curves.easeInOut);
-    Future.delayed(Duration(milliseconds: widget.delay), () { if (mounted) _c.forward(); });
+    Future.delayed(Duration(milliseconds: widget.delay), () {
+      if (mounted) _c.forward();
+    });
   }
+
   @override
-  void dispose() { _c.dispose(); super.dispose(); }
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) => FadeTransition(
-    opacity: _a,
-    child: Container(width: 7, height: 7,
-        decoration: BoxDecoration(color: RhythmaColors.primary, shape: BoxShape.circle)),
-  );
+        opacity: _a,
+        child: Container(
+            width: 7,
+            height: 7,
+            decoration: BoxDecoration(
+                color: RhythmaColors.primary, shape: BoxShape.circle)),
+      );
 }

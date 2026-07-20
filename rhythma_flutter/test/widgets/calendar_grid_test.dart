@@ -11,6 +11,7 @@ void main() {
     LocalStorageService.isTesting = true;
     LocalStorageService.mockCycleLogs = [];
   });
+
   Widget buildTestableWidget({required Widget child}) {
     return MultiProvider(
       providers: [
@@ -26,9 +27,10 @@ void main() {
     );
   }
 
-  testWidgets('CalendarGrid renders and handles date selection', (WidgetTester tester) async {
+  testWidgets('CalendarGrid renders and handles date selection',
+      (WidgetTester tester) async {
     final pageController = PageController(initialPage: 12000);
-    
+
     await tester.pumpWidget(buildTestableWidget(
       child: CalendarGrid(
         pageController: pageController,
@@ -36,24 +38,20 @@ void main() {
       ),
     ));
 
-    // Wait for the PageView to layout
     await tester.pumpAndSettle();
 
-    // Verify it renders some text days (like '15')
-    expect(find.text('15'), findsWidgets);
-
-    // Tap day 15
-    await tester.tap(find.text('15').first);
+    // Tap day 1 of the displayed month – always safe (even if future, it's rejected silently).
+    await tester.tap(find.text('1').first);
     await tester.pump();
 
-    // The CycleProvider should now have selected day 15. We test this indirectly by 
-    // seeing if it still renders properly and doesn't throw.
-    expect(find.text('15'), findsWidgets);
+    // Verify the calendar still renders.
+    expect(find.text('1'), findsWidgets);
   });
 
-  testWidgets('CalendarGrid supports month swiping via PageController', (WidgetTester tester) async {
+  testWidgets('CalendarGrid supports month swiping via PageController',
+      (WidgetTester tester) async {
     final pageController = PageController(initialPage: 12000);
-    
+
     await tester.pumpWidget(buildTestableWidget(
       child: CalendarGrid(
         pageController: pageController,
@@ -63,10 +61,11 @@ void main() {
     await tester.pumpAndSettle();
 
     // Swipe left (next month)
-    pageController.nextPage(duration: const Duration(milliseconds: 100), curve: Curves.linear);
+    pageController.nextPage(
+        duration: const Duration(milliseconds: 100), curve: Curves.linear);
     await tester.pumpAndSettle();
-    
-    // We expect it to still render days
-    expect(find.text('15'), findsWidgets);
+
+    // Ensure the calendar still renders.
+    expect(find.text('1'), findsWidgets);
   });
 }

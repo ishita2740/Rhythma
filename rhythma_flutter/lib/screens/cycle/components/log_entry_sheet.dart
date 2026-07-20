@@ -12,7 +12,8 @@ class LogEntrySheet extends StatefulWidget {
     this.existingLog,
   });
 
-  static Future<void> show(BuildContext context, DateTime date, {Map<String, dynamic>? existingLog}) {
+  static Future<void> show(BuildContext context, DateTime date,
+      {Map<String, dynamic>? existingLog}) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -87,7 +88,8 @@ class _LogEntrySheetState extends State<LogEntrySheet> {
                 children: [
                   Text(
                     l10n.logTitle,
-                    style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                    style: theme.textTheme.headlineSmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   IconButton(
                     icon: const Icon(Icons.close),
@@ -101,15 +103,21 @@ class _LogEntrySheetState extends State<LogEntrySheet> {
                   controller: scrollController,
                   children: [
                     // Flow Intensity
-                    Text(l10n.logFlowIntensity, style: theme.textTheme.titleMedium),
+                    Text(l10n.logFlowIntensity,
+                        style: theme.textTheme.titleMedium),
                     const SizedBox(height: 8),
                     SegmentedButton<String>(
                       segments: [
-                        ButtonSegment(value: 'Light', label: Text(l10n.logLight)),
-                        ButtonSegment(value: 'Medium', label: Text(l10n.logMedium)),
-                        ButtonSegment(value: 'Heavy', label: Text(l10n.logHeavy)),
+                        ButtonSegment(
+                            value: 'Light', label: Text(l10n.logLight)),
+                        ButtonSegment(
+                            value: 'Medium', label: Text(l10n.logMedium)),
+                        ButtonSegment(
+                            value: 'Heavy', label: Text(l10n.logHeavy)),
                       ],
-                      selected: _flowIntensity != null ? {_flowIntensity!} : <String>{},
+                      selected: _flowIntensity != null
+                          ? {_flowIntensity!}
+                          : <String>{},
                       onSelectionChanged: (Set<String> newSelection) {
                         setState(() {
                           _flowIntensity = newSelection.first;
@@ -140,12 +148,19 @@ class _LogEntrySheetState extends State<LogEntrySheet> {
                               margin: const EdgeInsets.only(right: 12),
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: isSelected ? theme.colorScheme.primaryContainer : theme.colorScheme.surfaceContainerHighest,
+                                color: isSelected
+                                    ? theme.colorScheme.primaryContainer
+                                    : theme.colorScheme.surfaceContainerHighest,
                                 shape: BoxShape.circle,
-                                border: isSelected ? Border.all(color: theme.colorScheme.primary, width: 2) : null,
+                                border: isSelected
+                                    ? Border.all(
+                                        color: theme.colorScheme.primary,
+                                        width: 2)
+                                    : null,
                               ),
                               child: Center(
-                                child: Text(emoji, style: const TextStyle(fontSize: 24)),
+                                child: Text(emoji,
+                                    style: const TextStyle(fontSize: 24)),
                               ),
                             ),
                           );
@@ -155,7 +170,8 @@ class _LogEntrySheetState extends State<LogEntrySheet> {
                     const SizedBox(height: 24),
 
                     // Sleep Hours
-                    Text('${l10n.logSleepHours}: ${_sleepHours.toInt()}h', style: theme.textTheme.titleMedium),
+                    Text('${l10n.logSleepHours}: ${_sleepHours.toInt()}h',
+                        style: theme.textTheme.titleMedium),
                     Slider(
                       value: _sleepHours,
                       min: 0,
@@ -171,7 +187,8 @@ class _LogEntrySheetState extends State<LogEntrySheet> {
                     const SizedBox(height: 16),
 
                     // Stress Level
-                    Text('${l10n.logStressLevel}: ${_stressLevel.toInt()}', style: theme.textTheme.titleMedium),
+                    Text('${l10n.logStressLevel}: ${_stressLevel.toInt()}',
+                        style: theme.textTheme.titleMedium),
                     Slider(
                       value: _stressLevel,
                       min: 1,
@@ -187,7 +204,8 @@ class _LogEntrySheetState extends State<LogEntrySheet> {
                     const SizedBox(height: 16),
 
                     // Symptoms
-                    Text(l10n.logLabelSymptoms, style: theme.textTheme.titleMedium),
+                    Text(l10n.logLabelSymptoms,
+                        style: theme.textTheme.titleMedium),
                     const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rhythma/l10n/app_localizations.dart';
 import '../../config/theme.dart';
 import '../../providers/locale_provider.dart';
+import '../../providers/profile_provider.dart';
 import '../../components/shared.dart';
 
 class LanguageScreen extends StatelessWidget {
@@ -19,7 +20,8 @@ class LanguageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final currentLocaleCode = context.watch<LocaleProvider>().locale.languageCode;
+    final currentLocaleCode =
+        context.watch<LocaleProvider>().locale.languageCode;
 
     return Container(
       decoration: BoxDecoration(gradient: RhythmaGradients.bg),
@@ -46,20 +48,29 @@ class LanguageScreen extends StatelessWidget {
               child: GlassCard(
                 padding: EdgeInsets.zero,
                 child: ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   title: Text(
                     langName,
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      color: isSelected ? RhythmaColors.primary : RhythmaColors.foreground,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.normal,
+                      color: isSelected
+                          ? RhythmaColors.primary
+                          : RhythmaColors.foreground,
                     ),
                   ),
                   trailing: isSelected
-                      ? Icon(Icons.check_circle_rounded, color: RhythmaColors.primary)
+                      ? Icon(Icons.check_circle_rounded,
+                          color: RhythmaColors.primary)
                       : null,
                   onTap: () {
                     context.read<LocaleProvider>().setLocale(Locale(langCode));
+                    final profile = context.read<ProfileProvider>().profile;
+                    if (profile.isNotEmpty) {
+                      context.read<ProfileProvider>().mergeProfileWithSync({'language': langCode});
+                    }
                   },
                 ),
               ),

@@ -1,9 +1,7 @@
 {
   "@@locale": "en",
   "appTitle": "Rhythma",
-  "@appTitle": {
-    "description": "The title of the application"
-  },
+  "@appTitle": { "description": "The title of the application" },
   "settingsTitle": "Settings",
   "appPreferences": "App Preferences",
   "languagePreferences": "Language Preferences",
@@ -21,7 +19,6 @@
   "cancel": "Cancel",
   "loggedOutSuccess": "Logged out successfully",
   "selectLanguage": "Select Language",
-  
   "homeGreeting": "Namaste",
   "homePhaseDesc": "Day 14 · Ovulation phase",
   "homeNextPeriod": "NEXT PERIOD IN",
@@ -49,13 +46,7 @@
   "homeRetry": "Retry",
   "homeComingSoon": "Coming Soon",
   "homeUnderDevelopment": "{topic} is currently under development.",
-  "@homeUnderDevelopment": {
-    "placeholders": {
-      "topic": {
-        "type": "String"
-      }
-    }
-  },
+  "@homeUnderDevelopment": { "placeholders": { "topic": { "type": "String" } } },
   "homePrivacySecurity": "Privacy & Security",
   "homeOk": "OK",
   "cycleTrackerTitle": "Cycle Tracker",
@@ -91,7 +82,6 @@
   "logSympFatigue": "Fatigue",
   "logSympNausea": "Nausea",
   "logSympBackPain": "Back Pain",
-  
   "assistantTitle": "Rhythma Assistant",
   "assistantSubtitle": "Your private health companion",
   "assistantInputHint": "Ask anything about your health...",
@@ -101,7 +91,6 @@
   "assistantSug3": "Is a 35-day cycle normal?",
   "assistantSug4": "Foods that help with PMS",
   "assistantSug5": "मेरे पीरियड्स अनियमित हैं — क्या यह सामान्य है?",
-
   "insightsTitle": "Health Insights",
   "insightsSubtitle": "Last 90 days",
   "insightsMhsLabel": "MENSTRUAL HEALTH SCORE",
@@ -119,7 +108,6 @@
   "insightsRec1": "Add iron-rich foods near period start",
   "insightsRec2": "Try 10-minute yoga on luteal-phase days",
   "insightsRec3": "Hydrate 2.5L during ovulation week",
-  
   "profileTitle": "Profile",
   "profileYearsOld": "years old",
   "profileCycleDay": "Cycle Day",
@@ -144,18 +132,15 @@
   "profileEmergencyContactsTitle": "Emergency Contacts",
   "profileAddNew": "Add New",
   "profileNoContacts": "No emergency contacts set up yet.",
-  
   "navHome": "Home",
   "navCycle": "Cycle",
   "navAsk": "Ask",
   "navInsights": "Insights",
   "navYou": "You",
-  
   "settingsHelpSupport": "Help & Support",
   "settingsContactUs": "Contact Us / Report Bug",
   "settingsContactDesc": "Send an email to our support team",
   "settingsEmailError": "Could not open email app. Please email us at support@rhythma.com",
-
   "onboardingPrivacyNote": "Your information stays on your device. We never share your data without your permission.",
   "onboardingNext": "Next",
   "onboardingBack": "Back",
@@ -193,5 +178,37 @@
   "onboardingNameRequired": "Please enter your name",
   "onboardingAgeInvalid": "Please enter a valid age (10–120)",
   "onboardingHeightInvalid": "Please enter a valid height (50–250 cm)",
-  "onboardingWeightInvalid": "Please enter a valid weight (20–300 kg)"
+  "onboardingWeightInvalid": "Please enter a valid weight (20–300 kg)",
+  "onboardingPhoneInvalid": "Please enter a valid phone number",
+  "onboardingTapToSelectDate": "Tap to select date",
+  "onboardingDays": "days",
+  "smsScreenTitle": "SMS Summaries",
+  "smsScreenSubtitle": "Stay informed even without the app",
+  "smsInfoCardTitle": "Weekly Health Summary",
+  "smsInfoCardBody": "Every week, Rhythma will send you a brief summary of your cycle status, health score, and any important patterns, directly to your phone via SMS. Works without data or the app.",
+  "smsConfigTitle": "Configuration",
+  "smsPhoneLabel": "Phone Number",
+  "smsPhoneHint": "+91 98765 43210",
+  "smsEnableWeekly": "Enable weekly SMS",
+  "smsSaveSettings": "Save Settings",
+  "smsSendSectionTitle": "Send a Summary Now",
+  "smsSendRecipientPrefix": "Sends the message below to:",
+  "smsSendNoPhone": "Add and save a phone number above first.",
+  "smsSendButton": "Send Summary Now",
+  "smsErrorEnterPhone": "Please enter a phone number",
+  "smsErrorInvalidPhone": "Enter a valid phone number in international format, e.g. +919876543210",
+  "smsSuccessSaved": "SMS settings saved successfully!",
+  "smsErrorAddPhoneFirst": "Add and save a phone number first",
+  "smsSuccessSent": "Summary sent to your phone!",
+  "smsErrorRateLimit": "You can send one summary per minute, please wait a bit and try again.",
+  "smsErrorSessionExpired": "Your session has expired. Please log in again.",
+  "smsErrorNetwork": "Couldn't reach the server. Check your connection and try again.",
+  "smsErrorGeneric": "Something went wrong. Please try again.",
+  "smsLoadError": "Couldn't load your SMS settings. Pull to refresh or try again.",
+  "smsSummaryMessage": "🌸 Rhythma Health Summary\nThis is your on-demand summary from Rhythma.\nOpen the app for your latest cycle insights.\nReply STOP to unsubscribe.",
+  "insightsLoadError": "Couldn't load your insights: {error}",
+  "@insightsLoadError": { "placeholders": { "error": { "type": "String" } } },
+  "insightsNotEnoughData": "Log a few more cycles on the Cycle tab to unlock your full health insights.",
+  "insightsNoSymptomsYet": "No symptoms logged yet — log some on the Cycle tab to see patterns here.",
+  "insightsNotEnoughTrendData": "Log at least two cycles to see your trend here."
 }

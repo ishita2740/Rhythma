@@ -23,9 +23,11 @@ class AssistantService {
         final reply = data['response'];
         if (reply is String && reply.trim().isNotEmpty) return reply;
       }
-      throw const AssistantException('The assistant returned an empty response.');
+      throw const AssistantException(
+          'The assistant returned an empty response.');
     } on DioException catch (e) {
-      throw AssistantException(_readErrorMessage(e, 'Failed to get a response. Please try again.'));
+      throw AssistantException(
+          _readErrorMessage(e, 'Failed to get a response. Please try again.'));
     }
   }
 
@@ -35,7 +37,8 @@ class AssistantService {
       final List data = response.data;
       return data.map((e) => Map<String, String>.from(e)).toList();
     } on DioException catch (e) {
-      throw AssistantException(_readErrorMessage(e, 'Failed to load languages.'));
+      throw AssistantException(
+          _readErrorMessage(e, 'Failed to load languages.'));
     }
   }
 
@@ -55,7 +58,8 @@ class AssistantService {
       if (detail is String && detail.trim().isNotEmpty) return detail;
     }
 
-    if (error.response?.statusCode != null && error.response!.statusCode! >= 500) {
+    if (error.response?.statusCode != null &&
+        error.response!.statusCode! >= 500) {
       return 'The assistant is temporarily unavailable. Please try again later.';
     }
 

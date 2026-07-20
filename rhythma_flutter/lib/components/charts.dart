@@ -98,8 +98,7 @@ class _RingPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_RingPainter old) =>
-      old.day != day || old.total != total;
+  bool shouldRepaint(_RingPainter old) => old.day != day || old.total != total;
 }
 
 /// Score ring for Insights screen — larger, shows percentage value
@@ -159,8 +158,7 @@ class _ScorePainter extends CustomPainter {
         transform: const GradientRotation(-math.pi / 2),
       ).createShader(rect);
 
-    canvas.drawArc(
-        rect, -math.pi / 2, (value / 100) * 2 * math.pi, false, arc);
+    canvas.drawArc(rect, -math.pi / 2, (value / 100) * 2 * math.pi, false, arc);
   }
 
   @override
@@ -185,7 +183,8 @@ class TrendChart extends StatelessWidget {
     return SizedBox(
       height: height,
       child: CustomPaint(
-        painter: _SparkPainter(points: points, color: color ?? RhythmaColors.primary),
+        painter: _SparkPainter(
+            points: points, color: color ?? RhythmaColors.primary),
         size: Size.infinite,
       ),
     );
@@ -207,7 +206,10 @@ class _SparkPainter extends CustomPainter {
     final step = size.width / (points.length - 1);
 
     double x(int i) => i * step;
-    double y(double v) => size.height - ((v - minV) / range) * size.height * 0.85 - size.height * 0.075;
+    double y(double v) =>
+        size.height -
+        ((v - minV) / range) * size.height * 0.85 -
+        size.height * 0.075;
 
     final path = Path();
     for (int i = 0; i < points.length; i++) {

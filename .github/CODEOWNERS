@@ -1,0 +1,21 @@
+# Default owner
+* @ishita2740
+
+# Backend
+/backend/ @ishita2740
+
+# Flutter
+/rhythma_flutter/ @ishita2740
+
+# React Web
+/web/ @ishita2740
+
+# Landing Page
+/landing-page/ @ishita2740
+
+# Documentation
+/docs/ @ishita2740
+*.md @ishita2740
+
+# GitHub workflows
+/.github/ @ishita2740

@@ -2,8 +2,13 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:rhythma/screens/auth/login_screen.dart';
 import 'package:rhythma/services/auth_service.dart';
-import 'package:rhythma/services/local_storage_service.dart';
 
+/// Registration screen — collects only identity credentials.
+///
+/// Profile data (name, age, health info, avatar, language, etc.) is collected
+/// separately in the 5-step onboarding flow which runs immediately after the
+/// user's first successful login.  This keeps authentication concerns separate
+/// from profile-building concerns.
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -12,23 +17,17 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _ageController = TextEditingController();
-  final _cycleLengthController = TextEditingController(text: '28');
   bool _loading = false;
   bool _obscurePassword = true;
 
   @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
-    _ageController.dispose();
-    _cycleLengthController.dispose();
     super.dispose();
   }
 
@@ -36,15 +35,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
     final username = _usernameController.text.trim();
-    final fullName = _nameController.text.trim();
-    final ageVal = int.tryParse(_ageController.text.trim());
-    final cycleVal = int.tryParse(_cycleLengthController.text.trim());
 
     final validationError = _validateUsername(username) ??
         _validateEmail(email) ??
-        _validatePassword(password) ??
-        _validateAge(ageVal) ??
-        _validateCycleLength(cycleVal);
+        _validatePassword(password);
     if (validationError != null) {
       _showMessage(validationError);
       return;
@@ -52,32 +46,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     setState(() => _loading = true);
     try {
-      await AuthService().register(
-        username,
-        email,
-        password,
-        fullName.isEmpty ? null : fullName,
-      );
+      await AuthService().register(username, email, password, null);
 
-      // Seed the on-device profile with the details already collected here,
-      // so it's populated the moment the user logs in for the first time
-      // instead of falling back to placeholder defaults.
-      await LocalStorageService.saveProfile({
-        'name': fullName.isEmpty ? username : fullName,
-        'age': ageVal!,
-        'cycle_length': cycleVal!,
-      });
+      // Auto-login immediately — onboarding will run via RhythmaRoot
+      // which checks onboardingCompleted for the new (empty) user account.
+      await AuthService().login(username, password);
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Account created successfully! Please login.'),
+          content: Text('Account created! Let\'s set up your profile.'),
           backgroundColor: Colors.green,
         ),
       );
-      Navigator.pushReplacement(
+      Navigator.pushNamedAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        '/home',
+        (route) => false,
       );
     } catch (e) {
       if (mounted) _showMessage(e.toString());
@@ -88,7 +73,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   String? _validateEmail(String email) {
     if (email.isEmpty) return 'Email is required';
-    if (!EmailValidator.validate(email)) return 'Please enter a valid email address';
+    if (!EmailValidator.validate(email))
+      return 'Please enter a valid email address';
     return null;
   }
 
@@ -104,20 +90,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (username.length > 30) return 'Username must not exceed 30 characters';
     if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(username)) {
       return 'Username can only contain letters, numbers, and underscores';
-    }
-    return null;
-  }
-
-  String? _validateAge(int? age) {
-    if (age == null) return 'Please enter a valid age';
-    if (age < 10 || age > 120) return 'Age must be between 10 and 120';
-    return null;
-  }
-
-  String? _validateCycleLength(int? cycleLength) {
-    if (cycleLength == null) return 'Please enter a valid average cycle length';
-    if (cycleLength < 15 || cycleLength > 45) {
-      return 'Cycle length must be between 15 and 45 days';
     }
     return null;
   }
@@ -138,10 +110,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 24),
-              Icon(
-                Icons.favorite_rounded,
-                size: 52,
-                color: Theme.of(context).primaryColor,
+              Image.asset(
+                'assets/images/logo.png',
+                height: 120,
+                fit: BoxFit.contain,
               ),
               const SizedBox(height: 12),
               const Text(
@@ -156,17 +128,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 style: TextStyle(color: Theme.of(context).hintColor),
               ),
               const SizedBox(height: 36),
-              TextField(
-                controller: _nameController,
-                enabled: !_loading,
-                textCapitalization: TextCapitalization.words,
-                decoration: const InputDecoration(
-                  labelText: 'Full Name (optional)',
-                  prefixIcon: Icon(Icons.badge_outlined),
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
               TextField(
                 controller: _emailController,
                 enabled: !_loading,
@@ -192,32 +153,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 16),
               TextField(
-                controller: _ageController,
-                enabled: !_loading,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
-                  labelText: 'Age',
-                  helperText: 'Between 10 and 120',
-                  prefixIcon: Icon(Icons.cake_outlined),
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _cycleLengthController,
-                enabled: !_loading,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
-                  labelText: 'Average Cycle Length (days)',
-                  helperText: 'Between 15 and 45 days',
-                  prefixIcon: Icon(Icons.calendar_month_outlined),
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
                 controller: _passwordController,
                 enabled: !_loading,
                 obscureText: _obscurePassword,
@@ -228,9 +163,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   prefixIcon: const Icon(Icons.lock_outline),
                   border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
-                    tooltip: _obscurePassword ? 'Show password' : 'Hide password',
+                    tooltip:
+                        _obscurePassword ? 'Show password' : 'Hide password',
                     icon: Icon(
-                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                     ),
                     onPressed: () {
                       setState(() => _obscurePassword = !_obscurePassword);
@@ -259,7 +197,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     : () {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (_) => const LoginScreen()),
+                          MaterialPageRoute(
+                              builder: (_) => const LoginScreen()),
                         );
                       },
                 child: const Text('Already have an account? Login'),

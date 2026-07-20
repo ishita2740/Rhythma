@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rhythma/providers/profile_provider.dart';
+import 'package:rhythma/providers/locale_provider.dart';
 import 'package:rhythma/screens/auth/register_screen.dart';
 import 'package:rhythma/services/auth_service.dart';
 
@@ -35,6 +38,14 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await AuthService().login(username, password);
       if (!mounted) return;
+
+      context.read<ProfileProvider>().reloadProfile();
+      final profile = context.read<ProfileProvider>().profile;
+      final lang = profile['language'] as String?;
+      if (lang != null) {
+        context.read<LocaleProvider>().setLocale(Locale(lang));
+      }
+
       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
     } catch (e) {
       if (mounted) _showMessage(e.toString());
@@ -60,10 +71,10 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.favorite_rounded,
-                  size: 56,
-                  color: Theme.of(context).primaryColor,
+                Image.asset(
+                  'assets/images/logo.png',
+                  height: 120,
+                  fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 12),
                 const Text(
@@ -99,9 +110,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     prefixIcon: const Icon(Icons.lock_outline),
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
-                      tooltip: _obscurePassword ? 'Show password' : 'Hide password',
+                      tooltip:
+                          _obscurePassword ? 'Show password' : 'Hide password',
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                       ),
                       onPressed: () {
                         setState(() => _obscurePassword = !_obscurePassword);
@@ -130,7 +144,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       : () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                            MaterialPageRoute(
+                                builder: (_) => const RegisterScreen()),
                           );
                         },
                   child: const Text("Don't have an account? Register"),

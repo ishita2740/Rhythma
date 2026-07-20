@@ -69,13 +69,14 @@ class RhythmaApp extends StatefulWidget {
 }
 
 class _RhythmaAppState extends State<RhythmaApp> {
-  late Future<String?> _validationFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _validationFuture = AuthService().validateSession();
-  }
+  // Created once, not inline in build(): a FutureBuilder whose `future` is
+  // constructed fresh on every build restarts (goes back to `waiting`) on
+  // every rebuild — and rebuilds happen for reasons unrelated to auth,
+  // e.g. a locale or theme change calling notifyListeners(). That was
+  // tearing down RhythmaRoot (and whatever onboarding page the user was
+  // on) back to the splash screen, then to a brand new RhythmaRoot, every
+  // time onboarding's language step changed the locale.
+  late final Future<String?> _sessionFuture = AuthService().validateSession();
 
   @override
   Widget build(BuildContext context) {
@@ -105,18 +106,20 @@ class _RhythmaAppState extends State<RhythmaApp> {
         // Confirms the stored token is still genuinely valid (not merely
         // present) via a lightweight /auth/me check, and scopes local
         // storage to the resulting account — see AuthService.validateSession.
-        future: _validationFuture,
+        future: _sessionFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const SplashScreen();
           }
-          return snapshot.data != null ? const RhythmaRoot() : const LoginScreen();
+          return snapshot.data != null
+              ? const RhythmaRoot()
+              : const LoginScreen();
         },
       ),
       routes: {
         '/login': (_) => const LoginScreen(),
         '/register': (_) => const RegisterScreen(),
-        '/home': (_) => const RhythmaShell(),
+        '/home': (_) => const RhythmaRoot(),
         '/assistant': (_) => const ShellBackground(child: AssistantScreen()),
       },
     );
@@ -140,10 +143,28 @@ class _RhythmaRootState extends State<RhythmaRoot> {
   void initState() {
     super.initState();
     _onboardingDone = LocalStorageService.onboardingCompleted;
+
+    // Reload profile and sync locale after session validation completes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<ProfileProvider>().reloadProfile();
+        final profile = context.read<ProfileProvider>().profile;
+        final lang = profile['language'] as String?;
+        if (lang != null) {
+          context.read<LocaleProvider>().setLocale(Locale(lang));
+        }
+      }
+    });
   }
 
   void _handleOnboardingComplete() {
     setState(() => _onboardingDone = true);
+    context.read<ProfileProvider>().reloadProfile();
+    final profile = context.read<ProfileProvider>().profile;
+    final lang = profile['language'] as String?;
+    if (lang != null) {
+      context.read<LocaleProvider>().setLocale(Locale(lang));
+    }
   }
 
   @override
@@ -209,10 +230,10 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.favorite,
-              size: 80,
-              color: Theme.of(context).primaryColor,
+            Image.asset(
+              'assets/images/logo.png',
+              height: 120,
+              fit: BoxFit.contain,
             ),
             const SizedBox(height: 24),
             const CircularProgressIndicator(),

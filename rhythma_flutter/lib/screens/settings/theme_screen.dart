@@ -29,7 +29,8 @@ class ThemeScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text(l10n.themeToggle), // Reusing existing localized string for title
+          title: Text(
+              l10n.themeToggle), // Reusing existing localized string for title
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
@@ -57,7 +58,8 @@ class ThemeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            const SectionHeader(title: 'Theme Color'), // Ideally localized later
+            const SectionHeader(
+                title: 'Theme Color'), // Ideally localized later
             GlassCard(
               padding: const EdgeInsets.all(20),
               child: Wrap(
@@ -66,7 +68,8 @@ class ThemeScreen extends StatelessWidget {
                 alignment: WrapAlignment.center,
                 children: predefinedColors.map((item) {
                   final color = item['color'] as Color;
-                  final isSelected = themeProvider.primaryColor.value == color.value;
+                  final isSelected =
+                      themeProvider.primaryColor.value == color.value;
 
                   return GestureDetector(
                     onTap: () {
@@ -79,7 +82,8 @@ class ThemeScreen extends StatelessWidget {
                         color: color,
                         shape: BoxShape.circle,
                         border: isSelected
-                            ? Border.all(color: RhythmaColors.foreground, width: 3)
+                            ? Border.all(
+                                color: RhythmaColors.foreground, width: 3)
                             : null,
                         boxShadow: [
                           BoxShadow(

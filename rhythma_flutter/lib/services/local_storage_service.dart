@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// Keys used in Hive boxes
@@ -5,52 +7,100 @@ class _Keys {
   static const cycleBox = 'cycle_logs';
   static const settingsBox = 'settings';
   static const userBox = 'user_profile';
+  static const profile = 'profile';
+  static const chatHistory = 'chat_history';
+  static const emergencyContacts = 'emergency_contacts';
+  static const onboardingCompleted = 'onboarding_completed';
+  static const language = 'language';
+  static const cloudSync = 'cloud_sync';
+  static const smsEnabled = 'sms_enabled';
+  static const themeMode = 'theme_mode';
+  static const primaryColor = 'primary_color';
+  static const currentUserId = 'current_user_id';
 }
 
 /// Manages all on-device storage via Hive.
-/// All health data is stored locally first and synced to Firestore
-/// only when the user explicitly enables cloud sync.
 class LocalStorageService {
   static bool _initialised = false;
 
-  // Test mocks to bypass Hive lock conflicts during unit/widget tests
+  // Test mocks to bypass Hive during unit/widget tests
   static bool isTesting = false;
   static Map<String, dynamic>? mockProfile;
   static List<Map<String, String>> mockEmergencyContacts = [];
   static bool mockOnboardingCompleted = false;
   static List<Map<String, dynamic>> mockCycleLogs = [];
+  static String? mockCurrentUserId;
 
   /// Call once at app startup (after WidgetsFlutterBinding.ensureInitialized)
-  static Future<void> init() async {
+  static Future<void> init({String? testPath}) async {
     if (_initialised) return;
-    await Hive.initFlutter();
-    await Hive.openBox<Map>(_Keys.cycleBox);
+
+    if (testPath != null) {
+      Hive.init(testPath);
+    } else {
+      await Hive.initFlutter();
+    }
+
+    const secureStorage = FlutterSecureStorage();
+    var encryptionKeyString = await secureStorage.read(key: 'hive_key');
+    bool needsMigration = false;
+
+    if (encryptionKeyString == null) {
+      final key = Hive.generateSecureKey();
+      encryptionKeyString = base64UrlEncode(key);
+      await secureStorage.write(key: 'hive_key', value: encryptionKeyString);
+      needsMigration = true; // Flag that existing data is unencrypted
+    }
+
+    final cipher = HiveAesCipher(base64Url.decode(encryptionKeyString));
+
+    // 1. Handle migration for existing users for cycleBox
+    if (needsMigration && await Hive.boxExists(_Keys.cycleBox)) {
+      final oldBox = await Hive.openBox<Map>(_Keys.cycleBox);
+      final oldData = oldBox.toMap();
+      await oldBox.close();
+      await Hive.deleteBoxFromDisk(_Keys.cycleBox); // Delete unencrypted file
+
+      final newBox = await Hive.openBox<Map>(_Keys.cycleBox, encryptionCipher: cipher);
+      await newBox.putAll(oldData); // Restore data securely
+    } else {
+      await Hive.openBox<Map>(_Keys.cycleBox, encryptionCipher: cipher);
+    }
+
+    // 2. Handle migration for existing users for userBox
+    if (needsMigration && await Hive.boxExists(_Keys.userBox)) {
+      final oldBox = await Hive.openBox<Map>(_Keys.userBox);
+      final oldData = oldBox.toMap();
+      await oldBox.close();
+      await Hive.deleteBoxFromDisk(_Keys.userBox); // Delete unencrypted file
+
+      final newBox = await Hive.openBox<Map>(_Keys.userBox, encryptionCipher: cipher);
+      await newBox.putAll(oldData); // Restore data securely
+    } else {
+      await Hive.openBox<Map>(_Keys.userBox, encryptionCipher: cipher);
+    }
+
+    // 3. Open non-sensitive settings unencrypted
     await Hive.openBox<dynamic>(_Keys.settingsBox);
-    await Hive.openBox<Map>(_Keys.userBox);
+
     _initialised = true;
   }
 
-  // ── Per-account data scoping ────────────────────────────────────────────
-  //
-  // This store was originally shared by whoever happened to be logged in —
-  // profile/chat history/cycle logs weren't tied to an account, just the
-  // device. That meant a second person logging into a different account on
-  // the same phone would see the first person's data. Personal data below
-  // is now namespaced by the signed-in user's id. Device-level preferences
-  // (theme, language, notification toggles) intentionally stay un-scoped,
-  // since those are reasonably "this phone's" settings rather than "this
-  // account's".
+  // ── Per-account data scoping ──────────────────────────────────────────
 
-  static const _kCurrentUserId = 'current_user_id';
+  static const _kCurrentUserId = _Keys.currentUserId;
 
-  /// The id of the currently signed-in user. Set by AuthService right after
-  /// a successful login or a successful session validation at launch.
-  static String? get currentUserId => _settings.get(_kCurrentUserId) as String?;
+  static String? get currentUserId {
+    if (isTesting) return mockCurrentUserId;
+    return _settings.get(_kCurrentUserId) as String?;
+  }
 
   static Future<void> setCurrentUserId(String? userId) async {
+    if (isTesting) {
+      mockCurrentUserId = userId;
+      return;
+    }
     if (userId == null) {
-      // Just clears the "which account is active" pointer — does NOT
-      // delete anyone's data, so it's still there if they log back in.
       await _settings.delete(_kCurrentUserId);
       return;
     }
@@ -64,22 +114,22 @@ class LocalStorageService {
   }
 
   /// One-time migration: silently moves any pre-existing un-scoped entries
-  /// into the first account that logs in after this update, so an
-  /// existing user's profile/chat history/cycle logs don't appear to
-  /// vanish just because storage is now namespaced.
+  /// into the first account that logs in after this update.
   static Future<void> _migrateLegacyDataIfNeeded(String uid) async {
-    final scopedProfileKey = '$uid::profile';
-    if (_userBox.containsKey('profile') && !_userBox.containsKey(scopedProfileKey)) {
-      final legacyProfile = _userBox.get('profile');
+    final scopedProfileKey = '$uid::${_Keys.profile}';
+    if (_userBox.containsKey(_Keys.profile) &&
+        !_userBox.containsKey(scopedProfileKey)) {
+      final legacyProfile = _userBox.get(_Keys.profile);
       if (legacyProfile != null) {
         await _userBox.put(scopedProfileKey, legacyProfile);
       }
-      await _userBox.delete('profile');
+      await _userBox.delete(_Keys.profile);
     }
 
     const legacyChatKey = 'chat_history';
     final scopedChatKey = '$uid::chat_history';
-    if (_settings.containsKey(legacyChatKey) && !_settings.containsKey(scopedChatKey)) {
+    if (_settings.containsKey(legacyChatKey) &&
+        !_settings.containsKey(scopedChatKey)) {
       await _settings.put(scopedChatKey, _settings.get(legacyChatKey));
       await _settings.delete(legacyChatKey);
     }
@@ -95,16 +145,14 @@ class LocalStorageService {
     }
   }
 
-  // ── Cycle Logs ────────────────────────────────────────────────────────────
+  // ── Cycle Logs ──────────────────────────────────────────────────────────
 
   static Box<Map> get _cycleBox => Hive.box<Map>(_Keys.cycleBox);
 
-  /// Save a cycle log entry. Key = ISO date string of start_date, scoped
-  /// to the currently signed-in user.
   static Future<void> saveCycleLog(Map<String, dynamic> log) async {
     if (isTesting) {
-      // Find and replace or add new
-      final index = mockCycleLogs.indexWhere((l) => l['start_date'] == log['start_date']);
+      final index =
+          mockCycleLogs.indexWhere((l) => l['start_date'] == log['start_date']);
       if (index != -1) {
         mockCycleLogs[index] = log;
       } else {
@@ -116,7 +164,6 @@ class LocalStorageService {
     await _cycleBox.put(_scoped(key), log);
   }
 
-  /// Returns all cycle logs for the current user, sorted most recent first.
   static List<Map<String, dynamic>> getCycleLogs() {
     if (isTesting) {
       return List<Map<String, dynamic>>.from(mockCycleLogs)
@@ -136,72 +183,72 @@ class LocalStorageService {
           (b['start_date'] as String).compareTo(a['start_date'] as String));
   }
 
-  /// Returns the last [n] cycle logs.
   static List<Map<String, dynamic>> getRecentCycleLogs({int n = 6}) {
     if (isTesting) return [];
     return getCycleLogs().take(n).toList();
   }
 
-  // ── User Settings ─────────────────────────────────────────────────────────
+  // ── User Settings ──────────────────────────────────────────────────────
 
   static Box<dynamic> get _settings => Hive.box<dynamic>(_Keys.settingsBox);
 
   static String get preferredLanguage {
     if (isTesting) return 'en';
-    return _settings.get('language', defaultValue: 'en') as String;
+    return _settings.get(_Keys.language, defaultValue: 'en') as String;
   }
 
   static Future<void> setPreferredLanguage(String code) async {
     if (isTesting) return;
-    await _settings.put('language', code);
+    await _settings.put(_Keys.language, code);
   }
 
   static bool get cloudSyncEnabled {
     if (isTesting) return false;
-    return _settings.get('cloud_sync', defaultValue: false) as bool;
+    return _settings.get(_Keys.cloudSync, defaultValue: false) as bool;
   }
 
   static Future<void> setCloudSync(bool enabled) async {
     if (isTesting) return;
-    await _settings.put('cloud_sync', enabled);
+    await _settings.put(_Keys.cloudSync, enabled);
   }
 
   static bool get smsEnabled {
     if (isTesting) return false;
-    return _settings.get('sms_enabled', defaultValue: false) as bool;
+    return _settings.get(_Keys.smsEnabled, defaultValue: false) as bool;
   }
 
   static Future<void> setSmsEnabled(bool enabled) async {
     if (isTesting) return;
-    await _settings.put('sms_enabled', enabled);
+    await _settings.put(_Keys.smsEnabled, enabled);
   }
 
   static String? getThemeMode() {
     if (isTesting) return null;
-    return _settings.get('theme_mode') as String?;
+    return _settings.get(_Keys.themeMode) as String?;
   }
 
   static Future<void> setThemeMode(String mode) async {
     if (isTesting) return;
-    await _settings.put('theme_mode', mode);
+    await _settings.put(_Keys.themeMode, mode);
   }
 
   static int? getPrimaryColor() {
     if (isTesting) return null;
-    return _settings.get('primary_color') as int?;
+    return _settings.get(_Keys.primaryColor) as int?;
   }
 
   static Future<void> setPrimaryColor(int colorValue) async {
     if (isTesting) return;
-    await _settings.put('primary_color', colorValue);
+    await _settings.put(_Keys.primaryColor, colorValue);
   }
 
-  // ── Onboarding ────────────────────────────────────────────────────────────
+  // ── Onboarding ──────────────────────────────────────────────────────────
 
-  /// Returns true if the user has completed onboarding at least once.
+  /// Onboarding completion is scoped per user, so each account has its own state.
   static bool get onboardingCompleted {
     if (isTesting) return mockOnboardingCompleted;
-    return _settings.get('onboarding_completed', defaultValue: false) as bool;
+    return _settings.get(_scoped(_Keys.onboardingCompleted), defaultValue: false)
+        as bool;
   }
 
   static Future<void> setOnboardingCompleted(bool value) async {
@@ -209,16 +256,16 @@ class LocalStorageService {
       mockOnboardingCompleted = value;
       return;
     }
-    await _settings.put('onboarding_completed', value);
+    await _settings.put(_scoped(_Keys.onboardingCompleted), value);
   }
 
-  // ── User Profile ──────────────────────────────────────────────────────────
+  // ── User Profile ────────────────────────────────────────────────────────
 
   static Box<Map> get _userBox => Hive.box<Map>(_Keys.userBox);
 
   static Map<String, dynamic>? getProfile() {
     if (isTesting) return mockProfile;
-    final raw = _userBox.get(_scoped('profile'));
+    final raw = _userBox.get(_scoped(_Keys.profile));
     return raw != null ? Map<String, dynamic>.from(raw) : null;
   }
 
@@ -227,13 +274,31 @@ class LocalStorageService {
       mockProfile = profile;
       return;
     }
-    await _userBox.put(_scoped('profile'), profile);
+    await _userBox.put(_scoped(_Keys.profile), profile);
+    final lang = profile['language'] as String?;
+    if (lang != null) await setPreferredLanguage(lang);
   }
 
-  /// Save (merge) a single field into today's — or a given date's — cycle log
-  /// entry. Used by quick log actions (e.g. Home screen Flow/Mood/Sleep/Stress
-  /// buttons) that log one value at a time rather than a full CycleLog form.
-  static Future<void> saveQuickLogField(DateTime date, String field, String value) async {
+  static Future<void> mergeProfile(Map<String, dynamic> updates) async {
+    final existing = getProfile() ?? {};
+    final merged = {...existing, ...updates};
+    await saveProfile(merged);
+    if (isTesting) mockProfile = merged;
+  }
+
+  // ── Quick Log Field ────────────────────────────────────────────────────
+
+  static Future<void> saveQuickLogField(DateTime date, String field, dynamic value) async {
+    if (isTesting) {
+      final key = _dateKey(date);
+      final index = mockCycleLogs.indexWhere((l) => l['start_date'] == key);
+      if (index != -1) {
+        mockCycleLogs[index] = {...mockCycleLogs[index], field: value};
+      } else {
+        mockCycleLogs.add({'start_date': key, field: value});
+      }
+      return;
+    }
     final key = _scoped(_dateKey(date));
     final existing = _cycleBox.get(key);
     final data = existing != null
@@ -243,24 +308,24 @@ class LocalStorageService {
     await _cycleBox.put(key, data);
   }
 
-  /// Merges [updates] into the existing profile instead of overwriting it.
-  /// Fields present in [updates] overwrite existing values; other fields
-  /// (e.g. those saved during onboarding) are left untouched.
-  static Future<void> mergeProfile(Map<String, dynamic> updates) async {
-    final existing = getProfile() ?? {};
-    final merged = {...existing, ...updates};
-    await saveProfile(merged);
-    if (isTesting) mockProfile = merged;
+  static Map<String, dynamic>? getCycleLogForDate(DateTime date) {
+    if (isTesting) {
+      final key = _dateKey(date);
+      final match = mockCycleLogs.where((l) => l['start_date'] == key);
+      return match.isEmpty ? null : Map<String, dynamic>.from(match.first);
+    }
+    final raw = _cycleBox.get(_scoped(_dateKey(date)));
+    return raw != null ? Map<String, dynamic>.from(raw) : null;
   }
+
   static String _dateKey(DateTime date) =>
       '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 
-  // ── Emergency Contacts ────────────────────────────────────────────────────
+  // ── Emergency Contacts ─────────────────────────────────────────────────
 
-  /// Returns a list of saved emergency contacts.
   static List<Map<String, String>> getEmergencyContacts() {
     if (isTesting) return mockEmergencyContacts;
-    final raw = _settings.get('emergency_contacts');
+    final raw = _settings.get(_scoped(_Keys.emergencyContacts));
     if (raw != null) {
       return List<Map<String, String>>.from(
         (raw as List).map((e) => Map<String, String>.from(e as Map)),
@@ -269,20 +334,18 @@ class LocalStorageService {
     return [];
   }
 
-  /// Save the list of emergency contacts.
   static Future<void> saveEmergencyContacts(List<Map<String, String>> contacts) async {
     if (isTesting) {
       mockEmergencyContacts = contacts;
       return;
     }
-    await _settings.put('emergency_contacts', contacts);
+    await _settings.put(_scoped(_Keys.emergencyContacts), contacts);
   }
 
-  // ── Assistant Chat History ────────────────────────────────────────────────
+  // ── Assistant Chat History ─────────────────────────────────────────────
 
-  /// Returns the saved assistant conversation (role/content pairs), oldest first.
   static List<Map<String, String>> getChatHistory() {
-    final raw = _settings.get(_scoped('chat_history'));
+    final raw = _settings.get(_scoped(_Keys.chatHistory));
     if (raw != null) {
       return List<Map<String, String>>.from(
         (raw as List).map((e) => Map<String, String>.from(e as Map)),
@@ -291,18 +354,14 @@ class LocalStorageService {
     return [];
   }
 
-  /// Persists the assistant conversation so it survives app restarts.
   static Future<void> saveChatHistory(List<Map<String, String>> history) =>
-      _settings.put(_scoped('chat_history'), history);
+      _settings.put(_scoped(_Keys.chatHistory), history);
 
-  static Future<void> clearChatHistory() => _settings.delete(_scoped('chat_history'));
+  static Future<void> clearChatHistory() =>
+      _settings.delete(_scoped(_Keys.chatHistory));
 
-  // ── Clear all data ────────────────────────────────────────────────────────
+  // ── Clear all data ─────────────────────────────────────────────────────
 
-  /// Wipes every local box for every account that's ever used this device
-  /// (not just the currently signed-in one) — this is a full device reset,
-  /// not a per-account logout. Not currently called anywhere in the app;
-  /// kept for a future "reset this device" debug/support feature.
   static Future<void> clearAll() async {
     if (isTesting) {
       mockProfile = null;

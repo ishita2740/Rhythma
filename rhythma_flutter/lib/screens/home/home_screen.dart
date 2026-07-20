@@ -4,9 +4,13 @@ import 'package:rhythma/l10n/app_localizations.dart';
 import '../../config/theme.dart';
 import '../../components/shared.dart';
 import '../../components/charts.dart';
-import '../../services/api_client.dart';
-import '../../services/local_storage_service.dart';
+import '../../models/cycle_log.dart';
 import '../../providers/theme_provider.dart';
+import '../../providers/profile_provider.dart';
+import '../../services/api_client.dart';
+import '../../services/cycle_service.dart';
+import '../../services/local_storage_service.dart';
+import '../../utils/log_options.dart';
 import '../cycle/components/log_entry_sheet.dart';
 import '../insights/insights_screen.dart';
 import '../settings/language_screen.dart';
@@ -64,7 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: RhythmaColors.rose),
+            const Icon(Icons.error_outline,
+                size: 48, color: RhythmaColors.rose),
             const SizedBox(height: 16),
             Text(
               l10n.homeFailedLoad,
@@ -82,7 +87,15 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    final userName = _userData['name'] ?? 'User';
+    final localProfile = context.watch<ProfileProvider>().profile;
+    final localName = localProfile['name'] as String?;
+    final apiName = _userData['name'] as String?;
+    final userName = (localName != null && localName.isNotEmpty)
+        ? localName
+        : (apiName ?? 'User');
+
+    final avatarPath =
+        localProfile['avatar'] as String? ?? 'assets/avatars/avatar_1.png';
     final nextPeriodDays = _cycleData['nextPeriodDays'] ?? 14;
     final cycleDay = _cycleData['day'] ?? 14;
     final totalCycle = _cycleData['total'] ?? 28;
@@ -100,6 +113,12 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.fromLTRB(2, 8, 2, 20),
             child: Row(
               children: [
+                CircleAvatar(
+                  radius: 22,
+                  backgroundImage: AssetImage(avatarPath),
+                  backgroundColor: RhythmaColors.primary.withOpacity(0.15),
+                ),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -306,7 +325,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              // Navigate to Assistant Screen
                               Navigator.pushNamed(context, '/assistant');
                             },
                             child: Container(
@@ -373,7 +391,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 currentDate,
                 existingLog: existingLog,
               ).then((_) {
-                setState(() {}); // Refresh home screen after logging
+                setState(() {});
               });
             },
           ),
@@ -388,12 +406,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: l10n.homeLogFlow,
                   icon: Icons.water_drop_outlined,
                   color: RhythmaColors.rose,
-                  options: [
-                    l10n.logNone,
-                    l10n.logLight,
-                    l10n.logMedium,
-                    l10n.logHeavy
-                  ],
+                  options: LogOptions.flow(l10n),
                 ),
               ),
               const SizedBox(width: 10),
@@ -406,7 +419,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: l10n.homeLogMood,
                   icon: Icons.favorite_border_rounded,
                   color: RhythmaColors.coral,
-                  options: const ['😊', '😐', '😔', '😤', '🥰'],
+                  options: LogOptions.mood,
                 ),
               ),
               const SizedBox(width: 10),
@@ -419,12 +432,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: l10n.homeLogSleep,
                   icon: Icons.bedtime_outlined,
                   color: RhythmaColors.primary,
-                  options: [
-                    l10n.logSleep1,
-                    l10n.logSleep2,
-                    l10n.logSleep3,
-                    l10n.logSleep4
-                  ],
+                  options: LogOptions.sleep(l10n),
                 ),
               ),
               const SizedBox(width: 10),
@@ -437,11 +445,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: l10n.homeLogStress,
                   icon: Icons.air_rounded,
                   color: RhythmaColors.teal,
-                  options: [
-                    l10n.logEnergyLow,
-                    l10n.logEnergyMid,
-                    l10n.logEnergyHigh
-                  ],
+                  options: LogOptions.stress(l10n),
                 ),
               ),
             ],
@@ -576,12 +580,34 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  dynamic _coerce(String field, String value) {
+    if (field == 'sleep_hours') return double.tryParse(value) ?? value;
+    if (field == 'stress_level') return int.tryParse(value) ?? value;
+    return value;
+  }
+
+  CycleLog _buildQuickLog(String field, dynamic value) {
+    final now = DateTime.now();
+    switch (field) {
+      case 'flow_intensity':
+        return CycleLog(startDate: now, flowIntensity: value as String);
+      case 'mood':
+        return CycleLog(startDate: now, mood: value as String);
+      case 'sleep_hours':
+        return CycleLog(startDate: now, sleepHours: value as double);
+      case 'stress_level':
+        return CycleLog(startDate: now, stressLevel: value as int);
+      default:
+        return CycleLog(startDate: now);
+    }
+  }
+
   void _showQuickLogSheet({
     required String field,
     required String label,
     required IconData icon,
     required Color color,
-    required List<String> options,
+    required List<LogOption> options,
   }) {
     showModalBottomSheet(
       context: context,
@@ -628,11 +654,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   return GestureDetector(
                     onTap: () async {
                       await LocalStorageService.saveQuickLogField(
-                          DateTime.now(), field, opt);
+                          DateTime.now(), field, _coerce(field, opt.value));
                       if (ctx.mounted) Navigator.pop(ctx);
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('$label logged: $opt')),
+                      if (!mounted) return;
+
+                      final messenger = ScaffoldMessenger.of(context);
+
+                      try {
+                        await CycleService().submitLog(
+                          _buildQuickLog(field, _coerce(field, opt.value)),
+                        );
+                        messenger.showSnackBar(
+                          SnackBar(content: Text('$label logged: ${opt.label}')),
+                        );
+                        _fetchDashboardData();
+                      } catch (_) {
+                        messenger.showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                "Saved on this device — couldn't reach the server yet."),
+                          ),
                         );
                       }
                     },
@@ -645,11 +686,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         border: Border.all(color: RhythmaColors.border),
                       ),
                       child: Text(
-                        opt,
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: RhythmaColors.foreground),
+                        opt.label,
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: RhythmaColors.foreground),
                       ),
                     ),
                   );
@@ -834,5 +872,6 @@ class _LearnCard extends StatelessWidget {
 }
 
 extension on Widget {
-  Widget opacity(double value) => Opacity(opacity: value, child: this);
+  Widget opacity(double value) =>
+      Opacity(opacity: value, child: this);
 }

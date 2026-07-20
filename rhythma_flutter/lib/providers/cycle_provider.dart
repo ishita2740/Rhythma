@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rhythma/l10n/app_localizations.dart';
 import '../config/theme.dart';
+import '../services/local_storage_service.dart';
 
 class CycleProvider extends ChangeNotifier {
   final DateTime _today = DateTime.now();
@@ -8,31 +9,27 @@ class CycleProvider extends ChangeNotifier {
   late DateTime _selectedDate;
   late DateTime _displayedMonth;
 
-  // Mock logged days
-  final Set<String> _loggedDays = {};
-
   CycleProvider() {
     _selectedDate = DateTime(_today.year, _today.month, _today.day);
     _displayedMonth = DateTime(_today.year, _today.month);
-
-    // Add some mock logged days for visual testing
-    _loggedDays.add(DateTime(_today.year, _today.month, _today.day - 1).toIso8601String().split('T').first);
-    _loggedDays.add(DateTime(_today.year, _today.month, _today.day - 3).toIso8601String().split('T').first);
-    _loggedDays.add(DateTime(_today.year, _today.month, _today.day + 2).toIso8601String().split('T').first);
   }
 
   DateTime get selectedDate => _selectedDate;
   DateTime get displayedMonth => _displayedMonth;
 
   void selectDate(DateTime date) {
-    if (_selectedDate != date) {
-      _selectedDate = date;
+    final today = DateTime(_today.year, _today.month, _today.day);
+    final normalized = DateTime(date.year, date.month, date.day);
+    if (normalized.isAfter(today)) return; // no logging for future days
+    if (_selectedDate != normalized) {
+      _selectedDate = normalized;
       notifyListeners();
     }
   }
 
   void setDisplayedMonth(DateTime month) {
-    if (_displayedMonth.year != month.year || _displayedMonth.month != month.month) {
+    if (_displayedMonth.year != month.year ||
+        _displayedMonth.month != month.month) {
       _displayedMonth = DateTime(month.year, month.month);
       notifyListeners();
     }
@@ -44,19 +41,18 @@ class CycleProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Whether anything has actually been saved for [date] (Home quick-log
+  /// tiles or the Cycle screen's log rows/Save button both write through
+  /// LocalStorageService, so this always reflects real data — not a mock).
   bool hasLogsForDate(DateTime date) {
-    return _loggedDays.contains(date.toIso8601String().split('T').first);
+    return LocalStorageService.getCycleLogForDate(date) != null;
   }
 
-  void toggleLogForDate(DateTime date) {
-    final key = date.toIso8601String().split('T').first;
-    if (_loggedDays.contains(key)) {
-      _loggedDays.remove(key);
-    } else {
-      _loggedDays.add(key);
-    }
-    notifyListeners();
-  }
+  /// Notifies listeners (e.g. to redraw the calendar's "logged" dot) after
+  /// a log write elsewhere. The log itself is persisted by whoever calls
+  /// this — this provider intentionally doesn't hold log data itself, just
+  /// the calendar's navigation/selection state.
+  void refresh() => notifyListeners();
 
   void refreshLogs() {
     notifyListeners();

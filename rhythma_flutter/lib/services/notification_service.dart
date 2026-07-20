@@ -27,7 +27,8 @@ class NotificationService {
       requestSoundPermission: false,
     );
 
-    const InitializationSettings initializationSettings = InitializationSettings(
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
@@ -55,11 +56,10 @@ class NotificationService {
       required String title,
       required String body,
       required DateTime scheduledDate}) async {
-    
     final tz.TZDateTime tzDate = tz.TZDateTime.from(scheduledDate, tz.local);
-    
+
     if (tzDate.isBefore(tz.TZDateTime.now(tz.local))) {
-      return; 
+      return;
     }
 
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -102,9 +102,9 @@ class NotificationService {
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await _notificationsPlugin.show(
-      id: id, 
-      title: title, 
-      body: body, 
+      id: id,
+      title: title,
+      body: body,
       notificationDetails: platformChannelSpecifics,
     );
   }

@@ -53,7 +53,8 @@ void main() {
 
     test('saveProfile overwrites the entire profile', () async {
       await LocalStorageService.saveProfile({'name': 'Aarya', 'age': 25});
-      await LocalStorageService.saveProfile({'name': 'Priya', 'cycle_length': 30});
+      await LocalStorageService.saveProfile(
+          {'name': 'Priya', 'cycle_length': 30});
       final retrieved = LocalStorageService.getProfile();
       expect(retrieved, equals({'name': 'Priya', 'cycle_length': 30}));
       expect(retrieved!.containsKey('age'), isFalse,
@@ -69,7 +70,8 @@ void main() {
     });
 
     test('mergeProfile adds new fields to existing profile', () async {
-      await LocalStorageService.saveProfile({'name': 'Aarya', 'age': 25, 'avatar': '🌸'});
+      await LocalStorageService.saveProfile(
+          {'name': 'Aarya', 'age': 25, 'avatar': '🌸'});
       await LocalStorageService.mergeProfile({'cycle_length': 28});
       final profile = LocalStorageService.getProfile();
       expect(profile!['name'], 'Aarya');
@@ -85,7 +87,8 @@ void main() {
         'avatar': '🌸',
         'last_period': '2025-06-01',
       });
-      await LocalStorageService.mergeProfile({'name': 'Aarya Renamed', 'age': 26});
+      await LocalStorageService.mergeProfile(
+          {'name': 'Aarya Renamed', 'age': 26});
       final profile = LocalStorageService.getProfile();
       expect(profile!['name'], 'Aarya Renamed');
       expect(profile['age'], 26);

@@ -12,7 +12,7 @@ class CycleLog(BaseModel):
     end_date: Optional[date] = None
     flow_intensity: Optional[str] = None
     mood: Optional[str] = None
-    symptoms: Optional[List[str]] = []
+    symptoms: Optional[List[str]] = None
     sleep_hours: Optional[float] = None
     stress_level: Optional[int] = None
     notes: Optional[str] = None
@@ -26,8 +26,21 @@ async def log_cycle(
     log: CycleLog,
     current_user: dict = Depends(get_current_user)
 ):
+    """Persists a cycle log entry for `log.start_date`.
+
+    Used both by the Home screen's quick-log tiles (which send a partial
+    CycleLog — just the one field being tapped, e.g. only
+    `flow_intensity` set) and the Cycle screen's "Save" button (which sends
+    a full CycleLog with everything the user selected for that day).
+    Either way this upserts *that day's* single document rather than
+    creating a new one per call — see CycleService.upsert_log for why.
+    """
     user_id = current_user["id"]
-    log_id = CycleService.create_log(user_id, log.model_dump())
+    # Only send along fields the caller actually set, so a partial (Home
+    # quick-log) submission doesn't overwrite the rest of the day's
+    # already-saved fields with nulls.
+    fields = {k: v for k, v in log.model_dump().items() if k != "start_date" and v is not None}
+    log_id = CycleService.upsert_log(user_id, log.start_date, fields)
     return {
         "message": f"Cycle logged for user {user_id}",
         "id": log_id,

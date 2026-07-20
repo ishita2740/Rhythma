@@ -28,7 +28,7 @@ class ThemeProvider extends ChangeNotifier {
     if (colorVal != null) {
       _primaryColor = Color(colorVal);
     }
-    
+
     RhythmaColors.updateTheme(_isDarkMode, _primaryColor);
     notifyListeners();
   }

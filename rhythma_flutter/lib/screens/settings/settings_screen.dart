@@ -9,6 +9,7 @@ import '../../providers/locale_provider.dart';
 import '../../providers/theme_provider.dart';
 import 'language_screen.dart';
 import 'theme_screen.dart';
+import '../sms/sms_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -23,8 +24,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _cycleTracking = true;
   bool _medicineAlerts = true;
   bool _wellnessTips = false;
-
-
 
   void _showLogoutDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -117,7 +116,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               // user "logged in" in the UI even though nothing
                               // else about the session had changed.
                               Navigator.of(context, rootNavigator: true)
-                                  .pushNamedAndRemoveUntil('/login', (route) => false);
+                                  .pushNamedAndRemoveUntil(
+                                      '/login', (route) => false);
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -143,13 +143,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Future<bool> _showConfirmationDialog(String title, String content, bool newValue) async {
+  Future<bool> _showConfirmationDialog(
+      String title, String content, bool newValue) async {
     final result = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(title, style: TextStyle(color: RhythmaColors.primary)),
         content: Text(
-          newValue ? 'Are you sure you want to turn ON $content?' : 'Are you sure you want to turn OFF $content?',
+          newValue
+              ? 'Are you sure you want to turn ON $content?'
+              : 'Are you sure you want to turn OFF $content?',
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         actions: [
@@ -175,7 +178,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     context.watch<ThemeProvider>();
     final l10n = AppLocalizations.of(context)!;
-    final currentLocaleCode = context.watch<LocaleProvider>().locale.languageCode;
+    final currentLocaleCode =
+        context.watch<LocaleProvider>().locale.languageCode;
     String currentLanguageName = LanguageScreen.languages.entries
         .firstWhere((entry) => entry.value == currentLocaleCode,
             orElse: () => const MapEntry('English', 'en'))
@@ -210,11 +214,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     title: Text(l10n.languagePreferences),
                     subtitle: Text(currentLanguageName),
-                    trailing: Icon(Icons.chevron_right_rounded, color: RhythmaColors.mutedFg),
+                    trailing: Icon(Icons.chevron_right_rounded,
+                        color: RhythmaColors.mutedFg),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const LanguageScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const LanguageScreen()),
                       );
                     },
                   ),
@@ -226,11 +232,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       size: 36,
                     ),
                     title: Text(l10n.themeToggle),
-                    trailing: Icon(Icons.chevron_right_rounded, color: RhythmaColors.mutedFg),
+                    trailing: Icon(Icons.chevron_right_rounded,
+                        color: RhythmaColors.mutedFg),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const ThemeScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const ThemeScreen()),
                       );
                     },
                   ),
@@ -255,7 +263,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     value: _cycleTracking,
                     activeThumbColor: RhythmaColors.primary,
                     onChanged: (bool value) async {
-                      bool confirm = await _showConfirmationDialog('Cycle Tracking', 'cycle tracking reminders', value);
+                      bool confirm = await _showConfirmationDialog(
+                          'Cycle Tracking', 'cycle tracking reminders', value);
                       if (confirm) {
                         setState(() {
                           _cycleTracking = value;
@@ -274,7 +283,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     value: _medicineAlerts,
                     activeThumbColor: RhythmaColors.primary,
                     onChanged: (bool value) async {
-                      bool confirm = await _showConfirmationDialog('Medicine Alerts', 'medicine alerts', value);
+                      bool confirm = await _showConfirmationDialog(
+                          'Medicine Alerts', 'medicine alerts', value);
                       if (!confirm) return;
 
                       setState(() {
@@ -282,14 +292,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       });
                       if (value) {
                         // Request permissions first
-                        bool granted = await NotificationService.instance.requestPermissions();
+                        bool granted = await NotificationService.instance
+                            .requestPermissions();
                         if (granted) {
                           // Schedule a test medicine alert for 10 seconds from now
                           NotificationService.instance.scheduleMedicineAlert(
                             id: 1001,
                             title: 'Medicine Reminder',
                             body: 'Time to take your iron supplement!',
-                            scheduledDate: DateTime.now().add(const Duration(seconds: 10)),
+                            scheduledDate:
+                                DateTime.now().add(const Duration(seconds: 10)),
                           );
                         } else {
                           // Revert if denied
@@ -313,7 +325,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     value: _wellnessTips,
                     activeThumbColor: RhythmaColors.primary,
                     onChanged: (bool value) async {
-                      bool confirm = await _showConfirmationDialog('Wellness Tips', 'wellness tips', value);
+                      bool confirm = await _showConfirmationDialog(
+                          'Wellness Tips', 'wellness tips', value);
                       if (confirm) {
                         setState(() {
                           _wellnessTips = value;
@@ -330,9 +343,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     title: const Text('Test Notification Now'),
                     subtitle: const Text('Sends an instant alert'),
-                    trailing: Icon(Icons.send_rounded, color: RhythmaColors.mutedFg),
+                    trailing:
+                        Icon(Icons.send_rounded, color: RhythmaColors.mutedFg),
                     onTap: () async {
-                      bool granted = await NotificationService.instance.requestPermissions();
+                      bool granted = await NotificationService.instance
+                          .requestPermissions();
                       if (granted) {
                         NotificationService.instance.showInstantNotification(
                           id: 9999,
@@ -340,6 +355,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           body: 'Native notifications are working perfectly!',
                         );
                       }
+                    },
+                  ),
+                  Divider(height: 1, color: RhythmaColors.border),
+                  ListTile(
+                    leading: TintedIcon(
+                      icon: Icons.sms_rounded,
+                      color: RhythmaColors.teal,
+                      size: 36,
+                    ),
+                    title: const Text('SMS Cycle Summaries'),
+                    subtitle: const Text('Get a text summary sent to your phone'),
+                    trailing: Icon(Icons.chevron_right_rounded, color: RhythmaColors.mutedFg),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SmsScreen()),
+                      );
                     },
                   ),
                 ],
@@ -360,7 +392,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       size: 36,
                     ),
                     title: Text(l10n.appPermissions),
-                    trailing: Icon(Icons.chevron_right_rounded, color: RhythmaColors.mutedFg),
+                    trailing: Icon(Icons.chevron_right_rounded,
+                        color: RhythmaColors.mutedFg),
                     onTap: () {
                       showDialog(
                         context: context,
@@ -400,7 +433,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       size: 36,
                     ),
                     title: Text(l10n.privacyPolicy),
-                    trailing: Icon(Icons.chevron_right_rounded, color: RhythmaColors.mutedFg),
+                    trailing: Icon(Icons.chevron_right_rounded,
+                        color: RhythmaColors.mutedFg),
                     onTap: () {
                       showDialog(
                         context: context,
@@ -449,20 +483,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 title: Text(l10n.settingsContactUs),
                 subtitle: Text(l10n.settingsContactDesc),
-                trailing: Icon(Icons.chevron_right_rounded, color: RhythmaColors.mutedFg),
+                trailing: Icon(Icons.chevron_right_rounded,
+                    color: RhythmaColors.mutedFg),
                 onTap: () async {
                   final Uri emailUri = Uri(
                     scheme: 'mailto',
                     path: 'support@rhythma.com',
-                    query: 'subject=Rhythma Support & Bug Report&body=Hi Rhythma Team,%0D%0A%0D%0AI need help with...', // %0D%0A is for line breaks
+                    query:
+                        'subject=Rhythma Support & Bug Report&body=Hi Rhythma Team,%0D%0A%0D%0AI need help with...', // %0D%0A is for line breaks
                   );
 
                   if (await canLaunchUrl(emailUri)) {
-                    await launchUrl(emailUri, mode: LaunchMode.externalApplication);
+                    await launchUrl(emailUri,
+                        mode: LaunchMode.externalApplication);
                   } else {
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                         SnackBar(content: Text(l10n.settingsEmailError)),
+                        SnackBar(content: Text(l10n.settingsEmailError)),
                       );
                     }
                   }
@@ -486,7 +523,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                trailing: Icon(Icons.chevron_right_rounded, color: RhythmaColors.mutedFg),
+                trailing: Icon(Icons.chevron_right_rounded,
+                    color: RhythmaColors.mutedFg),
                 onTap: () => _showLogoutDialog(context),
               ),
             ),

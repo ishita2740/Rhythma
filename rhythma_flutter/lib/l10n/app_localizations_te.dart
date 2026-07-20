@@ -559,4 +559,113 @@ class AppLocalizationsTe extends AppLocalizations {
   @override
   String get onboardingWeightInvalid =>
       'దయచేసి చెల్లుబాటు అయ్యే బరువు నమోదు చేయండి (20–300 కిలో)';
+
+  @override
+  String get onboardingPhoneInvalid =>
+      'దయచేసి చెల్లుబాటు అయ్యే ఫోన్ నంబర్‌ను నమోదు చేయండి';
+
+  @override
+  String get onboardingTapToSelectDate => 'తేదీని ఎంచుకోవడానికి ట్యాప్ చేయండి';
+
+  @override
+  String get onboardingDays => 'రోజులు';
+
+  @override
+  String get smsScreenTitle => 'ఎస్‌ఎంఎస్ సారాంశాలు';
+
+  @override
+  String get smsScreenSubtitle => 'యాప్ లేకుండా కూడా సమాచారం పొందండి';
+
+  @override
+  String get smsInfoCardTitle => 'వారపు ఆరోగ్య సారాంశం';
+
+  @override
+  String get smsInfoCardBody =>
+      'ప్రతి వారం, మీ చక్ర స్థితి, ఆరోగ్య స్కోరు మరియు ముఖ్యమైన నమూనాల సంక్షిప్త సారాంశాన్ని Rhythma నేరుగా ఎస్‌ఎంఎస్ ద్వారా మీ ఫోన్‌కు పంపుతుంది, డేటా లేదా యాప్ లేకుండా కూడా పనిచేస్తుంది.';
+
+  @override
+  String get smsConfigTitle => 'కాన్ఫిగరేషన్';
+
+  @override
+  String get smsPhoneLabel => 'ఫోన్ నంబర్';
+
+  @override
+  String get smsPhoneHint => '+91 98765 43210';
+
+  @override
+  String get smsEnableWeekly => 'వారపు ఎస్‌ఎంఎస్‌ను ప్రారంభించండి';
+
+  @override
+  String get smsSaveSettings => 'సెట్టింగ్‌లను సేవ్ చేయండి';
+
+  @override
+  String get smsSendSectionTitle => 'ఇప్పుడు సారాంశం పంపండి';
+
+  @override
+  String get smsSendRecipientPrefix => 'దిగువ సందేశం ఈ నంబర్‌కు పంపబడుతుంది:';
+
+  @override
+  String get smsSendNoPhone => 'ముందుగా పైన ఫోన్ నంబర్‌ను జోడించి సేవ్ చేయండి.';
+
+  @override
+  String get smsSendButton => 'ఇప్పుడు సారాంశం పంపండి';
+
+  @override
+  String get smsErrorEnterPhone => 'దయచేసి ఫోన్ నంబర్‌ను నమోదు చేయండి';
+
+  @override
+  String get smsErrorInvalidPhone =>
+      'అంతర్జాతీయ ఆకృతిలో సరైన ఫోన్ నంబర్‌ను నమోదు చేయండి, ఉదా. +919876543210';
+
+  @override
+  String get smsSuccessSaved =>
+      'ఎస్‌ఎంఎస్ సెట్టింగ్‌లు విజయవంతంగా సేవ్ చేయబడ్డాయి!';
+
+  @override
+  String get smsErrorAddPhoneFirst =>
+      'ముందుగా ఫోన్ నంబర్‌ను జోడించి సేవ్ చేయండి';
+
+  @override
+  String get smsSuccessSent => 'సారాంశం మీ ఫోన్‌కు పంపబడింది!';
+
+  @override
+  String get smsErrorRateLimit =>
+      'మీరు నిమిషానికి ఒక సారాంశాన్ని మాత్రమే పంపవచ్చు, దయచేసి కొంత సమయం తర్వాత మళ్లీ ప్రయత్నించండి.';
+
+  @override
+  String get smsErrorSessionExpired =>
+      'మీ సెషన్ గడువు ముగిసింది. దయచేసి మళ్లీ లాగిన్ చేయండి.';
+
+  @override
+  String get smsErrorNetwork =>
+      'సర్వర్‌ను చేరుకోలేకపోయాము. మీ కనెక్షన్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.';
+
+  @override
+  String get smsErrorGeneric =>
+      'ఏదో తప్పు జరిగింది. దయచేసి మళ్లీ ప్రయత్నించండి.';
+
+  @override
+  String get smsLoadError =>
+      'మీ ఎస్‌ఎంఎస్ సెట్టింగ్‌లను లోడ్ చేయలేకపోయాము. రిఫ్రెష్ చేయండి లేదా మళ్లీ ప్రయత్నించండి.';
+
+  @override
+  String get smsSummaryMessage =>
+      '🌸 Rhythma ఆరోగ్య సారాంశం\nఇది Rhythma నుండి మీ ఆన్-డిమాండ్ సారాంశం.\nమీ తాజా చక్ర సమాచారం కోసం యాప్‌ను తెరవండి.\nసబ్‌స్క్రిప్షన్ రద్దు చేయడానికి STOP అని రిప్లై ఇవ్వండి.';
+
+  @override
+  String insightsLoadError(String error) {
+    return 'మీ విశ్లేషణలను లోడ్ చేయలేకపోయాము: $error';
+  }
+
+  @override
+  String get insightsNotEnoughData =>
+      'మీ పూర్తి ఆరోగ్య విశ్లేషణలను అన్లాక్ చేయడానికి Cycle ట్యాబ్‌లో మరికొన్ని చక్రాలను లాగ్ చేయండి.';
+
+  @override
+  String get insightsNoSymptomsYet =>
+      'ఇంకా లక్షణాలు ఏవీ లాగ్ చేయబడలేదు — Cycle ట్యాబ్‌లో కొన్నింటిని లాగ్ చేయండి.';
+
+  @override
+  String get insightsNotEnoughTrendData =>
+      'మీ ట్రెండ్ చూడటానికి కనీసం రెండు చక్రాలను లాగ్ చేయండి.';
 }

@@ -39,7 +39,8 @@ class FirestoreService {
     // }
     // await batch.commit();
 
-    debugPrint('FirestoreService: sync complete (stub — Firebase not yet wired)');
+    debugPrint(
+        'FirestoreService: sync complete (stub — Firebase not yet wired)');
   }
 
   /// Fetch cycle logs from Firestore and merge into local Hive storage.

@@ -45,11 +45,12 @@ cd Rhythma
 
 ```
 cd rhythma_flutter
-flutter create .        # regenerates android/ and ios/, which are not committed
 flutter pub get
 cp env.example .env     # add GEMINI_API_KEY if you want live AI responses
 flutter run
 ```
+
+Note: `android/`, `ios/`, and the other platform folders are already committed to the repo (only build artifacts inside them, like `android/.gradle/` or `ios/Pods/`, are gitignored). There's no need to run `flutter create .` — doing so can overwrite already-configured platform files (manifests, icons, permissions).
 
 **Backend:**
 
@@ -82,11 +83,11 @@ The [README's Project Status](https://github.com/ishita2740/Rhythma/blob/main/RE
 
 **Before starting on any of these, open an issue first** (see [Issue Workflow](#issue-workflow)). Each one needs a scoping discussion, since the "right" first version is genuinely open, not just an implementation detail.
 
-> **Highest-priority non-clean-slate gap:** wiring the Cycle screen's daily-logging bottom sheet to persist real data (via Hive and/or the backend's working `POST /cycle/log`). This isn't clean-slate — the UI, the backend endpoint, and the `/dashboard` scoring that would consume the data all already exist — but closing it is what unblocks the Insights screen, real CVI/MHS, and the Home screen's dashboard actually showing something. If you want a smaller, well-scoped, high-impact issue rather than a clean-slate feature, ask about this one.
+> **Highest-priority non-clean-slate gap:** the Cycle screen's daily-logging bottom sheet (`log_entry_sheet.dart`) already saves each entry via `LocalStorageService.saveCycleLog()` — that part works. The break is one layer up: `cycle_provider.dart`, which drives the calendar's "logged day" highlighting, uses a hardcoded mock `_loggedDays` set (literally commented `// Mock logged days`) instead of reading from `LocalStorageService.getCycleLogs()`. So a real log gets saved, but the calendar doesn't reflect it. Separately, nothing in the Flutter app calls the backend's working `POST /cycle/log` at all — all logging today is local-only (Hive), with no path to the backend or Firestore yet. Fixing `CycleProvider` to read real Hive data is a small, well-scoped, high-impact issue if you want one; wiring an actual backend sync call is a bigger, separate piece of work (related to the Firestore sync stub below).
 
 - **First Period Guidance** — a dedicated onboarding and education flow for first-time users aged 12–17, with simpler language, a different tone, and content distinct from the general cycle-tracking experience. Open questions before code gets written: how do we determine a user is in this age group, how much of the existing navigation should this flow reuse vs. replace, and where does the educational content itself come from (needs review, ideally from someone with relevant health-education background).
 - **Ayurvedic Correlation Layer** — educational content connecting lifestyle and cycle patterns to traditional Ayurvedic wellness concepts, surfaced contextually alongside cycle/insight data. This is content-heavy work as much as code: sourcing accurate, non-prescriptive material is the harder half of this feature, and it needs to stay clearly educational rather than reading as medical advice (see [Disclaimer](https://github.com/ishita2740/Rhythma/blob/main/README.md#disclaimer)).
-- **WhatsApp Bot Integration** — a Gemini-powered WhatsApp assistant (via Twilio/Meta Cloud API) for cycle tracking and health Q&A without an app install. This one has a real dependency: it should build on the existing `backend/api/assistant.py` endpoint, which currently exists but isn't called by the Flutter app or the web app yet. If you're interested in this, it's worth first checking in on the plan to consolidate the two AI-assistant paths (client-direct vs. backend-proxied — see the README's [Features In Progress](https://github.com/ishita2740/Rhythma/blob/main/README.md#features-in-progress)), since building on the wrong one means redoing the work later.
+- **WhatsApp Bot Integration** — a Gemini-powered WhatsApp assistant (via Twilio/Meta Cloud API) for cycle tracking and health Q&A without an app install. This one has a real dependency: it should build on the existing `backend/api/assistant.py` endpoint, which currently exists but isn't called by the Flutter app or the web app yet. If you're interested in this, check the README's [Project Status](https://github.com/ishita2740/Rhythma/blob/main/README.md#project-status) table first for the current state of the AI Assistant integration, since building against the wrong assumption means redoing the work later.
 - **Website product pages** — `web/` now has a working login/register/protected-route scaffold (React + Vite + TypeScript), but cycle tracking, AI Assistant, and Insights pages don't exist yet — only a placeholder home page. Building these against the existing backend endpoints (the same ones the Flutter app calls) is open work, and it's reasonable to propose tackling one page at a time rather than all of it in one PR (see [Maximum Recommended PR Size](#maximum-recommended-pr-size)).
 
 If you have an idea that isn't listed in the README's Future Features section at all, that's fine too — open an issue describing it and we can discuss whether and how it fits before any code is written.
@@ -121,26 +122,77 @@ Use lowercase, hyphen-separated, descriptive names — not issue numbers alone (
 
 ## Issue Assignment Policy
 
-- Comment on the issue asking to be assigned before starting work, so two people don't duplicate effort.
+- Comment on the issue with the implementation approach asking to be assigned before starting work, so two people don't duplicate effort.
 - If an issue has been assigned but shows no activity or linked PR after **7 days**, it's fair game to ask the maintainer to reassign it.
 - Don't open a PR for an issue assigned to someone else without coordinating with them first.
 - Assigned issues may be reassigned if there is no visible activity for an extended period.
 - Work on only one assigned issue at a time unless approved by a maintainer.
-
+= Please wait until a maintainer assigns the issue before starting work.
+- You're always welcome to reopen the discussion or submit a fresh PR later.
+  
 ---
 
 ## Issue Labels
 
-| Label | Purpose |
-| --- | --- |
-| good first issue | Beginner-friendly tasks |
-| enhancement | New features or improvements |
-| bug | Defects or unexpected behavior |
-| documentation | Documentation-only work |
-| good frontend | Flutter/UI contributions |
-| good backend | Backend/API contributions |
-| content | Health/educational content work (e.g. First Period Guidance, Ayurvedic layer) |
-| maintenance | Refactoring, cleanup, tooling |
+The repository uses labels to help contributors identify suitable issues.
+
+| Label | Description |
+| ------ | ----------- |
+| `good first issue` | Beginner-friendly issues for first-time contributors. |
+| `help wanted` | Community contributions are encouraged. |
+| `bug` | Something isn't working as expected. |
+| `enhancement` | New features or improvements. |
+| `documentation` | Documentation updates and improvements. |
+| `accessibility` | Accessibility and inclusive design improvements. |
+| `localization` | Translation and multilingual improvements. |
+| `backend` | Backend/API related tasks. |
+| `mobile` | Flutter/mobile application tasks. |
+| `content` | Educational or health-related content improvements. |
+| `easy` | Suitable for beginners. |
+| `medium` | Moderate complexity. |
+| `hard` | Advanced tasks requiring deeper understanding. |
+| `priority: high` | High priority issues. |
+| `priority: medium` | Medium priority issues. |
+| `priority: low` | Low priority issues. |
+| `security` | Security-related improvements or fixes. |
+| `ECSoC26` | Issues participating in Elite Summer of Code 2026. |
+
+## Contribution Recognition
+
+Some labels are used to recognize exceptional contributions during community programs.
+
+| Label | Meaning |
+|--------|---------|
+| good-pr | High-quality pull request (+15 XP) |
+| good-ui | Exceptional UI/Flutter contribution (+25 XP) |
+| good-backend | Exceptional backend contribution (+50 XP) |
+
+These labels are awarded by maintainers after review.
+They are **not** requested by contributors.
+
+---
+
+## Architecture
+
+Before implementing major features, spend some time understanding the existing architecture.
+
+Avoid introducing duplicate services, providers, API layers, or utilities when similar functionality already exists.
+
+---
+
+## AI-assisted Contributions
+
+AI tools (ChatGPT, Claude, GitHub Copilot, etc.) may be used to assist development.
+
+However, contributors remain fully responsible for:
+
+- Code correctness
+- Testing
+- Documentation
+- Security
+- Code quality
+
+AI-generated code will be reviewed using the same standards as handwritten code.
 
 ---
 
@@ -149,7 +201,7 @@ Use lowercase, hyphen-separated, descriptive names — not issue numbers alone (
 ### General
 
 - Keep code simple and maintainable.
-- Follow existing project conventions.
+- Prefer consistency over personal preference. Match the existing architecture and coding style unless a refactor has been discussed first.
 - Avoid unnecessary dependencies.
 - Prefer reusable components and services.
 - Remove debug code before submitting.
@@ -275,6 +327,19 @@ If you added an endpoint, manually exercise it via the interactive docs at `http
 5. **Keep the PR up to date** with `main` if review takes a while and conflicts appear.
 6. A maintainer will merge once the PR is approved and checks (where they exist) pass.
 
+## Draft Pull Requests
+
+If your work is still in progress, open the PR as a **Draft Pull Request**.
+
+Draft PRs are encouraged for:
+
+- Early feedback
+- Architecture discussions
+- Large features
+- Collaborative development
+
+Convert it to "Ready for Review" only after completing the checklist.
+
 ---
 
 ## Maximum Recommended PR Size
@@ -319,6 +384,9 @@ Please:
 - Remove sensitive logs before submission
 - Report security issues privately to maintainers
 
+If you discover a security vulnerability, please **do not open a public GitHub issue.**
+Instead, contact the maintainers privately so the issue can be investigated before disclosure.
+
 ---
 
 ## Documentation Guidelines
@@ -341,6 +409,14 @@ Please:
 
 ---
 
+## Merge Policy
+
+Maintainers may squash, rebase, or merge commits depending on what best preserves project history.
+
+The merge strategy is chosen by the maintainers.
+
+---
+
 ## Code of Conduct
 
 This project is committed to providing a welcoming and respectful environment for all contributors, regardless of experience level, background, or identity. Please be kind, constructive, and considerate in all interactions — in issues, PRs, and reviews.
@@ -349,8 +425,29 @@ Harassment, discrimination, abusive behavior, or personal attacks will not be to
 
 ---
 
+## Community
+
+You're welcome to join our Discord community for general discussions, questions, brainstorming ideas, or getting help with the project.
+
+**Discord:** https://discord.com/channels/1385270036331233371/1525165966382862626
+
+Please use:
+- **GitHub Issues** for bugs and feature requests.
+- **GitHub Pull Requests** for code reviews.
+- **Discord** for general discussions, questions, brainstorming, and community support.
+
+Project decisions and accepted feature requests should always be documented on GitHub so they're easy for everyone to find later.
+
+---
+
 ## Questions?
 
 If you are unsure about implementation details, project direction, or issue scope, open an issue and ask before starting work — it's easier for everyone that way.
 
+If you're unsure where to start:
+
+- Look for `good first issue`
+- Look for `help wanted`
+- Read the README completely
+  
 We appreciate every contribution and thank you for helping improve Rhythma. 💜

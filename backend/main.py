@@ -49,6 +49,12 @@ app.add_middleware(
         "http://127.0.0.1:8000",
         "http://localhost:5173",  # Vite dev server default port (web/)
         "http://127.0.0.1:5173",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://localhost:8081",   # Flutter web dev server
+        "http://127.0.0.1:8081",
+        "http://localhost:8082",
+        "http://127.0.0.1:8082",
     ],
     allow_credentials=True,
     allow_methods=["*"],

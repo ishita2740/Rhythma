@@ -63,7 +63,9 @@ def mock_auth_dependencies():
     # no effect on the names `auth_router` actually calls. Patching
     # `core.auth_router.UserService` / `core.auth_router.verify_password`
     # replaces the exact reference the route code uses.
-    with patch("core.auth_router.UserService") as MockUserService, \
+    with patch("core.auth_router.UserService") as MockUserService1, \
+         patch("core.auth.UserService") as MockUserService2, \
+         patch("api.sms.UserService") as MockUserService3, \
          patch("core.auth_router.verify_password") as mock_verify:
 
         # Define mock user data
@@ -105,24 +107,33 @@ def mock_auth_dependencies():
 
         def get_by_id(user_id):
             if user_id == "test-user-id-123":
-                return test_user_data.copy()
+                return test_user_data
             if user_id == "rate-limiter-id":
-                return rate_limiter_user.copy()
+                return rate_limiter_user
             return None
 
         def create_user(user_dict):
             # Return a new user ID (ignore the actual data)
             return "test-user-id-123"
 
+        def update_user(user_id, update_data):
+            if user_id == "test-user-id-123":
+                test_user_data.update(update_data)
+                return True
+            if user_id == "rate-limiter-id":
+                rate_limiter_user.update(update_data)
+                return True
+            return False
+
         # UserService's methods are @staticmethods, called directly on the
         # class (e.g. `UserService.get_user_by_username(...)`) — never
-        # instantiated. So the side effects go on the mocked class itself,
-        # not on `MockUserService.return_value` (which would only matter
-        # if the code did `UserService().get_user_by_username(...)`).
-        MockUserService.get_user_by_username.side_effect = get_by_username
-        MockUserService.get_user_by_email.side_effect = get_by_email
-        MockUserService.get_user_by_id.side_effect = get_by_id
-        MockUserService.create_user.side_effect = create_user
+        # instantiated. So the side effects go on the mocked classes.
+        for mock_us in [MockUserService1, MockUserService2, MockUserService3]:
+            mock_us.get_user_by_username.side_effect = get_by_username
+            mock_us.get_user_by_email.side_effect = get_by_email
+            mock_us.get_user_by_id.side_effect = get_by_id
+            mock_us.create_user.side_effect = create_user
+            mock_us.update_user.side_effect = update_user
 
         # Mock verify_password: return True for correct password
         def verify_pw(plain, hashed):
@@ -295,3 +306,44 @@ def test_sms_rate_limiting():
         headers=headers
     )
     assert response2.status_code == 429
+
+
+def test_get_profile():
+    token_response = client.post(
+        "/api/v1/auth/token",
+        data={"username": "testuser", "password": "testpass123"}
+    )
+    assert token_response.status_code == 200
+    token = token_response.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    response = client.get("/api/v1/auth/profile", headers=headers)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["username"] == "testuser"
+    assert data["email"] == "testuser@example.com"
+    assert "password" not in data
+
+
+def test_patch_profile():
+    token_response = client.post(
+        "/api/v1/auth/token",
+        data={"username": "testuser", "password": "testpass123"}
+    )
+    assert token_response.status_code == 200
+    token = token_response.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    update_payload = {
+        "age": 25,
+        "cycle_length": 29,
+        "avatar": "assets/avatars/avatar_2.png"
+    }
+    response = client.patch("/api/v1/auth/profile", json=update_payload, headers=headers)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["age"] == 25
+    assert data["cycle_length"] == 29
+    assert data["avatar"] == "assets/avatars/avatar_2.png"
+    assert data["username"] == "testuser"
+    assert "password" not in data

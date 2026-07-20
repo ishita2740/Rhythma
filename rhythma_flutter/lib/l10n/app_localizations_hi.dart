@@ -36,7 +36,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get medicineAlerts => 'दवा अलर्ट';
 
   @override
-  String get wellnessTips => 'कल्याण टिप्स';
+  String get wellnessTips => 'स्वास्थ्य संबंधी सुझाव';
 
   @override
   String get securityPrivacyTitle => 'सुरक्षा और गोपनीयता';
@@ -76,7 +76,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get homeDaysLabel => 'दिन';
 
   @override
-  String get homeFertileWindow => 'प्रजनन खिड़की · ';
+  String get homeFertileWindow => 'उपजाऊ अवधि · ';
 
   @override
   String get homeHighEnergy => 'उच्च ऊर्जा';
@@ -86,7 +86,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get homeAiSubtitle =>
-      'मुझसे अपने शरीर के बारे में कुछ भी पूछें,\nअपनी भाषा में।';
+      'अपने शरीर से जुड़ा कोई भी प्रश्न अपनी भाषा में मुझसे पूछें।';
 
   @override
   String get homeAiPrompt => 'मेरे मासिक धर्म अनियमित क्यों हैं?';
@@ -114,7 +114,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get homeWeeklyInsightTitle =>
-      'इस सप्ताह आपकी नींद में 12% सुधार हुआ है - आपका चक्र आपको धन्यवाद दे सकता है।';
+      'इस सप्ताह आपकी नींद में 12% सुधार हुआ है। यह आपके मासिक धर्म चक्र के लिए लाभदायक हो सकता है।';
 
   @override
   String get homeWeeklyInsightDesc =>
@@ -258,14 +258,14 @@ class AppLocalizationsHi extends AppLocalizations {
   String get assistantTitle => 'रिद्मा सहायक';
 
   @override
-  String get assistantSubtitle => 'आपकी स्वास्थ्य साथी • निजी और सुरक्षित';
+  String get assistantSubtitle => 'आपकी स्वास्थ्य सहयोगी • सुरक्षित और निजी';
 
   @override
-  String get assistantInputHint => 'अपना सवाल पूछें...';
+  String get assistantInputHint => 'अपना प्रश्न पूछें...';
 
   @override
   String get assistantWelcome =>
-      'नमस्ते आर्या 🌸 मैं रिद्मा हूँ, आपकी निजी स्वास्थ्य साथी। मुझसे अपने चक्र, लक्षणों या स्वास्थ्य के बारे में कुछ भी पूछें — अंग्रेजी, हिंदी, मराठी या तमिल में।';
+      'नमस्ते आर्या 🌸 मैं रिद्मा हूँ, आपकी निजी स्वास्थ्य सहयोगी। अपने मासिक धर्म चक्र, लक्षणों या स्वास्थ्य से जुड़ा कोई भी प्रश्न मुझसे अंग्रेज़ी, हिंदी, मराठी या तमिल में पूछ सकती हैं।';
 
   @override
   String get assistantSug1 => 'मेरे मासिक धर्म अनियमित क्यों हैं?';
@@ -338,7 +338,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get profileTitle => 'प्रोफ़ाइल';
 
   @override
-  String get profileYearsOld => 'साल की';
+  String get profileYearsOld => 'वर्ष';
 
   @override
   String get profileCycleDay => 'चक्र का दिन';
@@ -429,7 +429,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get settingsContactUs => 'हमसे संपर्क करें / बग की रिपोर्ट करें';
 
   @override
-  String get settingsContactDesc => 'हमारी सहायता टीम को ईमेल भेजें';
+  String get settingsContactDesc => 'हमारी सहायता टीम को ईमेल करें';
 
   @override
   String get settingsEmailError =>
@@ -556,4 +556,110 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get onboardingWeightInvalid =>
       'कृपया वैध वज़न दर्ज करें (20–300 किग्रा)';
+
+  @override
+  String get onboardingPhoneInvalid => 'कृपया एक मान्य फ़ोन नंबर दर्ज करें';
+
+  @override
+  String get onboardingTapToSelectDate => 'तारीख चुनने के लिए टैप करें';
+
+  @override
+  String get onboardingDays => 'दिन';
+
+  @override
+  String get smsScreenTitle => 'एसएमएस सारांश';
+
+  @override
+  String get smsScreenSubtitle => 'ऐप के बिना भी जानकारी पाएं';
+
+  @override
+  String get smsInfoCardTitle => 'साप्ताहिक स्वास्थ्य सारांश';
+
+  @override
+  String get smsInfoCardBody =>
+      'हर सप्ताह, रिद्मा आपको आपके चक्र की स्थिति, स्वास्थ्य स्कोर और किसी भी महत्वपूर्ण पैटर्न का संक्षिप्त सारांश सीधे एसएमएस के ज़रिए आपके फ़ोन पर भेजेगी, बिना डेटा या ऐप के भी काम करता है।';
+
+  @override
+  String get smsConfigTitle => 'कॉन्फ़िगरेशन';
+
+  @override
+  String get smsPhoneLabel => 'फ़ोन नंबर';
+
+  @override
+  String get smsPhoneHint => '+91 98765 43210';
+
+  @override
+  String get smsEnableWeekly => 'साप्ताहिक एसएमएस सक्षम करें';
+
+  @override
+  String get smsSaveSettings => 'सेटिंग्स सहेजें';
+
+  @override
+  String get smsSendSectionTitle => 'अभी सारांश भेजें';
+
+  @override
+  String get smsSendRecipientPrefix =>
+      'नीचे दिया गया संदेश इस नंबर पर भेजा जाएगा:';
+
+  @override
+  String get smsSendNoPhone => 'पहले ऊपर फ़ोन नंबर जोड़ें और सहेजें।';
+
+  @override
+  String get smsSendButton => 'सारांश अभी भेजें';
+
+  @override
+  String get smsErrorEnterPhone => 'कृपया फ़ोन नंबर दर्ज करें';
+
+  @override
+  String get smsErrorInvalidPhone =>
+      'अंतरराष्ट्रीय प्रारूप में मान्य फ़ोन नंबर दर्ज करें, जैसे +919876543210';
+
+  @override
+  String get smsSuccessSaved => 'एसएमएस सेटिंग्स सफलतापूर्वक सहेजी गईं!';
+
+  @override
+  String get smsErrorAddPhoneFirst => 'पहले फ़ोन नंबर जोड़ें और सहेजें';
+
+  @override
+  String get smsSuccessSent => 'सारांश आपके फ़ोन पर भेज दिया गया!';
+
+  @override
+  String get smsErrorRateLimit =>
+      'आप प्रति मिनट केवल एक सारांश भेज सकते हैं, कृपया थोड़ी देर बाद पुनः प्रयास करें।';
+
+  @override
+  String get smsErrorSessionExpired =>
+      'आपका सत्र समाप्त हो गया है। कृपया फिर से लॉग इन करें।';
+
+  @override
+  String get smsErrorNetwork =>
+      'सर्वर तक नहीं पहुंच सके। अपना कनेक्शन जांचें और पुनः प्रयास करें।';
+
+  @override
+  String get smsErrorGeneric => 'कुछ गलत हो गया। कृपया पुनः प्रयास करें।';
+
+  @override
+  String get smsLoadError =>
+      'आपकी एसएमएस सेटिंग्स लोड नहीं हो सकीं। रीफ्रेश करें या पुनः प्रयास करें।';
+
+  @override
+  String get smsSummaryMessage =>
+      '🌸 रिद्मा स्वास्थ्य सारांश\nयह रिद्मा से आपका ऑन-डिमांड सारांश है।\nअपनी नवीनतम चक्र जानकारी के लिए ऐप खोलें।\nसदस्यता समाप्त करने के लिए STOP उत्तर दें।';
+
+  @override
+  String insightsLoadError(String error) {
+    return 'आपकी जानकारी लोड नहीं हो सकी: $error';
+  }
+
+  @override
+  String get insightsNotEnoughData =>
+      'अपने पूर्ण स्वास्थ्य अंतर्दृष्टि को अनलॉक करने के लिए Cycle टैब पर कुछ और चक्र लॉग करें।';
+
+  @override
+  String get insightsNoSymptomsYet =>
+      'अभी तक कोई लक्षण लॉग नहीं किया गया है - यहाँ पैटर्न देखने के लिए Cycle टैब पर कुछ लॉग करें।';
+
+  @override
+  String get insightsNotEnoughTrendData =>
+      'अपना ट्रेंड देखने के लिए कम से कम दो चक्र लॉग करें।';
 }

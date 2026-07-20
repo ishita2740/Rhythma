@@ -1165,6 +1165,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a valid weight (20–300 kg)'**
   String get onboardingWeightInvalid;
+
+  /// No description provided for @onboardingPhoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number'**
+  String get onboardingPhoneInvalid;
+
+  /// No description provided for @onboardingTapToSelectDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to select date'**
+  String get onboardingTapToSelectDate;
+
+  /// No description provided for @onboardingDays.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get onboardingDays;
+
+  /// No description provided for @smsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS Summaries'**
+  String get smsScreenTitle;
+
+  /// No description provided for @smsScreenSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay informed even without the app'**
+  String get smsScreenSubtitle;
+
+  /// No description provided for @smsInfoCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly Health Summary'**
+  String get smsInfoCardTitle;
+
+  /// No description provided for @smsInfoCardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Every week, Rhythma will send you a brief summary of your cycle status, health score, and any important patterns, directly to your phone via SMS. Works without data or the app.'**
+  String get smsInfoCardBody;
+
+  /// No description provided for @smsConfigTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configuration'**
+  String get smsConfigTitle;
+
+  /// No description provided for @smsPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get smsPhoneLabel;
+
+  /// No description provided for @smsPhoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'+91 98765 43210'**
+  String get smsPhoneHint;
+
+  /// No description provided for @smsEnableWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable weekly SMS'**
+  String get smsEnableWeekly;
+
+  /// No description provided for @smsSaveSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Settings'**
+  String get smsSaveSettings;
+
+  /// No description provided for @smsSendSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a Summary Now'**
+  String get smsSendSectionTitle;
+
+  /// No description provided for @smsSendRecipientPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Sends the message below to:'**
+  String get smsSendRecipientPrefix;
+
+  /// No description provided for @smsSendNoPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Add and save a phone number above first.'**
+  String get smsSendNoPhone;
+
+  /// No description provided for @smsSendButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Summary Now'**
+  String get smsSendButton;
+
+  /// No description provided for @smsErrorEnterPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a phone number'**
+  String get smsErrorEnterPhone;
+
+  /// No description provided for @smsErrorInvalidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid phone number in international format, e.g. +919876543210'**
+  String get smsErrorInvalidPhone;
+
+  /// No description provided for @smsSuccessSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS settings saved successfully!'**
+  String get smsSuccessSaved;
+
+  /// No description provided for @smsErrorAddPhoneFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Add and save a phone number first'**
+  String get smsErrorAddPhoneFirst;
+
+  /// No description provided for @smsSuccessSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary sent to your phone!'**
+  String get smsSuccessSent;
+
+  /// No description provided for @smsErrorRateLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'You can send one summary per minute, please wait a bit and try again.'**
+  String get smsErrorRateLimit;
+
+  /// No description provided for @smsErrorSessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has expired. Please log in again.'**
+  String get smsErrorSessionExpired;
+
+  /// No description provided for @smsErrorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach the server. Check your connection and try again.'**
+  String get smsErrorNetwork;
+
+  /// No description provided for @smsErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get smsErrorGeneric;
+
+  /// No description provided for @smsLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your SMS settings. Pull to refresh or try again.'**
+  String get smsLoadError;
+
+  /// No description provided for @smsSummaryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'🌸 Rhythma Health Summary\nThis is your on-demand summary from Rhythma.\nOpen the app for your latest cycle insights.\nReply STOP to unsubscribe.'**
+  String get smsSummaryMessage;
+
+  /// No description provided for @insightsLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your insights: {error}'**
+  String insightsLoadError(String error);
+
+  /// No description provided for @insightsNotEnoughData.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a few more cycles on the Cycle tab to unlock your full health insights.'**
+  String get insightsNotEnoughData;
+
+  /// No description provided for @insightsNoSymptomsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No symptoms logged yet — log some on the Cycle tab to see patterns here.'**
+  String get insightsNoSymptomsYet;
+
+  /// No description provided for @insightsNotEnoughTrendData.
+  ///
+  /// In en, this message translates to:
+  /// **'Log at least two cycles to see your trend here.'**
+  String get insightsNotEnoughTrendData;
 }
 
 class _AppLocalizationsDelegate
