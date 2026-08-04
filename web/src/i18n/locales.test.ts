@@ -9,18 +9,26 @@ import ml from './locales/ml.json';
 import mr from './locales/mr.json';
 import ta from './locales/ta.json';
 import te from './locales/te.json';
+import ur from './locales/ur.json';
+import or_ from './locales/or.json';
+import as_ from './locales/as.json';
+import mai from './locales/mai.json';
+import sat from './locales/sat.json';
+import ks from './locales/ks.json';
+import ne from './locales/ne.json';
+import sd from './locales/sd.json';
 
 // A missing key does not throw — i18next falls back to the key itself, so
 // the user sees a raw string like "home.flow" in the middle of the UI. That
 // is invisible to tsc, to the linter, and to a build. It is only catchable
 // by comparing the locale files, which is what this file does.
 
-const LOCALES = { bn, gu, hi, kn, ml, mr, ta, te } as const;
+const LOCALES = { bn, gu, hi, kn, ml, mr, ta, te, ur, or: or_, as: as_, mai, sat, ks, ne, sd } as const;
 
 // Locales that currently carry a full translation of en.json. These are
 // held to strict parity: a new English key that isn't translated here
 // fails the build.
-const COMPLETE_LOCALES = ['hi', 'kn', 'ml', 'mr', 'ta', 'te'] as const;
+const COMPLETE_LOCALES = ['bn', 'hi', 'kn', 'ml', 'mr', 'ta', 'te', 'ur', 'or', 'as', 'mai', 'sat', 'ks', 'ne', 'sd'] as const;
 
 // Locales that are genuinely incomplete today. Writing this test turned up
 // that `bn` and `gu` each define only 18 of the 182 keys in en.json — so
@@ -34,7 +42,6 @@ const COMPLETE_LOCALES = ['hi', 'kn', 'ml', 'mr', 'ta', 'te'] as const;
 // so these locales can only improve. Lower the floor and the test fails;
 // raise a locale to 182 and move it into COMPLETE_LOCALES.
 const KNOWN_INCOMPLETE: Record<string, number> = {
-  bn: 18,
   gu: 18,
 };
 
