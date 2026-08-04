@@ -6,6 +6,15 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_bn.dart';
+import 'app_localizations_ur.dart';
+import 'app_localizations_or.dart';
+import 'app_localizations_as.dart';
+import 'app_localizations_mai.dart';
+import 'app_localizations_sat.dart';
+import 'app_localizations_ks.dart';
+import 'app_localizations_ne.dart';
+import 'app_localizations_sd.dart';
+
 import 'app_localizations_en.dart';
 import 'app_localizations_gu.dart';
 import 'app_localizations_hi.dart';
@@ -101,15 +110,23 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('as'),
     Locale('bn'),
     Locale('en'),
     Locale('gu'),
     Locale('hi'),
     Locale('kn'),
+    Locale('ks'),
+    Locale('mai'),
     Locale('ml'),
     Locale('mr'),
+    Locale('ne'),
+    Locale('or'),
+    Locale('sat'),
+    Locale('sd'),
     Locale('ta'),
-    Locale('te')
+    Locale('te'),
+    Locale('ur')
   ];
 
   /// The title of the application
@@ -1840,15 +1857,23 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) => <String>[
+        'as',
         'bn',
         'en',
         'gu',
         'hi',
         'kn',
+        'ks',
+        'mai',
         'ml',
         'mr',
+        'ne',
+        'or',
+        'sat',
+        'sd',
         'ta',
-        'te'
+        'te',
+        'ur'
       ].contains(locale.languageCode);
 
   @override
@@ -1858,6 +1883,8 @@ class _AppLocalizationsDelegate
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'as':
+      return AppLocalizationsAs();
     case 'bn':
       return AppLocalizationsBn();
     case 'en':
@@ -1868,14 +1895,28 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsHi();
     case 'kn':
       return AppLocalizationsKn();
+    case 'ks':
+      return AppLocalizationsKs();
+    case 'mai':
+      return AppLocalizationsMai();
     case 'ml':
       return AppLocalizationsMl();
     case 'mr':
       return AppLocalizationsMr();
+    case 'ne':
+      return AppLocalizationsNe();
+    case 'or':
+      return AppLocalizationsOr();
+    case 'sat':
+      return AppLocalizationsSat();
+    case 'sd':
+      return AppLocalizationsSd();
     case 'ta':
       return AppLocalizationsTa();
     case 'te':
       return AppLocalizationsTe();
+    case 'ur':
+      return AppLocalizationsUr();
   }
 
   throw FlutterError(

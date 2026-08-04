@@ -11,6 +11,15 @@ import mr from './locales/mr.json';
 import ta from './locales/ta.json';
 import te from './locales/te.json';
 import bn from './locales/bn.json';
+import ur from './locales/ur.json';
+import or_ from './locales/or.json';
+import as_ from './locales/as.json';
+import mai from './locales/mai.json';
+import sat from './locales/sat.json';
+import ks from './locales/ks.json';
+import ne from './locales/ne.json';
+import sd from './locales/sd.json';
+
 
 // Matches the Flutter app's supported locales: English, Hindi, Kannada,
 // Malayalam, Marathi, Tamil, Telugu, and Bengali. Kannada and Malayalam translations
@@ -30,6 +39,15 @@ i18n
       ta: { translation: ta },
       te: { translation: te },
       bn: { translation: bn },
+      ur: { translation: ur },
+      or: { translation: or_ },
+      as: { translation: as_ },
+      mai: { translation: mai },
+      sat: { translation: sat },
+      ks: { translation: ks },
+      ne: { translation: ne },
+      sd: { translation: sd },
+
     },
     fallbackLng: 'en',
     interpolation: { escapeValue: false },
