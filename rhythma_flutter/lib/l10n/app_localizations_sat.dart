@@ -4,64 +4,63 @@ import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
 
-/// The translations for English (`en`).
+/// The translations for Santali (`sat`).
 class AppLocalizationsSat extends AppLocalizations {
-  AppLocalizationsSat([String locale = 'en']) : super(locale);
+  AppLocalizationsSat([String locale = 'sat']) : super(locale);
 
   @override
   String get appTitle => 'Rhythma';
 
   @override
-  String get settingsTitle => 'Settings';
+  String get settingsTitle => 'ᱥᱮᱴᱤᱝᱥ';
 
   @override
-  String get appPreferences => 'App Preferences';
+  String get appPreferences => 'ᱮᱯ ᱨᱮᱭᱟᱜ ᱯᱚᱥᱚᱱᱫᱚ';
 
   @override
-  String get languagePreferences => 'Language Preferences';
+  String get languagePreferences => 'ᱯᱟᱹᱨᱥᱤ ᱯᱚᱥᱚᱱᱫᱚ';
 
   @override
-  String get darkMode => 'Dark Mode';
+  String get darkMode => 'ᱰᱟᱨᱠ ᱢᱳᱰ';
 
   @override
-  String get themeToggle => 'Theme toggle';
+  String get themeToggle => 'ᱛᱷᱤᱢ ᱵᱚᱫᱚᱞ';
 
   @override
-  String get notificationsTitle => 'Notifications';
+  String get notificationsTitle => 'ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ';
 
   @override
-  String get cycleTrackingReminders => 'Cycle Tracking Reminders';
+  String get cycleTrackingReminders => 'ᱥᱟᱭᱠᱮᱞ ᱴᱨᱮᱠᱤᱝ ᱨᱤᱢᱟᱭᱤᱱᱰᱟᱨ';
 
   @override
-  String get medicineAlerts => 'Medicine Alerts';
+  String get medicineAlerts => 'ᱨᱟᱱ ᱮᱞᱟᱨᱴ';
 
   @override
-  String get wellnessTips => 'Wellness Tips';
+  String get wellnessTips => 'ᱥᱣᱟᱥᱛᱷᱚ ᱴᱤᱯᱥ';
 
   @override
-  String get securityPrivacyTitle => 'Security & Privacy';
+  String get securityPrivacyTitle => 'ᱥᱤᱠᱤᱣᱨᱤᱴᱤ ᱟᱨ ᱯᱨᱟᱭᱵᱷᱮᱥᱤ';
 
   @override
-  String get appPermissions => 'App Permissions';
+  String get appPermissions => 'ᱮᱯ ᱯᱟᱨᱢᱤᱥᱚᱱ';
 
   @override
-  String get privacyPolicy => 'Privacy Policy';
+  String get privacyPolicy => 'ᱯᱨᱟᱭᱵᱷᱮᱥᱤ ᱯᱚᱞᱤᱥᱤ';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'ᱞᱚᱜ ᱟᱣᱩᱴ';
 
   @override
-  String get logoutConfirmation =>
-      'Are you sure you want to log out of Rhythma?';
+  String get logoutConfirmation => 'ᱪᱮᱫ ᱟᱢ ᱥᱟᱹᱨᱤ ᱜᱮ Rhythma ᱠᱷᱚᱱ ᱞᱚᱜ ᱟᱣᱩᱴ ᱥᱟᱱᱟᱭᱮᱫ ᱢᱮᱭᱟ?';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'ᱵᱟᱹᱛᱤᱞ';
 
   @override
-  String get loggedOutSuccess => 'Logged out successfully';
+  String get loggedOutSuccess => 'ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱞᱚᱜ ᱟᱣᱩᱴ ᱮᱱᱟ';
 
   @override
-  String get selectLanguage => 'Select Language';
+  String get selectLanguage => 'ᱯᱟᱹᱨᱥᱤ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
 
   @override
   String get langEnglish => 'English';
@@ -79,82 +78,79 @@ class AppLocalizationsSat extends AppLocalizations {
   String get langMarathi => 'मराठी (Marathi)';
 
   @override
-  String get homeGreeting => 'Namaste';
+  String get homeGreeting => 'ᱡᱚᱦᱟᱨ';
 
   @override
-  String get homePhaseDesc => 'Day 14 · Ovulation phase';
+  String get homePhaseDesc => 'ᱫᱤᱱ 14 · ᱳᱵᱷᱭᱩᱞᱮᱥᱚᱱ ᱯᱷᱮᱡ';
 
   @override
-  String get homeNextPeriod => 'NEXT PERIOD IN';
+  String get homeNextPeriod => 'ᱛᱟᱭᱚᱢ ᱯᱤᱨᱤᱭᱚᱰ';
 
   @override
-  String get homeDaysLabel => 'days';
+  String get homeDaysLabel => 'ᱢᱟᱦᱟᱸ';
 
   @override
-  String get homeFertileWindow => 'Fertile window · ';
+  String get homeFertileWindow => 'ᱯᱷᱟᱨᱴᱟᱭᱤᱞ ᱣᱤᱱᱰᱳ · ';
 
   @override
-  String get homeHighEnergy => 'High energy';
+  String get homeHighEnergy => 'ᱦᱟᱭ ᱮᱱᱟᱨᱡᱤ';
 
   @override
   String get homeAiTitle => 'RHYTHMA AI';
 
   @override
-  String get homeAiSubtitle =>
-      'Ask me anything about your body,\nin your language.';
+  String get homeAiSubtitle => 'ᱟᱢᱟᱜ ᱦᱚᱲᱢᱚ ᱵᱟᱵᱚᱫᱽ ᱛᱮ ᱡᱟᱦᱟᱸ ᱜᱮ ᱠᱩᱞᱤ ᱢᱮ,\nᱟᱢᱟᱜ ᱯᱟᱹᱨᱥᱤ ᱛᱮ᱾';
 
   @override
-  String get homeAiPrompt => 'Why are my periods irregular?';
+  String get homeAiPrompt => 'ᱤᱧᱟᱜ ᱯᱤᱨᱤᱭᱚᱰ ᱤᱨᱨᱮᱜᱩᱞᱟᱨ ᱪᱮᱫᱟᱜ ᱟ?';
 
   @override
-  String get homeFeelingTitle => 'How are you feeling today?';
+  String get homeFeelingTitle => 'ᱛᱮᱦᱮᱧ ᱪᱮᱫ ᱞᱮᱠᱟᱢ ᱵᱩᱡᱷᱟᱹᱣᱮᱫᱟ?';
 
   @override
-  String get homeLogAll => 'Log all';
+  String get homeLogAll => 'ᱥᱟᱱᱟᱢ ᱞᱚᱜ ᱢᱮ';
 
   @override
-  String get homeLogFlow => 'Flow';
+  String get homeLogFlow => 'ᱯᱷᱞᱳ';
 
   @override
-  String get homeLogMood => 'Mood';
+  String get homeLogMood => 'ᱢᱩᱰ';
 
   @override
-  String get homeLogSleep => 'Sleep';
+  String get homeLogSleep => 'ᱡᱟᱹᱯᱤᱫ';
 
   @override
-  String get homeLogStress => 'Stress';
+  String get homeLogStress => 'ᱥᱴᱨᱮᱥ';
 
   @override
-  String get homeWeeklyInsightLabel => 'WEEKLY INSIGHT';
+  String get homeWeeklyInsightLabel => 'ᱣᱤᱠᱞᱤ ᱤᱱᱥᱟᱭᱤᱴ';
 
   @override
-  String get homeWeeklyInsightTitle =>
-      'Your sleep improved 12% this week — your cycle may thank you.';
+  String get homeWeeklyInsightTitle => 'ᱱᱚᱣᱟ ᱦᱟᱯᱛᱟ ᱨᱮ ᱟᱢᱟᱜ ᱡᱟᱹᱯᱤᱫ 12% ᱵᱷᱟᱹᱜᱤ ᱟᱠᱟᱱᱟ — ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ ᱵᱷᱟᱹᱜᱤ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ᱾';
 
   @override
-  String get homeWeeklyInsightDesc =>
-      'Consistent rest before ovulation supports hormonal balance.';
+  String get homeWeeklyInsightDesc => 'ᱳᱵᱷᱭᱩᱞᱮᱥᱚᱱ ᱢᱟᱲᱟᱝ ᱨᱮ ᱞᱮᱛᱟᱲ ᱡᱤᱨᱟᱹᱣ ᱦᱚᱨᱢᱳᱱᱟᱞ ᱵᱮᱞᱮᱱᱥ ᱮ ᱥᱟᱯᱚᱨᱴᱟ᱾';
 
   @override
-  String get homeLearnTitle => 'Learn with Rhythma';
+  String get homeLearnTitle => 'Rhythma ᱥᱟᱶ ᱪᱮᱫᱚᱜ ᱢᱮ';
 
   @override
-  String get homeLearnPcos => 'Understanding PCOS';
+  String get homeLearnPcos => 'PCOS ᱵᱩᱡᱷᱟᱹᱣ';
 
   @override
-  String get homeLearnHormones => 'Hormones 101';
+  String get homeLearnHormones => 'ᱦᱚᱨᱢᱳᱱᱥ ᱵᱮᱥᱤᱠᱥ';
 
   @override
-  String get homeLearnIron => 'Iron-rich foods';
+  String get homeLearnIron => 'ᱟᱭᱨᱚᱱ ᱛᱮ ᱯᱮᱨᱮᱡ ᱡᱚᱢᱟᱜ';
 
   @override
-  String get homeArticle => 'ARTICLE';
+  String get homeArticle => 'ᱟᱨᱴᱤᱠᱮᱞ';
 
   @override
-  String get homeFailedLoad => 'Failed to load dashboard';
+  String get homeFailedLoad => 'ᱰᱮᱥᱵᱳᱨᱰ ᱞᱳᱰ ᱵᱟᱝ ᱦᱩᱭ ᱞᱮᱱᱟ';
 
   @override
-  String get homeRetry => 'Retry';
+  String get homeRetry => 'ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ';
 
   @override
   String get homeMhs => 'MHS';
@@ -163,533 +159,516 @@ class AppLocalizationsSat extends AppLocalizations {
   String get homeCvi => 'CVI';
 
   @override
-  String get homeSleep => 'Sleep';
+  String get homeSleep => 'ᱡᱟᱹᱯᱤᱫ';
 
   @override
-  String get homeComingSoon => 'Coming Soon';
+  String get homeComingSoon => 'ᱞᱚᱜᱚᱱ ᱦᱤᱡᱩᱜ ᱠᱟᱱᱟ';
 
   @override
   String homeUnderDevelopment(String topic) {
-    return '$topic is currently under development.';
+    return '$topic ᱫᱚ ᱱᱤᱛᱚᱜ ᱰᱮᱵᱷᱮᱞᱚᱯ ᱦᱩᱭᱩᱜ ᱠᱟᱱᱟ᱾';
   }
 
   @override
-  String get homeErrorNetwork =>
-      'Please check your internet connection and try again.';
+  String get homeErrorNetwork => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱤᱱᱴᱟᱨᱱᱮᱴ ᱠᱟᱱᱮᱠᱥᱚᱱ ᱪᱮᱠ ᱢᱮ ᱟᱨ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
-  String get homeErrorAuth => 'Your session has expired. Please log in again.';
+  String get homeErrorAuth => 'ᱟᱢᱟᱜ ᱥᱮᱥᱚᱱ ᱢᱩᱪᱟᱹᱫ ᱟᱠᱟᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱞᱚᱜ ᱤᱱ ᱢᱮ᱾';
 
   @override
-  String get homeErrorServer =>
-      'Something went wrong on our end. Please try again later.';
+  String get homeErrorServer => 'ᱟᱞᱮ ᱥᱮᱫ ᱠᱷᱚᱱ ᱡᱟᱦᱟᱸ ᱵᱟᱹᱲᱤᱡ ᱦᱩᱭᱮᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱛᱟᱭᱚᱢ ᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
-  String get homeErrorGeneric => 'Unable to load data. Please try again.';
+  String get homeErrorGeneric => 'ᱰᱟᱴᱟ ᱞᱳᱰ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
   String homeQuickLogTitle(String label) {
-    return 'Log $label';
+    return 'ᱞᱚᱜ $label';
   }
 
   @override
   String homeQuickLogSaved(String label, String value) {
-    return '$label logged: $value';
+    return '$label ᱞᱚᱜ ᱮᱱᱟ: $value';
   }
 
   @override
-  String get homePrivacySecurity => 'Privacy & Security';
+  String get homePrivacySecurity => 'ᱯᱨᱟᱭᱵᱷᱮᱥᱤ ᱟᱨ ᱥᱤᱠᱤᱣᱨᱤᱴᱤ';
 
   @override
-  String get homeOk => 'OK';
+  String get homeOk => 'ᱴᱷᱤᱠ ᱜᱮᱭᱟ';
 
   @override
-  String get cycleTrackerTitle => 'Cycle Tracker';
+  String get cycleTrackerTitle => 'ᱥᱟᱭᱠᱮᱞ ᱴᱨᱮᱠᱟᱨ';
 
   @override
-  String get cycleToday => 'Today';
+  String get cycleToday => 'ᱛᱮᱦᱮᱧ';
 
   @override
-  String get cyclePhasePeriod => 'Period';
+  String get cyclePhasePeriod => 'ᱯᱤᱨᱤᱭᱚᱰ';
 
   @override
-  String get cyclePhaseFollicular => 'Follicular';
+  String get cyclePhaseFollicular => 'ᱯᱷᱳᱞᱤᱠᱩᱞᱟᱨ';
 
   @override
-  String get cyclePhaseOvulation => 'Ovulation';
+  String get cyclePhaseOvulation => 'ᱳᱵᱷᱭᱩᱞᱮᱥᱚᱱ';
 
   @override
-  String get cyclePhaseLuteal => 'Luteal';
+  String get cyclePhaseLuteal => 'ᱞᱩᱴᱤᱭᱟᱞ';
 
   @override
-  String get logFor => 'Log for';
+  String get logFor => 'ᱞᱟᱹᱜᱤᱫ ᱞᱚᱜ ᱢᱮ';
 
   @override
-  String get logNone => 'None';
+  String get logNone => 'ᱪᱮᱫ ᱦᱚᱸ ᱵᱟᱝ';
 
   @override
-  String get logLight => 'Light';
+  String get logLight => 'ᱦᱟᱞᱠᱟ';
 
   @override
-  String get logMedium => 'Medium';
+  String get logMedium => 'ᱢᱤᱰᱤᱭᱟᱢ';
 
   @override
-  String get logHeavy => 'Heavy';
+  String get logHeavy => 'ᱡᱟᱹᱥᱛᱤ';
 
   @override
-  String get logEnergyLow => 'Low';
+  String get logEnergyLow => 'ᱠᱚᱢ';
 
   @override
-  String get logEnergyMid => 'Mid';
+  String get logEnergyMid => 'ᱢᱤᱰᱤᱭᱟᱢ';
 
   @override
-  String get logEnergyHigh => 'High';
+  String get logEnergyHigh => 'ᱡᱟᱹᱥᱛᱤ';
 
   @override
-  String get logSleep1 => '<5h';
+  String get logSleep1 => '<5 ᱴᱟᱲᱟᱝ';
 
   @override
-  String get logSleep2 => '5-7h';
+  String get logSleep2 => '5-7 ᱴᱟᱲᱟᱝ';
 
   @override
-  String get logSleep3 => '7-9h';
+  String get logSleep3 => '7-9 ᱴᱟᱲᱟᱝ';
 
   @override
-  String get logSleep4 => '9h+';
+  String get logSleep4 => '9 ᱴᱟᱲᱟᱝ+';
 
   @override
-  String get logSympCramps => 'Cramps';
+  String get logSympCramps => 'ᱦᱟᱹᱥᱩ';
 
   @override
-  String get logSympHeadache => 'Headache';
+  String get logSympHeadache => 'ᱵᱚᱦᱚᱜ ᱦᱟᱹᱥᱩ';
 
   @override
-  String get logSympBloating => 'Bloating';
+  String get logSympBloating => 'ᱞᱟᱡ ᱯᱷᱩᱞᱟᱹᱣ';
 
   @override
-  String get logSympAcne => 'Acne';
+  String get logSympAcne => 'ᱢᱩᱦᱟᱸᱥᱟ';
 
   @override
-  String get logLabelEnergy => 'Energy';
+  String get logLabelEnergy => 'ᱮᱱᱟᱨᱡᱤ';
 
   @override
-  String get logLabelSymptoms => 'Symptoms';
+  String get logLabelSymptoms => 'ᱞᱚᱠᱷᱚᱱᱠᱚ';
 
   @override
-  String get logToday => 'Log Today';
+  String get logToday => 'ᱛᱮᱦᱮᱧ ᱞᱚᱜ ᱢᱮ';
 
   @override
-  String get logTitle => 'Log your day';
+  String get logTitle => 'ᱟᱢᱟᱜ ᱫᱤᱱ ᱞᱚᱜ ᱢᱮ';
 
   @override
-  String get logFlowIntensity => 'Flow Intensity';
+  String get logFlowIntensity => 'ᱯᱷᱞᱳ ᱤᱱᱴᱮᱱᱥᱤᱴᱤ';
 
   @override
-  String get logMood => 'Mood';
+  String get logMood => 'ᱢᱩᱰ';
 
   @override
-  String get logSleepHours => 'Sleep Hours';
+  String get logSleepHours => 'ᱡᱟᱹᱯᱤᱫ ᱴᱟᱲᱟᱝ';
 
   @override
-  String get logStressLevel => 'Stress Level';
+  String get logStressLevel => 'ᱥᱴᱨᱮᱥ ᱞᱮᱵᱷᱮᱞ';
 
   @override
-  String get logSave => 'Save Log';
+  String get logSave => 'ᱞᱚᱜ ᱥᱮᱵᱷ ᱢᱮ';
 
   @override
-  String get logSympFatigue => 'Fatigue';
+  String get logSympFatigue => 'ᱞᱟᱸᱜᱟ';
 
   @override
-  String get logSympNausea => 'Nausea';
+  String get logSympNausea => 'ᱩᱞᱟᱹ';
 
   @override
-  String get logSympBackPain => 'Back Pain';
+  String get logSympBackPain => 'ᱫᱮᱭᱟ ᱦᱟᱹᱥᱩ';
 
   @override
-  String get assistantTitle => 'Rhythma Assistant';
+  String get assistantTitle => 'Rhythma ᱟᱥᱤᱥᱴᱮᱱᱴ';
 
   @override
-  String get assistantSubtitle => 'Your private health companion';
+  String get assistantSubtitle => 'ᱟᱢᱟᱜ ᱯᱨᱟᱭᱵᱷᱮᱴ ᱦᱮᱞᱛᱷ ᱜᱟᱛᱮ';
 
   @override
-  String get assistantInputHint => 'Ask anything about your health...';
+  String get assistantInputHint => 'ᱟᱢᱟᱜ ᱦᱚᱲᱢᱚ ᱵᱟᱵᱚᱫᱽ ᱛᱮ ᱡᱟᱦᱟᱸ ᱜᱮ ᱠᱩᱞᱤ ᱢᱮ...';
 
   @override
   String assistantWelcome(String name) {
-    return 'Hi $name 🌸 I\'m Rhythma, your private health companion. Ask me anything about your cycle, symptoms, or wellbeing — in English, Hindi, Marathi, or Tamil.';
+    return 'ᱡᱚᱦᱟᱨ $name 🌸 ᱤᱧ ᱫᱚ Rhythma ᱠᱟᱹᱱᱟᱹᱧ, ᱟᱢᱟᱜ ᱯᱨᱟᱭᱵᱷᱮᱴ ᱦᱮᱞᱛᱷ ᱜᱟᱛᱮ᱾ ᱤᱧ ᱴᱷᱮᱱ ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ, ᱞᱚᱠᱷᱚᱱ ᱥᱮ ᱦᱚᱲᱢᱚ ᱵᱟᱵᱚᱫᱽ ᱛᱮ ᱡᱟᱦᱟᱸ ᱜᱮ ᱠᱩᱞᱤ ᱢᱮ᱾';
   }
 
   @override
-  String get assistantSug1 => 'Why are my periods irregular?';
+  String get assistantSug1 => 'ᱤᱧᱟᱜ ᱯᱤᱨᱤᱭᱚᱰ ᱤᱨᱨᱮᱜᱩᱞᱟᱨ ᱪᱮᱫᱟᱜ ᱟ?';
 
   @override
-  String get assistantSug2 => 'What causes severe cramps?';
+  String get assistantSug2 => 'ᱡᱟᱹᱥᱛᱤ ᱦᱟᱹᱥᱩ ᱨᱮᱭᱟᱜ ᱠᱟᱨᱚᱱ ᱫᱚ ᱪᱮᱫ?';
 
   @override
-  String get assistantSug3 => 'Is a 35-day cycle normal?';
+  String get assistantSug3 => 'ᱪᱮᱫ 35 ᱫᱤᱱ ᱨᱮᱭᱟᱜ ᱥᱟᱭᱠᱮᱞ ᱫᱚ ᱱᱚᱨᱢᱟᱞ ᱜᱮᱭᱟ?';
 
   @override
-  String get assistantSug4 => 'Foods that help with PMS';
+  String get assistantSug4 => 'PMS ᱨᱮ ᱜᱚᱲᱚᱭᱮᱢᱟᱜ ᱡᱚᱢᱟᱜᱠᱚ';
 
   @override
-  String get assistantSug5 => 'मेरे पीरियड्स अनियमित हैं — क्या यह सामान्य है?';
+  String get assistantSug5 => 'ᱤᱧᱟᱜ ᱯᱤᱨᱤᱭᱚᱰᱥ ᱤᱨᱨᱮᱜᱩᱞᱟᱨ ᱜᱮᱭᱟ — ᱪᱮᱫ ᱱᱚᱣᱟ ᱫᱚ ᱱᱚᱨᱢᱟᱞ ᱜᱮᱭᱟ?';
 
   @override
-  String get insightsTitle => 'Health Insights';
+  String get insightsTitle => 'ᱦᱮᱞᱛᱷ ᱤᱱᱥᱟᱭᱤᱴᱥ';
 
   @override
-  String get insightsSubtitle => 'Last 90 days';
+  String get insightsSubtitle => 'ᱢᱩᱪᱟᱹᱫ 90 ᱫᱤᱱ';
 
   @override
-  String get insightsMhsLabel => 'MENSTRUAL HEALTH SCORE';
+  String get insightsMhsLabel => 'ᱢᱮᱱᱥᱴᱨᱩᱣᱟᱞ ᱦᱮᱞᱛᱷ ᱥᱠᱳᱨ';
 
   @override
-  String get insightsMhsDelta => '+6 vs last cycle';
+  String get insightsMhsDelta => 'ᱢᱩᱪᱟᱹᱫ ᱥᱟᱭᱠᱮᱞ ᱥᱟᱞᱟᱜ ᱛᱮ +6';
 
   @override
-  String get insightsVar => 'Cycle Variability';
+  String get insightsVar => 'ᱥᱟᱭᱠᱮᱞ ᱵᱷᱮᱨᱤᱭᱟᱵᱤᱞᱤᱴᱤ';
 
   @override
-  String get insightsAvgCycle => 'Avg Cycle';
+  String get insightsAvgCycle => 'ᱮᱵᱷᱟᱨᱮᱡᱽ ᱥᱟᱭᱠᱮᱞ';
 
   @override
-  String get insightsRegular => 'Regular';
+  String get insightsRegular => 'ᱨᱮᱜᱩᱞᱟᱨ';
 
   @override
-  String get insightsModerate => 'Moderate';
+  String get insightsModerate => 'ᱢᱤᱰᱤᱭᱟᱢ';
 
   @override
-  String get insightsTrendLabel => 'CYCLE LENGTH TREND';
+  String get insightsTrendLabel => 'ᱥᱟᱭᱠᱮᱞ ᱡᱤᱞᱤᱧ ᱴᱨᱮᱱᱰ';
 
   @override
-  String get insightsStabilizing => 'Stabilizing';
+  String get insightsStabilizing => 'ᱥᱴᱮᱵᱤᱞᱟᱭᱡᱤᱝ';
 
   @override
-  String get insightsHealthy => 'Healthy';
+  String get insightsHealthy => 'ᱦᱮᱞᱫᱤ';
 
   @override
-  String get insightsSymptomsLabel => 'Symptom patterns';
+  String get insightsSymptomsLabel => 'ᱞᱚᱠᱷᱚᱱ ᱯᱮᱴᱟᱨᱱᱠᱚ';
 
   @override
-  String get insightsMoodSwings => 'Mood swings';
+  String get insightsMoodSwings => 'ᱢᱩᱰ ᱥᱣᱤᱝᱥ';
 
   @override
-  String get insightsWellnessLabel => 'Wellness recommendations';
+  String get insightsWellnessLabel => 'ᱣᱮᱞᱱᱮᱥ ᱨᱮᱠᱚᱢᱮᱱᱰᱮᱥᱚᱱ';
 
   @override
-  String get insightsRec1 => 'Add iron-rich foods near period start';
+  String get insightsRec1 => 'ᱯᱤᱨᱤᱭᱚᱰ ᱮᱦᱚᱵᱚᱜ ᱥᱩᱨ ᱨᱮ ᱟᱭᱨᱚᱱ ᱛᱮ ᱯᱮᱨᱮᱡ ᱡᱚᱢᱟᱜ ᱥᱮᱞᱮᱫ ᱢᱮ';
 
   @override
-  String get insightsRec2 => 'Try 10-minute yoga on luteal-phase days';
+  String get insightsRec2 => 'ᱞᱩᱴᱤᱭᱟᱞ-ᱯᱷᱮᱡ ᱫᱤᱱ ᱨᱮ 10-ᱢᱤᱱᱤᱴ ᱡᱳᱜᱟ ᱪᱮᱥᱴᱟᱭ ᱢᱮ';
 
   @override
-  String get insightsRec3 => 'Hydrate 2.5L during ovulation week';
+  String get insightsRec3 => 'ᱳᱵᱷᱭᱩᱞᱮᱥᱚᱱ ᱦᱟᱯᱛᱟ ᱨᱮ 2.5L ᱫᱟᱜ ᱧᱩᱭ ᱢᱮ';
 
   @override
-  String get profileTitle => 'Profile';
+  String get profileTitle => 'ᱯᱨᱚᱯᱷᱟᱭᱤᱞ';
 
   @override
-  String get profileYearsOld => 'years old';
+  String get profileYearsOld => 'ᱥᱮᱨᱢᱟ ᱩᱢᱮᱨ';
 
   @override
-  String get profileCycleDay => 'Cycle Day';
+  String get profileCycleDay => 'ᱥᱟᱭᱠᱮᱞ ᱫᱤᱱ';
 
   @override
-  String get profileQuickStats => 'Quick Stats';
+  String get profileQuickStats => 'ᱠᱩᱭᱤᱠ ᱥᱴᱮᱴᱥ';
 
   @override
-  String get profileAvgCycleLength => 'Avg Cycle Length';
+  String get profileAvgCycleLength => 'ᱮᱵᱷᱟᱨᱮᱡᱽ ᱥᱟᱭᱠᱮᱞ ᱡᱤᱞᱤᱧ';
 
   @override
-  String get profileAvgMentalHealth => 'Avg Mental Health';
+  String get profileAvgMentalHealth => 'ᱮᱵᱷᱟᱨᱮᱡᱽ ᱢᱮᱱᱴᱟᱞ ᱦᱮᱞᱛᱷ';
 
   @override
-  String get profileCycleVariability => 'Cycle Variability';
+  String get profileCycleVariability => 'ᱥᱟᱭᱠᱮᱞ ᱵᱷᱮᱨᱤᱭᱟᱵᱤᱞᱤᱴᱤ';
 
   @override
-  String get profileLastCycleLength => 'Last Cycle Length';
+  String get profileLastCycleLength => 'ᱢᱩᱪᱟᱹᱫ ᱥᱟᱭᱠᱮᱞ ᱡᱤᱞᱤᱧ';
 
   @override
-  String get profileAccountSettings => 'Account Settings';
+  String get profileAccountSettings => 'ᱮᱠᱟᱣᱩᱱᱴ ᱥᱮᱴᱤᱝᱥ';
 
   @override
-  String get profileEditInfo => 'Edit Profile Information';
+  String get profileEditInfo => 'ᱯᱨᱚᱯᱷᱟᱭᱤᱞ ᱤᱱᱯᱷᱳ ᱮᱰᱤᱴ ᱢᱮ';
 
   @override
-  String get profileEmergencyContact => 'Medical Emergency Contact';
+  String get profileEmergencyContact => 'ᱢᱮᱰᱤᱠᱟᱞ ᱤᱢᱟᱨᱡᱮᱱᱥᱤ ᱠᱚᱱᱴᱮᱠᱴ';
 
   @override
-  String get profileAppSettings => 'App Settings';
+  String get profileAppSettings => 'ᱮᱯ ᱥᱮᱴᱤᱝᱥ';
 
   @override
-  String get profileEditProfile => 'Edit Profile';
+  String get profileEditProfile => 'ᱯᱨᱚᱯᱷᱟᱭᱤᱞ ᱮᱰᱤᱴ ᱢᱮ';
 
   @override
-  String get profileName => 'Name';
+  String get profileName => 'ᱧᱩᱛᱩᱢ';
 
   @override
-  String get profileAge => 'Age';
+  String get profileAge => 'ᱩᱢᱮᱨ';
 
   @override
-  String get profileAvgCycleDays => 'Average Cycle Length (Days)';
+  String get profileAvgCycleDays => 'ᱮᱵᱷᱟᱨᱮᱡᱽ ᱥᱟᱭᱠᱮᱞ ᱡᱤᱞᱤᱧ (ᱫᱤᱱ)';
 
   @override
-  String get profileSaveChanges => 'Save Changes';
+  String get profileSaveChanges => 'ᱪᱮᱱᱡᱮᱥ ᱥᱮᱵᱷ ᱢᱮ';
 
   @override
-  String get profileNameEmptyError => 'Please enter a valid name';
+  String get profileNameEmptyError => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱧᱩᱛᱩᱢ ᱮᱢ ᱢᱮ';
 
   @override
-  String get profileAddContact => 'Add Contact';
+  String get profileAddContact => 'ᱠᱚᱱᱴᱮᱠᱴ ᱥᱮᱞᱮᱫ ᱢᱮ';
 
   @override
-  String get profileEditContact => 'Edit Contact';
+  String get profileEditContact => 'ᱠᱚᱱᱴᱮᱠᱴ ᱮᱰᱤᱴ ᱢᱮ';
 
   @override
-  String get profilePhone => 'Phone';
+  String get profilePhone => 'ᱯᱷᱳᱱ';
 
   @override
-  String get profileSave => 'Save';
+  String get profileSave => 'ᱥᱮᱵᱷ';
 
   @override
-  String get profileEmergencyContactsTitle => 'Emergency Contacts';
+  String get profileEmergencyContactsTitle => 'ᱤᱢᱟᱨᱡᱮᱱᱥᱤ ᱠᱚᱱᱴᱮᱠᱴᱥ';
 
   @override
-  String get profileAddNew => 'Add New';
+  String get profileAddNew => 'ᱱᱟᱣᱟ ᱥᱮᱞᱮᱫ ᱢᱮ';
 
   @override
-  String get profileNoContacts => 'No emergency contacts set up yet.';
+  String get profileNoContacts => 'ᱱᱤᱛ ᱫᱷᱟᱹᱵᱤᱡ ᱡᱟᱦᱟᱸᱱᱟᱜ ᱤᱢᱟᱨᱡᱮᱱᱥᱤ ᱠᱚᱱᱴᱮᱠᱴ ᱵᱟᱝ ᱥᱮᱴ ᱟᱠᱟᱱᱟ᱾';
 
   @override
-  String get profileAgeInvalidError => 'Please enter a valid age';
+  String get profileAgeInvalidError => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱩᱢᱮᱨ ᱮᱢ ᱢᱮ';
 
   @override
-  String get profileCycleInvalidError => 'Please enter a valid cycle length';
+  String get profileCycleInvalidError => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱥᱟᱭᱠᱮᱞ ᱡᱤᱞᱤᱧ ᱮᱢ ᱢᱮ';
 
   @override
-  String get profilePhoneInvalidError => 'Please enter a valid phone number';
+  String get profilePhoneInvalidError => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱮᱢ ᱢᱮ';
 
   @override
-  String get contactNameRequiredError => 'Contact name is required';
+  String get contactNameRequiredError => 'ᱠᱚᱱᱴᱮᱠᱴ ᱧᱩᱛᱩᱢ ᱞᱟᱹᱠᱛᱤᱭᱟ';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'ᱮᱰᱤᱴ';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'ᱰᱤᱞᱤᱴ';
 
   @override
-  String get onboardingAvatarOption => 'Avatar Option';
+  String get onboardingAvatarOption => 'ᱟᱵᱷᱟᱛᱟᱨ ᱚᱯᱥᱚᱱ';
 
   @override
-  String get navHome => 'Home';
+  String get navHome => 'ᱦᱳᱢ';
 
   @override
-  String get navCycle => 'Cycle';
+  String get navCycle => 'ᱥᱟᱭᱠᱮᱞ';
 
   @override
-  String get navAsk => 'Ask';
+  String get navAsk => 'ᱠᱩᱞᱤ';
 
   @override
-  String get navInsights => 'Insights';
+  String get navInsights => 'ᱤᱱᱥᱟᱭᱤᱴᱥ';
 
   @override
-  String get navYou => 'You';
+  String get navYou => 'ᱟᱢ';
 
   @override
-  String get settingsHelpSupport => 'Help & Support';
+  String get settingsHelpSupport => 'ᱦᱮᱞᱯ ᱟᱨ ᱥᱟᱯᱚᱨᱴ';
 
   @override
-  String get settingsContactUs => 'Contact Us / Report Bug';
+  String get settingsContactUs => 'ᱟᱞᱮ ᱥᱟᱶ ᱠᱚᱱᱴᱮᱠᱴ ᱢᱮ / ᱵᱟᱜ ᱨᱤᱯᱳᱨᱴ';
 
   @override
-  String get settingsContactDesc => 'Send an email to our support team';
+  String get settingsContactDesc => 'ᱟᱞᱮᱭᱟᱜ ᱥᱟᱯᱚᱨᱴ ᱴᱤᱢ ᱴᱷᱮᱱ ᱤᱢᱮᱞ ᱵᱷᱮᱡᱟᱭ ᱢᱮ';
 
   @override
-  String get settingsEmailError =>
-      'Could not open email app. Please email us at support@rhythma.com';
+  String get settingsEmailError => 'ᱤᱢᱮᱞ ᱮᱯ ᱵᱟᱝ ᱠᱷᱩᱞᱟᱹ ᱞᱮᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ support@rhythma.com ᱨᱮ ᱤᱢᱮᱞ ᱟᱞᱮ ᱢᱮ';
 
   @override
-  String get settingsData => 'Data';
+  String get settingsData => 'ᱰᱟᱴᱟ';
 
   @override
-  String get settingsExportData => 'Export My Data';
+  String get settingsExportData => 'ᱤᱧᱟᱜ ᱰᱟᱴᱟ ᱮᱠᱥᱯᱳᱨᱴ ᱢᱮ';
 
   @override
-  String get settingsExportDataDesc =>
-      'Download your profile, contacts, and cycle logs as JSON';
+  String get settingsExportDataDesc => 'ᱟᱢᱟᱜ ᱯᱨᱚᱯᱷᱟᱭᱤᱞ, ᱠᱚᱱᱴᱮᱠᱴᱥ ᱟᱨ ᱥᱟᱭᱠᱮᱞ ᱞᱚᱜᱥ JSON ᱞᱮᱠᱟᱛᱮ ᱰᱟᱣᱩᱱᱞᱳᱰ ᱢᱮ';
 
   @override
-  String get settingsExportSuccess => 'Data exported successfully';
+  String get settingsExportSuccess => 'ᱰᱟᱴᱟ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱮᱠᱥᱯᱳᱨᱴ ᱮᱱᱟ';
 
   @override
-  String get onboardingPrivacyNote =>
-      'Your information stays on your device. We never share your data without your permission.';
+  String get onboardingPrivacyNote => 'ᱟᱢᱟᱜ ᱤᱱᱯᱷᱚᱨᱢᱮᱥᱚᱱ ᱟᱢᱟᱜ ᱰᱤᱵᱷᱟᱭᱤᱥ ᱨᱮᱜᱮ ᱛᱟᱦᱮᱸᱱᱟ᱾ ᱟᱞᱮ ᱟᱢᱟᱜ ᱯᱟᱨᱢᱤᱥᱚᱱ ᱵᱮᱜᱚᱨ ᱛᱤᱥ ᱦᱚᱸ ᱟᱢᱟᱜ ᱰᱟᱴᱟ ᱵᱟᱞᱮ ᱥᱮᱭᱟᱨᱟ᱾';
 
   @override
-  String get onboardingNext => 'Next';
+  String get onboardingNext => 'ᱛᱟᱭᱚᱢ';
 
   @override
-  String get onboardingBack => 'Back';
+  String get onboardingBack => 'ᱛᱟᱭᱚᱢ ᱥᱮᱫ';
 
   @override
-  String get onboardingSkip => 'Skip';
+  String get onboardingSkip => 'ᱥᱠᱤᱯ';
 
   @override
-  String get onboardingDone => 'Get Started';
+  String get onboardingDone => 'ᱮᱦᱚᱵ';
 
   @override
-  String get onboardingStep1Title => 'Choose Your Language';
+  String get onboardingStep1Title => 'ᱟᱢᱟᱜ ᱯᱟᱹᱨᱥᱤ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
 
   @override
-  String get onboardingStep1Subtitle =>
-      'Select the language you are most comfortable with';
+  String get onboardingStep1Subtitle => 'ᱡᱟᱦᱟᱸ ᱯᱟᱹᱨᱥᱤ ᱛᱮ ᱟᱢ ᱡᱟᱹᱥᱛᱤ ᱠᱚᱢᱯᱷᱚᱨᱴᱮᱵᱚᱞ ᱢᱮᱱᱟᱢᱟ ᱚᱱᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
 
   @override
-  String get onboardingStep2Title => 'Tell us about you';
+  String get onboardingStep2Title => 'ᱟᱢ ᱵᱟᱵᱚᱫᱽ ᱛᱮ ᱞᱟᱹᱭ ᱟᱞᱮ ᱢᱮ';
 
   @override
-  String get onboardingStep2Subtitle =>
-      'This helps us personalise your experience';
+  String get onboardingStep2Subtitle => 'ᱱᱚᱣᱟ ᱫᱚ ᱟᱢᱟᱜ ᱮᱠᱥᱯᱤᱨᱤᱭᱮᱱᱥ ᱯᱟᱨᱥᱚᱱᱟᱞᱟᱭᱤᱡᱽ ᱨᱮ ᱜᱚᱲᱚᱭ ᱮᱢᱚᱜ-ᱟ';
 
   @override
-  String get onboardingNameHint => 'Your name or nickname';
+  String get onboardingNameHint => 'ᱟᱢᱟᱜ ᱧᱩᱛᱩᱢ ᱥᱮ ᱱᱤᱠᱱᱮᱢ';
 
   @override
-  String get onboardingNameLabel => 'Name';
+  String get onboardingNameLabel => 'ᱧᱩᱛᱩᱢ';
 
   @override
-  String get onboardingAgeLabel => 'Age';
+  String get onboardingAgeLabel => 'ᱩᱢᱮᱨ';
 
   @override
-  String get onboardingHeightLabel => 'Height (cm)';
+  String get onboardingHeightLabel => 'ᱩᱥᱩᱞ (cm)';
 
   @override
-  String get onboardingWeightLabel => 'Weight (kg)';
+  String get onboardingWeightLabel => 'ᱦᱟᱢᱟᱞ (kg)';
 
   @override
-  String get onboardingAvatarLabel => 'Choose an Avatar';
+  String get onboardingAvatarLabel => 'ᱢᱤᱫᱴᱟᱹᱝ ᱟᱵᱷᱟᱛᱟᱨ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
 
   @override
-  String get onboardingStep3Title => 'Your Cycle';
+  String get onboardingStep3Title => 'ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ';
 
   @override
-  String get onboardingStep3Subtitle =>
-      'Help us understand your cycle — you can skip if unsure';
+  String get onboardingStep3Subtitle => 'ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ ᱵᱩᱡᱷᱟᱹᱣ ᱨᱮ ᱟᱞᱮ ᱜᱚᱲᱚ ᱟᱞᱮ ᱢᱮ — ᱡᱩᱫᱤ ᱥᱤᱣᱚᱨ ᱵᱟᱹᱱᱩᱢᱟ ᱮᱱᱠᱷᱟᱱ ᱥᱠᱤᱯ ᱫᱟᱲᱮᱭᱟᱜ-ᱟᱢ';
 
   @override
-  String get onboardingLastPeriodLabel => 'Last Period Start Date';
+  String get onboardingLastPeriodLabel => 'ᱢᱩᱪᱟᱹᱫ ᱯᱤᱨᱤᱭᱚᱰ ᱮᱦᱚᱵᱚᱜ ᱢᱟᱹᱦᱤᱛ';
 
   @override
-  String get onboardingCycleLengthLabel => 'Average Cycle Length (days)';
+  String get onboardingCycleLengthLabel => 'ᱮᱵᱷᱟᱨᱮᱡᱽ ᱥᱟᱭᱠᱮᱞ ᱡᱤᱞᱤᱧ (ᱫᱤᱱ)';
 
   @override
-  String get onboardingPeriodDurationLabel => 'Average Period Duration (days)';
+  String get onboardingPeriodDurationLabel => 'ᱮᱵᱷᱟᱨᱮᱡᱽ ᱯᱤᱨᱤᱭᱚᱰ ᱰᱤᱣᱨᱮᱥᱚᱱ (ᱫᱤᱱ)';
 
   @override
-  String get onboardingCycleRegularityLabel => 'Cycle Regularity';
+  String get onboardingCycleRegularityLabel => 'ᱥᱟᱭᱠᱮᱞ ᱨᱮᱜᱩᱞᱟᱨᱤᱴᱤ';
 
   @override
-  String get onboardingRegular => 'Regular';
+  String get onboardingRegular => 'ᱨᱮᱜᱩᱞᱟᱨ';
 
   @override
-  String get onboardingIrregular => 'Irregular';
+  String get onboardingIrregular => 'ᱤᱨᱨᱮᱜᱩᱞᱟᱨ';
 
   @override
-  String get onboardingStep4Title => 'A Little More (Optional)';
+  String get onboardingStep4Title => 'ᱟᱨᱦᱚᱸ ᱠᱤᱪᱷᱩ (ᱚᱯᱥᱚᱱᱟᱞ)';
 
   @override
-  String get onboardingStep4Subtitle =>
-      'Helps us suggest region-specific wellness tips';
+  String get onboardingStep4Subtitle => 'ᱨᱤᱡᱤᱭᱚᱱ-ᱥᱯᱮᱥᱤᱯᱷᱤᱠ ᱣᱮᱞᱱᱮᱥ ᱴᱤᱯᱥ ᱨᱮᱠᱚᱢᱮᱱᱰ ᱨᱮ ᱜᱚᱲᱚᱭ ᱮᱢᱚᱜ-ᱟ';
 
   @override
-  String get onboardingPhoneLabel => 'Phone Number (optional)';
+  String get onboardingPhoneLabel => 'ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ (ᱚᱯᱥᱚᱱᱟᱞ)';
 
   @override
-  String get onboardingPhoneHint => 'e.g. +919876543210';
+  String get onboardingPhoneHint => 'ᱡᱮᱞᱮᱠᱟ +919876543210';
 
   @override
-  String get onboardingCityLabel => 'City (optional)';
+  String get onboardingCityLabel => 'ᱥᱚᱦᱚᱨ (ᱚᱯᱥᱚᱱᱟᱞ)';
 
   @override
-  String get onboardingStateLabel => 'State / PIN Code (optional)';
+  String get onboardingStateLabel => 'ᱯᱚᱱᱚᱛ / ᱯᱤᱱ ᱠᱳᱰ (ᱚᱯᱥᱚᱱᱟᱞ)';
 
   @override
-  String get onboardingStep5Title => 'Stay in the loop';
+  String get onboardingStep5Title => 'ᱟᱯᱰᱮᱴ ᱛᱟᱦᱮᱸᱱ ᱢᱮ';
 
   @override
-  String get onboardingStep5Subtitle =>
-      'Enable notifications so Rhythma can remind you at the right time';
+  String get onboardingStep5Subtitle => 'ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱮᱱᱮᱵᱚᱞ ᱢᱮ ᱡᱟᱛᱮ Rhythma ᱥᱚᱴᱷᱤᱠ ᱚᱠᱛᱚ ᱨᱮ ᱩᱭᱦᱟᱹᱨ ᱮᱢᱟᱢᱟᱭ';
 
   @override
-  String get onboardingEnableNotifications => 'Enable Cycle Reminders';
+  String get onboardingEnableNotifications => 'ᱥᱟᱭᱠᱮᱞ ᱨᱤᱢᱟᱭᱤᱱᱰᱟᱨ ᱮᱱᱮᱵᱚᱞ ᱢᱮ';
 
   @override
-  String get onboardingNotificationsDesc =>
-      'Get gentle reminders before your period and ovulation window';
+  String get onboardingNotificationsDesc => 'ᱟᱢᱟᱜ ᱯᱤᱨᱤᱭᱚᱰ ᱟᱨ ᱳᱵᱷᱭᱩᱞᱮᱥᱚᱱ ᱣᱤᱱᱰᱳ ᱢᱟᱲᱟᱝ ᱨᱮ ᱦᱟᱞᱠᱟ ᱨᱤᱢᱟᱭᱤᱱᱰᱟᱨ ᱧᱟᱢ ᱢᱮ';
 
   @override
-  String get onboardingDataConsentLabel =>
-      'I consent to storing my health data locally on this device';
+  String get onboardingDataConsentLabel => 'ᱤᱧ ᱱᱚᱣᱟ ᱰᱤᱵᱷᱟᱭᱤᱥ ᱨᱮ ᱤᱧᱟᱜ ᱦᱮᱞᱛᱷ ᱰᱟᱴᱟ ᱞᱳᱠᱟᱞᱤ ᱥᱴᱳᱨ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱦᱢᱚᱛᱤᱧ ᱮᱢᱮᱫᱟ';
 
   @override
-  String get onboardingDataConsentRequired => 'Please accept to continue';
+  String get onboardingDataConsentRequired => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱞᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ ᱮᱠᱥᱮᱯᱴ ᱢᱮ';
 
   @override
-  String get onboardingNameRequired => 'Please enter your name';
+  String get onboardingNameRequired => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱧᱩᱛᱩᱢ ᱮᱢ ᱢᱮ';
 
   @override
-  String get onboardingAgeInvalid => 'Please enter a valid age (10–120)';
+  String get onboardingAgeInvalid => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱩᱢᱮᱨ ᱮᱢ ᱢᱮ (10–120)';
 
   @override
-  String get onboardingHeightInvalid =>
-      'Please enter a valid height (50–250 cm)';
+  String get onboardingHeightInvalid => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱩᱥᱩᱞ ᱮᱢ ᱢᱮ (50–250 cm)';
 
   @override
-  String get onboardingWeightInvalid =>
-      'Please enter a valid weight (20–300 kg)';
+  String get onboardingWeightInvalid => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱦᱟᱢᱟᱞ ᱮᱢ ᱢᱮ (20–300 kg)';
 
   @override
-  String get onboardingPhoneInvalid =>
-      'Use international format, e.g. +919876543210';
+  String get onboardingPhoneInvalid => 'ᱤᱱᱴᱟᱨᱱᱮᱥᱱᱟᱞ ᱯᱷᱚᱨᱢᱮᱴ ᱵᱮᱵᱷᱟᱨ ᱢᱮ, ᱡᱮᱞᱮᱠᱟ +919876543210';
 
   @override
-  String get onboardingAgeRequired => 'Please enter your age or select a range';
+  String get onboardingAgeRequired => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱩᱢᱮᱨ ᱮᱢ ᱢᱮ ᱥᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱨᱮᱱᱡᱽ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
 
   @override
-  String get onboardingHeightRequired =>
-      'Please enter your height or select a range';
+  String get onboardingHeightRequired => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱩᱥᱩᱞ ᱮᱢ ᱢᱮ ᱥᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱨᱮᱱᱡᱽ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
 
   @override
-  String get onboardingWeightRequired =>
-      'Please enter your weight or select a range';
+  String get onboardingWeightRequired => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱦᱟᱢᱟᱞ ᱮᱢ ᱢᱮ ᱥᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱨᱮᱱᱡᱽ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
 
   @override
-  String get onboardingNotSure => 'Not sure';
+  String get onboardingNotSure => 'ᱥᱤᱣᱚᱨ ᱵᱟᱹᱱᱩᱜ-ᱟ';
 
   @override
-  String get onboardingApproximate => 'Approximate';
+  String get onboardingApproximate => 'ᱟᱱᱩᱢᱟᱱᱤᱠ';
 
   @override
-  String get onboardingAgeHint => 'Enter your age';
+  String get onboardingAgeHint => 'ᱟᱢᱟᱜ ᱩᱢᱮᱨ ᱮᱢ ᱢᱮ';
 
   @override
-  String get onboardingAgeUnit => 'years';
+  String get onboardingAgeUnit => 'ᱥᱮᱨᱢᱟ';
 
   @override
-  String get onboardingHeightHint => 'Enter your height';
+  String get onboardingHeightHint => 'ᱟᱢᱟᱜ ᱩᱥᱩᱞ ᱮᱢ ᱢᱮ';
 
   @override
   String get onboardingHeightUnit => 'cm';
 
   @override
-  String get onboardingWeightHint => 'Enter your weight';
+  String get onboardingWeightHint => 'ᱟᱢᱟᱜ ᱦᱟᱢᱟᱞ ᱮᱢ ᱢᱮ';
 
   @override
   String get onboardingWeightUnit => 'kg';
 
   @override
-  String get onboardingRangeUnder18 => 'Under 18';
+  String get onboardingRangeUnder18 => '18 ᱠᱷᱚᱱ ᱠᱚᱢ';
 
   @override
   String get onboardingRange18to25 => '18–25';
@@ -704,10 +683,10 @@ class AppLocalizationsSat extends AppLocalizations {
   String get onboardingRange51to65 => '51–65';
 
   @override
-  String get onboardingRangeOver65 => 'Over 65';
+  String get onboardingRangeOver65 => '65 ᱠᱷᱚᱱ ᱡᱟᱹᱥᱛᱤ';
 
   @override
-  String get onboardingRangeUnder150 => 'Under 150 cm';
+  String get onboardingRangeUnder150 => '150 cm ᱠᱷᱚᱱ ᱠᱚᱢ';
 
   @override
   String get onboardingRange150to160 => '150–160 cm';
@@ -719,10 +698,10 @@ class AppLocalizationsSat extends AppLocalizations {
   String get onboardingRange171to180 => '171–180 cm';
 
   @override
-  String get onboardingRangeOver180 => 'Over 180 cm';
+  String get onboardingRangeOver180 => '180 cm ᱠᱷᱚᱱ ᱡᱟᱹᱥᱛᱤ';
 
   @override
-  String get onboardingRangeUnder50kg => 'Under 50 kg';
+  String get onboardingRangeUnder50kg => '50 kg ᱠᱷᱚᱱ ᱠᱚᱢ';
 
   @override
   String get onboardingRange50to65kg => '50–65 kg';
@@ -734,181 +713,165 @@ class AppLocalizationsSat extends AppLocalizations {
   String get onboardingRange81to100kg => '81–100 kg';
 
   @override
-  String get onboardingRangeOver100kg => 'Over 100 kg';
+  String get onboardingRangeOver100kg => '100 kg ᱠᱷᱚᱱ ᱡᱟᱹᱥᱛᱤ';
 
   @override
-  String get onboardingTapToSelectDate => 'Tap to select date';
+  String get onboardingTapToSelectDate => 'ᱢᱟᱹᱦᱤᱛ ᱵᱟᱪᱷᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱴᱮᱯ ᱢᱮ';
 
   @override
-  String get onboardingDays => 'days';
+  String get onboardingDays => 'ᱫᱤନ';
 
   @override
-  String get onboardingApproximateLabel => 'When was your last period?';
+  String get onboardingApproximateLabel => 'ᱟᱢᱟᱜ ᱢᱩᱪᱟᱹᱫ ᱯᱤᱨᱤᱭᱚᱰ ᱛᱤᱥ ᱛᱟᱦᱮᱸ ᱠᱟᱱᱟ?';
 
   @override
-  String get onboardingApproximateLessWeek => 'Less than a week ago';
+  String get onboardingApproximateLessWeek => 'ᱢᱤᱫ ᱦᱟᱯᱛᱟ ᱠᱷᱚᱱ ᱠᱚᱢ ᱢᱟᱲᱟᱝ';
 
   @override
-  String get onboardingApproximate1to2Weeks => '1–2 weeks ago';
+  String get onboardingApproximate1to2Weeks => '1–2 ᱦᱟᱯᱛᱟ ᱢᱟᱲᱟᱝ';
 
   @override
-  String get onboardingApproximate3to4Weeks => '3–4 weeks ago';
+  String get onboardingApproximate3to4Weeks => '3–4 ᱦᱟᱯᱛᱟ ᱢᱟᱲᱟᱝ';
 
   @override
-  String get onboardingApproximateMoreMonth => 'More than a month ago';
+  String get onboardingApproximateMoreMonth => 'ᱢᱤᱫ ᱪᱟᱸᱫᱚ ᱠᱷᱚᱱ ᱡᱟᱹᱥᱛᱤ ᱢᱟᱲᱟᱝ';
 
   @override
-  String get onboardingPickExactDate => 'Pick exact date instead';
+  String get onboardingPickExactDate => 'ᱱᱚᱣᱟ ᱵᱚᱫᱚᱞ ᱛᱮ ᱥᱚᱴᱷᱤᱠ ᱢᱟᱹᱦᱤᱛ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
 
   @override
-  String get onboardingLastPeriodRequired =>
-      'Please select when your last period started';
+  String get onboardingLastPeriodRequired => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱡᱮ ᱟᱢᱟᱜ ᱢᱩᱪᱟᱹᱫ ᱯᱤᱨᱤᱭᱚᱰ ᱛᱤᱥ ᱮᱦᱚᱵ ᱞᱮᱱᱟ';
 
   @override
-  String get nudgeCompleteProfileTitle => 'Want more accurate predictions?';
+  String get nudgeCompleteProfileTitle => 'ᱟᱨᱦᱚᱸ ᱥᱚᱴᱷᱤᱠ ᱯᱨᱮᱰᱤᱠᱥᱚᱱ ᱥᱟᱱᱟᱭᱮᱫ ᱢᱮᱭᱟ?';
 
   @override
-  String get nudgeCompleteProfileBody =>
-      'Add the exact start date of your last period to improve cycle predictions.';
+  String get nudgeCompleteProfileBody => 'ᱥᱟᱭᱠᱮᱞ ᱯᱨᱮᱰᱤᱠᱥᱚᱱ ᱵᱷᱟᱹᱜᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱢᱟᱜ ᱢᱩᱪᱟᱹᱫ ᱯᱤᱨᱤᱭᱚᱰ ᱮᱦᱚᱵᱚᱜ ᱨᱮᱭᱟᱜ ᱥᱚᱴᱷᱤᱠ ᱢᱟᱹᱦᱤᱛ ᱥᱮᱞᱮᱫ ᱢᱮ᱾';
 
   @override
-  String get nudgeCompleteProfileAction => 'Update';
+  String get nudgeCompleteProfileAction => 'ᱟᱯᱰᱮᱴ';
 
   @override
-  String get nudgeCompleteProfileDismiss => 'Maybe later';
+  String get nudgeCompleteProfileDismiss => 'ᱯᱟᱞᱮᱱ ᱛᱟᱭᱚᱢ ᱛᱮ';
 
   @override
-  String get smsScreenTitle => 'SMS Summaries';
+  String get smsScreenTitle => 'SMS ᱥᱟᱢᱟᱨᱤᱠᱚ';
 
   @override
-  String get smsScreenSubtitle => 'Stay informed even without the app';
+  String get smsScreenSubtitle => 'ᱮᱯ ᱵᱮᱜᱚᱨ ᱦᱚᱸ ᱟᱯᱰᱮᱴ ᱛᱟᱦᱮᱸᱱ ᱢᱮ';
 
   @override
-  String get smsInfoCardTitle => 'Weekly Health Summary';
+  String get smsInfoCardTitle => 'ᱣᱤᱠᱞᱤ ᱦᱮᱞᱛᱷ ᱥᱟᱢᱟᱨᱤ';
 
   @override
-  String get smsInfoCardBody =>
-      'Every week, Rhythma will send you a brief summary of your cycle status, health score, and any important patterns, directly to your phone via SMS. Works without data or the app.';
+  String get smsInfoCardBody => 'ᱦᱟᱯᱛᱟ ᱯᱤᱪᱷᱤ, Rhythma ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ ᱥᱴᱮᱴᱟᱥ, ᱦᱮᱞᱛᱷ ᱥᱠᱳᱨ ᱟᱨ ᱡᱟᱦᱟᱸᱱᱟᱜ ᱞᱟᱹᱠᱛᱤᱭᱟᱱ ᱯᱮᱴᱟᱨᱱ ᱨᱮᱭᱟᱜ ᱢᱤᱫᱴᱟᱹᱝ ᱠᱷᱟᱴᱚ ᱥᱟᱢᱟᱨᱤ SMS ᱛᱟᱞᱟ ᱛᱮ ᱥᱚᱡᱷᱮ ᱟᱢᱟᱜ ᱯᱷᱳᱱ ᱨᱮ ᱵᱷᱮᱡᱟᱭᱟᱭ᱾ ᱰᱟᱴᱟ ᱥᱮ ᱮᱯ ᱵᱮᱜᱚᱨ ᱠᱟᱹᱢᱤᱭᱟ᱾';
 
   @override
-  String get smsConfigTitle => 'Configuration';
+  String get smsConfigTitle => 'ᱠᱚᱱᱯᱷᱤᱜᱟᱨᱮᱥᱚᱱ';
 
   @override
-  String get smsPhoneLabel => 'Phone Number';
+  String get smsPhoneLabel => 'ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ';
 
   @override
   String get smsPhoneHint => '+91 98765 43210';
 
   @override
-  String get smsEnableWeekly => 'Enable weekly SMS';
+  String get smsEnableWeekly => 'ᱣᱤᱠᱞᱤ SMS ᱮᱱᱮᱵᱚᱞ ᱢᱮ';
 
   @override
-  String get smsSaveSettings => 'Save Settings';
+  String get smsSaveSettings => 'ᱥᱮᱴᱤᱝᱥ ᱥᱮᱵᱷ ᱢᱮ';
 
   @override
-  String get smsSendSectionTitle => 'Send a Summary Now';
+  String get smsSendSectionTitle => 'ᱱᱤᱛᱚᱜ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱢᱟᱨᱤ ᱵᱷᱮᱡᱟᱭ ᱢᱮ';
 
   @override
-  String get smsSendRecipientPrefix => 'Sends the message below to:';
+  String get smsSendRecipientPrefix => 'ᱞᱟᱛᱟᱨ ᱨᱮᱭᱟᱜ ᱢᱮᱥᱮᱡᱽ ᱵᱷᱮᱡᱟᱭᱮᱫᱟᱭ:';
 
   @override
-  String get smsSendNoPhone => 'Add and save a phone number above first.';
+  String get smsSendNoPhone => 'ᱢᱟᱲᱟᱝ ᱪᱮᱛᱟᱱ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱥᱮᱞᱮᱫ ᱢᱮ ᱟᱨ ᱥᱮᱵᱷ ᱢᱮ᱾';
 
   @override
-  String get smsSendButton => 'Send Summary Now';
+  String get smsSendButton => 'ᱱᱤᱛᱚᱜ ᱥᱟᱢᱟᱨᱤ ᱵᱷᱮᱡᱟᱭ ᱢᱮ';
 
   @override
-  String get smsErrorEnterPhone => 'Please enter a phone number';
+  String get smsErrorEnterPhone => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱮᱢ ᱢᱮ';
 
   @override
-  String get smsErrorInvalidPhone =>
-      'Enter a valid phone number in international format, e.g. +919876543210';
+  String get smsErrorInvalidPhone => 'ᱤᱱᱴᱟᱨᱱᱮᱥᱱᱟᱞ ᱯᱷᱚᱨᱢᱮᱴ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱮᱢ ᱢᱮ, ᱡᱮᱞᱮᱠᱟ +919876543210';
 
   @override
-  String get smsSuccessSaved => 'SMS settings saved successfully!';
+  String get smsSuccessSaved => 'SMS ᱥᱮᱴᱤᱝᱥ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱥᱮᱵᱷ ᱮᱱᱟ!';
 
   @override
-  String get smsErrorAddPhoneFirst => 'Add and save a phone number first';
+  String get smsErrorAddPhoneFirst => 'ᱢᱟᱲᱟᱝ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱥᱮᱞᱮᱫ ᱢᱮ ᱟᱨ ᱥᱮᱵᱷ ᱢᱮ';
 
   @override
-  String get smsSuccessSent => 'Summary sent to your phone!';
+  String get smsSuccessSent => 'ᱟᱢᱟᱜ ᱯᱷᱳᱱ ᱨᱮ ᱥᱟᱢᱟᱨᱤ ᱵᱷᱮᱡᱟ ᱮᱱᱟ!';
 
   @override
-  String get smsErrorRateLimit =>
-      'You can send one summary per minute, please wait a bit and try again.';
+  String get smsErrorRateLimit => 'ᱟᱢ ᱢᱤᱫ ᱢᱤᱱᱤᱴ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱢᱟᱨᱤᱢ ᱵᱷᱮᱡᱟ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ, ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱠᱤᱪᱷᱩ ᱚᱠᱛᱚ ᱛᱟᱺᱜᱤ ᱢᱮ ᱟᱨ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
-  String get smsErrorSessionExpired =>
-      'Your session has expired. Please log in again.';
+  String get smsErrorSessionExpired => 'ᱟᱢᱟᱜ ᱥᱮᱥᱚᱱ ᱢᱩᱪᱟᱹᱫ ᱟᱠᱟᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱞᱚᱜ ᱤᱱ ᱢᱮ᱾';
 
   @override
-  String get smsErrorNetwork =>
-      'Couldn\'t reach the server. Check your connection and try again.';
+  String get smsErrorNetwork => 'ᱥᱟᱨᱵᱷᱟᱨ ᱥᱟᱶ ᱠᱟᱱᱮᱠᱴ ᱵᱟᱝ ᱦᱩᱭ ᱞᱮᱱᱟ᱾ ᱟᱢᱟᱜ ᱠᱟᱱᱮᱠᱥᱚᱱ ᱪᱮᱠ ᱢᱮ ᱟᱨ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
-  String get smsErrorGeneric => 'Something went wrong. Please try again.';
+  String get smsErrorGeneric => 'ᱡᱟᱦᱟᱸ ᱵᱟᱹᱲᱤᱡ ᱦᱩᱭᱮᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
-  String get smsLoadError =>
-      'Couldn\'t load your SMS settings. Pull to refresh or try again.';
+  String get smsLoadError => 'ᱟᱢᱟᱜ SMS ᱥᱮᱴᱤᱝᱥ ᱞᱳᱰ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ᱾ ᱨᱤᱯᱷᱨᱮᱥ ᱞᱟᱹᱜᱤᱫ ᱚᱨ ᱢᱮ ᱥᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
-  String get smsSummaryMessage =>
-      '🌸 Rhythma Health Summary\nThis is your on-demand summary from Rhythma.\nOpen the app for your latest cycle insights.\nReply STOP to unsubscribe.';
+  String get smsSummaryMessage => '🌸 Rhythma ᱦᱮᱞᱛᱷ ᱥᱟᱢᱟᱨᱤ\nᱱᱚᱣᱟ ᱫᱚ Rhythma ᱠᱷᱚᱱ ᱟᱢᱟᱜ ᱚᱱ-ᱰᱤᱢᱟᱱᱰ ᱥᱟᱢᱟᱨᱤ ᱠᱟᱱᱟ᱾\nᱟᱢᱟᱜ ᱞᱮᱴᱮᱥᱴ ᱥᱟᱭᱠᱮᱞ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱞᱟᱹᱜᱤᱫ ᱮᱯ ᱠᱷᱩᱞᱟᱹᱣ ᱢᱮ᱾\nᱟᱱᱥᱟᱵᱽᱥᱠᱨᱟᱭᱤᱵᱽ ᱞᱟᱹᱜᱤᱫ STOP ᱨᱤᱯᱞᱟᱭ ᱢᱮ᱾';
 
   @override
   String insightsLoadError(String error) {
-    return 'Couldn\'t load your insights: $error';
+    return 'ᱟᱢᱟᱜ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱞᱳᱰ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ: $error';
   }
 
   @override
-  String get insightsNotEnoughData =>
-      'Log a few more cycles on the Cycle tab to unlock your full health insights.';
+  String get insightsNotEnoughData => 'ᱟᱢᱟᱜ ᱯᱩᱨᱟᱹ ᱦᱮᱞᱛᱷ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱟᱱᱞᱚᱠ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱠᱮᱞ ᱴᱮᱵᱽ ᱨᱮ ᱟᱨᱦᱚᱸ ᱠᱤᱪᱷᱩ ᱥᱟᱭᱠᱮᱞ ᱞᱚᱜ ᱢᱮ᱾';
 
   @override
-  String get insightsNoSymptomsYet =>
-      'No symptoms logged yet — log some on the Cycle tab to see patterns here.';
+  String get insightsNoSymptomsYet => 'ᱱᱤᱛ ᱫᱷᱟᱹᱵᱤᱡ ᱡᱟᱦᱟᱸᱱᱟᱜ ᱞᱚᱠᱷᱚᱱ ᱵᱟᱝ ᱞᱚᱜ ᱟᱠᱟᱱᱟ — ᱱᱚᱸᱰᱮ ᱯᱮᱴᱟᱨᱱᱠᱚ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱠᱮᱞ ᱴᱮᱵᱽ ᱨᱮ ᱠᱤᱪᱷᱩ ᱞᱚᱜ ᱢᱮ᱾';
 
   @override
-  String get insightsNotEnoughTrendData =>
-      'Log at least two cycles to see your trend here.';
+  String get insightsNotEnoughTrendData => 'ᱱᱚᱸᱰᱮ ᱟᱢᱟᱜ ᱴᱨᱮᱱᱰ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱠᱚᱢ ᱠᱷᱚᱱ ᱠᱚᱢ ᱵᱟᱨᱭᱟ ᱥᱟᱭᱠᱮᱞ ᱞᱚᱜ ᱢᱮ᱾';
 
   @override
-  String get assistantAccessibilitySuggestedPrompt => 'Suggested prompt';
+  String get assistantAccessibilitySuggestedPrompt => 'ᱥᱟᱡᱮᱥᱴᱮᱰ ᱯᱨᱚᱢᱯᱴ';
 
   @override
-  String get assistantAccessibilityMessageInput => 'Message input';
+  String get assistantAccessibilityMessageInput => 'ᱢᱮᱥᱮᱡᱽ ᱤᱱᱯᱩᱴ';
 
   @override
-  String get assistantAccessibilityMessageInputHint =>
-      'Type your question here';
+  String get assistantAccessibilityMessageInputHint => 'ᱟᱢᱟᱜ ᱠᱩᱠᱞᱤ ᱱᱚᱸᱰᱮ ᱴᱟᱭᱤᱯ ᱢᱮ';
 
   @override
-  String get assistantAccessibilitySendMessage => 'Send message';
+  String get assistantAccessibilitySendMessage => 'ᱢᱮᱥᱮᱡᱽ ᱵᱷᱮᱡᱟᱭ ᱢᱮ';
 
   @override
-  String get assistantAccessibilitySendMessageHint =>
-      'Sends your message to the assistant';
+  String get assistantAccessibilitySendMessageHint => 'ᱟᱢᱟᱜ ᱢᱮᱥᱮᱡᱽ ᱟᱥᱤᱥᱴᱮᱱᱴ ᱴᱷᱮᱱ ᱵᱷᱮᱡᱟᱭᱟᱭ';
 
   @override
-  String get assistantAccessibilityTyping => 'Assistant is typing';
+  String get assistantAccessibilityTyping => 'ᱟᱥᱤᱥᱴᱮᱱᱴ ᱴᱟᱭᱤᱯᱮᱫᱟᱭ';
 
   @override
-  String get languageSelectionError =>
-      'Unable to save language. Please try again.';
+  String get languageSelectionError => 'ᱯᱟᱹᱨᱥᱤ ᱥᱮᱵᱷ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
-  String get deleteAccount => 'Delete Account';
+  String get deleteAccount => 'ᱮᱠᱟᱣᱩᱱᱴ ᱰᱤᱞᱤᱴ ᱢᱮ';
 
   @override
-  String get deleteAccountConfirmationTitle => 'Delete Account?';
+  String get deleteAccountConfirmationTitle => 'ᱮᱠᱟᱣᱩᱱᱴ ᱰᱤᱞᱤᱴᱟᱢ?';
 
   @override
-  String get deleteAccountConfirmationDesc =>
-      'This action is permanent and cannot be undone. All your data will be wiped.';
+  String get deleteAccountConfirmationDesc => 'ᱱᱚᱣᱟ ᱠᱟᱹᱢᱤ ᱫᱚ ᱯᱟᱨᱢᱟᱱᱮᱱᱴ ᱠᱟᱱᱟ ᱟᱨ ᱱᱚᱣᱟ ᱫᱚ ᱟᱨᱦᱚᱸ ᱨᱩᱣᱟᱹᱲ ᱵᱟᱝ ᱜᱟᱱᱚᱜ-ᱟ᱾ ᱟᱢᱟᱜ ᱥᱟᱱᱟᱢ ᱰᱟᱴᱟ ᱢᱮᱴᱟᱣ ᱜᱤᱰᱤᱜ-ᱟ᱾';
 
   @override
-  String get accountDeletedSuccess => 'Account deleted successfully.';
+  String get accountDeletedSuccess => 'ᱮᱠᱟᱣᱩᱱᱴ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱰᱤᱞᱤᱴ ᱮᱱᱟ᱾';
 
   @override
   String get langGujarati => 'ગુજરાતી (Gujarati)';
