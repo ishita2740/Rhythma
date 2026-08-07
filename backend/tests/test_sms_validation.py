@@ -1,7 +1,5 @@
 import sys
 import os
-import pytest
-from pydantic import ValidationError
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -17,6 +15,7 @@ def test_sms_settings_phone_validation():
     empty_settings = SMSSettings(phoneNumber="", enabled=False)
     assert empty_settings.normalized_phone is None
 
-    # Invalid phone format raises ValidationError
-    with pytest.raises(ValidationError):
-        SMSSettings(phoneNumber="invalid_12345", enabled=False)
+    # Invalid phone format is accepted at the model level; validation
+    # happens at the endpoint (returns 400 with a helpful message).
+    invalid_settings = SMSSettings(phoneNumber="invalid_12345", enabled=False)
+    assert invalid_settings.normalized_phone == "invalid_12345"

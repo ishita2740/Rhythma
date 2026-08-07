@@ -330,5 +330,29 @@
   "deleteAccountConfirmationDesc": "This action is permanent and cannot be undone. All your data will be wiped.",
   "accountDeletedSuccess": "Account deleted successfully.",
   "langGujarati": "ગુજરાતી (Gujarati)",
-  "insightsDisclaimer": "These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional."
+  "insightsDisclaimer": "These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional.",
+  "welcomeToRhythma": "Welcome to Rhythma",
+  "loginOrSignUpWithPhone": "Log in or sign up with your phone number.",
+  "enterOtpSentToPhone": "Enter the OTP sent to your phone",
+  "phoneNumber": "Phone Number",
+  "getOtp": "Get OTP",
+  "sendingOtp": "Sending OTP...",
+  "otp": "OTP",
+  "verifyOtp": "Verify OTP",
+  "verifying": "Verifying...",
+  "useDifferentPhoneNumber": "Use a different phone number",
+  "pleaseEnterPhoneNumber": "Please enter your phone number.",
+  "pleaseEnterValidPhoneNumber": "Please enter a valid phone number with country code (e.g., +91).",
+  "verificationFailed": "Verification failed",
+  "otpSentTo": "OTP sent to {phone}",
+  "@otpSentTo": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "pleaseEnterOtp": "Please enter the OTP.",
+  "invalidOtp": "Invalid OTP. Please try again.",
+  "failedToGetIdToken": "Failed to get ID token"
 }

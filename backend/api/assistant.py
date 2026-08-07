@@ -16,6 +16,22 @@ from services.rate_limit_service import RateLimitService
 
 logger = logging.getLogger(__name__)
 
+# ─── Backward-compatible shims ────────────────────────────────────────────
+# Legacy tests import these directly from api.assistant. The real rate
+# limiting now lives in RateLimitService (Firestore-backed), but these
+# symbols must remain importable so that test_auth.py and
+# test_assistant_rate_limiter.py keep working without changes.
+_assistant_rate_history: dict = {}
+
+
+def is_rate_limited(user_id: str) -> Optional[int]:
+    """Thin wrapper kept for backward-compatible test imports."""
+    return RateLimitService.is_rate_limited(
+        key=f"assistant:{user_id}",
+        limit=ASSISTANT_RATE_LIMIT,
+        window_seconds=ASSISTANT_RATE_WINDOW,
+    )
+
 #: Loads the curated, sourced medical reference dataset (issue #266) and
 #: retrieves relevant facts to ground each assistant answer. Degrades to
 #: ungrounded responses if the dataset is unavailable.

@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final l10n = AppLocalizations.of(context)!;
     String phone = _phoneController.text.trim();
     if (phone.isEmpty) {
-      _showMessage(l10n.pleaseEnterPhoneNumber ?? 'Please enter your phone number.');
+      _showMessage(l10n.pleaseEnterPhoneNumber);
       return;
     }
 
@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (phone.length == 10 && !phone.startsWith('+')) {
       phone = '+91$phone';
     } else if (!phone.startsWith('+')) {
-      _showMessage(l10n.pleaseEnterValidPhoneNumber ?? 'Please enter a valid phone number with country code (e.g., +91).');
+      _showMessage(l10n.pleaseEnterValidPhoneNumber);
       return;
     }
 
@@ -62,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
         verificationFailed: (FirebaseAuthException e) {
           if (!mounted) return;
           setState(() => _loading = false);
-          _showMessage(e.message ?? l10n.verificationFailed ?? 'Verification failed');
+          _showMessage(e.message ?? l10n.verificationFailed);
         },
         codeSent: (String verificationId, int? resendToken) {
           if (!mounted) return;
@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final l10n = AppLocalizations.of(context)!;
     final otp = _otpController.text.trim();
     if (otp.isEmpty || _verificationId == null) {
-      _showMessage(l10n.pleaseEnterOtp ?? 'Please enter the OTP.');
+      _showMessage(l10n.pleaseEnterOtp);
       return;
     }
 
@@ -103,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _loading = false);
-      _showMessage(l10n.invalidOtp ?? 'Invalid OTP. Please try again.');
+      _showMessage(l10n.invalidOtp);
     }
   }
 
@@ -113,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
       final idToken = await userCredential.user?.getIdToken();
       
-      if (idToken == null) throw Exception(l10n.failedToGetIdToken ?? 'Failed to get ID token');
+      if (idToken == null) throw Exception(l10n.failedToGetIdToken);
 
       await AuthService().firebaseLogin(idToken);
       if (!mounted) return;
@@ -153,15 +153,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  l10n.welcomeToRhythma ?? 'Welcome to Rhythma',
+                  l10n.welcomeToRhythma,
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   _otpSent 
-                    ? (l10n.enterOtpSentToPhone ?? 'Enter the OTP sent to your phone')
-                    : (l10n.loginOrSignUpWithPhone ?? 'Log in or sign up with your phone number.'),
+                    ? l10n.enterOtpSentToPhone
+                    : l10n.loginOrSignUpWithPhone,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Theme.of(context).hintColor),
                 ),
@@ -174,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     keyboardType: TextInputType.phone,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
-                      labelText: l10n.phoneNumber ?? 'Phone Number',
+                      labelText: l10n.phoneNumber,
                       hintText: '+91 9876543210',
                       prefixIcon: const Icon(Icons.phone_outlined),
                       border: const OutlineInputBorder(),
@@ -190,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : const Icon(Icons.send_rounded),
-                    label: Text(_loading ? (l10n.sendingOtp ?? 'Sending OTP...') : (l10n.getOtp ?? 'Get OTP')),
+                    label: Text(_loading ? l10n.sendingOtp : l10n.getOtp),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
                     ),
@@ -203,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     textInputAction: TextInputAction.done,
                     onSubmitted: (_) => _verifyOtp(),
                     decoration: InputDecoration(
-                      labelText: l10n.otp ?? 'OTP',
+                      labelText: l10n.otp,
                       hintText: '123456',
                       prefixIcon: const Icon(Icons.password_outlined),
                       border: const OutlineInputBorder(),
@@ -219,14 +219,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : const Icon(Icons.login_rounded),
-                    label: Text(_loading ? (l10n.verifying ?? 'Verifying...') : (l10n.verifyOtp ?? 'Verify OTP')),
+                    label: Text(_loading ? l10n.verifying : l10n.verifyOtp),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
                     ),
                   ),
                   TextButton(
                     onPressed: _loading ? null : () => setState(() => _otpSent = false),
-                    child: Text(l10n.useDifferentPhoneNumber ?? "Use a different phone number"),
+                    child: Text(l10n.useDifferentPhoneNumber),
                   ),
                 ],
               ],

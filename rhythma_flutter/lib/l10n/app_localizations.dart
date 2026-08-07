@@ -1846,11 +1846,107 @@ abstract class AppLocalizations {
   /// **'ગુજરાતી (Gujarati)'**
   String get langGujarati;
 
-  /// No description provided for @insightsDisclaimer.
+  /// No description provided for @welcomeToRhythma.
   ///
   /// In en, this message translates to:
-  /// **'These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional.'**
-  String get insightsDisclaimer;
+  /// **'Welcome to Rhythma'**
+  String get welcomeToRhythma;
+
+  /// No description provided for @loginOrSignUpWithPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in or sign up with your phone number.'**
+  String get loginOrSignUpWithPhone;
+
+  /// No description provided for @enterOtpSentToPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the OTP sent to your phone'**
+  String get enterOtpSentToPhone;
+
+  /// No description provided for @phoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get phoneNumber;
+
+  /// No description provided for @getOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Get OTP'**
+  String get getOtp;
+
+  /// No description provided for @sendingOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending OTP...'**
+  String get sendingOtp;
+
+  /// No description provided for @otp.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP'**
+  String get otp;
+
+  /// No description provided for @verifyOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify OTP'**
+  String get verifyOtp;
+
+  /// No description provided for @verifying.
+  ///
+  /// In en, this message translates to:
+  /// **'Verifying...'**
+  String get verifying;
+
+  /// No description provided for @useDifferentPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a different phone number'**
+  String get useDifferentPhoneNumber;
+
+  /// No description provided for @pleaseEnterPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your phone number.'**
+  String get pleaseEnterPhoneNumber;
+
+  /// No description provided for @pleaseEnterValidPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number with country code (e.g., +91).'**
+  String get pleaseEnterValidPhoneNumber;
+
+  /// No description provided for @verificationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification failed'**
+  String get verificationFailed;
+
+  /// No description provided for @otpSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP sent to {phone}'**
+  String otpSentTo(String phone);
+
+  /// No description provided for @pleaseEnterOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the OTP.'**
+  String get pleaseEnterOtp;
+
+  /// No description provided for @invalidOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid OTP. Please try again.'**
+  String get invalidOtp;
+
+  /// No description provided for @failedToGetIdToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to get ID token'**
+  String get failedToGetIdToken;
 }
 
 class _AppLocalizationsDelegate

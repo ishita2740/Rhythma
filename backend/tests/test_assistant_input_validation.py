@@ -71,6 +71,7 @@ from api.assistant import (  # noqa: E402
 from core.auth import get_current_user  # noqa: E402
 import services.firestore_service as fs  # noqa: E402
 from services.firestore_service import MockFirestoreClient  # noqa: E402
+import services.rate_limit_service as _rl_mod  # noqa: E402
 
 if not isinstance(fs.db, MockFirestoreClient):
     fs.db = MockFirestoreClient()
@@ -92,6 +93,10 @@ def _isolate():
     # conversation store has to be empty for the client-history cases to
     # exercise anything.
     fs.db._collections = {}
+    # RateLimitService may hold a different db reference (replaced by
+    # test_auth_rate_limits); clear it too so assistant rate limits reset.
+    if hasattr(_rl_mod.db, "_collections"):
+        _rl_mod.db._collections = {}
     assistant._assistant_rate_history.clear()
     RecordingGemini.prompts = []
     # `genai` was bound at import; point it at the recorder for this module.
@@ -100,6 +105,8 @@ def _isolate():
     app.dependency_overrides.clear()
     assistant._assistant_rate_history.clear()
     fs.db._collections = {}
+    if hasattr(_rl_mod.db, "_collections"):
+        _rl_mod.db._collections = {}
 
 
 def chat(**payload):

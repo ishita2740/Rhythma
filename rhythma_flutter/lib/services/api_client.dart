@@ -126,15 +126,7 @@ class ApiClient {
   }
 
   static Future<String> _doRefresh(String refreshToken) async {
-    // Use a clean Dio instance without our interceptors to avoid
-    // recursion (the refresh endpoint itself could 401).
-    final refreshDio = Dio(BaseOptions(
-      baseUrl: AppConfig.apiBaseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
-    ));
-
-    final response = await refreshDio.post(
+    final response = await _dio.post(
       '/auth/refresh',
       data: {'refresh_token': refreshToken},
     );

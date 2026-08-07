@@ -56,6 +56,19 @@ class RateLimitService:
         return None
 
     @staticmethod
+    def reset(key: str) -> None:
+        """Remove the rate-limit entry for a single key.
+
+        Called after a successful login so a user who mistypes her password
+        is not left one attempt away from a lockout.
+        """
+        try:
+            doc_ref = RateLimitService._document(key)
+            doc_ref.delete()
+        except Exception:
+            pass
+
+    @staticmethod
     def clear_all():
         """
         Clear all rate limit entries.

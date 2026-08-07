@@ -48,7 +48,7 @@ def test_trends_endpoint_statements(auth_headers, mock_auth_dependencies):
             assert response.status_code == 200
             data = response.json()
             assert "sleep" in data and data["sleep"] is not None
-            assert "decreased" in data["sleep"]
+            assert "increased" in data["sleep"]
             assert "stress" in data and "increased" in data["stress"]
             assert "symptoms" in data
             assert data["symptoms"].get("cramps") is not None

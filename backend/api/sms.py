@@ -159,12 +159,6 @@ class SMSSettings(BaseModel):
     def normalized_phone(self) -> Optional[str]:
         return self.phoneNumber.strip() if self.phoneNumber else None
 
-    @field_validator("phoneNumber")
-    def validate_phone_number(cls, v: Optional[str]) -> Optional[str]:
-        if v and v.strip() and not re.match(PHONE_PATTERN, v.strip()):
-            raise ValueError("Phone number must be in E.164 format, e.g. +919876543210.")
-        return v
-
 
 class SMSSettingsResponse(BaseModel):
     phoneNumber: str

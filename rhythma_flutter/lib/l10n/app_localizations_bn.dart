@@ -937,5 +937,53 @@ class AppLocalizationsBn extends AppLocalizations {
   String get langGujarati => 'ગુજરાતી (Gujarati)';
 
   @override
-  String get insightsDisclaimer => 'These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional.';
+  String get welcomeToRhythma => 'Welcome to Rhythma';
+
+  @override
+  String get loginOrSignUpWithPhone => 'Log in or sign up with your phone number.';
+
+  @override
+  String get enterOtpSentToPhone => 'Enter the OTP sent to your phone';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get sendingOtp => 'Sending OTP...';
+
+  @override
+  String get otp => 'OTP';
+
+  @override
+  String get verifyOtp => 'Verify OTP';
+
+  @override
+  String get verifying => 'Verifying...';
+
+  @override
+  String get useDifferentPhoneNumber => 'Use a different phone number';
+
+  @override
+  String get pleaseEnterPhoneNumber => 'Please enter your phone number.';
+
+  @override
+  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number with country code (e.g., +91).';
+
+  @override
+  String get verificationFailed => 'Verification failed';
+
+  @override
+  String otpSentTo(String phone) => 'OTP sent to $phone';
+
+  @override
+  String get pleaseEnterOtp => 'Please enter the OTP.';
+
+  @override
+  String get invalidOtp => 'Invalid OTP. Please try again.';
+
+  @override
+  String get failedToGetIdToken => 'Failed to get ID token';
 }
