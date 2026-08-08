@@ -33,6 +33,7 @@ from api.provider import router as provider_router
 # Auth router lives in core (not in api) to avoid duplicate registration
 from core.auth_router import router as auth_router
 
+from api.bot import router as bot_router
 from core.errors import register_exception_handlers
 from core.middleware import RequestContextMiddleware
 from core.request_context import REQUEST_ID_HEADER
@@ -142,6 +143,7 @@ app.include_router(cycle_router,     prefix="/api/v1/cycle",     tags=["Cycle Tr
 app.include_router(insights_router,  prefix="/api/v1/insights",  tags=["Insights"])
 app.include_router(sms_router,       prefix="/api/v1/sms",       tags=["SMS"])
 app.include_router(dashboard_router, prefix="/api/v1",           tags=["Dashboard"])
+app.include_router(bot_router,       prefix="/api/v1/bot",       tags=["Chatbot Engine"])
 app.include_router(privacy_router,   prefix="/api/v1/privacy",   tags=["Privacy"])
 app.include_router(provider_router,  prefix="/api/v1/provider",  tags=["Provider Dashboard"])
 
