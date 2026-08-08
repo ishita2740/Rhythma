@@ -5,7 +5,7 @@
   --border: #e5e4e7;
   --accent: #aa3bff;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: system-ui, 'Segoe UI', Roboto, Noto Sans, 'Noto Sans Kannada', 'Noto Sans Malayalam', sans-serif;
 
   font: 18px/145% var(--sans);
   color-scheme: light dark;
@@ -15,6 +15,19 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Multi-lingual layout rendering support (Kannada, Malayalam, etc.) */
+.nav-link,
+button,
+.chip,
+.bubble-body,
+.card-sub,
+.mhs-info,
+.mini-stat {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.4;
 }
 
 @media (prefers-color-scheme: dark) {
