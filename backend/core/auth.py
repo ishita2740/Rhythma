@@ -58,7 +58,15 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 def _hash_token(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
 
+def cleanup_expired_refresh_tokens():
+    now = datetime.now(timezone.utc)
+    expired = [k for k, v in refresh_token_store.items() if now > v.get("expires_at", now)]
+    for k in expired:
+        refresh_token_store.pop(k, None)
+
+
 def create_refresh_token(user_id: str) -> str:
+    cleanup_expired_refresh_tokens()
     token = secrets.token_urlsafe(48)
     token_hash = _hash_token(token)
     expires_at = datetime.now(timezone.utc) + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
