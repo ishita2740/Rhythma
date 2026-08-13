@@ -79,9 +79,6 @@ class AppLocalizationsMl extends AppLocalizations {
   String get langMarathi => 'मराठी (Marathi)';
 
   @override
-  String get langGujarati => 'ગુજરાતી (Gujarati)';
-
-  @override
   String get homeGreeting => 'നമസ്കാരം';
 
   @override
@@ -98,6 +95,10 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get homeHighEnergy => 'ഉയർന്ന ഊർജ്ജസ്വലത';
+
+  @override
+  String get homeFertileWindowDisclaimer =>
+      'ഇത് നിങ്ങൾ രേഖപ്പെടുത്തിയ ഡാറ്റയെ അടിസ്ഥാനമാക്കിയുള്ള ഒരു കണക്കാക്കൽ മാത്രമാണ്, ഇത് വൈദ്യോപദേശമോ ഗർഭനിരോധന ഉപദേശമോ അല്ല.';
 
   @override
   String get homeAiTitle => 'RHYTHMA AI';
@@ -341,6 +342,10 @@ class AppLocalizationsMl extends AppLocalizations {
   String get assistantSug5 => 'എന്റെ ആർത്തവം ക്രമരഹിതമാണ് — ഇത് സാധാരണമാണോ?';
 
   @override
+  String get assistantDisclaimer =>
+      'ഈ അസിസ്റ്റന്റ് പൊതുവായ ആരോഗ്യ വിവരങ്ങൾ മാത്രമേ നൽകുന്നുള്ളൂ, ഇത് പ്രൊഫഷണൽ വൈദ്യോപദേശത്തിന് പകരമല്ല.';
+
+  @override
   String get insightsTitle => 'ആരോഗ്യ വിവരങ്ങൾ';
 
   @override
@@ -392,6 +397,10 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get insightsRec3 => 'അണ്ഡോത്പാദന ആഴ്ചയിൽ 2.5 ലിറ്റർ വെള്ളം കുടിക്കുക';
+
+  @override
+  String get insightsDisclaimer =>
+      'ഈ ഉൾക്കാഴ്ചകൾ നിങ്ങൾ രേഖപ്പെടുത്തിയ വിവരങ്ങളെ അടിസ്ഥാനമാക്കിയുള്ളതാണ്, വ്യക്തിഗത ട്രാക്കിംഗിന് മാത്രം ഉദ്ദേശിച്ചുള്ളതാണ്. ഇത് വൈദ്യ രോഗനിർണയമല്ല, യോഗ്യതയുള്ള വൈദ്യ വിദഗ്ധന്റെ ഉപദേശത്തിന് പകരമല്ല.';
 
   @override
   String get profileTitle => 'പ്രൊഫൈൽ';
@@ -924,4 +933,58 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get accountDeletedSuccess => 'Account deleted successfully.';
+
+  @override
+  String get langGujarati => 'ગુજરાતી (Gujarati)';
+
+  @override
+  String get welcomeToRhythma => 'Welcome to Rhythma';
+
+  @override
+  String get loginOrSignUpWithPhone => 'Log in or sign up with your phone number.';
+
+  @override
+  String get enterOtpSentToPhone => 'Enter the OTP sent to your phone';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get sendingOtp => 'Sending OTP...';
+
+  @override
+  String get otp => 'OTP';
+
+  @override
+  String get verifyOtp => 'Verify OTP';
+
+  @override
+  String get verifying => 'Verifying...';
+
+  @override
+  String get useDifferentPhoneNumber => 'Use a different phone number';
+
+  @override
+  String get pleaseEnterPhoneNumber => 'Please enter your phone number.';
+
+  @override
+  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number with country code (e.g., +91).';
+
+  @override
+  String get verificationFailed => 'Verification failed';
+
+  @override
+  String otpSentTo(String phone) => 'OTP sent to $phone';
+
+  @override
+  String get pleaseEnterOtp => 'Please enter the OTP.';
+
+  @override
+  String get invalidOtp => 'Invalid OTP. Please try again.';
+
+  @override
+  String get failedToGetIdToken => 'Failed to get ID token';
 }

@@ -37,9 +37,19 @@ class ExportService {
     final file = File('${directory.path}/rhythma_export_$timestamp.json');
     await file.writeAsString(jsonString);
 
-    await Share.shareXFiles(
-      [XFile(file.path)],
-      subject: 'Rhythma Data Export',
-    );
+    try {
+      await Share.shareXFiles(
+        [XFile(file.path)],
+        subject: 'Rhythma Data Export',
+      );
+    } catch (_) {
+      // Fallback for desktop platforms or environments without native share handlers
+    } finally {
+      if (await file.exists()) {
+        try {
+          await file.delete();
+        } catch (_) {}
+      }
+    }
   }
 }

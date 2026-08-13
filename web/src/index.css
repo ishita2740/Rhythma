@@ -5,7 +5,7 @@
   --border: #e5e4e7;
   --accent: #aa3bff;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: system-ui, 'Segoe UI', Roboto, Noto Sans, 'Noto Sans Kannada', 'Noto Sans Malayalam', sans-serif;
 
   font: 18px/145% var(--sans);
   color-scheme: light dark;
@@ -15,6 +15,19 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Multi-lingual layout rendering support (Kannada, Malayalam, etc.) */
+.nav-link,
+button,
+.chip,
+.bubble-body,
+.card-sub,
+.mhs-info,
+.mini-stat {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.4;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -104,6 +117,37 @@ p {
   color: #c0392b;
   font-size: 0.85rem;
   margin: 0 0 0.5rem;
+}
+
+/* Password requirements on the register form. Colour reinforces the state,
+   it never carries it alone — every row also shows a ✓ or a •, so met and
+   unmet stay distinguishable with a red-green colour vision deficiency or
+   on a monochrome screen. */
+.password-requirements {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  color: #6b6b6b;
+}
+
+.password-requirements p {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+
+.password-requirements ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.password-requirements .rule-met {
+  color: #1e7a45;
+}
+
+.password-requirements .rule-unmet {
+  color: #6b6b6b;
 }
 
 .centered-loader {
@@ -272,6 +316,62 @@ p {
   width: 100%;
 }
 
+/* ── Prediction (issue #419) ──────────────────────────────────────────── */
+
+.prediction-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+/* The overdue count is the one number on this screen that has to read
+   differently from the others — it is a state, not a countdown. */
+.cycle-next-number.is-overdue,
+.stat-value.is-overdue {
+  color: #c0392b;
+}
+
+.prediction-date {
+  font-weight: 600;
+  color: var(--text-h);
+  margin: 0.2rem 0 0;
+}
+
+.prediction-range {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  margin: 0;
+}
+
+.prediction-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.4rem 0 0.2rem;
+}
+
+.prediction-source {
+  font-size: 0.78rem;
+  opacity: 0.7;
+  margin: 0;
+}
+
+.status-pill.phase-late,
+.status-pill.phase-unknown,
+.status-pill.confidence-low {
+  background: color-mix(in srgb, #8E8E93 18%, transparent);
+  color: #6b6b70;
+}
+
+.status-pill.confidence-high {
+  background: color-mix(in srgb, #52B3B0 18%, transparent);
+  color: #3d8a87;
+}
+
+.outlook-card {
+  margin-bottom: 0.9rem;
+}
+
 .icon-btn {
   background: transparent;
   border: 1px solid var(--border);
@@ -434,6 +534,12 @@ p {
   font-size: 0.85rem;
   color: var(--accent);
   font-weight: 600;
+}
+
+.fertile-window-disclaimer {
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  color: var(--text);
 }
 
 .stat-row {
@@ -868,31 +974,6 @@ p {
 
 /* ── Insights ────────────────────────────────────────────────────────────── */
 
-.mhs-card {
-  flex-direction: row;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-.mhs-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.mhs-value {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--text-h);
-  line-height: 1.1;
-}
-
-.mhs-total {
-  font-size: 1.1rem;
-  color: var(--text);
-  font-weight: 600;
-}
-
 .mini-stats {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -964,69 +1045,68 @@ p {
   color: #c96a3c;
 }
 
+.status-pill.attention {
+  background: color-mix(in srgb, #e07aad 15%, transparent);
+  color: #c34d84;
+}
+
+.status-pill.neutral {
+  background: color-mix(in srgb, var(--text) 12%, transparent);
+  color: var(--text);
+}
+
 .empty-note {
   font-size: 0.88rem;
   color: var(--text);
   padding: 0.5rem 0;
 }
 
-.symptom-card {
+.observation-card {
   gap: 0.5rem;
+  border-left: 4px solid var(--border);
 }
 
-.symptom-bars {
+.observation-card.severity-info {
+  border-left-color: #9b72cf;
+}
+
+.observation-card.severity-attention {
+  border-left-color: #e8946a;
+}
+
+.observation-card.severity-seek_care {
+  border-left-color: #e07aad;
+}
+
+.observation-heading {
   display: flex;
-  flex-direction: column;
+  align-items: flex-start;
   gap: 0.6rem;
 }
 
-.symptom-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: 0.85rem;
+.observation-icon {
+  flex: 0 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.4;
 }
 
-.symptom-label {
-  width: 6.5rem;
-  color: var(--text-h);
-}
-
-.symptom-track {
-  flex: 1;
-  height: 8px;
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--text) 12%, transparent);
-  overflow: hidden;
-}
-
-.symptom-fill {
-  height: 100%;
-  border-radius: 4px;
-}
-
-.symptom-pct {
-  width: 2.5rem;
-  text-align: right;
+.observation-severity-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--text);
 }
 
-.rec-card {
-  flex-direction: row;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.9rem 1.1rem;
+.observation-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-h);
 }
 
-.rec-icon {
-  flex: 0 0 auto;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
+.observation-body {
+  font-size: 0.88rem;
+  color: var(--text);
+  margin: 0;
 }
 
 /* ── Profile ─────────────────────────────────────────────────────────────── */
@@ -1102,6 +1182,85 @@ p {
 .menu-item.danger:disabled {
   opacity: 0.5;
   cursor: default;
+}
+
+/* ── Data & privacy (issue #418) ──────────────────────────────────────── */
+
+.data-category-list {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.data-category {
+  border-top: 1px solid color-mix(in srgb, var(--text-h) 10%, transparent);
+  padding-top: 0.6rem;
+}
+
+.data-category-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.data-category-label {
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.data-category-count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* The field list can be long — every column of a cycle log — and it is
+   reference material rather than something to read through, so it is set
+   smaller and allowed to wrap rather than pushed into its own scroller. */
+.data-category-fields {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin: 0.25rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.export-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+.danger-zone {
+  border-color: color-mix(in srgb, #c0392b 30%, transparent);
+}
+
+.warning-text {
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.deletion-impact {
+  margin: 0.5rem 0;
+  padding-left: 1.1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.confirm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0.75rem 0;
+  font-weight: 600;
+}
+
+.text-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--accent);
 }
 
 .avatar-picker {
@@ -1207,7 +1366,160 @@ p {
   margin: 0;
 }
 
+/* ── Provider dashboard & data sharing (issue #267) ─────────────────────── */
+
+.provider-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.provider-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.1rem;
+}
+
+.provider-card a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-subtitle {
+  margin-top: -0.4rem;
+  margin-bottom: 0.9rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge.active {
+  background: color-mix(in srgb, #52b3b0 15%, transparent);
+  color: #2e9e9b;
+}
+
+.badge.revoked {
+  background: color-mix(in srgb, #b05252 15%, transparent);
+  color: #b05252;
+}
+
+.list-card {
+  padding: 0.9rem 1rem;
+}
+
+.list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.list-row:last-child {
+  border-bottom: none;
+}
+
+.list-row-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.list-row-title {
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+.list-row-sub {
+  font-size: 0.82rem;
+  color: var(--text);
+  word-break: break-word;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 0.55rem 0.4rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.data-table th {
+  color: var(--text);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-section {
+  margin-top: 1.1rem;
+}
+
+.detail-section h2 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 /* ── Responsive ──────────────────────────────────────────────────────────── */
+
+/* ── Error boundary & 404 ────────────────────────────────────────────────── */
+
+.error-boundary,
+.not-found-page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 4rem 1.25rem;
+  text-align: center;
+  align-items: center;
+}
+
+.error-boundary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+/* The Link styled as a button needs the padding a <button> gets for free. */
+.error-boundary-actions a {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.error-request-id code,
+.not-found-path {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  /* Long, unbreakable strings: a request id or a pasted URL must wrap
+     rather than push the page into a horizontal scroll on a phone. */
+  overflow-wrap: anywhere;
+}
 
 @media (max-width: 520px) {
   .quick-tiles {
@@ -1227,4 +1539,21 @@ p {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+/* ── Assistant transcript privacy (issue #420) ────────────────────────── */
+
+.assistant-privacy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.4rem;
+}
+
+.assistant-privacy .disclaimer {
+  margin: 0;
+  flex: 1;
+  min-width: 12rem;
 }

@@ -1,58 +1,191 @@
 import logging
 import os
+import re
+import unicodedata
 from datetime import datetime, timedelta, timezone
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 import google.generativeai as genai
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 
 from core.auth import get_current_user
 from services.firestore_service import AssistantConversationService
+from services.medical_knowledge_service import MedicalKnowledgeService
+from services.rate_limit_service import RateLimitService
 
 logger = logging.getLogger(__name__)
 
-# ─── Rate Limiter (in-memory, resets on restart) ──────────────────────────
-_assistant_rate_history = {}
+# ─── Backward-compatible shims ────────────────────────────────────────────
+# Legacy tests import these directly from api.assistant. The real rate
+# limiting now lives in RateLimitService (Firestore-backed), but these
+# symbols must remain importable so that test_auth.py and
+# test_assistant_rate_limiter.py keep working without changes.
+_assistant_rate_history: dict = {}
+
+
+def is_rate_limited(user_id: str) -> Optional[int]:
+    """Thin wrapper kept for backward-compatible test imports."""
+    return RateLimitService.is_rate_limited(
+        key=f"assistant:{user_id}",
+        limit=ASSISTANT_RATE_LIMIT,
+        window_seconds=ASSISTANT_RATE_WINDOW,
+    )
+
+#: Loads the curated, sourced medical reference dataset (issue #266) and
+#: retrieves relevant facts to ground each assistant answer. Degrades to
+#: ungrounded responses if the dataset is unavailable.
+medical_knowledge_service = MedicalKnowledgeService()
 
 ASSISTANT_RATE_LIMIT = int(os.getenv("ASSISTANT_RATE_LIMIT", "10"))
 ASSISTANT_RATE_WINDOW = int(os.getenv("ASSISTANT_RATE_WINDOW", "60"))
 
 
-def is_rate_limited(user_id: str) -> Optional[int]:
-    now = datetime.now(timezone.utc)
-    if user_id in _assistant_rate_history:
-        _assistant_rate_history[user_id] = [
-            t for t in _assistant_rate_history[user_id]
-            if now - t < timedelta(seconds=ASSISTANT_RATE_WINDOW)
-        ]
-    else:
-        _assistant_rate_history[user_id] = []
+# ─── Supported languages ──────────────────────────────────────────────────
+#: The one definition of what this endpoint speaks. `GET /languages`
+#: publishes it and `AssistantRequest` validates against it, so the list a
+#: client is shown and the list it is judged against cannot drift apart.
+SUPPORTED_LANGUAGES = [
+    {"code": "en", "name": "English"},
+    {"code": "hi", "name": "Hindi"},
+    {"code": "mr", "name": "Marathi"},
+    {"code": "ta", "name": "Tamil"},
+    {"code": "te", "name": "Telugu"},
+    {"code": "kn", "name": "Kannada"},
+    {"code": "ml", "name": "Malayalam"},
+    {"code": "gu", "name": "Gujarati"},
+]
 
-    if len(_assistant_rate_history[user_id]) >= ASSISTANT_RATE_LIMIT:
-        oldest = _assistant_rate_history[user_id][0]
-        remaining = int((oldest + timedelta(seconds=ASSISTANT_RATE_WINDOW) - now).total_seconds())
-        return max(remaining, 1)
+SUPPORTED_LANGUAGE_CODES = frozenset(lang["code"] for lang in SUPPORTED_LANGUAGES)
 
-    _assistant_rate_history[user_id].append(now)
-    return None
+
+# ─── Input limits ─────────────────────────────────────────────────────────
+# Read from the environment at import, matching ASSISTANT_RATE_LIMIT above.
+# The rate limit caps *requests*; these cap what one request may carry,
+# which is what the token bill is actually made of. Ten 500 KB messages a
+# minute sits comfortably inside a 10/minute limit.
+ASSISTANT_MAX_MESSAGE_CHARS = int(os.getenv("ASSISTANT_MAX_MESSAGE_CHARS", "2000"))
+ASSISTANT_MAX_HISTORY_MESSAGES = int(os.getenv("ASSISTANT_MAX_HISTORY_MESSAGES", "20"))
+ASSISTANT_MAX_HISTORY_CHARS = int(os.getenv("ASSISTANT_MAX_HISTORY_CHARS", "2000"))
+
+
+def to_single_line(value: str) -> str:
+    """Collapse anything that could forge a new line in the prompt.
+
+    The prompt is assembled as newline-separated instruction lines, so a
+    value containing a newline can introduce a line of its own. Validation
+    already restricts `language` to a known code, which closes that on its
+    own; this runs anyway because the two defences are independent and this
+    one costs nothing. Unicode line separators (U+2028, U+2029) and other
+    control characters are stripped too — they are invisible in a payload
+    and a plain `\\n` check would miss them.
+    """
+    # Replaced with a space rather than deleted: dropping the newline in
+    # "cramps\nadvice" would glue the words into "crampsadvice" and change
+    # what was said, which is a different bug from the one being fixed.
+    flattened = "".join(
+        " "
+        if char in ("\u2028", "\u2029") or unicodedata.category(char) == "Cc"
+        else char
+        for char in value
+    )
+    return re.sub(r"\s+", " ", flattened).strip()
 
 
 class ChatMessage(BaseModel):
-    role: str
-    content: str
+    #: Only the two roles the prompt builder understands. Anything else was
+    #: silently dropped before, so a client could send history it believed
+    #: was in use and never find out otherwise.
+    role: Literal["user", "model"]
+    content: str = Field(
+        ...,
+        min_length=1,
+        max_length=ASSISTANT_MAX_HISTORY_CHARS,
+        description="One turn of the conversation.",
+    )
 
 
 class AssistantRequest(BaseModel):
-    message: str
-    language: Optional[str] = "en"
-    history: Optional[List[ChatMessage]] = None
+    message: str = Field(
+        ...,
+        min_length=1,
+        max_length=ASSISTANT_MAX_MESSAGE_CHARS,
+        description="The user's question. Length-capped before any model call is made.",
+    )
+    language: Optional[str] = Field(
+        "en",
+        description=(
+            "One of the codes from GET /assistant/languages. Rejected with "
+            "422 if it is anything else."
+        ),
+    )
+    history: Optional[List[ChatMessage]] = Field(
+        None,
+        max_length=ASSISTANT_MAX_HISTORY_MESSAGES,
+        description=(
+            "Recent turns, used only when nothing is persisted server-side "
+            "for this user."
+        ),
+    )
+
+    @field_validator("message")
+    @classmethod
+    def message_must_not_be_blank(cls, value: str) -> str:
+        """A message of spaces is an empty message with extra steps."""
+        if not value.strip():
+            raise ValueError("Message cannot be empty.")
+        return value
+
+    @field_validator("language")
+    @classmethod
+    def language_must_be_supported(cls, value: Optional[str]) -> Optional[str]:
+        """Reject anything not in SUPPORTED_LANGUAGE_CODES.
+
+        This field is interpolated into the prompt as its own instruction
+        line — `Language: Respond in {language}.` — directly beneath the
+        system prompt that forbids diagnosing and prescribing. Unvalidated,
+        it is a place for a caller to write their own instructions in the
+        position the guardrails occupy. Restricting it to an eight-item
+        allowlist removes the vector rather than trying to filter it.
+        """
+        if value is None:
+            return "en"
+
+        # Region tags are accepted and reduced to their base language:
+        # the web client sends `i18n.language`, which the browser language
+        # detector routinely reports as `en-US` or `hi-IN`. Refusing those
+        # would break real users over a formatting difference that carries
+        # no meaning for a prompt.
+        normalized = value.strip().lower().replace("_", "-").split("-")[0]
+
+        if normalized not in SUPPORTED_LANGUAGE_CODES:
+            supported = ", ".join(sorted(SUPPORTED_LANGUAGE_CODES))
+            raise ValueError(
+                f"Unsupported language {value!r}. Supported languages: {supported}."
+            )
+        return normalized
+
+
+class AssistantSource(BaseModel):
+    """A citable source backing the answer, for the client to render as links.
+
+    Populated from the retrieved medical references, so users can verify
+    the information themselves (menstrual_insights_guidelines.md).
+    """
+
+    name: str
+    title: str
+    url: str
+    accessedOn: str
 
 
 class AssistantResponse(BaseModel):
     response: str
     language: str
     disclaimer: str = "Please consult a healthcare professional for medical advice."
+    #: The sources the answer was grounded on; empty when no medical
+    #: reference matched the message.
+    sources: List[AssistantSource] = Field(default_factory=list)
 
 
 SYSTEM_PROMPT = """
@@ -78,21 +211,44 @@ else:
     genai.configure(api_key=GEMINI_API_KEY)
 
 
-@router.post("/chat", response_model=AssistantResponse)
+@router.post(
+    "/chat",
+    response_model=AssistantResponse,
+    summary="Ask the AI health assistant a question",
+    description=(
+        "Answers a question about menstrual and reproductive health, "
+        "grounded in the curated medical reference dataset and in the "
+        "user's recent conversation.\n\n"
+        "Input is bounded: `message` and each `history[].content` are "
+        "length-capped, `history` is item-capped, `role` accepts only "
+        "`user` or `model`, and `language` must be one of the codes from "
+        "`GET /assistant/languages`. All of it is enforced by the request "
+        "model, so an over-limit or malformed request returns `422` "
+        "without a model call being made — the per-user rate limit caps "
+        "requests, not the tokens inside them.\n\n"
+        "Returns `429` with `Retry-After` when the per-user rate limit is "
+        "exceeded."
+    ),
+)
 async def chat(
     request: AssistantRequest,
     current_user: dict = Depends(get_current_user),
 ):
-    if not request.message.strip():
-        raise HTTPException(status_code=400, detail="Message cannot be empty.")
-
+    # Emptiness, length and language are all settled by AssistantRequest
+    # before this body runs — so an oversized or malformed request is
+    # refused without a Gemini call, and without the token bill attached
+    # to one.
     if not GEMINI_API_KEY:
         raise HTTPException(status_code=500, detail="AI service not configured.")
 
     user_id = current_user.get("id")
 
-    # Rate limit check
-    remaining = is_rate_limited(user_id)
+    # Rate limit check (use Firestore-backed shared RateLimitService)
+    remaining = RateLimitService.is_rate_limited(
+        key=f"assistant:{user_id}",
+        limit=ASSISTANT_RATE_LIMIT,
+        window_seconds=ASSISTANT_RATE_WINDOW,
+    )
     if remaining is not None:
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
@@ -107,11 +263,30 @@ async def chat(
     if not history and request.history:
         history = request.history[-10:]
 
+    # Ground the answer with sourced medical references. The retrieval query
+    # folds in recent user turns so follow-ups like "and what about the
+    # bleeding?" still match the right topic. See services/medical_knowledge_service.py.
+    retrieval_query = " ".join(
+        [m.content for m in history[-5:] if m.role == "user" and m.content]
+        + [request.message]
+    ).strip()
+    references = medical_knowledge_service.retrieve(retrieval_query, limit=3)
+    grounding = medical_knowledge_service.build_grounding_block(references)
+
     prompt_parts = [
         f"System: {SYSTEM_PROMPT}",
-        f"Language: Respond in {request.language}.",
-        "\n--- Conversation History ---",
     ]
+
+    if grounding:
+        prompt_parts.append(f"Grounding: {grounding}")
+
+    # `to_single_line` on a value that is already restricted to an
+    # eight-item allowlist is redundant by design: if the allowlist is ever
+    # widened, or a caller reaches this without going through the model,
+    # the prompt still cannot gain a line it didn't ask for.
+    prompt_parts.append(f"Language: Respond in {to_single_line(request.language or 'en')}.")
+
+    prompt_parts.append("\n--- Conversation History ---")
 
     if history:
         for msg in history[-10:]:
@@ -133,7 +308,20 @@ async def chat(
     try:
         model = genai.GenerativeModel("models/gemini-2.5-flash")
         response = model.generate_content("\n".join(prompt_parts))
-        reply = response.text.strip() if response.text else "I'm sorry, I couldn't process that."
+        
+        reply = None
+        if hasattr(response, "candidates") and response.candidates:
+            first_candidate = response.candidates[0]
+            finish_reason = str(getattr(first_candidate, "finish_reason", ""))
+            if "SAFETY" in finish_reason or finish_reason == "2":
+                reply = "I cannot process this request as it triggered safety guidelines. Please consult a healthcare professional."
+        
+        if reply is None:
+            try:
+                reply = response.text.strip() if response.text else "I'm sorry, I couldn't process that."
+            except Exception as val_err:
+                logger.warning("Could not read response.text due to filter/exception: %s", val_err)
+                reply = "I'm sorry, I couldn't generate a response. Please rephrase your query or consult a healthcare professional."
         
         # Persist exchange to Firestore
         AssistantConversationService.add_messages(user_id, [
@@ -145,21 +333,22 @@ async def chat(
             response=reply,
             language=request.language or "en",
             disclaimer="Please consult a healthcare professional for medical advice.",
+            sources=medical_knowledge_service.source_list(references),
         )
     except Exception as exc:
         logger.error("Gemini API error: %s", exc, exc_info=True)
         raise HTTPException(status_code=500, detail="AI service error. Please try again later.")
 
 
-@router.get("/languages")
+@router.get(
+    "/languages",
+    summary="Languages the assistant will answer in",
+    description=(
+        "The codes accepted by the `language` field of `POST "
+        "/assistant/chat`. Served from the same list the request model "
+        "validates against, so this cannot advertise a language the "
+        "endpoint would then reject."
+    ),
+)
 async def supported_languages(current_user: dict = Depends(get_current_user)):
-    return [
-        {"code": "en", "name": "English"},
-        {"code": "hi", "name": "Hindi"},
-        {"code": "mr", "name": "Marathi"},
-        {"code": "ta", "name": "Tamil"},
-        {"code": "te", "name": "Telugu"},
-        {"code": "kn", "name": "Kannada"},
-        {"code": "ml", "name": "Malayalam"},
-        {"code": "gu", "name": "Gujarati"},
-    ]
+    return SUPPORTED_LANGUAGES

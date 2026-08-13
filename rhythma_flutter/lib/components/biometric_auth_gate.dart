@@ -19,8 +19,11 @@ class _BiometricAuthGateState extends State<BiometricAuthGate>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    if (LocalStorageService.biometricEnabled) _authenticate();
-    else _locked = false;
+    if (LocalStorageService.biometricEnabled) {
+      _authenticate();
+    } else {
+      _locked = false;
+    }
   }
 
   @override
@@ -39,7 +42,8 @@ class _BiometricAuthGateState extends State<BiometricAuthGate>
 
   Future<void> _authenticate() async {
     final auth = LocalAuthentication();
-    final available = await auth.canCheckBiometrics || await auth.isDeviceSupported();
+    final available =
+        await auth.canCheckBiometrics || await auth.isDeviceSupported();
     if (!available) {
       if (mounted) setState(() => _locked = false);
       return;
@@ -47,7 +51,8 @@ class _BiometricAuthGateState extends State<BiometricAuthGate>
     try {
       final authenticated = await auth.authenticate(
         localizedReason: 'Authenticate to access Rhythma',
-        options: const AuthenticationOptions(biometricOnly: false, stickyAuth: true),
+        options:
+            const AuthenticationOptions(biometricOnly: false, stickyAuth: true),
       );
       if (mounted) setState(() => _locked = !authenticated);
     } catch (_) {

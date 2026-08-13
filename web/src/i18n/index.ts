@@ -11,11 +11,16 @@ import mr from './locales/mr.json';
 import ta from './locales/ta.json';
 import te from './locales/te.json';
 import bn from './locales/bn.json';
+import as from './locales/as.json';
+import ks from './locales/ks.json';
+import mai from './locales/mai.json';
+import ne from './locales/ne.json';
+import or from './locales/or.json';
+import sat from './locales/sat.json';
+import sd from './locales/sd.json';
+import ur from './locales/ur.json';
 
-// Matches the Flutter app's supported locales: English, Hindi, Kannada,
-// Malayalam, Marathi, Tamil, Telugu, and Bengali. Kannada and Malayalam translations
-// are included, while hi/mr/ta/te/bn currently use placeholder translations and
-// can be localized in future updates.
+// Matches the Flutter app's supported locales.
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -30,6 +35,14 @@ i18n
       ta: { translation: ta },
       te: { translation: te },
       bn: { translation: bn },
+      as: { translation: as },
+      ks: { translation: ks },
+      mai: { translation: mai },
+      ne: { translation: ne },
+      or: { translation: or },
+      sat: { translation: sat },
+      sd: { translation: sd },
+      ur: { translation: ur },
     },
     fallbackLng: 'en',
     interpolation: { escapeValue: false },

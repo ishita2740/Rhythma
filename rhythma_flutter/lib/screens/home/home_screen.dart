@@ -125,8 +125,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final nextPeriodDays = _cycleData['nextPeriodDays'] ?? 14;
     final cycleDay = _cycleData['day'] ?? 14;
     final totalCycle = _cycleData['total'] ?? 28;
-    final mhs = _insights['mhs'] ?? 82;
-    final cvi = _insights['cvi'] ?? 'Low';
+    final avgCycle = _insights['averageCycleLength'] ?? 28;
+    final avgBleeding = _insights['averageBleedingDuration'] ?? 5;
     final sleepHours = _insights['sleepHours'] ?? '7.2h';
 
     return SingleChildScrollView(
@@ -287,6 +287,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                               ),
+                              const SizedBox(height: 4),
+                              Text(
+                                l10n.homeFertileWindowDisclaimer,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: RhythmaColors.mutedFg,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -301,13 +309,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       children: [
                         _StatCell(
-                            label: 'MHS',
-                            value: '$mhs',
+                            label: 'Avg Cycle',
+                            value: '${avgCycle}d',
                             color: RhythmaColors.primary),
                         _StatDivider(),
                         _StatCell(
-                            label: 'CVI',
-                            value: '$cvi',
+                            label: 'Bleeding',
+                            value: '${avgBleeding}d',
                             color: RhythmaColors.teal),
                         _StatDivider(),
                         _StatCell(

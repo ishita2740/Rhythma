@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../data/ayurveda_content.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:rhythma/l10n/app_localizations.dart';
@@ -209,6 +210,7 @@ class _CycleScreenState extends State<CycleScreen> {
     );
     if (confirmed != true) return;
 
+    if (!mounted) return;
     final cycleProvider = context.read<CycleProvider>();
     final dateKey = RhythmaDateUtils.toDateKey(cycleProvider.selectedDate);
     await LocalStorageService.deleteCycleLog(dateKey);
@@ -229,9 +231,8 @@ class _CycleScreenState extends State<CycleScreen> {
 
     final displayedMonth = cycleProvider.displayedMonth;
     final selectedDate = cycleProvider.selectedDate;
-    final selectedLog =
-        LocalStorageService.getCycleLogForDate(selectedDate) ?? {};
-    final hasSelections = selectedLog.isNotEmpty;
+    final currentPhaseKey = cycleProvider.phaseKey(selectedDate);
+    final phaseContent = ayurvedaContent[currentPhaseKey] ?? [];
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
@@ -386,6 +387,12 @@ class _CycleScreenState extends State<CycleScreen> {
             selectedValue: _formatStoredValue(selectedLog['sleep_hours']),
             onSelect: (opt) => _onLogSelect(selectedDate, 'sleep_hours', opt),
           ),
+          const SizedBox(height: 18),
+
+          if (phaseContent.isNotEmpty)
+            _AyurvedaSection(
+              phaseContent: phaseContent,
+              ),
           const SizedBox(height: 10),
           _LogRow(
             icon: Icons.psychology_outlined,
@@ -438,10 +445,10 @@ class _CycleScreenState extends State<CycleScreen> {
           if (_savedSuccessfully) ...[
             const SizedBox(height: 10),
             Row(
-              children: [
+              children: const [
                 Icon(Icons.check_circle_rounded,
                     color: RhythmaColors.teal, size: 16),
-                const SizedBox(width: 6),
+                SizedBox(width: 6),
                 Text(
                   'Saved to your account',
                   style: TextStyle(
@@ -636,6 +643,103 @@ class _ScreenHeader extends StatelessWidget {
           ],
         ],
       ),
+    );
+  }
+}
+
+class _AyurvedaSection extends StatelessWidget {
+  final List<AyurvedaContent> phaseContent;
+
+  const _AyurvedaSection({
+    required this.phaseContent,
+  });
+
+  String _title(AppLocalizations l10n, String key) {
+    switch (key) {
+      case 'ayurvedaMenstrualTitle':
+        return l10n.ayurvedaMenstrualTitle;
+      case 'ayurvedaFollicularTitle':
+        return l10n.ayurvedaFollicularTitle;
+      case 'ayurvedaOvulationTitle':
+        return l10n.ayurvedaOvulationTitle;
+      case 'ayurvedaLutealTitle':
+        return l10n.ayurvedaLutealTitle;
+      default:
+        return '';
+    }
+  }
+
+  String _description(AppLocalizations l10n, String key) {
+    switch (key) {
+      case 'ayurvedaMenstrualDescription':
+        return l10n.ayurvedaMenstrualDescription;
+      case 'ayurvedaFollicularDescription':
+        return l10n.ayurvedaFollicularDescription;
+      case 'ayurvedaOvulationDescription':
+        return l10n.ayurvedaOvulationDescription;
+      case 'ayurvedaLutealDescription':
+        return l10n.ayurvedaLutealDescription;
+      default:
+        return '';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.ayurvedaWellnessTitle,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: RhythmaColors.foreground,
+          ),
+        ),
+        const SizedBox(height: 10),
+        ...phaseContent.map(
+          (content) => Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: GlassCard(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _title(l10n, content.titleKey),
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: RhythmaColors.foreground,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    _description(l10n, content.descriptionKey),
+                    style: TextStyle(
+                      fontSize: 13,
+                      height: 1.4,
+                      color: RhythmaColors.mutedFg,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    l10n.ayurvedaDisclaimer,
+                    style: TextStyle(
+                      fontSize: 11,
+                      height: 1.3,
+                      color: RhythmaColors.mutedFg,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

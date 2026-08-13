@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_bn.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_gu.dart';
 import 'app_localizations_hi.dart';
@@ -13,6 +14,15 @@ import 'app_localizations_ml.dart';
 import 'app_localizations_mr.dart';
 import 'app_localizations_ta.dart';
 import 'app_localizations_te.dart';
+
+import 'app_localizations_as.dart';
+import 'app_localizations_ks.dart';
+import 'app_localizations_mai.dart';
+import 'app_localizations_ne.dart';
+import 'app_localizations_or.dart';
+import 'app_localizations_sat.dart';
+import 'app_localizations_sd.dart';
+import 'app_localizations_ur.dart';
 
 // ignore_for_file: type=lint
 
@@ -100,6 +110,7 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('bn'),
     Locale('en'),
     Locale('gu'),
     Locale('hi'),
@@ -107,7 +118,15 @@ abstract class AppLocalizations {
     Locale('ml'),
     Locale('mr'),
     Locale('ta'),
-    Locale('te')
+    Locale('te'),
+    Locale('as'),
+    Locale('ks'),
+    Locale('mai'),
+    Locale('ne'),
+    Locale('or'),
+    Locale('sat'),
+    Locale('sd'),
+    Locale('ur')
   ];
 
   /// The title of the application
@@ -248,12 +267,6 @@ abstract class AppLocalizations {
   /// **'मराठी (Marathi)'**
   String get langMarathi;
 
-  /// No description provided for @langGujarati.
-  ///
-  /// In en, this message translates to:
-  /// **'ગુજરાતી (Gujarati)'**
-  String get langGujarati;
-
   /// No description provided for @homeGreeting.
   ///
   /// In en, this message translates to:
@@ -289,6 +302,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'High energy'**
   String get homeHighEnergy;
+
+  /// No description provided for @homeFertileWindowDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'This is an estimate based on your logged data, not medical or contraceptive advice.'**
+  String get homeFertileWindowDisclaimer;
 
   /// No description provided for @homeAiTitle.
   ///
@@ -740,6 +759,12 @@ abstract class AppLocalizations {
   /// **'मेरे पीरियड्स अनियमित हैं — क्या यह सामान्य है?'**
   String get assistantSug5;
 
+  /// No description provided for @assistantDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'This assistant provides general wellness information only and is not a substitute for professional medical advice.'**
+  String get assistantDisclaimer;
+
   /// No description provided for @insightsTitle.
   ///
   /// In en, this message translates to:
@@ -841,6 +866,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hydrate 2.5L during ovulation week'**
   String get insightsRec3;
+
+  /// No description provided for @insightsDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional.'**
+  String get insightsDisclaimer;
 
   /// No description provided for @profileTitle.
   ///
@@ -1825,6 +1856,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Account deleted successfully.'**
   String get accountDeletedSuccess;
+
+  /// No description provided for @langGujarati.
+  ///
+  /// In en, this message translates to:
+  /// **'ગુજરાતી (Gujarati)'**
+  String get langGujarati;
+
+  /// No description provided for @welcomeToRhythma.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Rhythma'**
+  String get welcomeToRhythma;
+
+  /// No description provided for @loginOrSignUpWithPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in or sign up with your phone number.'**
+  String get loginOrSignUpWithPhone;
+
+  /// No description provided for @enterOtpSentToPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the OTP sent to your phone'**
+  String get enterOtpSentToPhone;
+
+  /// No description provided for @phoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get phoneNumber;
+
+  /// No description provided for @getOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Get OTP'**
+  String get getOtp;
+
+  /// No description provided for @sendingOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending OTP...'**
+  String get sendingOtp;
+
+  /// No description provided for @otp.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP'**
+  String get otp;
+
+  /// No description provided for @verifyOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify OTP'**
+  String get verifyOtp;
+
+  /// No description provided for @verifying.
+  ///
+  /// In en, this message translates to:
+  /// **'Verifying...'**
+  String get verifying;
+
+  /// No description provided for @useDifferentPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a different phone number'**
+  String get useDifferentPhoneNumber;
+
+  /// No description provided for @pleaseEnterPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your phone number.'**
+  String get pleaseEnterPhoneNumber;
+
+  /// No description provided for @pleaseEnterValidPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number with country code (e.g., +91).'**
+  String get pleaseEnterValidPhoneNumber;
+
+  /// No description provided for @verificationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification failed'**
+  String get verificationFailed;
+
+  /// No description provided for @otpSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP sent to {phone}'**
+  String otpSentTo(String phone);
+
+  /// No description provided for @pleaseEnterOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the OTP.'**
+  String get pleaseEnterOtp;
+
+  /// No description provided for @invalidOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid OTP. Please try again.'**
+  String get invalidOtp;
+
+  /// No description provided for @failedToGetIdToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to get ID token'**
+  String get failedToGetIdToken;
 }
 
 class _AppLocalizationsDelegate
@@ -1838,6 +1977,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) => <String>[
+        'bn',
         'en',
         'gu',
         'hi',
@@ -1845,7 +1985,15 @@ class _AppLocalizationsDelegate
         'ml',
         'mr',
         'ta',
-        'te'
+        'te',
+        'as',
+        'ks',
+        'mai',
+        'ne',
+        'or',
+        'sat',
+        'sd',
+        'ur'
       ].contains(locale.languageCode);
 
   @override
@@ -1855,6 +2003,8 @@ class _AppLocalizationsDelegate
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'bn':
+      return AppLocalizationsBn();
     case 'en':
       return AppLocalizationsEn();
     case 'gu':
@@ -1871,6 +2021,22 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsTa();
     case 'te':
       return AppLocalizationsTe();
+    case 'as':
+      return AppLocalizationsAs();
+    case 'ks':
+      return AppLocalizationsKs();
+    case 'mai':
+      return AppLocalizationsMai();
+    case 'ne':
+      return AppLocalizationsNe();
+    case 'or':
+      return AppLocalizationsOr();
+    case 'sat':
+      return AppLocalizationsSat();
+    case 'sd':
+      return AppLocalizationsSd();
+    case 'ur':
+      return AppLocalizationsUr();
   }
 
   throw FlutterError(

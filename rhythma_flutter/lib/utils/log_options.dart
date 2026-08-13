@@ -53,6 +53,9 @@ class LogOptions {
         LogOption(l10n.logSympCramps, 'cramps'),
         LogOption(l10n.logSympHeadache, 'headache'),
         LogOption(l10n.logSympBloating, 'bloating'),
+        LogOption(l10n.logSympFatigue, 'fatigue'),
+        LogOption(l10n.logSympNausea, 'nausea'),
         LogOption(l10n.logSympAcne, 'acne'),
+        LogOption(l10n.logSympBackPain, 'back pain'),
       ];
 }

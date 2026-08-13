@@ -79,9 +79,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get langMarathi => 'मराठी (Marathi)';
 
   @override
-  String get langGujarati => 'ગુજરાતી (Gujarati)';
-
-  @override
   String get homeGreeting => 'Namaste';
 
   @override
@@ -98,6 +95,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeHighEnergy => 'High energy';
+
+  @override
+  String get homeFertileWindowDisclaimer =>
+      'This is an estimate based on your logged data, not medical or contraceptive advice.';
 
   @override
   String get homeAiTitle => 'RHYTHMA AI';
@@ -223,6 +224,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cyclePhaseLuteal => 'Luteal';
+  String get ayurvedaWellnessTitle;
+String get ayurvedaDisclaimer;
+
+String get ayurvedaMenstrualTitle;
+String get ayurvedaMenstrualDescription;
+
+String get ayurvedaFollicularTitle;
+String get ayurvedaFollicularDescription;
+
+String get ayurvedaOvulationTitle;
+String get ayurvedaOvulationDescription;
+
+String get ayurvedaLutealTitle;
+String get ayurvedaLutealDescription;
 
   @override
   String get logFor => 'Log for';
@@ -338,6 +353,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get assistantSug5 => 'मेरे पीरियड्स अनियमित हैं — क्या यह सामान्य है?';
 
   @override
+  String get assistantDisclaimer =>
+      'This assistant provides general wellness information only and is not a substitute for professional medical advice.';
+
+  @override
   String get insightsTitle => 'Health Insights';
 
   @override
@@ -387,6 +406,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get insightsRec3 => 'Hydrate 2.5L during ovulation week';
+
+  @override
+  String get insightsDisclaimer =>
+      'These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional.';
 
   @override
   String get profileTitle => 'Profile';
@@ -651,265 +674,38 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get onboardingWeightInvalid =>
       'Please enter a valid weight (20–300 kg)';
+      @override
+String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
 
-  @override
-  String get onboardingPhoneInvalid =>
-      'Use international format, e.g. +919876543210';
+@override
+String get ayurvedaDisclaimer =>
+    'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.';
 
-  @override
-  String get onboardingAgeRequired => 'Please enter your age or select a range';
+@override
+String get ayurvedaMenstrualTitle => 'Rest and reflection';
 
-  @override
-  String get onboardingHeightRequired =>
-      'Please enter your height or select a range';
+@override
+String get ayurvedaMenstrualDescription =>
+    'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.';
 
-  @override
-  String get onboardingWeightRequired =>
-      'Please enter your weight or select a range';
+@override
+String get ayurvedaFollicularTitle => 'Renewal and activity';
 
-  @override
-  String get onboardingNotSure => 'Not sure';
+@override
+String get ayurvedaFollicularDescription =>
+    'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.';
 
-  @override
-  String get onboardingApproximate => 'Approximate';
+@override
+String get ayurvedaOvulationTitle => 'Connection and balance';
 
-  @override
-  String get onboardingAgeHint => 'Enter your age';
+@override
+String get ayurvedaOvulationDescription =>
+    'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.';
 
-  @override
-  String get onboardingAgeUnit => 'years';
+@override
+String get ayurvedaLutealTitle => 'Grounding and routine';
 
-  @override
-  String get onboardingHeightHint => 'Enter your height';
-
-  @override
-  String get onboardingHeightUnit => 'cm';
-
-  @override
-  String get onboardingWeightHint => 'Enter your weight';
-
-  @override
-  String get onboardingWeightUnit => 'kg';
-
-  @override
-  String get onboardingRangeUnder18 => 'Under 18';
-
-  @override
-  String get onboardingRange18to25 => '18–25';
-
-  @override
-  String get onboardingRange26to35 => '26–35';
-
-  @override
-  String get onboardingRange36to50 => '36–50';
-
-  @override
-  String get onboardingRange51to65 => '51–65';
-
-  @override
-  String get onboardingRangeOver65 => 'Over 65';
-
-  @override
-  String get onboardingRangeUnder150 => 'Under 150 cm';
-
-  @override
-  String get onboardingRange150to160 => '150–160 cm';
-
-  @override
-  String get onboardingRange161to170 => '161–170 cm';
-
-  @override
-  String get onboardingRange171to180 => '171–180 cm';
-
-  @override
-  String get onboardingRangeOver180 => 'Over 180 cm';
-
-  @override
-  String get onboardingRangeUnder50kg => 'Under 50 kg';
-
-  @override
-  String get onboardingRange50to65kg => '50–65 kg';
-
-  @override
-  String get onboardingRange66to80kg => '66–80 kg';
-
-  @override
-  String get onboardingRange81to100kg => '81–100 kg';
-
-  @override
-  String get onboardingRangeOver100kg => 'Over 100 kg';
-
-  @override
-  String get onboardingTapToSelectDate => 'Tap to select date';
-
-  @override
-  String get onboardingDays => 'days';
-
-  @override
-  String get onboardingApproximateLabel => 'When was your last period?';
-
-  @override
-  String get onboardingApproximateLessWeek => 'Less than a week ago';
-
-  @override
-  String get onboardingApproximate1to2Weeks => '1–2 weeks ago';
-
-  @override
-  String get onboardingApproximate3to4Weeks => '3–4 weeks ago';
-
-  @override
-  String get onboardingApproximateMoreMonth => 'More than a month ago';
-
-  @override
-  String get onboardingPickExactDate => 'Pick exact date instead';
-
-  @override
-  String get onboardingLastPeriodRequired =>
-      'Please select when your last period started';
-
-  @override
-  String get nudgeCompleteProfileTitle => 'Want more accurate predictions?';
-
-  @override
-  String get nudgeCompleteProfileBody =>
-      'Add the exact start date of your last period to improve cycle predictions.';
-
-  @override
-  String get nudgeCompleteProfileAction => 'Update';
-
-  @override
-  String get nudgeCompleteProfileDismiss => 'Maybe later';
-
-  @override
-  String get smsScreenTitle => 'SMS Summaries';
-
-  @override
-  String get smsScreenSubtitle => 'Stay informed even without the app';
-
-  @override
-  String get smsInfoCardTitle => 'Weekly Health Summary';
-
-  @override
-  String get smsInfoCardBody =>
-      'Every week, Rhythma will send you a brief summary of your cycle status, health score, and any important patterns, directly to your phone via SMS. Works without data or the app.';
-
-  @override
-  String get smsConfigTitle => 'Configuration';
-
-  @override
-  String get smsPhoneLabel => 'Phone Number';
-
-  @override
-  String get smsPhoneHint => '+91 98765 43210';
-
-  @override
-  String get smsEnableWeekly => 'Enable weekly SMS';
-
-  @override
-  String get smsSaveSettings => 'Save Settings';
-
-  @override
-  String get smsSendSectionTitle => 'Send a Summary Now';
-
-  @override
-  String get smsSendRecipientPrefix => 'Sends the message below to:';
-
-  @override
-  String get smsSendNoPhone => 'Add and save a phone number above first.';
-
-  @override
-  String get smsSendButton => 'Send Summary Now';
-
-  @override
-  String get smsErrorEnterPhone => 'Please enter a phone number';
-
-  @override
-  String get smsErrorInvalidPhone =>
-      'Enter a valid phone number in international format, e.g. +919876543210';
-
-  @override
-  String get smsSuccessSaved => 'SMS settings saved successfully!';
-
-  @override
-  String get smsErrorAddPhoneFirst => 'Add and save a phone number first';
-
-  @override
-  String get smsSuccessSent => 'Summary sent to your phone!';
-
-  @override
-  String get smsErrorRateLimit =>
-      'You can send one summary per minute, please wait a bit and try again.';
-
-  @override
-  String get smsErrorSessionExpired =>
-      'Your session has expired. Please log in again.';
-
-  @override
-  String get smsErrorNetwork =>
-      'Couldn\'t reach the server. Check your connection and try again.';
-
-  @override
-  String get smsErrorGeneric => 'Something went wrong. Please try again.';
-
-  @override
-  String get smsLoadError =>
-      'Couldn\'t load your SMS settings. Pull to refresh or try again.';
-
-  @override
-  String get smsSummaryMessage =>
-      '🌸 Rhythma Health Summary\nThis is your on-demand summary from Rhythma.\nOpen the app for your latest cycle insights.\nReply STOP to unsubscribe.';
-
-  @override
-  String insightsLoadError(String error) {
-    return 'Couldn\'t load your insights: $error';
-  }
-
-  @override
-  String get insightsNotEnoughData =>
-      'Log a few more cycles on the Cycle tab to unlock your full health insights.';
-
-  @override
-  String get insightsNoSymptomsYet =>
-      'No symptoms logged yet — log some on the Cycle tab to see patterns here.';
-
-  @override
-  String get insightsNotEnoughTrendData =>
-      'Log at least two cycles to see your trend here.';
-
-  @override
-  String get assistantAccessibilitySuggestedPrompt => 'Suggested prompt';
-
-  @override
-  String get assistantAccessibilityMessageInput => 'Message input';
-
-  @override
-  String get assistantAccessibilityMessageInputHint =>
-      'Type your question here';
-
-  @override
-  String get assistantAccessibilitySendMessage => 'Send message';
-
-  @override
-  String get assistantAccessibilitySendMessageHint =>
-      'Sends your message to the assistant';
-
-  @override
-  String get assistantAccessibilityTyping => 'Assistant is typing';
-
-  @override
-  String get languageSelectionError =>
-      'Unable to save language. Please try again.';
-
-  @override
-  String get deleteAccount => 'Delete Account';
-
-  @override
-  String get deleteAccountConfirmationTitle => 'Delete Account?';
-
-  @override
-  String get deleteAccountConfirmationDesc =>
-      'This action is permanent and cannot be undone. All your data will be wiped.';
-
-  @override
-  String get accountDeletedSuccess => 'Account deleted successfully.';
+@override
+String get ayurvedaLutealDescription =>
+    'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
 }

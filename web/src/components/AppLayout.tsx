@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../auth/useAuth';
+import { MAIN_CONTENT_ID } from './SkipToContent';
 
 interface NavLinkDef {
   to: string;
@@ -14,6 +15,7 @@ const LINKS: NavLinkDef[] = [
   { to: '/assistant', key: 'nav.assistant' },
   { to: '/insights', key: 'nav.insights' },
   { to: '/profile', key: 'nav.profile' },
+  { to: '/sharing', key: 'nav.sharing' },
   { to: '/settings', key: 'nav.settings' },
 ];
 
@@ -45,7 +47,11 @@ export function AppLayout() {
         ))}
       </nav>
 
-      <main className="app-main">
+      {/* id and tabIndex make this the skip link's target and the
+          place focus lands after a route change (#409). tabIndex={-1}
+          is focusable programmatically but not by Tab, so it adds no
+          stop to the keyboard order. */}
+      <main id={MAIN_CONTENT_ID} tabIndex={-1} className="app-main">
         <Outlet />
       </main>
     </div>

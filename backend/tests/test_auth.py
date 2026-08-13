@@ -63,19 +63,14 @@ def _ensure_firebase_mock():
     sys.modules["firebase_admin"] = mock_firebase_admin
     sys.modules["firebase_admin.auth"] = mock_firebase_auth
 
-from core.auth_router import login_attempts, register_attempts
 from api.sms import sms_history
-from api.assistant import _assistant_rate_history
 from core.auth import refresh_token_store, reset_token_store, verification_token_store
 
 @pytest.fixture(autouse=True)
 def clear_state():
     client.cookies.clear()
 
-    login_attempts.clear()
-    register_attempts.clear()
     sms_history.clear()
-    _assistant_rate_history.clear()
 
     refresh_token_store.clear()
     reset_token_store.clear()
@@ -263,6 +258,8 @@ def test_web_client_does_not_receive_token_in_body():
     )
     assert response.status_code == 200
     assert "access_token" not in response.json()
+    # Web client should still get the refresh cookie set
+    assert "rhythma_refresh_token" in response.cookies
 
 def test_mobile_client_still_receives_token_in_body():
     firebase_admin.auth.verify_id_token.return_value = {"phone_number": "+1234567890", "uid": "firebase_uid"}
@@ -271,7 +268,9 @@ def test_mobile_client_still_receives_token_in_body():
         json={"id_token": "valid_token"},
     )
     assert response.status_code == 200
-    assert "access_token" in response.json()
+    data = response.json()
+    assert "access_token" in data
+    assert "refresh_token" in data
 
 
 # ─── Registration ─────────────────────────────────────────────────────────
@@ -463,3 +462,116 @@ def test_logout_all_revokes_refresh_tokens():
         "refresh_token": refresh_token
     })
     assert refresh_resp.status_code == 401
+
+
+# ─── Refresh Token: Cookie-Based (Web) ────────────────────────────────────
+
+def test_refresh_token_with_cookie_success():
+    """Web clients can refresh using the HttpOnly cookie without sending the token in the body."""
+    firebase_admin.auth.verify_id_token.return_value = {"phone_number": "+1234567890", "uid": "firebase_uid"}
+    # Login as web client — no token in body, but cookie is set
+    login_resp = client.post(
+        "/api/v1/auth/firebase-login",
+        json={"id_token": "valid_token"},
+        headers={"X-Client-Platform": "web"},
+    )
+    assert login_resp.status_code == 200
+    assert "rhythma_refresh_token" in login_resp.cookies
+
+    # Refresh without body — cookie should be used
+    refresh_resp = client.post("/api/v1/auth/refresh")
+    assert refresh_resp.status_code == 200
+    data = refresh_resp.json()
+    assert "access_token" in data
+    assert "refresh_token" in data
+    # Cookie should be rotated
+    assert "rhythma_access_token" in refresh_resp.cookies
+    assert "rhythma_refresh_token" in refresh_resp.cookies
+
+
+def test_refresh_token_cookie_rotation():
+    """Refreshing with a cookie should rotate both cookies."""
+    firebase_admin.auth.verify_id_token.return_value = {"phone_number": "+1234567890", "uid": "firebase_uid"}
+    client.post(
+        "/api/v1/auth/firebase-login",
+        json={"id_token": "valid_token"},
+        headers={"X-Client-Platform": "web"},
+    )
+
+    # First refresh
+    resp1 = client.post("/api/v1/auth/refresh")
+    assert resp1.status_code == 200
+    old_refresh_cookie = resp1.cookies.get("rhythma_refresh_token")
+
+    # Second refresh with the new cookie (auto-sent by TestClient)
+    resp2 = client.post("/api/v1/auth/refresh")
+    assert resp2.status_code == 200
+    new_refresh_cookie = resp2.cookies.get("rhythma_refresh_token")
+
+    # Cookies should be different (rotation)
+    assert old_refresh_cookie != new_refresh_cookie
+
+
+def test_refresh_token_body_takes_precedence_over_cookie():
+    """If both body and cookie are present, body token is used."""
+    login_resp = client.post("/api/v1/auth/login", json={
+        "email": "test@example.com",
+        "password": "SecurePass123",
+    })
+    refresh_token = login_resp.json()["refresh_token"]
+
+    # Also set a cookie by doing a web login
+    firebase_admin.auth.verify_id_token.return_value = {"phone_number": "+1234567890", "uid": "firebase_uid"}
+    client.post(
+        "/api/v1/auth/firebase-login",
+        json={"id_token": "valid_token"},
+        headers={"X-Client-Platform": "web"},
+    )
+
+    # Refresh with explicit body token — should use body, not cookie
+    resp = client.post("/api/v1/auth/refresh", json={"refresh_token": refresh_token})
+    assert resp.status_code == 200
+
+
+def test_refresh_token_no_body_no_cookie_fails():
+    """A request with neither body token nor cookie should 401."""
+    resp = client.post("/api/v1/auth/refresh")
+    assert resp.status_code == 401
+    assert "No refresh token provided" in resp.json()["detail"]
+
+
+# ─── Firebase Login Refresh Token ─────────────────────────────────────────
+
+def test_firebase_login_sets_refresh_cookie():
+    """Firebase login should set the refresh cookie for all clients."""
+    firebase_admin.auth.verify_id_token.return_value = {"phone_number": "+1234567890", "uid": "firebase_uid"}
+    response = client.post(
+        "/api/v1/auth/firebase-login",
+        json={"id_token": "valid_token"},
+    )
+    assert response.status_code == 200
+    assert "rhythma_refresh_token" in response.cookies
+
+
+def test_firebase_refresh_token_flow():
+    """Full flow: firebase login → use refresh token → get new access token."""
+    firebase_admin.auth.verify_id_token.return_value = {"phone_number": "+1234567890", "uid": "firebase_uid"}
+    login_resp = client.post(
+        "/api/v1/auth/firebase-login",
+        json={"id_token": "valid_token"},
+    )
+    assert login_resp.status_code == 200
+    refresh_token = login_resp.json()["refresh_token"]
+    old_access = login_resp.json()["access_token"]
+
+    # Use refresh token to get new tokens
+    refresh_resp = client.post("/api/v1/auth/refresh", json={"refresh_token": refresh_token})
+    assert refresh_resp.status_code == 200
+    new_access = refresh_resp.json()["access_token"]
+
+    # New access token should be different
+    assert new_access != old_access
+
+    # Old refresh token should be revoked
+    second_refresh = client.post("/api/v1/auth/refresh", json={"refresh_token": refresh_token})
+    assert second_refresh.status_code == 401

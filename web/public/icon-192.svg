@@ -1,0 +1,29 @@
+<!--
+  Home-screen icon, 192px nominal (#407).
+
+  A separate mark from favicon.svg rather than a resize of it. The favicon
+  is a detailed gradient lockup that reads well at 48px against a browser
+  chrome; at a home-screen size, behind a launcher's rounded-square mask,
+  its thin strokes disappear. This one is a solid ground with a single
+  centred glyph, which is what survives masking.
+
+  The glyph is inset well inside the 40% safe radius a maskable icon
+  needs, so a launcher can crop to a circle, a squircle or a rounded
+  square without clipping it.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192" role="img" aria-label="Rhythma">
+  <defs>
+    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#aa3bff" />
+      <stop offset="1" stop-color="#7e14ff" />
+    </linearGradient>
+  </defs>
+
+  <rect width="192" height="192" fill="url(#ground)" />
+
+  <!-- The bolt from the wordmark, simplified and centred. -->
+  <path
+    fill="#ffffff"
+    d="M104.5 158.4c-2.6 3.3-7.9 1.5-7.9-2.7v-40.2a8.8 8.8 0 0 0-8.8-8.8H45.3c-3.6 0-5.7-4.1-3.6-7l29.2-40.9c4.2-5.8 0-14-7.2-14H41.2c-3.6 0-5.7-4-3.6-7L71 33.6c.8-1.2 2.2-1.9 3.6-1.9h55.3c3.6 0 5.7 4.1 3.6 7l-29.2 40.9c-4.2 5.9 0 14 7.2 14h34.4c3.7 0 5.8 4.2 3.5 7.1z"
+  />
+</svg>

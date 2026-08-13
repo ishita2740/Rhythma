@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../auth/useAuth';
 import { fetchDashboard, fetchProfile, patchProfile, type DashboardData, type Profile } from '../api/endpoints';
+import { cycleSpread, formatSpread } from '../lib/cycleStats';
+import { useDocumentMeta } from '../lib/useDocumentMeta';
 
 const AVATAR_COLORS = ['#AA3BFF', '#E07AAD', '#52B3B0', '#E8946A', '#6A98E8', '#B3528A'];
 
@@ -15,6 +17,7 @@ function phasePill(day: number | null, t: (k: string) => string): string {
 }
 
 export function ProfilePage() {
+  useDocumentMeta('meta.profile.title', 'meta.profile.description');
   const { t } = useTranslation();
   const { user } = useAuth();
 
@@ -95,10 +98,12 @@ export function ProfilePage() {
   const initial = displayName.charAt(0).toUpperCase();
   const avatarColor = profile?.avatar && AVATAR_COLORS.includes(profile.avatar) ? profile.avatar : AVATAR_COLORS[0];
   const lengths = dashboard?.cycleHistory.map((p) => p.cycle_length) ?? [];
-  const variability =
-    lengths.length >= 2 && dashboard
-      ? Math.round(lengths.reduce((acc, l) => acc + (l - dashboard.cycle.total) ** 2, 0) / lengths.length)
-      : null;
+  // Measured against the mean of these lengths, in days. It used to be a
+  // variance (squared deviations, never square-rooted) taken around
+  // `dashboard.cycle.total` — a rounded average from a different
+  // calculation that falls back to 28 when the user has almost no
+  // history. See lib/cycleStats.ts and issue #383.
+  const spread = formatSpread(cycleSpread(lengths));
   const lastCycle = lengths.length > 0 ? lengths[lengths.length - 1] : null;
 
   return (
@@ -126,8 +131,8 @@ export function ProfilePage() {
 
       <section className="mini-stats">
         <MiniStat label={t('profile.avgCycleLength')} value={profile?.cycle_length != null ? `${profile.cycle_length} ${t('profile.days')}` : dashboard?.cycle.total != null ? `${dashboard.cycle.total} ${t('profile.days')}` : '—'} />
-        <MiniStat label={t('profile.avgMhs')} value={dashboard?.insights.mhs != null ? String(Math.round(dashboard.insights.mhs)) : '—'} />
-        <MiniStat label={t('profile.cycleVariability')} value={variability == null ? '—' : `±${variability}`} />
+        <MiniStat label={t('profile.avgBleeding')} value={dashboard?.insights.averageBleedingDuration != null ? `${dashboard.insights.averageBleedingDuration} ${t('profile.days')}` : '—'} />
+        <MiniStat label={t('profile.cycleVariability')} value={spread == null ? '—' : `${spread} ${t('profile.days')}`} />
         <MiniStat label={t('profile.lastCycleLength')} value={lastCycle != null ? `${lastCycle} ${t('profile.days')}` : '—'} />
       </section>
 

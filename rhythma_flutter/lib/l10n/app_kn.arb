@@ -27,6 +27,7 @@
   "homeDaysLabel": "ದಿನಗಳು",
   "homeFertileWindow": "ಫಲವತ್ತತೆಯ ಸಮಯ · ",
   "homeHighEnergy": "ಹೆಚ್ಚಿನ ಶಕ್ತಿ",
+  "homeFertileWindowDisclaimer": "ಇದು ನೀವು ದಾಖಲಿಸಿದ ಡೇಟಾ ಆಧಾರಿತ ಅಂದಾಜು ಮಾತ್ರ, ವೈದ್ಯಕೀಯ ಅಥವಾ ಗರ್ಭನಿರೋಧಕ ಸಲಹೆ ಅಲ್ಲ.",
   "homeAiTitle": "RHYTHMA AI",
   "homeAiSubtitle": "ನಿಮ್ಮ ದೇಹದ ಬಗ್ಗೆ ಏನೇ ಇರಲಿ,\nನಿಮ್ಮ ಭಾಷೆಯಲ್ಲೇ ಕೇಳಿ.",
   "homeAiPrompt": "ನನ್ನ ಮುಟ್ಟು ಅನಿಯಮಿತವಾಗಿರುವುದೇಕೆ?",
@@ -99,6 +100,7 @@
   "assistantSug3": "35 ದಿನಗಳ ಋತುಚಕ್ರ ಸಾಮಾನ್ಯವೇ?",
   "assistantSug4": "PMS ನಿವಾರಣೆಗೆ ನೆರವಾಗುವ ಆಹಾರಗಳು",
   "assistantSug5": "मेरे पीरियड्स अनियमित हैं — क्या यह सामान्य है?",
+  "assistantDisclaimer": "ಈ ಸಹಾಯಕ ಸಾಮಾನ್ಯ ಆರೋಗ್ಯ ಮಾಹಿತಿಯನ್ನು ಮಾತ್ರ ಒದಗಿಸುತ್ತದೆ ಮತ್ತು ವೃತ್ತಿಪರ ವೈದ್ಯಕೀಯ ಸಲಹೆಗೆ ಬದಲಿಯಲ್ಲ.",
   "insightsTitle": "ಆರೋಗ್ಯ ಒಳನೋಟಗಳು",
   "insightsSubtitle": "ಕಳೆದ 90 ದಿನಗಳು",
   "insightsMhsLabel": "ಋತುಚಕ್ರ ಆರೋಗ್ಯ ಸ್ಕೋರ್",
@@ -116,6 +118,7 @@
   "insightsRec1": "ಮುಟ್ಟು ಪ್ರಾರಂಭವಾಗುವ ದಿನಗಳಲ್ಲಿ ಕಬ್ಬಿಣಾಂಶವಿರುವ ಆಹಾರ ಸೇವಿಸಿ",
   "insightsRec2": "ಲ್ಯೂಟಿಯಲ್ ಹಂತದ ದಿನಗಳಲ್ಲಿ 10 ನಿಮಿಷಗಳ ಯೋಗ ಮಾಡಲು ಪ್ರಯತ್ನಿಸಿ",
   "insightsRec3": "ಅಂಡೋತ್ಪತ್ತಿಯ ವಾರದಲ್ಲಿ 2.5L ನೀರು ಕುಡಿಯಿರಿ",
+  "insightsDisclaimer": "ಈ ಒಳನೋಟಗಳು ನೀವು ದಾಖಲಿಸಿದ ಮಾಹಿತಿಯ ಆಧಾರದ ಮೇಲೆ ಇವೆ ಮತ್ತು ವೈಯಕ್ತಿಕ ಟ್ರ್ಯಾಕಿಂಗ್‌ಗಾಗಿ ಮಾತ್ರ. ಇದು ವೈದ್ಯಕೀಯ ರೋಗನಿರ್ಣಯವಲ್ಲ ಮತ್ತು ಅರ್ಹ ವೈದ್ಯಕೀಯ ವೃತ್ತಿಪರರ ಸಲಹೆಗೆ ಬದಲಿಯಲ್ಲ.",
   "profileTitle": "ಪ್ರೊಫೈಲ್",
   "profileYearsOld": "ವರ್ಷ ವಯಸ್ಸು",
   "profileCycleDay": "ಋತುಚಕ್ರದ ದಿನ",
@@ -247,5 +250,6 @@
   "deleteAccount": "Delete Account",
   "deleteAccountConfirmationTitle": "Delete Account?",
   "deleteAccountConfirmationDesc": "This action is permanent and cannot be undone. All your data will be wiped.",
-  "accountDeletedSuccess": "Account deleted successfully."
+  "accountDeletedSuccess": "Account deleted successfully.",
+  "insightsDisclaimer": "These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional."
 }

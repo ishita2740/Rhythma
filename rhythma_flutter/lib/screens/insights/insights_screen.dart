@@ -24,10 +24,11 @@ class _InsightsScreenState extends State<InsightsScreen> {
   bool _loading = true;
   String _error = '';
 
-  int? _mhs;
-  String? _cvi;
+  double? _avgCycleLength;
+  int? _shortestCycle;
+  int? _longestCycle;
+  double? _avgBleeding;
   String? _sleepHours;
-  int? _avgCycleLength;
   bool _hasEnoughData = false;
   List<int> _cycleLengthTrend = [];
   Map<String, double> _symptomFrequency = {};
@@ -54,10 +55,11 @@ class _InsightsScreenState extends State<InsightsScreen> {
       final symptomFreq = data['symptomFrequency'] as Map? ?? {};
 
       setState(() {
-        _mhs = (insights['mhs'] as num?)?.round();
-        _cvi = insights['cvi'] as String?;
+        _avgCycleLength = (insights['averageCycleLength'] as num?)?.toDouble();
+        _shortestCycle = (insights['shortestCycleLength'] as num?)?.toInt();
+        _longestCycle = (insights['longestCycleLength'] as num?)?.toInt();
+        _avgBleeding = (insights['averageBleedingDuration'] as num?)?.toDouble();
         _sleepHours = insights['sleepHours'] as String?;
-        _avgCycleLength = (cycle['total'] as num?)?.round();
         _hasEnoughData = data['hasEnoughDataForInsights'] == true;
         _cycleLengthTrend = history
             .map((e) => (e as Map)['cycle_length'])
@@ -122,6 +124,26 @@ class _InsightsScreenState extends State<InsightsScreen> {
       _Rec(l10n.insightsRec2, RhythmaColors.primary),
       _Rec(l10n.insightsRec3, RhythmaColors.teal),
     ];
+  }
+
+  Widget _buildStatRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(fontSize: 14, color: RhythmaColors.foreground),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: RhythmaColors.foreground,
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -220,14 +242,12 @@ class _InsightsScreenState extends State<InsightsScreen> {
                   ),
                   Row(
                     children: [
-                      ScoreRing(value: _mhs ?? 0, size: 96),
-                      const SizedBox(width: 18),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              l10n.insightsMhsLabel,
+                              'CYCLE STATISTICS',
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
@@ -235,23 +255,22 @@ class _InsightsScreenState extends State<InsightsScreen> {
                                 letterSpacing: 0.8,
                               ),
                             ),
-                            const SizedBox(height: 5),
-                            Text(
-                              _mhs != null ? '$_mhs / 100' : '— / 100',
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.w700,
-                                color: RhythmaColors.foreground,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
+                            const SizedBox(height: 12),
+                            _buildStatRow('Avg Cycle', _avgCycleLength != null ? '${_avgCycleLength!.toStringAsFixed(_avgCycleLength! % 1 == 0 ? 0 : 1)}d' : '—'),
+                            const SizedBox(height: 8),
+                            _buildStatRow('Shortest', _shortestCycle != null ? '${_shortestCycle}d' : '—'),
+                            const SizedBox(height: 8),
+                            _buildStatRow('Longest', _longestCycle != null ? '${_longestCycle}d' : '—'),
+                            const SizedBox(height: 8),
+                            _buildStatRow('Avg Bleeding', _avgBleeding != null ? '${_avgBleeding!.toStringAsFixed(_avgBleeding! % 1 == 0 ? 0 : 1)}d' : '—'),
+                            const SizedBox(height: 8),
                             Row(
                               children: [
                                 Icon(Icons.info_outline_rounded, size: 14, color: RhythmaColors.mutedFg),
                                 const SizedBox(width: 5),
                                 Expanded(
                                   child: Text(
-                                    _cvi != null ? '${l10n.insightsRegular} · CVI: $_cvi' : l10n.insightsMhsDelta,
+                                    l10n.insightsMhsDelta,
                                     style: TextStyle(fontSize: 12, color: RhythmaColors.mutedFg),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -286,7 +305,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
                 Expanded(
                   child: _MiniCard(
                     label: l10n.insightsAvgCycle,
-                    value: _avgCycleLength != null ? '$_avgCycleLength ${l10n.homeDaysLabel}' : '—',
+                    value: _avgCycleLength != null ? '${_avgCycleLength!.toStringAsFixed(_avgCycleLength! % 1 == 0 ? 0 : 1)} ${l10n.homeDaysLabel}' : '—',
                     delta: l10n.insightsRegular,
                     trendUp: true,
                     color: RhythmaColors.primary,
@@ -485,6 +504,14 @@ const SizedBox(height: 14),
                   padding: const EdgeInsets.only(bottom: 8),
                   child: r,
                 )),
+            const SizedBox(height: 14),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Text(
+                l10n.insightsDisclaimer,
+                style: TextStyle(fontSize: 11, color: RhythmaColors.mutedFg),
+              ),
+            ),
           ],
         ),
       ),

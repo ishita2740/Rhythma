@@ -79,9 +79,6 @@ class AppLocalizationsKn extends AppLocalizations {
   String get langMarathi => 'मराठी (Marathi)';
 
   @override
-  String get langGujarati => 'ગુજરાતી (Gujarati)';
-
-  @override
   String get homeGreeting => 'ನಮಸ್ತೆ';
 
   @override
@@ -98,6 +95,10 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get homeHighEnergy => 'ಹೆಚ್ಚಿನ ಶಕ್ತಿ';
+
+  @override
+  String get homeFertileWindowDisclaimer =>
+      'ಇದು ನೀವು ದಾಖಲಿಸಿದ ಡೇಟಾ ಆಧಾರಿತ ಅಂದಾಜು ಮಾತ್ರ, ವೈದ್ಯಕೀಯ ಅಥವಾ ಗರ್ಭನಿರೋಧಕ ಸಲಹೆ ಅಲ್ಲ.';
 
   @override
   String get homeAiTitle => 'RHYTHMA AI';
@@ -338,6 +339,10 @@ class AppLocalizationsKn extends AppLocalizations {
   String get assistantSug5 => 'मेरे पीरियड्स अनियमित हैं — क्या यह सामान्य है?';
 
   @override
+  String get assistantDisclaimer =>
+      'ಈ ಸಹಾಯಕ ಸಾಮಾನ್ಯ ಆರೋಗ್ಯ ಮಾಹಿತಿಯನ್ನು ಮಾತ್ರ ಒದಗಿಸುತ್ತದೆ ಮತ್ತು ವೃತ್ತಿಪರ ವೈದ್ಯಕೀಯ ಸಲಹೆಗೆ ಬದಲಿಯಲ್ಲ.';
+
+  @override
   String get insightsTitle => 'ಆರೋಗ್ಯ ಒಳನೋಟಗಳು';
 
   @override
@@ -389,6 +394,10 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get insightsRec3 => 'ಅಂಡೋತ್ಪತ್ತಿಯ ವಾರದಲ್ಲಿ 2.5L ನೀರು ಕುಡಿಯಿರಿ';
+
+  @override
+  String get insightsDisclaimer =>
+      'ಈ ಒಳನೋಟಗಳು ನೀವು ದಾಖಲಿಸಿದ ಮಾಹಿತಿಯ ಆಧಾರದ ಮೇಲೆ ಇವೆ ಮತ್ತು ವೈಯಕ್ತಿಕ ಟ್ರ್ಯಾಕಿಂಗ್‌ಗಾಗಿ ಮಾತ್ರ. ಇದು ವೈದ್ಯಕೀಯ ರೋಗನಿರ್ಣಯವಲ್ಲ ಮತ್ತು ಅರ್ಹ ವೈದ್ಯಕೀಯ ವೃತ್ತಿಪರರ ಸಲಹೆಗೆ ಬದಲಿಯಲ್ಲ.';
 
   @override
   String get profileTitle => 'ಪ್ರೊಫೈಲ್';
@@ -922,4 +931,58 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get accountDeletedSuccess => 'Account deleted successfully.';
+
+  @override
+  String get langGujarati => 'ગુજરાતી (Gujarati)';
+
+  @override
+  String get welcomeToRhythma => 'Welcome to Rhythma';
+
+  @override
+  String get loginOrSignUpWithPhone => 'Log in or sign up with your phone number.';
+
+  @override
+  String get enterOtpSentToPhone => 'Enter the OTP sent to your phone';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get sendingOtp => 'Sending OTP...';
+
+  @override
+  String get otp => 'OTP';
+
+  @override
+  String get verifyOtp => 'Verify OTP';
+
+  @override
+  String get verifying => 'Verifying...';
+
+  @override
+  String get useDifferentPhoneNumber => 'Use a different phone number';
+
+  @override
+  String get pleaseEnterPhoneNumber => 'Please enter your phone number.';
+
+  @override
+  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number with country code (e.g., +91).';
+
+  @override
+  String get verificationFailed => 'Verification failed';
+
+  @override
+  String otpSentTo(String phone) => 'OTP sent to $phone';
+
+  @override
+  String get pleaseEnterOtp => 'Please enter the OTP.';
+
+  @override
+  String get invalidOtp => 'Invalid OTP. Please try again.';
+
+  @override
+  String get failedToGetIdToken => 'Failed to get ID token';
 }

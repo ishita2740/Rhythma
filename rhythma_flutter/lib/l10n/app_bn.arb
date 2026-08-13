@@ -32,6 +32,7 @@
   "homeDaysLabel": "দিন",
   "homeFertileWindow": "উর্বর সময় · ",
   "homeHighEnergy": "উচ্চ শক্তি",
+  "homeFertileWindowDisclaimer": "এটি আপনার লগ করা ডেটার উপর ভিত্তি করে একটি অনুমান মাত্র, চিকিৎসা বা গর্ভনিরোধক পরামর্শ নয়।",
   "homeAiTitle": "RHYTHMA AI",
   "homeAiSubtitle": "আপনার শরীর সম্পর্কে আমাকে কিছু জিজ্ঞাসা করুন,\nআপনার ভাষায়।",
   "homeAiPrompt": "আমার পিরিয়ড অনিয়মিত কেন?",
@@ -138,6 +139,7 @@
   "assistantSug3": "৩৫ দিনের সাইকেল কি স্বাভাবিক?",
   "assistantSug4": "খাবার যা পিএমএস-এ সাহায্য করে",
   "assistantSug5": "আমার পিরিয়ড অনিয়মিত - এটি কি স্বাভাবিক?",
+  "assistantDisclaimer": "এই সহায়ক শুধুমাত্র সাধারণ স্বাস্থ্য তথ্য প্রদান করে এবং এটি পেশাদার চিকিৎসা পরামর্শের বিকল্প নয়।",
   "insightsTitle": "স্বাস্থ্য অন্তর্দৃষ্টি",
   "insightsSubtitle": "গত 90 দিন",
   "insightsMhsLabel": "ঋতুস্রাব স্বাস্থ্য স্কোর",
@@ -155,6 +157,7 @@
   "insightsRec1": "পিরিয়ড শুরু হওয়ার কাছাকাছি আয়রন সমৃদ্ধ খাবার যোগ করুন",
   "insightsRec2": "লুটেয়াল-ফেজ দিনগুলিতে 10 মিনিটের যোগব্যায়াম চেষ্টা করুন",
   "insightsRec3": "ডিম্বস্ফোটন সপ্তাহে 2.5L হাইড্রেট করুন",
+  "insightsDisclaimer": "এই তথ্যগুলি আপনার লগ করা ডেটার উপর ভিত্তি করে এবং শুধুমাত্র ব্যক্তিগত ট্র্যাকিংয়ের জন্য। এটি চিকিৎসা নির্ণয় নয় এবং যোগ্য স্বাস্থ্যসেবা পেশাদারের পরামর্শের বিকল্প নয়।",
   "profileTitle": "প্রোফাইল",
   "profileYearsOld": "বছর বয়সী",
   "profileCycleDay": "সাইকেল দিন",
@@ -325,5 +328,6 @@
   "deleteAccount": "অ্যাকাউন্ট মুছুন",
   "deleteAccountConfirmationTitle": "অ্যাকাউন্ট মুছবেন?",
   "deleteAccountConfirmationDesc": "এই ক্রিয়াটি স্থায়ী এবং পূর্বাবস্থায় ফিরিয়ে আনা যাবে না। আপনার সমস্ত ডেটা মুছে ফেলা হবে।",
-  "accountDeletedSuccess": "অ্যাকাউন্ট সফলভাবে মুছে ফেলা হয়েছে।"
+  "accountDeletedSuccess": "অ্যাকাউন্ট সফলভাবে মুছে ফেলা হয়েছে।",
+  "insightsDisclaimer": "These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional."
 }

@@ -27,6 +27,7 @@
   "homeDaysLabel": "દિવસ",
   "homeFertileWindow": "ફર્ટાઇલ વિન્ડો · ",
   "homeHighEnergy": "ઊંચી ઊર્જા",
+  "homeFertileWindowDisclaimer": "આ તમારા લોગ કરેલા ડેટા પર આધારિત એક અંદાજ છે, તબીબી અથવા ગર્ભનિરોધક સલાહ નથી.",
   "homeAiTitle": "RHYTHMA AI",
   "homeAiSubtitle": "તમારા શરીર વિશે કંઈ પણ પૂછો,\nતમારી ભાષામાં.",
   "homeAiPrompt": "મારા પીરિયડ્સ અનિયમિત કેમ છે?",
@@ -126,6 +127,7 @@
   "assistantSug3": "શું 35-દિવસનું ચક્ર સામાન્ય છે?",
   "assistantSug4": "PMS માં મદદ કરતા ખોરાક",
   "assistantSug5": "મારા પીરિયડ્સ અનિયમિત છે — શું આ સામાન્ય છે?",
+  "assistantDisclaimer": "આ સહાયક ફક્ત સામાન્ય આરોગ્ય માહિતી પ્રદાન કરે છે અને તે વ્યાવસાયિક તબીબી સલાહનો વિકલ્પ નથી.",
   "insightsTitle": "સ્વાસ્થ્ય અંતર્દૃષ્ટિ",
   "insightsSubtitle": "છેલ્લા 90 દિવસ",
   "insightsMhsLabel": "માસિક ધર્મ સ્વાસ્થ્ય સ્કોર",
@@ -143,6 +145,7 @@
   "insightsRec1": "પીરિયડ શરૂ થવાની નજીક આયર્નયુક્ત ખોરાક ઉમેરો",
   "insightsRec2": "લ્યુટિયલ તબક્કાના દિવસોમાં 10-મિનિટ યોગ અજમાવો",
   "insightsRec3": "ઓવ્યુલેશન અઠવાડિયા દરમિયાન 2.5L પાણી પીઓ",
+  "insightsDisclaimer": "આ માહિતી તમે લોગ કરેલા ડેટા પર આધારિત છે અને ફક્ત વ્યક્તિગત ટ્રેકિંગ માટે છે. આ તબીબી નિદાન નથી અને લાયક તબીબી વ્યાવસાયિકની સલાહનો વિકલ્પ નથી.",
   "profileTitle": "પ્રોફાઇલ",
   "profileYearsOld": "વર્ષ જૂના",
   "profileCycleDay": "ચક્ર દિવસ",
@@ -257,5 +260,6 @@
   "langTamil": "தமிழ் (Tamil)",
   "langTelugu": "తెలుగు (Telugu)",
   "langMarathi": "मराठी (Marathi)",
-  "langGujarati": "ગુજરાતી (Gujarati)"
+  "langGujarati": "ગુજરાતી (Gujarati)",
+  "insightsDisclaimer": "These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional."
 }

@@ -27,6 +27,7 @@
   "homeDaysLabel": "ദിവസങ്ങൾ",
   "homeFertileWindow": "ഗർഭധാരണ സാധ്യതയുള്ള സമയം · ",
   "homeHighEnergy": "ഉയർന്ന ഊർജ്ജസ്വലത",
+  "homeFertileWindowDisclaimer": "ഇത് നിങ്ങൾ രേഖപ്പെടുത്തിയ ഡാറ്റയെ അടിസ്ഥാനമാക്കിയുള്ള ഒരു കണക്കാക്കൽ മാത്രമാണ്, ഇത് വൈദ്യോപദേശമോ ഗർഭനിരോധന ഉപദേശമോ അല്ല.",
   "homeAiTitle": "RHYTHMA AI",
   "homeAiSubtitle": "നിങ്ങളുടെ ശരീരത്തെക്കുറിച്ച് എന്തുവേണമെങ്കിലും ചോദിക്കൂ,\nനിങ്ങളുടെ ഭാഷയിൽ.",
   "homeAiPrompt": "എന്തുകൊണ്ടാണ് എന്റെ ആർത്തവം ക്രമരഹിതമാകുന്നത്?",
@@ -126,6 +127,7 @@
   "assistantSug3": "35 ദിവസത്തെ ആർത്തവചക്രം സാധാരണമാണോ?",
   "assistantSug4": "PMS ശമിപ്പിക്കാൻ സഹായിക്കുന്ന ഭക്ഷണങ്ങൾ",
   "assistantSug5": "എന്റെ ആർത്തവം ക്രമരഹിതമാണ് — ഇത് സാധാരണമാണോ?",
+  "assistantDisclaimer": "ഈ അസിസ്റ്റന്റ് പൊതുവായ ആരോഗ്യ വിവരങ്ങൾ മാത്രമേ നൽകുന്നുള്ളൂ, ഇത് പ്രൊഫഷണൽ വൈദ്യോപദേശത്തിന് പകരമല്ല.",
   "insightsTitle": "ആരോഗ്യ വിവരങ്ങൾ",
   "insightsSubtitle": "അവസാന 90 ദിവസങ്ങൾ",
   "insightsMhsLabel": "ആർത്തവ ആരോഗ്യ സ്കോർ",
@@ -143,6 +145,7 @@
   "insightsRec1": "ആർത്തവ ആരംഭത്തിന് അടുത്ത് ഇരുമ്പ് ധാരാളമുള്ള ഭക്ഷണങ്ങൾ കഴിക്കുക",
   "insightsRec2": "ലൂട്ടിയൽ ഘട്ടത്തിൽ ദിവസവും 10 മിനിറ്റ് യോഗ ചെയ്യുക",
   "insightsRec3": "അണ്ഡോത്പാദന ആഴ്ചയിൽ 2.5 ലിറ്റർ വെള്ളം കുടിക്കുക",
+  "insightsDisclaimer": "ഈ ഉൾക്കാഴ്ചകൾ നിങ്ങൾ രേഖപ്പെടുത്തിയ വിവരങ്ങളെ അടിസ്ഥാനമാക്കിയുള്ളതാണ്, വ്യക്തിഗത ട്രാക്കിംഗിന് മാത്രം ഉദ്ദേശിച്ചുള്ളതാണ്. ഇത് വൈദ്യ രോഗനിർണയമല്ല, യോഗ്യതയുള്ള വൈദ്യ വിദഗ്ധന്റെ ഉപദേശത്തിന് പകരമല്ല.",
   "profileTitle": "പ്രൊഫൈൽ",
   "profileYearsOld": "വയസ്സ്",
   "profileCycleDay": "ആർത്തവചക്ര ദിവസം",
@@ -274,5 +277,6 @@
   "deleteAccount": "Delete Account",
   "deleteAccountConfirmationTitle": "Delete Account?",
   "deleteAccountConfirmationDesc": "This action is permanent and cannot be undone. All your data will be wiped.",
-  "accountDeletedSuccess": "Account deleted successfully."
+  "accountDeletedSuccess": "Account deleted successfully.",
+  "insightsDisclaimer": "These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional."
 }

@@ -1,4 +1,72 @@
 {
+  "meta": {
+    "appName": "Rhythma",
+    "home": {
+      "title": "Rhythma",
+      "description": "Your cycle at a glance — where you are today, what's coming, and what your own logs show."
+    },
+    "cycle": {
+      "title": "Cycle",
+      "description": "Log today's period, flow, mood and symptoms, and browse your cycle calendar."
+    },
+    "assistant": {
+      "title": "Assistant",
+      "description": "Ask about periods, symptoms and reproductive health, and get answers grounded in sourced medical references."
+    },
+    "insights": {
+      "title": "Insights",
+      "description": "What your logged cycles actually show — average length, consistency, and patterns worth noticing."
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "Your cycle details and personal information."
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Language, notifications and account preferences."
+    },
+    "sharing": {
+      "title": "Sharing",
+      "description": "Choose which healthcare providers can see your data, and see who has viewed it."
+    },
+    "sms": {
+      "title": "SMS summaries",
+      "description": "Get your cycle summary by text message, for when you are offline."
+    },
+    "login": {
+      "title": "Sign in",
+      "description": "Sign in to Rhythma."
+    },
+    "register": {
+      "title": "Create account",
+      "description": "Create your Rhythma account."
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "This page does not exist."
+    },
+    "providerDashboard": {
+      "title": "Patient dashboard",
+      "description": "Patients who have shared their data with you."
+    },
+    "providerPatient": {
+      "title": "Patient",
+      "description": "The cycle data this patient has shared with you."
+    },
+    "providerLogin": {
+      "title": "Provider sign in",
+      "description": "Sign in to the Rhythma provider dashboard."
+    },
+    "providerRegister": {
+      "title": "Provider registration",
+      "description": "Register as a healthcare provider on Rhythma."
+    }
+  },
+  "a11y": {
+    "skipToContent": "Skip to content",
+    "scrollToTop": "Scroll to top",
+    "navigatedTo": "{{page}} page"
+  },
   "auth": {
     "loginTitle": "Log in to Rhythma",
     "registerTitle": "Create your account",
@@ -15,7 +83,38 @@
     "noAccount": "Don't have an account?",
     "registerLink": "Register",
     "haveAccount": "Already have an account?",
-    "loginLink": "Log in"
+    "loginLink": "Log in",
+    "providerLink": "Healthcare professional? Sign in here",
+    "passwordRequirementsTitle": "Your password should be:",
+    "passwordRejected": "Please choose a different password:",
+    "passwordRules": {
+      "too_short": "At least {{min}} characters long",
+      "too_long": "Short enough to store safely (up to {{bytes}} bytes — letters in Indian scripts take about three bytes each)",
+      "too_common": "Not one of the most commonly used passwords",
+      "contains_identifier": "Not your email address or username",
+      "not_varied_enough": "Made of more than a couple of repeated characters",
+      "sequential": "Free of long runs like 12345 or qwerty"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "cycle": "Cycle",
+    "assistant": "Assistant",
+    "insights": "Insights",
+    "profile": "Profile",
+    "sharing": "Sharing",
+    "settings": "Settings",
+    "logout": "Log out"
+  },
+  "common": {
+    "loading": "Loading…",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "today": "Today",
+    "days": "days",
+    "back": "Back"
   },
   "home": {
     "welcome": "Welcome, {{name}}",
@@ -24,8 +123,9 @@
     "nextPeriod": "Next period in",
     "days": "days",
     "fertileWindow": "Fertile window + High energy",
-    "mhs": "MHS",
-    "cvi": "CVI",
+    "fertileWindowDisclaimer": "यह आपके लॉग किए गए डेटा पर आधारित एक अनुमान है, चिकित्सीय या गर्भनिरोधक सलाह नहीं।",
+    "avgCycle": "Avg Cycle",
+    "bleeding": "Bleeding",
     "sleep": "Sleep",
     "assistantTitle": "AI Assistant",
     "assistantSubtitle": "Your personal health companion",
@@ -40,25 +140,6 @@
     "failedToLoad": "Failed to load",
     "logged": "{{label}} logged",
     "savedOffline": "Couldn't reach the server. Please try again."
-  },
-  "nav": {
-    "home": "Home",
-    "cycle": "Cycle",
-    "assistant": "Assistant",
-    "insights": "Insights",
-    "profile": "Profile",
-    "settings": "Settings",
-    "logout": "Log out"
-  },
-  "common": {
-    "loading": "Loading…",
-    "retry": "Retry",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "today": "Today",
-    "days": "days",
-    "back": "Back"
   },
   "quickLog": {
     "none": "None",
@@ -101,7 +182,39 @@
     "fatigue": "Fatigue",
     "nausea": "Nausea",
     "acne": "Acne",
-    "backPain": "Back Pain"
+    "backPain": "Back Pain",
+    "loadFailed": "Couldn't load your logs for this month.",
+    "retry": "Try again"
+  },
+  "prediction": {
+    "outlookLabel": "साइकिल पूर्वानुमान",
+    "cycleDay": "साइकिल दिन",
+    "estimatedLength": "अनुमानित लंबाई",
+    "overdueLabel": "पीरियड देर से है",
+    "daysLate": "{{count}} दिन देर",
+    "dueToday": "आज अपेक्षित",
+    "range": "{{from}} और {{to}} के बीच",
+    "ovulation": "ओव्यूलेशन लगभग {{date}} को अनुमानित",
+    "fertileWindow": "फर्टाइल विंडो {{from}} – {{to}} (अनुमान, गर्भनिरोधक नहीं)",
+    "upcoming": "आगे अपेक्षित",
+    "phase": {
+      "period": "पीरियड",
+      "follicular": "फॉलिक्युलर",
+      "ovulation": "ओव्यूलेशन",
+      "luteal": "ल्यूटियल",
+      "late": "सामान्य से लंबा",
+      "unknown": "पर्याप्त डेटा नहीं"
+    },
+    "confidence": {
+      "high": "उच्च विश्वास",
+      "medium": "मध्यम विश्वास",
+      "low": "कम विश्वास"
+    },
+    "source": {
+      "logged_history": "आपके दर्ज साइकिलों पर आधारित",
+      "declared_cycle_length": "आपके द्वारा दी गई साइकिल लंबाई पर आधारित",
+      "population_default": "सामान्य 28-दिन की साइकिल पर आधारित — इसे अपना बनाने के लिए एक पीरियड दर्ज करें"
+    }
   },
   "assistant": {
     "title": "AI Assistant",
@@ -116,37 +229,44 @@
     "suggest5": "How do I track my ovulation?",
     "errorPrefix": "Error",
     "disclaimer": "Please consult a healthcare professional for medical advice.",
-    "rateLimited": "You're sending messages too quickly. Please wait a moment."
+    "rateLimited": "You're sending messages too quickly. Please wait a moment.",
+    "storedOnDevice": "यह बातचीत इसी डिवाइस पर रखी जाती है और लॉग आउट करने पर हटा दी जाती है।",
+    "clearConversation": "बातचीत हटाएँ"
   },
   "insights": {
     "title": "Insights",
-    "subtitle": "Your health at a glance",
-    "notEnoughData": "Log a few cycles to unlock personalized insights.",
-    "mhsLabel": "MENTAL HEALTH SCORE",
-    "cviLabel": "CVI",
-    "mhsDelta": "Score based on your recent cycles",
-    "regular": "Regular",
-    "irregular": "Irregular",
-    "variability": "Variability",
-    "avgCycle": "Avg cycle",
-    "sleep": "Sleep",
-    "stress": "Stress",
-    "low": "Low",
-    "moderate": "Moderate",
-    "high": "High",
-    "stabilizing": "Your cycle is stabilizing",
-    "moderateTrend": "Your cycle shows moderate variation",
-    "healthy": "Healthy",
-    "trendLabel": "Cycle length trend",
-    "notEnoughTrendData": "Log at least two cycles to see your trend",
-    "symptomsLabel": "Symptom patterns",
-    "noSymptomsYet": "No symptoms logged yet",
-    "exportReport": "Export Health Report",
-    "exportSubtitle": "Generate your health summary as a PDF",
-    "wellness": "Wellness recommendations",
-    "rec1": "Stay hydrated and get plenty of rest during your period.",
-    "rec2": "Try gentle exercise like walking or yoga to ease cramps.",
-    "rec3": "Track your sleep — aim for 7-9 hours per night.",
+    "subtitle": "Patterns from your own logged data",
+    "notEnoughData": "Log a few more cycles to unlock your full insights.",
+    "cycleStatsLabel": "Cycle stats",
+    "avgCycleLength": "Avg cycle length",
+    "cyclesAnalyzed": "Cycles analyzed",
+    "consistencyLabel": "Cycle consistency",
+    "consistency": {
+      "unknown": {
+        "pill": "Not enough data",
+        "description": "Log a couple more cycles to see how consistent your cycle length has been."
+      },
+      "consistent": {
+        "pill": "Consistent",
+        "description": "Your cycle length has stayed within a few days across your recent cycles."
+      },
+      "slightly_variable": {
+        "pill": "Slightly variable",
+        "description": "Your cycle length has varied a bit across your recent cycles."
+      },
+      "variable": {
+        "pill": "Variable",
+        "description": "Your cycle length has varied noticeably across your recent cycles."
+      }
+    },
+    "observationsLabel": "What your logs show",
+    "noObservations": "Nothing stands out in your recent logs — everything looks consistent with your own patterns.",
+    "severity": {
+      "info": "Info",
+      "attention": "Worth noting",
+      "seek_care": "Consider medical advice"
+    },
+    "disclaimer": "These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional.",
     "loadError": "Couldn't load your insights."
   },
   "profile": {
@@ -158,7 +278,7 @@
     "ovulation": "Ovulation Phase",
     "luteal": "Luteal Phase",
     "avgCycleLength": "Avg cycle length",
-    "avgMhs": "Avg mental health score",
+    "avgBleeding": "Avg bleeding",
     "cycleVariability": "Cycle variability",
     "lastCycleLength": "Last cycle length",
     "editInfo": "Edit Info",
@@ -170,12 +290,39 @@
     "saveChanges": "Save Changes",
     "nameRequired": "Name is required",
     "ageInvalid": "Age must be between 10 and 120",
-    "cycleInvalid": "Cycle length must be between 15 and 45"
+    "cycleInvalid": "Cycle length must be between 15 and 45",
+    "days": "days"
+  },
+  "privacy": {
+    "title": "आपका डेटा",
+    "subtitle": "आपके खाते के बारे में Rhythma जो कुछ भी सहेजता है, और आप उसका क्या कर सकती हैं।",
+    "loadError": "आपके खाते के लिए सहेजी गई जानकारी लोड नहीं हो सकी। कृपया फिर से कोशिश करें।",
+    "storedLabel": "क्या सहेजा गया है",
+    "storedTotal": "कुल {{count}} रिकॉर्ड।",
+    "dateRange": "{{from}} से {{to}} तक",
+    "fields": "फ़ील्ड",
+    "exportLabel": "अपना डेटा डाउनलोड करें",
+    "exportBody": "सर्वर पर मौजूद हर चीज़ की पूरी प्रति। JSON फ़ाइल पूरा बंडल है; CSV में आपके साइकिल लॉग उस रूप में हैं जिसे स्प्रेडशीट और दूसरे ट्रैकर पढ़ सकते हैं।",
+    "exportJson": "JSON डाउनलोड करें",
+    "exportCsv": "CSV डाउनलोड करें",
+    "exportReady": "{{filename}} के रूप में सहेजा गया",
+    "exportError": "डाउनलोड तैयार नहीं हो सका। कृपया फिर से कोशिश करें।",
+    "deleteLabel": "अपना खाता हटाएँ",
+    "deleteBody": "इससे आपके साइकिल लॉग, प्रोफ़ाइल और सहायक बातचीत हमेशा के लिए हट जाएँगे। इसे वापस नहीं लाया जा सकता।",
+    "deleteStart": "मेरा खाता हटाएँ",
+    "deleteConfirm": "सब कुछ हटाएँ",
+    "deleteError": "आपका खाता नहीं हटाया गया। कुछ भी नहीं हटाया गया है — कृपया फिर से कोशिश करें।",
+    "willDelete": "{{count}} × {{label}}",
+    "exportFirst": "यदि आप एक प्रति रखना चाहती हैं तो पहले अपना डेटा डाउनलोड कर लें — इसके बाद यह मौका नहीं मिलेगा।",
+    "typeToConfirm": "पुष्टि के लिए {{word}} टाइप करें",
+    "backToSettings": "सेटिंग्स पर वापस जाएँ"
   },
   "settings": {
     "title": "Settings",
     "language": "Language",
     "languageSubtitle": "Choose your preferred language",
+    "sharing": "Data sharing",
+    "sharingSubtitle": "Choose which healthcare providers can see your data",
     "sms": "SMS Cycle Summaries",
     "smsSubtitle": "Get a text summary sent to your phone",
     "logOut": "Log out",
@@ -187,7 +334,9 @@
     "telugu": "Telugu",
     "marathi": "Marathi",
     "kannada": "Kannada",
-    "malayalam": "Malayalam"
+    "malayalam": "Malayalam",
+    "dataPrivacy": "आपका डेटा",
+    "dataPrivacySubtitle": "देखें कि क्या सहेजा गया है, उसे डाउनलोड करें, या अपना खाता हटाएँ"
   },
   "sms": {
     "title": "SMS Summaries",
@@ -202,5 +351,99 @@
     "send": "Send",
     "phoneRequired": "A phone number is required to enable SMS summaries.",
     "phoneInvalid": "Phone number must be in E.164 format, e.g. +919876543210."
+  },
+  "provider": {
+    "loginTitle": "Healthcare provider sign in",
+    "registerTitle": "Create a provider account",
+    "subtitle": "For healthcare professionals only",
+    "email": "Work email",
+    "fullName": "Full name",
+    "specialty": "Specialty",
+    "specialtyPlaceholder": "e.g. Gynecology",
+    "licenseNumber": "Medical license number (optional)",
+    "password": "Password",
+    "loginButton": "Sign in",
+    "loggingIn": "Signing in…",
+    "registerButton": "Create account",
+    "registering": "Creating account…",
+    "loginError": "Invalid email or password.",
+    "registerError": "Could not create your provider account. Please try again.",
+    "noAccount": "Don't have a provider account?",
+    "registerLink": "Register",
+    "haveAccount": "Already have a provider account?",
+    "loginLink": "Sign in",
+    "patientLogin": "Patient? Log in here"
+  },
+  "providerNav": {
+    "dashboard": "Patients",
+    "logout": "Log out"
+  },
+  "providerDashboard": {
+    "title": "Patient Dashboard",
+    "welcome": "Welcome, {{name}}",
+    "empty": "You don't have any patients yet. When a patient shares her data with you, she will appear here.",
+    "mhs": "MHS",
+    "cvi": "CVI",
+    "cyclesLogged": "{{count}} cycles",
+    "viewPatient": "View patient",
+    "loadMore": "Load more patients",
+    "loadError": "Couldn't load your patients."
+  },
+  "providerPatient": {
+    "back": "Back to patients",
+    "notFound": "Patient not found, or you no longer have consent to view their data.",
+    "profile": "Profile",
+    "age": "Age",
+    "location": "Location",
+    "cycleLength": "Avg cycle length",
+    "periodDuration": "Period duration",
+    "lastPeriod": "Last period",
+    "summary": "Health summary",
+    "sleep": "Avg sleep",
+    "cycleLogs": "Cycle history",
+    "date": "Date",
+    "flow": "Flow",
+    "mood": "Mood",
+    "symptoms": "Symptoms",
+    "sleepHours": "Sleep",
+    "notes": "Notes",
+    "noLogs": "No cycle logs shared yet.",
+    "grantedOn": "Shared since {{date}}"
+  },
+  "sharing": {
+    "title": "Data Sharing",
+    "subtitle": "Share your health data with a healthcare professional",
+    "intro": "Only share data with a provider you trust. You can revoke access at any time.",
+    "addTitle": "Add a provider",
+    "providerEmail": "Provider email",
+    "addButton": "Share my data",
+    "adding": "Sharing…",
+    "added": "Data shared with {{name}}.",
+    "notFound": "No provider account found with that email.",
+    "active": "Active",
+    "revoked": "Revoked",
+    "revoke": "Revoke access",
+    "revokeConfirm": "Revoke {{name}}'s access to your data?",
+    "revokedMsg": "Access revoked.",
+    "empty": "You haven't shared your data with anyone yet.",
+    "grantedOn": "Shared since {{date}}",
+    "loadError": "Couldn't load your sharing settings.",
+    "accessLogTitle": "Who has viewed your data",
+    "accessLogSubtitle": "A record of every time a provider opened your records. Rhythma never stores a copy of what they saw.",
+    "accessLogEmpty": "No provider has viewed your data yet.",
+    "viewedFullRecord": "Opened your full record",
+    "viewedSummaryCard": "Saw your summary card",
+    "neverViewed": "Has not viewed your data yet",
+    "viewedSummary": "Viewed {{count}} times · last on {{date}}",
+    "unknownProvider": "A provider who has since closed their account"
+  },
+  "errors": {
+    "boundaryTitle": "Something went wrong on this screen",
+    "boundaryBody": "Your data is safe. You can try again, or go back to the home screen.",
+    "retry": "Try again",
+    "goHome": "Go to home",
+    "requestId": "Reference",
+    "notFoundTitle": "This page doesn't exist",
+    "notFoundBody": "The link may be out of date, or the address may have a typo."
   }
 }
