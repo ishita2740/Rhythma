@@ -160,11 +160,7 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get homeRetry => 'Retry';
 
-  @override
-  String get homeMhs => 'MHS';
 
-  @override
-  String get homeCvi => 'CVI';
 
   @override
   String get homeSleep => 'नींद';
@@ -349,11 +345,7 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get insightsSubtitle => 'पिछले 90 दिन';
 
-  @override
-  String get insightsMhsLabel => 'मासिक धर्म स्वास्थ्य स्कोर';
 
-  @override
-  String get insightsMhsDelta => 'पिछले चक्र की तुलना में +6';
 
   @override
   String get insightsVar => 'चक्र परिवर्तनशीलता';

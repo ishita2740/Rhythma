@@ -423,17 +423,7 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get homeRetry;
 
-  /// No description provided for @homeMhs.
-  ///
-  /// In en, this message translates to:
-  /// **'MHS'**
-  String get homeMhs;
 
-  /// No description provided for @homeCvi.
-  ///
-  /// In en, this message translates to:
-  /// **'CVI'**
-  String get homeCvi;
 
   /// No description provided for @homeSleep.
   ///
@@ -777,17 +767,7 @@ abstract class AppLocalizations {
   /// **'Last 90 days'**
   String get insightsSubtitle;
 
-  /// No description provided for @insightsMhsLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'MENSTRUAL HEALTH SCORE'**
-  String get insightsMhsLabel;
 
-  /// No description provided for @insightsMhsDelta.
-  ///
-  /// In en, this message translates to:
-  /// **'+6 vs last cycle'**
-  String get insightsMhsDelta;
 
   /// No description provided for @insightsVar.
   ///

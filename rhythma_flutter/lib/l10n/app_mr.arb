@@ -77,8 +77,6 @@
   "assistantDisclaimer": "हा सहाय्यक फक्त सामान्य आरोग्य माहिती देतो आणि तो व्यावसायिक वैद्यकीय सल्ल्याचा पर्याय नाही.",
   "insightsTitle": "आरोग्य अंतर्दृष्टी",
   "insightsSubtitle": "मागील 90 दिवस",
-  "insightsMhsLabel": "मासिक पाळी आरोग्य स्कोअर",
-  "insightsMhsDelta": "मागील चक्राच्या तुलनेत +6",
   "insightsVar": "चक्र परिवर्तनशीलता",
   "insightsAvgCycle": "सरासरी चक्र",
   "insightsRegular": "नियमित",
