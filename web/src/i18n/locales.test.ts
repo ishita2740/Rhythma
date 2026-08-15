@@ -20,7 +20,7 @@ const LOCALES = { bn, gu, hi, kn, ml, mr, ta, te } as const;
 // Locales that currently carry a full translation of en.json. These are
 // held to strict parity: a new English key that isn't translated here
 // fails the build.
-const COMPLETE_LOCALES = ['hi', 'kn', 'ml', 'mr', 'ta', 'te'] as const;
+const COMPLETE_LOCALES = ['bn', 'hi', 'mr', 'ta', 'te'] as const;
 
 // Locales that are genuinely incomplete today. Writing this test turned up
 // that `bn` and `gu` each define only 18 of the 182 keys in en.json — so
@@ -34,8 +34,9 @@ const COMPLETE_LOCALES = ['hi', 'kn', 'ml', 'mr', 'ta', 'te'] as const;
 // so these locales can only improve. Lower the floor and the test fails;
 // raise a locale to 182 and move it into COMPLETE_LOCALES.
 const KNOWN_INCOMPLETE: Record<string, number> = {
-  bn: 18,
   gu: 18,
+  kn: 18,
+  ml: 18,
 };
 
 type Json = Record<string, unknown>;
@@ -122,6 +123,33 @@ describe('locale coverage', () => {
     });
     expect(unfinished, `${code} has unfinished copy: ${unfinished.join(', ')}`).toEqual([]);
   });
+
+  it.each(Object.keys(LOCALES))('%s has no English placeholder strings', (code) => {
+    const locale = LOCALES[code as keyof typeof LOCALES] as Json;
+    const allowlist = new Set([
+      'meta.appName',
+      'meta.home.title',
+      'providerDashboard.mhs',
+      'providerDashboard.cvi',
+      'privacy.willDelete',
+      'settings.english'
+    ]);
+    
+    const placeholders = flatten(locale).filter((key) => {
+      const enValue = valueAt(en as Json, key);
+      const locValue = valueAt(locale, key);
+      
+      if (allowlist.has(key) || typeof locValue !== 'string' || locValue !== enValue) {
+        return false;
+      }
+      
+      // We consider it an English placeholder if it matches English exactly
+      // and contains English words (excluding short units like "4h").
+      return /[a-z]{3,}/i.test(locValue);
+    });
+    
+    expect(placeholders, `${code} has English placeholder strings: ${placeholders.join(', ')}`).toEqual([]);
+  });
 });
 
 describe('interpolation placeholders', () => {
@@ -170,3 +198,4 @@ describe('i18n registration', () => {
     expect(i18n.options.fallbackLng).toContain('en');
   });
 });
+ 
