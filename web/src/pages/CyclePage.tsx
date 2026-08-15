@@ -241,6 +241,7 @@ export function CyclePage() {
     next.delete(selectedIso);
     setLogs(next);
     setSaved(false);
+    void load();
   };
 
   const shiftMonth = (delta: number) => setDisplayedMonth((m) => addMonths(m, delta));
