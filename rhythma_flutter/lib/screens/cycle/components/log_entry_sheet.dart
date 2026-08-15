@@ -69,6 +69,12 @@ class _LogEntrySheetState extends State<LogEntrySheet> {
       'symptoms': _symptoms,
     };
     LocalStorageService.saveCycleLog(log);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Log saved successfully'),
+        duration: Duration(seconds: 2),
+      ),
+    );
     Navigator.of(context).pop();
   }
 
