@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic> _userData = {};
   Map<String, dynamic> _cycleData = {};
   Map<String, dynamic> _insights = {};
+  bool _hasEnoughData = false;
   String _error = '';
 
   @override
@@ -46,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _userData = cached['user'] ?? {};
         _cycleData = cached['cycle'] ?? {};
         _insights = cached['insights'] ?? {};
+        _hasEnoughData = cached['hasEnoughDataForInsights'] == true;
         _loading = false;
       });
     }
@@ -59,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'user': response.data['user'] ?? {},
         'cycle': response.data['cycle'] ?? {},
         'insights': response.data['insights'] ?? {},
+        'hasEnoughDataForInsights': response.data['hasEnoughDataForInsights'] == true,
       };
       await LocalStorageService.saveCachedDashboard(data);
       if (!mounted) return;
@@ -66,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _userData = data['user'] as Map<String, dynamic>;
         _cycleData = data['cycle'] as Map<String, dynamic>;
         _insights = data['insights'] as Map<String, dynamic>;
+        _hasEnoughData = data['hasEnoughDataForInsights'] as bool;
         _loading = false;
         _error = '';
       });
@@ -122,12 +126,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final avatarPath =
         localProfile['avatar'] as String? ?? 'assets/avatars/avatar_1.png';
-    final nextPeriodDays = _cycleData['nextPeriodDays'] ?? 14;
-    final cycleDay = _cycleData['day'] ?? 14;
-    final totalCycle = _cycleData['total'] ?? 28;
-    final avgCycle = _insights['averageCycleLength'] ?? 28;
-    final avgBleeding = _insights['averageBleedingDuration'] ?? 5;
-    final sleepHours = _insights['sleepHours'] ?? '7.2h';
+    final nextPeriodDays = _cycleData['nextPeriodDays'];
+    final cycleDay = _cycleData['day'];
+    final totalCycle = _cycleData['total'];
+    final avgCycle = _insights['averageCycleLength'];
+    final avgBleeding = _insights['averageBleedingDuration'];
+    final sleepHours = _insights['sleepHours'] as String?;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
@@ -210,7 +214,23 @@ class _HomeScreenState extends State<HomeScreen> {
             _buildNudgeBanner(context, l10n, localProfile),
 
           // ── Cycle ring + prediction ──────────────────────────
-          GlassCard(
+          if (_cycleData.isEmpty)
+            GlassCard(
+              child: Row(
+                children: [
+                  Icon(Icons.hourglass_top_rounded, color: RhythmaColors.primary, size: 28),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Text(
+                      l10n.insightsNotEnoughData,
+                      style: TextStyle(color: RhythmaColors.mutedFg, fontSize: 13),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else
+            GlassCard(
             child: Stack(
               children: [
                 Positioned(
@@ -229,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Row(
                       children: [
-                        CycleRing(day: cycleDay, total: totalCycle, size: 88),
+                        CycleRing(day: cycleDay ?? 0, total: totalCycle ?? 28, size: 88),
                         const SizedBox(width: 18),
                         Expanded(
                           child: Column(
@@ -310,17 +330,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         _StatCell(
                             label: 'Avg Cycle',
-                            value: '${avgCycle}d',
+                            value: avgCycle != null ? '${avgCycle}d' : '—',
                             color: RhythmaColors.primary),
                         _StatDivider(),
                         _StatCell(
                             label: 'Bleeding',
-                            value: '${avgBleeding}d',
+                            value: avgBleeding != null ? '${avgBleeding}d' : '—',
                             color: RhythmaColors.teal),
                         _StatDivider(),
                         _StatCell(
                             label: 'Sleep',
-                            value: '$sleepHours',
+                            value: sleepHours ?? '—',
                             color: RhythmaColors.coral),
                       ],
                     ),

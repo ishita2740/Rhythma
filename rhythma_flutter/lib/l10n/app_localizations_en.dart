@@ -706,6 +706,14 @@ String get ayurvedaOvulationDescription =>
 String get ayurvedaLutealTitle => 'Grounding and routine';
 
 @override
-String get ayurvedaLutealDescription =>
-    'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
+String get ayurvedaLutealDescription => 'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
+
+@override
+String get insightsNotEnoughData => 'Log a few more cycles on the Cycle tab to unlock your full health insights.';
+
+@override
+String get insightsNotEnoughTrendData => 'Log at least two cycles to see your trend here.';
+
+@override
+String get insightsNoSymptomsYet => 'No symptoms logged yet.';
 }

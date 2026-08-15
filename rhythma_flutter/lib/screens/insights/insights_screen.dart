@@ -224,7 +224,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
                 ),
               ),
 
-            // MHS hero card
+            // Cycle Statistics Card
             GlassCard(
               child: Stack(
                 children: [
@@ -263,20 +263,6 @@ class _InsightsScreenState extends State<InsightsScreen> {
                             _buildStatRow('Longest', _longestCycle != null ? '${_longestCycle}d' : '—'),
                             const SizedBox(height: 8),
                             _buildStatRow('Avg Bleeding', _avgBleeding != null ? '${_avgBleeding!.toStringAsFixed(_avgBleeding! % 1 == 0 ? 0 : 1)}d' : '—'),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Icon(Icons.info_outline_rounded, size: 14, color: RhythmaColors.mutedFg),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: Text(
-                                    l10n.insightsMhsDelta,
-                                    style: TextStyle(fontSize: 12, color: RhythmaColors.mutedFg),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       ),
