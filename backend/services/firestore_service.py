@@ -278,16 +278,24 @@ class UserService:
 
             phone = user.get("phone")
 
-            # Delete all cycle logs
-            cycle_logs = db.collection("cycle_logs").where("user_id", "==", user_id).stream()
-            for log in cycle_logs:
-                # In MockFirestoreClient, delete is available on MockDocumentReference
-                # In real Firestore, it's doc.reference.delete()
-                # But here cycle_logs returns doc snapshots. For safety:
+            # Delete all related user collections (cycle_logs, emergency_contacts, consents, conversations)
+            user_collections = ["cycle_logs", "emergency_contacts", "consents"]
+            for col in user_collections:
                 try:
-                    log.reference.delete()
-                except AttributeError:
-                    log.delete()
+                    docs = db.collection(col).where("user_id", "==", user_id).stream()
+                    for d in docs:
+                        try:
+                            d.reference.delete()
+                        except AttributeError:
+                            d.delete()
+                except Exception:
+                    pass
+
+            # Delete conversation document keyed by user_id
+            try:
+                db.collection("conversations").document(user_id).delete()
+            except Exception:
+                pass
 
             # Delete from Firebase Auth
             if phone:
