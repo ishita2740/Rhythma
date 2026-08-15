@@ -156,11 +156,7 @@ class AppLocalizationsOr extends AppLocalizations {
   @override
   String get homeRetry => 'ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ';
 
-  @override
-  String get homeMhs => 'MHS';
 
-  @override
-  String get homeCvi => 'CVI';
 
   @override
   String get homeSleep => 'ନିଦ';
@@ -342,11 +338,7 @@ class AppLocalizationsOr extends AppLocalizations {
   @override
   String get insightsSubtitle => 'ଗତ 90 ଦିନ';
 
-  @override
-  String get insightsMhsLabel => 'ଋତୁସ୍ରାବ ସ୍ୱାସ୍ଥ୍ୟ ସ୍କୋର୍';
 
-  @override
-  String get insightsMhsDelta => 'ଗତ ସାଇକେଲ୍ ତୁଳନାରେ +6';
 
   @override
   String get insightsVar => 'ସାଇକେଲ୍ ପରିବର୍ତ୍ତନଶୀଳତା';

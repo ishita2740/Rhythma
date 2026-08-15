@@ -156,11 +156,7 @@ class AppLocalizationsSat extends AppLocalizations {
   @override
   String get homeRetry => 'ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ';
 
-  @override
-  String get homeMhs => 'MHS';
 
-  @override
-  String get homeCvi => 'CVI';
 
   @override
   String get homeSleep => 'ᱡᱟᱹᱯᱤᱫ';
@@ -342,11 +338,7 @@ class AppLocalizationsSat extends AppLocalizations {
   @override
   String get insightsSubtitle => 'ᱢᱩᱪᱟᱹᱫ 90 ᱫᱤᱱ';
 
-  @override
-  String get insightsMhsLabel => 'ᱢᱮᱱᱥᱴᱨᱩᱣᱟᱞ ᱦᱮᱞᱛᱷ ᱥᱠᱳᱨ';
 
-  @override
-  String get insightsMhsDelta => 'ᱢᱩᱪᱟᱹᱫ ᱥᱟᱭᱠᱮᱞ ᱥᱟᱞᱟᱜ ᱛᱮ +6';
 
   @override
   String get insightsVar => 'ᱥᱟᱭᱠᱮᱞ ᱵᱷᱮᱨᱤᱭᱟᱵᱤᱞᱤᱴᱤ';

@@ -84,8 +84,6 @@
   "assistantDisclaimer": "यह सहायक केवल सामान्य स्वास्थ्य जानकारी प्रदान करता है और यह पेशेवर चिकित्सीय सलाह का विकल्प नहीं है।",
   "insightsTitle": "स्वास्थ्य अंतर्दृष्टि",
   "insightsSubtitle": "पिछले 90 दिन",
-  "insightsMhsLabel": "मासिक धर्म स्वास्थ्य स्कोर",
-  "insightsMhsDelta": "पिछले चक्र की तुलना में +6",
   "insightsVar": "चक्र परिवर्तनशीलता",
   "insightsAvgCycle": "औसत चक्र",
   "insightsRegular": "नियमित",

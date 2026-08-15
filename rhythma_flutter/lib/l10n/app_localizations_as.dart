@@ -156,11 +156,7 @@ class AppLocalizationsAs extends AppLocalizations {
   @override
   String get homeRetry => 'পুনৰ চেষ্টা কৰক';
 
-  @override
-  String get homeMhs => 'MHS';
 
-  @override
-  String get homeCvi => 'CVI';
 
   @override
   String get homeSleep => 'টোপনি';
@@ -342,11 +338,7 @@ class AppLocalizationsAs extends AppLocalizations {
   @override
   String get insightsSubtitle => 'যোৱা 90 দিন';
 
-  @override
-  String get insightsMhsLabel => 'ঋতুচক্ৰ স্বাস্থ্যৰ স্ক\'ৰ';
 
-  @override
-  String get insightsMhsDelta => 'যোৱা ঋতুচক্ৰৰ তুলনাত +6';
 
   @override
   String get insightsVar => 'ঋতুচক্ৰৰ পৰিৱৰ্তনশীলতা';

@@ -156,11 +156,7 @@ class AppLocalizationsSd extends AppLocalizations {
   @override
   String get homeRetry => 'ٻيهر ڪوشش ڪريو';
 
-  @override
-  String get homeMhs => 'MHS';
 
-  @override
-  String get homeCvi => 'CVI';
 
   @override
   String get homeSleep => 'ننڊ';
@@ -342,11 +338,7 @@ class AppLocalizationsSd extends AppLocalizations {
   @override
   String get insightsSubtitle => 'گزريل 90 ڏينهن';
 
-  @override
-  String get insightsMhsLabel => 'مينسٽروئل هيلٿ اسڪور';
 
-  @override
-  String get insightsMhsDelta => 'آخري سائيڪل جي مقابلي ۾ +6';
 
   @override
   String get insightsVar => 'سائيڪل جي تبديلي';

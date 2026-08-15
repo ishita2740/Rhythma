@@ -160,11 +160,7 @@ class AppLocalizationsMl extends AppLocalizations {
   @override
   String get homeRetry => 'വീണ്ടും ശ്രമിക്കുക';
 
-  @override
-  String get homeMhs => 'MHS';
 
-  @override
-  String get homeCvi => 'CVI';
 
   @override
   String get homeSleep => 'ഉറക്കം';
@@ -351,11 +347,7 @@ class AppLocalizationsMl extends AppLocalizations {
   @override
   String get insightsSubtitle => 'അവസാന 90 ദിവസങ്ങൾ';
 
-  @override
-  String get insightsMhsLabel => 'ആർത്തവ ആരോഗ്യ സ്കോർ';
 
-  @override
-  String get insightsMhsDelta => 'കഴിഞ്ഞ ചക്രത്തേക്കാൾ +6 കൂടുതൽ';
 
   @override
   String get insightsVar => 'ചക്രത്തിലെ വ്യത്യാസങ്ങൾ';

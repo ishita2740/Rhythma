@@ -156,11 +156,7 @@ class AppLocalizationsKs extends AppLocalizations {
   @override
   String get homeRetry => 'बेयि कोशिश करिव';
 
-  @override
-  String get homeMhs => 'MHS';
 
-  @override
-  String get homeCvi => 'CVI';
 
   @override
   String get homeSleep => 'नींद';
@@ -342,11 +338,7 @@ class AppLocalizationsKs extends AppLocalizations {
   @override
   String get insightsSubtitle => 'गऺमॖत्य 90 दूह';
 
-  @override
-  String get insightsMhsLabel => 'मासिक धर्म सेहत स्कोर';
 
-  @override
-  String get insightsMhsDelta => 'आखरी साइकिल मुक़ाबलॖ +6';
 
   @override
   String get insightsVar => 'साइकिल बदलाव';

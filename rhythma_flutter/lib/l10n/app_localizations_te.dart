@@ -160,11 +160,7 @@ class AppLocalizationsTe extends AppLocalizations {
   @override
   String get homeRetry => 'మళ్లీ ప్రయత్నించండి';
 
-  @override
-  String get homeMhs => 'MHS';
 
-  @override
-  String get homeCvi => 'CVI';
 
   @override
   String get homeSleep => 'నిద్ర';
@@ -350,11 +346,7 @@ class AppLocalizationsTe extends AppLocalizations {
   @override
   String get insightsSubtitle => 'గత 90 రోజులు';
 
-  @override
-  String get insightsMhsLabel => 'రుతుక్రమ ఆరోగ్య స్కోర్';
 
-  @override
-  String get insightsMhsDelta => 'మునుపటి చక్రంతో పోలిస్తే +6';
 
   @override
   String get insightsVar => 'సైకిల్ వేరియబిలిటీ';
