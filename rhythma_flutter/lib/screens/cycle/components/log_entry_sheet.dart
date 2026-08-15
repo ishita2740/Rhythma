@@ -50,7 +50,7 @@ class _LogEntrySheetState extends State<LogEntrySheet> {
       final log = widget.existingLog!;
       _flowIntensity = log['flow_intensity'] as String?;
       _mood = log['mood'] as String?;
-      _sleepHours = (log['sleep_hours'] as num?)?.toDouble() ?? 8.0;
+      _sleepHours = ((log['sleep_hours'] as num?)?.toDouble() ?? 8.0).clamp(0.0, 16.0);
       _stressLevel = (log['stress_level'] as num?)?.toDouble() ?? 1.0;
       if (log['symptoms'] != null) {
         _symptoms = List<String>.from(log['symptoms'] as List);
@@ -225,10 +225,10 @@ class _LogEntrySheetState extends State<LogEntrySheet> {
                     Text('${l10n.logSleepHours}: ${_sleepHours.toInt()}h',
                         style: theme.textTheme.titleMedium),
                     Slider(
-                      value: _sleepHours,
+                      value: _sleepHours.clamp(0.0, 16.0),
                       min: 0,
-                      max: 24,
-                      divisions: 24,
+                      max: 16,
+                      divisions: 16,
                       label: _sleepHours.toInt().toString(),
                       onChanged: (value) {
                         setState(() {
