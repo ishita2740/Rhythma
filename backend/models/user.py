@@ -60,6 +60,20 @@ class UserProfileUpdate(BaseModel):
     notifications_enabled: Optional[bool] = None
     phone: Optional[str] = None
 
+    @field_validator("language")
+    def validate_language(cls, value: Optional[str]) -> Optional[str]:
+        if value is None:
+            return value
+        supported = {
+            "en", "hi", "mr", "ta", "te", "bn", "gu", "kn", "ml", "pa",
+            "or", "as", "mai", "sat", "sd", "ur", "ks", "ne",
+        }
+        if value.lower() not in supported:
+            raise ValueError(
+                f"Unsupported language code '{value}'. Must be one of: {sorted(supported)}"
+            )
+        return value.lower()
+
     @field_validator("phone")
     def validate_phone(cls, value: Optional[str]) -> Optional[str]:
         if value and not re.fullmatch(r"^\+[1-9]\d{1,14}$", value):
