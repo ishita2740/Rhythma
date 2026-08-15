@@ -252,5 +252,8 @@
 "ayurvedaOvulationTitle": "Connection and balance",
 "ayurvedaOvulationDescription": "Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.",
 "ayurvedaLutealTitle": "Grounding and routine",
-"ayurvedaLutealDescription": "Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle."
+"ayurvedaLutealDescription": "Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.",
+"insightsNotEnoughData": "Log a few more cycles on the Cycle tab to unlock your full health insights.",
+"insightsNotEnoughTrendData": "Log at least two cycles to see your trend here.",
+"insightsNoSymptomsYet": "No symptoms logged yet."
 }
