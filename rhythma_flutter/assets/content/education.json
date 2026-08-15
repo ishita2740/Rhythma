@@ -1,0 +1,26 @@
+[
+  {
+    "id": "normal_cycle",
+    "title": "What is a Normal Menstrual Cycle?",
+    "summary": "Learn about the typical length and duration of a healthy menstrual cycle.",
+    "content": "A normal menstrual cycle lasts between 21 and 35 days, with bleeding lasting 2 to 7 days. It is common for cycles to vary slightly from month to month, especially during the first few years of menstruation or approaching menopause. If your cycle consistently falls outside this range, it may be a good idea to speak with a healthcare provider.",
+    "source_name": "WHO (World Health Organization)",
+    "source_url": "https://www.who.int/news-room/fact-sheets/detail/women-s-health"
+  },
+  {
+    "id": "common_symptoms",
+    "title": "Common Menstrual Symptoms",
+    "summary": "Understand which symptoms are typical during your period and which might need attention.",
+    "content": "Many women experience mild to moderate cramping, bloating, breast tenderness, and mood changes before or during their period. These are typically normal. However, severe pain that interferes with daily activities (dysmenorrhea) or extremely heavy bleeding that requires changing a pad or tampon every hour is not normal and should be evaluated.",
+    "source_name": "ACOG (American College of Obstetricians and Gynecologists)",
+    "source_url": "https://www.acog.org/womens-health/faqs/dysmenorrhea-painful-periods"
+  },
+  {
+    "id": "when_to_see_doctor",
+    "title": "When to See a Doctor",
+    "summary": "Key signs and symptoms that indicate you should seek medical advice.",
+    "content": "You should consult a healthcare provider if: your periods suddenly stop for more than 90 days; your periods become highly irregular after having been regular; you bleed for more than 7 days; you bleed between periods; you experience severe pain; or if you suddenly get a fever and feel sick after using tampons.",
+    "source_name": "NHS (National Health Service)",
+    "source_url": "https://www.nhs.uk/conditions/periods/period-problems/"
+  }
+]
