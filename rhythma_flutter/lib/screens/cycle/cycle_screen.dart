@@ -28,9 +28,6 @@ class _CycleScreenState extends State<CycleScreen> {
   // log-row tap regardless of this — this only tracks the explicit "Save"
   // submission of the full day's log to the backend.
   bool _saving = false;
-  bool _savedSuccessfully = false;
-  String? _saveError;
-  bool _saveErrorWasOffline = false;
 
   @override
   void initState() {
@@ -71,12 +68,7 @@ class _CycleScreenState extends State<CycleScreen> {
   /// "Saved to your account" confirmation, since the on-screen selection
   /// and the backend are out of sync again until Save is tapped.
   void _clearSaveStatus() {
-    if (_savedSuccessfully || _saveError != null) {
-      setState(() {
-        _savedSuccessfully = false;
-        _saveError = null;
-      });
-    }
+    // Legacy status clearance logic; now handled by ephemeral SnackBars.
   }
 
   Future<void> _onLogSelect(DateTime date, String field, LogOption option) async {
@@ -110,9 +102,9 @@ class _CycleScreenState extends State<CycleScreen> {
     final log = LocalStorageService.getCycleLogForDate(date) ?? {};
     setState(() {
       _saving = true;
-      _saveError = null;
-      _savedSuccessfully = false;
     });
+
+    final messenger = ScaffoldMessenger.of(context);
 
     try {
       await CycleService().submitLog(CycleLog(
@@ -126,20 +118,20 @@ class _CycleScreenState extends State<CycleScreen> {
       if (!mounted) return;
       setState(() {
         _saving = false;
-        _savedSuccessfully = true;
       });
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Log saved')),
+      );
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _saving = false;
-        _saveError = e.toString();
-        _saveErrorWasOffline = e is DioException &&
-            (e.type == DioExceptionType.connectionError ||
-                e.type == DioExceptionType.connectionTimeout ||
-                e.type == DioExceptionType.receiveTimeout ||
-                e.type == DioExceptionType.sendTimeout ||
-                e.type == DioExceptionType.unknown);
       });
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text("Saved on this device — couldn't reach the server yet."),
+        ),
+      );
     }
   }
 
@@ -356,37 +348,6 @@ class _CycleScreenState extends State<CycleScreen> {
                   : const Text('Save Log', style: TextStyle(fontWeight: FontWeight.w700)),
             ),
           ),
-          if (_savedSuccessfully) ...[
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Icon(Icons.check_circle_rounded, color: RhythmaColors.teal, size: 16),
-                const SizedBox(width: 6),
-                Text(
-                  'Saved to your account',
-                  style: TextStyle(fontSize: 12, color: RhythmaColors.teal, fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-          ],
-          if (_saveError != null) ...[
-            const SizedBox(height: 10),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(Icons.error_outline_rounded, color: RhythmaColors.rose, size: 16),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    _saveErrorWasOffline
-                        ? "Saved on this device, but couldn't reach the server yet. Try again once you're back online."
-                        : "Saved on this device, but the server rejected the save. Try again in a bit.",
-                    style: TextStyle(fontSize: 12, color: RhythmaColors.mutedFg),
-                  ),
-                ),
-              ],
-            ),
-          ],
         ],
       ),
     );
