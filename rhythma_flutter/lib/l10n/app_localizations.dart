@@ -5,23 +5,22 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_as.dart';
 import 'app_localizations_bn.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_gu.dart';
 import 'app_localizations_hi.dart';
 import 'app_localizations_kn.dart';
-import 'app_localizations_ml.dart';
-import 'app_localizations_mr.dart';
-import 'app_localizations_ta.dart';
-import 'app_localizations_te.dart';
-
-import 'app_localizations_as.dart';
 import 'app_localizations_ks.dart';
 import 'app_localizations_mai.dart';
+import 'app_localizations_ml.dart';
+import 'app_localizations_mr.dart';
 import 'app_localizations_ne.dart';
 import 'app_localizations_or.dart';
 import 'app_localizations_sat.dart';
 import 'app_localizations_sd.dart';
+import 'app_localizations_ta.dart';
+import 'app_localizations_te.dart';
 import 'app_localizations_ur.dart';
 
 // ignore_for_file: type=lint
@@ -110,22 +109,22 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('as'),
     Locale('bn'),
     Locale('en'),
     Locale('gu'),
     Locale('hi'),
     Locale('kn'),
-    Locale('ml'),
-    Locale('mr'),
-    Locale('ta'),
-    Locale('te'),
-    Locale('as'),
     Locale('ks'),
     Locale('mai'),
+    Locale('ml'),
+    Locale('mr'),
     Locale('ne'),
     Locale('or'),
     Locale('sat'),
     Locale('sd'),
+    Locale('ta'),
+    Locale('te'),
     Locale('ur')
   ];
 
@@ -756,7 +755,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantSug5.
   ///
   /// In en, this message translates to:
-  /// **'मेरे पीरियड्स अनियमित हैं — क्या यह सामान्य है?'**
+  /// **'My periods are irregular — is this normal?'**
   String get assistantSug5;
 
   /// No description provided for @assistantDisclaimer.
@@ -1377,425 +1376,95 @@ abstract class AppLocalizations {
   /// **'Please enter a valid weight (20–300 kg)'**
   String get onboardingWeightInvalid;
 
-  /// No description provided for @onboardingPhoneInvalid.
+  /// No description provided for @ayurvedaWellnessTitle.
   ///
   /// In en, this message translates to:
-  /// **'Use international format, e.g. +919876543210'**
-  String get onboardingPhoneInvalid;
+  /// **'Ayurveda-inspired wellness'**
+  String get ayurvedaWellnessTitle;
 
-  /// No description provided for @onboardingAgeRequired.
+  /// No description provided for @ayurvedaDisclaimer.
   ///
   /// In en, this message translates to:
-  /// **'Please enter your age or select a range'**
-  String get onboardingAgeRequired;
+  /// **'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.'**
+  String get ayurvedaDisclaimer;
 
-  /// No description provided for @onboardingHeightRequired.
+  /// No description provided for @ayurvedaMenstrualTitle.
   ///
   /// In en, this message translates to:
-  /// **'Please enter your height or select a range'**
-  String get onboardingHeightRequired;
+  /// **'Rest and reflection'**
+  String get ayurvedaMenstrualTitle;
 
-  /// No description provided for @onboardingWeightRequired.
+  /// No description provided for @ayurvedaMenstrualDescription.
   ///
   /// In en, this message translates to:
-  /// **'Please enter your weight or select a range'**
-  String get onboardingWeightRequired;
+  /// **'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.'**
+  String get ayurvedaMenstrualDescription;
 
-  /// No description provided for @onboardingNotSure.
+  /// No description provided for @ayurvedaFollicularTitle.
   ///
   /// In en, this message translates to:
-  /// **'Not sure'**
-  String get onboardingNotSure;
+  /// **'Renewal and activity'**
+  String get ayurvedaFollicularTitle;
 
-  /// No description provided for @onboardingApproximate.
+  /// No description provided for @ayurvedaFollicularDescription.
   ///
   /// In en, this message translates to:
-  /// **'Approximate'**
-  String get onboardingApproximate;
+  /// **'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.'**
+  String get ayurvedaFollicularDescription;
 
-  /// No description provided for @onboardingAgeHint.
+  /// No description provided for @ayurvedaOvulationTitle.
   ///
   /// In en, this message translates to:
-  /// **'Enter your age'**
-  String get onboardingAgeHint;
+  /// **'Connection and balance'**
+  String get ayurvedaOvulationTitle;
 
-  /// No description provided for @onboardingAgeUnit.
+  /// No description provided for @ayurvedaOvulationDescription.
   ///
   /// In en, this message translates to:
-  /// **'years'**
-  String get onboardingAgeUnit;
+  /// **'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.'**
+  String get ayurvedaOvulationDescription;
 
-  /// No description provided for @onboardingHeightHint.
+  /// No description provided for @ayurvedaLutealTitle.
   ///
   /// In en, this message translates to:
-  /// **'Enter your height'**
-  String get onboardingHeightHint;
+  /// **'Grounding and routine'**
+  String get ayurvedaLutealTitle;
 
-  /// No description provided for @onboardingHeightUnit.
+  /// No description provided for @ayurvedaLutealDescription.
   ///
   /// In en, this message translates to:
-  /// **'cm'**
-  String get onboardingHeightUnit;
+  /// **'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.'**
+  String get ayurvedaLutealDescription;
 
-  /// No description provided for @onboardingWeightHint.
+  /// No description provided for @logFlowVeryHeavy.
   ///
   /// In en, this message translates to:
-  /// **'Enter your weight'**
-  String get onboardingWeightHint;
+  /// **'Very Heavy'**
+  String get logFlowVeryHeavy;
 
-  /// No description provided for @onboardingWeightUnit.
+  /// No description provided for @logFlowSpotting.
   ///
   /// In en, this message translates to:
-  /// **'kg'**
-  String get onboardingWeightUnit;
+  /// **'Spotting'**
+  String get logFlowSpotting;
 
-  /// No description provided for @onboardingRangeUnder18.
+  /// No description provided for @logSympSeverePain.
   ///
   /// In en, this message translates to:
-  /// **'Under 18'**
-  String get onboardingRangeUnder18;
+  /// **'Severe Pain'**
+  String get logSympSeverePain;
 
-  /// No description provided for @onboardingRange18to25.
+  /// No description provided for @logSympFainting.
   ///
   /// In en, this message translates to:
-  /// **'18–25'**
-  String get onboardingRange18to25;
+  /// **'Fainting'**
+  String get logSympFainting;
 
-  /// No description provided for @onboardingRange26to35.
+  /// No description provided for @accountDeletedSuccess.
   ///
   /// In en, this message translates to:
-  /// **'26–35'**
-  String get onboardingRange26to35;
-
-  /// No description provided for @onboardingRange36to50.
-  ///
-  /// In en, this message translates to:
-  /// **'36–50'**
-  String get onboardingRange36to50;
-
-  /// No description provided for @onboardingRange51to65.
-  ///
-  /// In en, this message translates to:
-  /// **'51–65'**
-  String get onboardingRange51to65;
-
-  /// No description provided for @onboardingRangeOver65.
-  ///
-  /// In en, this message translates to:
-  /// **'Over 65'**
-  String get onboardingRangeOver65;
-
-  /// No description provided for @onboardingRangeUnder150.
-  ///
-  /// In en, this message translates to:
-  /// **'Under 150 cm'**
-  String get onboardingRangeUnder150;
-
-  /// No description provided for @onboardingRange150to160.
-  ///
-  /// In en, this message translates to:
-  /// **'150–160 cm'**
-  String get onboardingRange150to160;
-
-  /// No description provided for @onboardingRange161to170.
-  ///
-  /// In en, this message translates to:
-  /// **'161–170 cm'**
-  String get onboardingRange161to170;
-
-  /// No description provided for @onboardingRange171to180.
-  ///
-  /// In en, this message translates to:
-  /// **'171–180 cm'**
-  String get onboardingRange171to180;
-
-  /// No description provided for @onboardingRangeOver180.
-  ///
-  /// In en, this message translates to:
-  /// **'Over 180 cm'**
-  String get onboardingRangeOver180;
-
-  /// No description provided for @onboardingRangeUnder50kg.
-  ///
-  /// In en, this message translates to:
-  /// **'Under 50 kg'**
-  String get onboardingRangeUnder50kg;
-
-  /// No description provided for @onboardingRange50to65kg.
-  ///
-  /// In en, this message translates to:
-  /// **'50–65 kg'**
-  String get onboardingRange50to65kg;
-
-  /// No description provided for @onboardingRange66to80kg.
-  ///
-  /// In en, this message translates to:
-  /// **'66–80 kg'**
-  String get onboardingRange66to80kg;
-
-  /// No description provided for @onboardingRange81to100kg.
-  ///
-  /// In en, this message translates to:
-  /// **'81–100 kg'**
-  String get onboardingRange81to100kg;
-
-  /// No description provided for @onboardingRangeOver100kg.
-  ///
-  /// In en, this message translates to:
-  /// **'Over 100 kg'**
-  String get onboardingRangeOver100kg;
-
-  /// No description provided for @onboardingTapToSelectDate.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap to select date'**
-  String get onboardingTapToSelectDate;
-
-  /// No description provided for @onboardingDays.
-  ///
-  /// In en, this message translates to:
-  /// **'days'**
-  String get onboardingDays;
-
-  /// No description provided for @onboardingApproximateLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'When was your last period?'**
-  String get onboardingApproximateLabel;
-
-  /// No description provided for @onboardingApproximateLessWeek.
-  ///
-  /// In en, this message translates to:
-  /// **'Less than a week ago'**
-  String get onboardingApproximateLessWeek;
-
-  /// No description provided for @onboardingApproximate1to2Weeks.
-  ///
-  /// In en, this message translates to:
-  /// **'1–2 weeks ago'**
-  String get onboardingApproximate1to2Weeks;
-
-  /// No description provided for @onboardingApproximate3to4Weeks.
-  ///
-  /// In en, this message translates to:
-  /// **'3–4 weeks ago'**
-  String get onboardingApproximate3to4Weeks;
-
-  /// No description provided for @onboardingApproximateMoreMonth.
-  ///
-  /// In en, this message translates to:
-  /// **'More than a month ago'**
-  String get onboardingApproximateMoreMonth;
-
-  /// No description provided for @onboardingPickExactDate.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick exact date instead'**
-  String get onboardingPickExactDate;
-
-  /// No description provided for @onboardingLastPeriodRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Please select when your last period started'**
-  String get onboardingLastPeriodRequired;
-
-  /// No description provided for @nudgeCompleteProfileTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Want more accurate predictions?'**
-  String get nudgeCompleteProfileTitle;
-
-  /// No description provided for @nudgeCompleteProfileBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Add the exact start date of your last period to improve cycle predictions.'**
-  String get nudgeCompleteProfileBody;
-
-  /// No description provided for @nudgeCompleteProfileAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Update'**
-  String get nudgeCompleteProfileAction;
-
-  /// No description provided for @nudgeCompleteProfileDismiss.
-  ///
-  /// In en, this message translates to:
-  /// **'Maybe later'**
-  String get nudgeCompleteProfileDismiss;
-
-  /// No description provided for @smsScreenTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'SMS Summaries'**
-  String get smsScreenTitle;
-
-  /// No description provided for @smsScreenSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Stay informed even without the app'**
-  String get smsScreenSubtitle;
-
-  /// No description provided for @smsInfoCardTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Weekly Health Summary'**
-  String get smsInfoCardTitle;
-
-  /// No description provided for @smsInfoCardBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Every week, Rhythma will send you a brief summary of your cycle status, health score, and any important patterns, directly to your phone via SMS. Works without data or the app.'**
-  String get smsInfoCardBody;
-
-  /// No description provided for @smsConfigTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Configuration'**
-  String get smsConfigTitle;
-
-  /// No description provided for @smsPhoneLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Phone Number'**
-  String get smsPhoneLabel;
-
-  /// No description provided for @smsPhoneHint.
-  ///
-  /// In en, this message translates to:
-  /// **'+91 98765 43210'**
-  String get smsPhoneHint;
-
-  /// No description provided for @smsEnableWeekly.
-  ///
-  /// In en, this message translates to:
-  /// **'Enable weekly SMS'**
-  String get smsEnableWeekly;
-
-  /// No description provided for @smsSaveSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Save Settings'**
-  String get smsSaveSettings;
-
-  /// No description provided for @smsSendSectionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Send a Summary Now'**
-  String get smsSendSectionTitle;
-
-  /// No description provided for @smsSendRecipientPrefix.
-  ///
-  /// In en, this message translates to:
-  /// **'Sends the message below to:'**
-  String get smsSendRecipientPrefix;
-
-  /// No description provided for @smsSendNoPhone.
-  ///
-  /// In en, this message translates to:
-  /// **'Add and save a phone number above first.'**
-  String get smsSendNoPhone;
-
-  /// No description provided for @smsSendButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Send Summary Now'**
-  String get smsSendButton;
-
-  /// No description provided for @smsErrorEnterPhone.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a phone number'**
-  String get smsErrorEnterPhone;
-
-  /// No description provided for @smsErrorInvalidPhone.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter a valid phone number in international format, e.g. +919876543210'**
-  String get smsErrorInvalidPhone;
-
-  /// No description provided for @smsSuccessSaved.
-  ///
-  /// In en, this message translates to:
-  /// **'SMS settings saved successfully!'**
-  String get smsSuccessSaved;
-
-  /// No description provided for @smsErrorAddPhoneFirst.
-  ///
-  /// In en, this message translates to:
-  /// **'Add and save a phone number first'**
-  String get smsErrorAddPhoneFirst;
-
-  /// No description provided for @smsSuccessSent.
-  ///
-  /// In en, this message translates to:
-  /// **'Summary sent to your phone!'**
-  String get smsSuccessSent;
-
-  /// No description provided for @smsErrorRateLimit.
-  ///
-  /// In en, this message translates to:
-  /// **'You can send one summary per minute, please wait a bit and try again.'**
-  String get smsErrorRateLimit;
-
-  /// No description provided for @smsErrorSessionExpired.
-  ///
-  /// In en, this message translates to:
-  /// **'Your session has expired. Please log in again.'**
-  String get smsErrorSessionExpired;
-
-  /// No description provided for @smsErrorNetwork.
-  ///
-  /// In en, this message translates to:
-  /// **'Couldn\'t reach the server. Check your connection and try again.'**
-  String get smsErrorNetwork;
-
-  /// No description provided for @smsErrorGeneric.
-  ///
-  /// In en, this message translates to:
-  /// **'Something went wrong. Please try again.'**
-  String get smsErrorGeneric;
-
-  /// No description provided for @smsLoadError.
-  ///
-  /// In en, this message translates to:
-  /// **'Couldn\'t load your SMS settings. Pull to refresh or try again.'**
-  String get smsLoadError;
-
-  /// No description provided for @smsSummaryMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'🌸 Rhythma Health Summary\nThis is your on-demand summary from Rhythma.\nOpen the app for your latest cycle insights.\nReply STOP to unsubscribe.'**
-  String get smsSummaryMessage;
-
-  /// No description provided for @insightsLoadError.
-  ///
-  /// In en, this message translates to:
-  /// **'Couldn\'t load your insights: {error}'**
-  String insightsLoadError(String error);
-
-  /// No description provided for @insightsNotEnoughData.
-  ///
-  /// In en, this message translates to:
-  /// **'Log a few more cycles on the Cycle tab to unlock your full health insights.'**
-  String get insightsNotEnoughData;
-
-  /// No description provided for @insightsNoSymptomsYet.
-  ///
-  /// In en, this message translates to:
-  /// **'No symptoms logged yet — log some on the Cycle tab to see patterns here.'**
-  String get insightsNoSymptomsYet;
-
-  /// No description provided for @insightsNotEnoughTrendData.
-  ///
-  /// In en, this message translates to:
-  /// **'Log at least two cycles to see your trend here.'**
-  String get insightsNotEnoughTrendData;
-
-  /// No description provided for @assistantAccessibilitySuggestedPrompt.
-  ///
-  /// In en, this message translates to:
-  /// **'Suggested prompt'**
-  String get assistantAccessibilitySuggestedPrompt;
+  /// **'Account deleted successfully'**
+  String get accountDeletedSuccess;
 
   /// No description provided for @assistantAccessibilityMessageInput.
   ///
@@ -1806,7 +1475,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantAccessibilityMessageInputHint.
   ///
   /// In en, this message translates to:
-  /// **'Type your question here'**
+  /// **'Type your message and press send'**
   String get assistantAccessibilityMessageInputHint;
 
   /// No description provided for @assistantAccessibilitySendMessage.
@@ -1818,8 +1487,14 @@ abstract class AppLocalizations {
   /// No description provided for @assistantAccessibilitySendMessageHint.
   ///
   /// In en, this message translates to:
-  /// **'Sends your message to the assistant'**
+  /// **'Double tap to send'**
   String get assistantAccessibilitySendMessageHint;
+
+  /// No description provided for @assistantAccessibilitySuggestedPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested prompt'**
+  String get assistantAccessibilitySuggestedPrompt;
 
   /// No description provided for @assistantAccessibilityTyping.
   ///
@@ -1827,53 +1502,17 @@ abstract class AppLocalizations {
   /// **'Assistant is typing'**
   String get assistantAccessibilityTyping;
 
-  /// No description provided for @languageSelectionError.
-  ///
-  /// In en, this message translates to:
-  /// **'Unable to save language. Please try again.'**
-  String get languageSelectionError;
-
   /// No description provided for @deleteAccount.
   ///
   /// In en, this message translates to:
   /// **'Delete Account'**
   String get deleteAccount;
 
-  /// No description provided for @deleteAccountConfirmationTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete Account?'**
-  String get deleteAccountConfirmationTitle;
-
   /// No description provided for @deleteAccountConfirmationDesc.
   ///
   /// In en, this message translates to:
-  /// **'This action is permanent and cannot be undone. All your data will be wiped.'**
+  /// **'Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently removed.'**
   String get deleteAccountConfirmationDesc;
-
-  /// No description provided for @accountDeletedSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Account deleted successfully.'**
-  String get accountDeletedSuccess;
-
-  /// No description provided for @langGujarati.
-  ///
-  /// In en, this message translates to:
-  /// **'ગુજરાતી (Gujarati)'**
-  String get langGujarati;
-
-  /// No description provided for @welcomeToRhythma.
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome to Rhythma'**
-  String get welcomeToRhythma;
-
-  /// No description provided for @loginOrSignUpWithPhone.
-  ///
-  /// In en, this message translates to:
-  /// **'Log in or sign up with your phone number.'**
-  String get loginOrSignUpWithPhone;
 
   /// No description provided for @enterOtpSentToPhone.
   ///
@@ -1881,11 +1520,11 @@ abstract class AppLocalizations {
   /// **'Enter the OTP sent to your phone'**
   String get enterOtpSentToPhone;
 
-  /// No description provided for @phoneNumber.
+  /// No description provided for @failedToGetIdToken.
   ///
   /// In en, this message translates to:
-  /// **'Phone Number'**
-  String get phoneNumber;
+  /// **'Failed to get authentication token'**
+  String get failedToGetIdToken;
 
   /// No description provided for @getOtp.
   ///
@@ -1893,11 +1532,161 @@ abstract class AppLocalizations {
   /// **'Get OTP'**
   String get getOtp;
 
-  /// No description provided for @sendingOtp.
+  /// No description provided for @insightsLoadError.
   ///
   /// In en, this message translates to:
-  /// **'Sending OTP...'**
-  String get sendingOtp;
+  /// **'Failed to load insights: {error}'**
+  String insightsLoadError(String error);
+
+  /// No description provided for @insightsNoSymptomsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No symptoms logged yet'**
+  String get insightsNoSymptomsYet;
+
+  /// No description provided for @insightsNotEnoughData.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough data for insights yet'**
+  String get insightsNotEnoughData;
+
+  /// No description provided for @insightsNotEnoughTrendData.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough cycle data for trend analysis'**
+  String get insightsNotEnoughTrendData;
+
+  /// No description provided for @invalidOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid OTP'**
+  String get invalidOtp;
+
+  /// No description provided for @languageSelectionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save language preference'**
+  String get languageSelectionError;
+
+  /// No description provided for @loginOrSignUpWithPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Login or sign up with your phone number'**
+  String get loginOrSignUpWithPhone;
+
+  /// No description provided for @nudgeCompleteProfileAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Profile'**
+  String get nudgeCompleteProfileAction;
+
+  /// No description provided for @nudgeCompleteProfileBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please update your last period date with the exact day for more accurate predictions.'**
+  String get nudgeCompleteProfileBody;
+
+  /// No description provided for @nudgeCompleteProfileDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get nudgeCompleteProfileDismiss;
+
+  /// No description provided for @nudgeCompleteProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Your Profile'**
+  String get nudgeCompleteProfileTitle;
+
+  /// No description provided for @onboardingAgeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your age'**
+  String get onboardingAgeHint;
+
+  /// No description provided for @onboardingAgeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Age is required'**
+  String get onboardingAgeRequired;
+
+  /// No description provided for @onboardingAgeUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'years'**
+  String get onboardingAgeUnit;
+
+  /// No description provided for @onboardingApproximate.
+  ///
+  /// In en, this message translates to:
+  /// **'Approximate'**
+  String get onboardingApproximate;
+
+  /// No description provided for @onboardingDays.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get onboardingDays;
+
+  /// No description provided for @onboardingHeightHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your height'**
+  String get onboardingHeightHint;
+
+  /// No description provided for @onboardingHeightRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Height is required'**
+  String get onboardingHeightRequired;
+
+  /// No description provided for @onboardingHeightUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'cm'**
+  String get onboardingHeightUnit;
+
+  /// No description provided for @onboardingLastPeriodRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Last period date is required'**
+  String get onboardingLastPeriodRequired;
+
+  /// No description provided for @onboardingNotSure.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sure'**
+  String get onboardingNotSure;
+
+  /// No description provided for @onboardingPhoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number'**
+  String get onboardingPhoneInvalid;
+
+  /// No description provided for @onboardingTapToSelectDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to select date'**
+  String get onboardingTapToSelectDate;
+
+  /// No description provided for @onboardingWeightHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your weight'**
+  String get onboardingWeightHint;
+
+  /// No description provided for @onboardingWeightRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight is required'**
+  String get onboardingWeightRequired;
+
+  /// No description provided for @onboardingWeightUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'kg'**
+  String get onboardingWeightUnit;
 
   /// No description provided for @otp.
   ///
@@ -1905,17 +1694,179 @@ abstract class AppLocalizations {
   /// **'OTP'**
   String get otp;
 
-  /// No description provided for @verifyOtp.
+  /// No description provided for @otpSentTo.
   ///
   /// In en, this message translates to:
-  /// **'Verify OTP'**
-  String get verifyOtp;
+  /// **'OTP sent to {phoneNumber}'**
+  String otpSentTo(String phoneNumber);
 
-  /// No description provided for @verifying.
+  /// No description provided for @phoneNumber.
   ///
   /// In en, this message translates to:
-  /// **'Verifying...'**
-  String get verifying;
+  /// **'Phone Number'**
+  String get phoneNumber;
+
+  /// No description provided for @pleaseEnterOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the OTP'**
+  String get pleaseEnterOtp;
+
+  /// No description provided for @pleaseEnterPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your phone number'**
+  String get pleaseEnterPhoneNumber;
+
+  /// No description provided for @pleaseEnterValidPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number'**
+  String get pleaseEnterValidPhoneNumber;
+
+  /// No description provided for @sendingOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending OTP...'**
+  String get sendingOtp;
+
+  /// No description provided for @smsConfigTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configuration'**
+  String get smsConfigTitle;
+
+  /// No description provided for @smsEnableWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable weekly SMS summary'**
+  String get smsEnableWeekly;
+
+  /// No description provided for @smsErrorAddPhoneFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please add a phone number first'**
+  String get smsErrorAddPhoneFirst;
+
+  /// No description provided for @smsErrorEnterPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a phone number'**
+  String get smsErrorEnterPhone;
+
+  /// No description provided for @smsErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get smsErrorGeneric;
+
+  /// No description provided for @smsErrorInvalidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number in E.164 format (e.g. +919876543210)'**
+  String get smsErrorInvalidPhone;
+
+  /// No description provided for @smsErrorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error. Please check your connection and try again.'**
+  String get smsErrorNetwork;
+
+  /// No description provided for @smsErrorRateLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please wait a moment and try again.'**
+  String get smsErrorRateLimit;
+
+  /// No description provided for @smsErrorSessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has expired. Please log in again.'**
+  String get smsErrorSessionExpired;
+
+  /// No description provided for @smsInfoCardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive a weekly summary of your cycle and health data via SMS. This is especially useful in low-data areas.'**
+  String get smsInfoCardBody;
+
+  /// No description provided for @smsInfoCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS Health Summaries'**
+  String get smsInfoCardTitle;
+
+  /// No description provided for @smsPhoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'+91 9876543210'**
+  String get smsPhoneHint;
+
+  /// No description provided for @smsPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get smsPhoneLabel;
+
+  /// No description provided for @smsSaveSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Settings'**
+  String get smsSaveSettings;
+
+  /// No description provided for @smsScreenSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure SMS summaries'**
+  String get smsScreenSubtitle;
+
+  /// No description provided for @smsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS Summaries'**
+  String get smsScreenTitle;
+
+  /// No description provided for @smsSendButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Summary Now'**
+  String get smsSendButton;
+
+  /// No description provided for @smsSendNoPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a phone number to send summaries'**
+  String get smsSendNoPhone;
+
+  /// No description provided for @smsSendRecipientPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending to: '**
+  String get smsSendRecipientPrefix;
+
+  /// No description provided for @smsSendSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Now'**
+  String get smsSendSectionTitle;
+
+  /// No description provided for @smsSuccessSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings saved successfully'**
+  String get smsSuccessSaved;
+
+  /// No description provided for @smsSuccessSent.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS sent successfully'**
+  String get smsSuccessSent;
+
+  /// No description provided for @smsSummaryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Here\'s your Rhythma health summary...'**
+  String get smsSummaryMessage;
 
   /// No description provided for @useDifferentPhoneNumber.
   ///
@@ -1923,51 +1874,29 @@ abstract class AppLocalizations {
   /// **'Use a different phone number'**
   String get useDifferentPhoneNumber;
 
-  /// No description provided for @pleaseEnterPhoneNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter your phone number.'**
-  String get pleaseEnterPhoneNumber;
-
-  /// No description provided for @pleaseEnterValidPhoneNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid phone number with country code (e.g., +91).'**
-  String get pleaseEnterValidPhoneNumber;
-
   /// No description provided for @verificationFailed.
   ///
   /// In en, this message translates to:
   /// **'Verification failed'**
   String get verificationFailed;
 
-  /// No description provided for @otpSentTo.
+  /// No description provided for @verifying.
   ///
   /// In en, this message translates to:
-  /// **'OTP sent to {phone}'**
-  String otpSentTo(String phone);
+  /// **'Verifying...'**
+  String get verifying;
 
-  /// No description provided for @pleaseEnterOtp.
+  /// No description provided for @verifyOtp.
   ///
   /// In en, this message translates to:
-  /// **'Please enter the OTP.'**
-  String get pleaseEnterOtp;
+  /// **'Verify OTP'**
+  String get verifyOtp;
 
-  /// No description provided for @invalidOtp.
+  /// No description provided for @welcomeToRhythma.
   ///
   /// In en, this message translates to:
-  /// **'Invalid OTP. Please try again.'**
-  String get invalidOtp;
-
-  /// No description provided for @failedToGetIdToken.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to get ID token'**
-  String get failedToGetIdToken;
-  String get logFlowVeryHeavy;
-  String get logFlowSpotting;
-  String get logSympSeverePain;
-  String get logSympFainting;
+  /// **'Welcome to Rhythma'**
+  String get welcomeToRhythma;
 }
 
 class _AppLocalizationsDelegate
@@ -1981,36 +1910,34 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) => <String>[
+        'as',
         'bn',
         'en',
         'gu',
         'hi',
         'kn',
-        'ml',
-        'mr',
-        'ta',
-        'te',
-        'as',
         'ks',
         'mai',
+        'ml',
+        'mr',
         'ne',
         'or',
         'sat',
         'sd',
+        'ta',
+        'te',
         'ur'
       ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
-  String get logFlowVeryHeavy;
-  String get logFlowSpotting;
-  String get logSympSeverePain;
-  String get logSympFainting;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'as':
+      return AppLocalizationsAs();
     case 'bn':
       return AppLocalizationsBn();
     case 'en':
@@ -2021,20 +1948,14 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsHi();
     case 'kn':
       return AppLocalizationsKn();
-    case 'ml':
-      return AppLocalizationsMl();
-    case 'mr':
-      return AppLocalizationsMr();
-    case 'ta':
-      return AppLocalizationsTa();
-    case 'te':
-      return AppLocalizationsTe();
-    case 'as':
-      return AppLocalizationsAs();
     case 'ks':
       return AppLocalizationsKs();
     case 'mai':
       return AppLocalizationsMai();
+    case 'ml':
+      return AppLocalizationsMl();
+    case 'mr':
+      return AppLocalizationsMr();
     case 'ne':
       return AppLocalizationsNe();
     case 'or':
@@ -2043,6 +1964,10 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsSat();
     case 'sd':
       return AppLocalizationsSd();
+    case 'ta':
+      return AppLocalizationsTa();
+    case 'te':
+      return AppLocalizationsTe();
     case 'ur':
       return AppLocalizationsUr();
   }
@@ -2052,8 +1977,4 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       'an issue with the localizations generation tool. Please file an issue '
       'on GitHub with a reproducible sample app and the gen-l10n configuration '
       'that was used.');
-  String get logFlowVeryHeavy;
-  String get logFlowSpotting;
-  String get logSympSeverePain;
-  String get logSympFainting;
 }
