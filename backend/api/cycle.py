@@ -174,6 +174,45 @@ class CycleLogDeleteResponse(BaseModel):
     id: str
 
 
+class BatchCycleLogItem(BaseModel):
+    start_date: date
+    end_date: Optional[date] = None
+    flow_intensity: Optional[str] = None
+    mood: Optional[str] = None
+    symptoms: Optional[List[str]] = None
+    sleep_hours: Optional[float] = None
+    stress_level: Optional[int] = None
+    notes: Optional[str] = None
+
+
+class BatchCycleResultItem(BaseModel):
+    date_key: str
+    status: str
+    error: Optional[str] = None
+
+
+class BatchCycleRequest(BaseModel):
+    items: List[BatchCycleLogItem]
+
+
+class BatchCycleResponse(BaseModel):
+    results: List[BatchCycleResultItem]
+
+
+class BatchDeleteRequest(BaseModel):
+    date_keys: List[str]
+
+
+class BatchDeleteResultItem(BaseModel):
+    date_key: str
+    status: str
+    error: Optional[str] = None
+
+
+class BatchDeleteResponse(BaseModel):
+    results: List[BatchDeleteResultItem]
+
+
 class CycleLengthEstimateModel(BaseModel):
     days: int = Field(..., description="Estimated cycle length in days.")
     source: str = Field(
@@ -283,6 +322,70 @@ async def get_loggable_values(current_user: dict = Depends(get_current_user)):
     authenticated router is the sort of thing that gets copied.
     """
     return loggable_values()
+
+
+@router.post(
+    "/batch",
+    response_model=BatchCycleResponse,
+    summary="Batch upsert cycle logs",
+    description="Accepts a list of cycle log upserts and processes them. Returns per-item results indicating success or failure.",
+)
+async def batch_upsert_cycle_logs(
+    batch: BatchCycleRequest,
+    current_user: dict = Depends(get_current_user),
+):
+    user_id = current_user["id"]
+    results: List[BatchCycleResultItem] = []
+
+    for item in batch.items:
+        try:
+            fields = {k: v for k, v in item.model_dump().items() if k != "start_date" and v is not None}
+            CycleService.upsert_log(user_id, item.start_date, fields)
+            results.append(BatchCycleResultItem(
+                date_key=item.start_date.isoformat(),
+                status="ok",
+            ))
+        except Exception as e:
+            results.append(BatchCycleResultItem(
+                date_key=item.start_date.isoformat(),
+                status="error",
+                error=str(e),
+            ))
+
+    return {"results": results}
+
+
+@router.post(
+    "/batch-delete",
+    response_model=BatchDeleteResponse,
+    summary="Batch delete cycle logs",
+    description="Accepts a list of date keys and deletes the corresponding cycle logs. Returns per-item results.",
+)
+async def batch_delete_cycle_logs(
+    batch: BatchDeleteRequest,
+    current_user: dict = Depends(get_current_user),
+):
+    user_id = current_user["id"]
+    results: List[BatchDeleteResultItem] = []
+
+    for date_key in batch.date_keys:
+        try:
+            from datetime import date as date_type
+            log_date = date_type.fromisoformat(date_key)
+            doc_id = CycleService._log_doc_id(user_id, log_date)
+            CycleService.delete_log(user_id, doc_id)
+            results.append(BatchDeleteResultItem(
+                date_key=date_key,
+                status="ok",
+            ))
+        except Exception as e:
+            results.append(BatchDeleteResultItem(
+                date_key=date_key,
+                status="error",
+                error=str(e),
+            ))
+
+    return {"results": results}
 
 
 @router.post(
