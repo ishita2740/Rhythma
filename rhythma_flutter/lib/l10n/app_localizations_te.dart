@@ -995,4 +995,34 @@ class AppLocalizationsTe extends AppLocalizations {
   String get logSympSeverePain => 'Severe Pain';
   @override
   String get logSympFainting => 'Fainting';
+
+  @override
+  String get ayurvedaWellnessTitle => 'ఆయుర్వేద ప్రేరిత ఆరోగ్య సమాచారం';
+
+  @override
+  String get ayurvedaDisclaimer => 'ఇది కేవలం విద్యాపరమైన సమాచారం మాత్రమే. ఆయుర్వేద ప్రేరిత సమాచారం వైద్య సలహా, నిర్ధారణ లేదా చికిత్సకు ప్రత్యామ్నాయం కాదు.';
+
+  @override
+  String get ayurvedaMenstrualTitle => 'విశ్రాంతి మరియు ఆత్మపరిశీలన';
+
+  @override
+  String get ayurvedaMenstrualDescription => 'ఆయుర్వేద సంప్రదాయాల ప్రకారం రుతుక్రమ సమయంలో విశ్రాంతి, ఆత్మపరిశీలన మరియు సున్నితమైన స్వీయ సంరక్షణకు ప్రాధాన్యం ఇవ్వాలని సూచిస్తాయి.';
+
+  @override
+  String get ayurvedaFollicularTitle => 'పునరుజ్జీవనం మరియు చురుకుదనం';
+
+  @override
+  String get ayurvedaFollicularDescription => 'ఆయుర్వేద ఆరోగ్య సంప్రదాయాలు రుతుక్రమం తర్వాతి దశను పునరుజ్జీవనం మరియు క్రమంగా చురుకుదనం పెంచుకునే సమయంగా వివరిస్తాయి.';
+
+  @override
+  String get ayurvedaOvulationTitle => 'సమతుల్యత మరియు అనుబంధం';
+
+  @override
+  String get ayurvedaOvulationDescription => 'కొన్ని ఆయుర్వేద సంప్రదాయాలు చక్రం మధ్య దశను ఉత్సాహం మరియు సామాజిక అనుబంధానికి అనుకూల సమయంగా పేర్కొంటాయి.';
+
+  @override
+  String get ayurvedaLutealTitle => 'స్థిరత్వం మరియు దినచర్య';
+
+  @override
+  String get ayurvedaLutealDescription => 'ఆయుర్వేద సంప్రదాయాలు చక్రం చివరి దశలో ప్రశాంతమైన దినచర్య మరియు జాగ్రత్తగా స్వీయ సంరక్షణకు ప్రాధాన్యం ఇస్తాయి.';
 }
