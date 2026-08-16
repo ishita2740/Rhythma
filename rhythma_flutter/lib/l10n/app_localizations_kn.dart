@@ -226,6 +226,12 @@ class AppLocalizationsKn extends AppLocalizations {
   String get cyclePhaseLuteal => 'ಲ್ಯೂಟಿಯಲ್';
 
   @override
+  String get cyclePhaseLate => 'ಚಕ್ರ ದೀರ್ಘವಾಗಿ ಸಾಗುತ್ತಿದೆ';
+
+  @override
+  String get cyclePhaseUnknown => 'ಹೇಳಲು ಇನ್ನೂ ಸಾಕಷ್ಟು ಮಾಹಿತಿ ಇಲ್ಲ';
+
+  @override
   String get logFor => 'ದಾಖಲಿಸಿ:';
 
   @override

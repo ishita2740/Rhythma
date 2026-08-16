@@ -60,6 +60,8 @@
   "cyclePhaseFollicular": "ఫొలిక్యులర్",
   "cyclePhaseOvulation": "అండోత్సర్గం",
   "cyclePhaseLuteal": "లూటియల్",
+  "cyclePhaseLate": "చక్రం ఎక్కువ కాలం సాగుతోంది",
+  "cyclePhaseUnknown": "ఇంకా చెప్పడానికి సరిపడా లేదు",
   "logFor": "లాగ్ చేయండి",
   "logNone": "ఏదీ లేదు",
   "logLight": "తక్కువ",

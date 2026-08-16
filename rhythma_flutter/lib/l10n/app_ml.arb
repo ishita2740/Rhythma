@@ -90,6 +90,8 @@
   "cyclePhaseFollicular": "ഫോളിക്കുലാർ ഘട്ടം",
   "cyclePhaseOvulation": "അണ്ഡോത്പാദനം",
   "cyclePhaseLuteal": "ലൂട്ടിയൽ ഘട്ടം",
+  "cyclePhaseLate": "ചക്രം നീണ്ടുപോകുന്നു",
+  "cyclePhaseUnknown": "പറയാൻ മാത്രം വിവരമില്ല",
   "logFor": "രേഖപ്പെടുത്തുന്നത്:",
   "logNone": "ഇല്ല",
   "logLight": "കുറഞ്ഞത്",

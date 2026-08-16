@@ -228,6 +228,12 @@ class AppLocalizationsTe extends AppLocalizations {
   String get cyclePhaseLuteal => 'లూటియల్';
 
   @override
+  String get cyclePhaseLate => 'చక్రం ఎక్కువ కాలం సాగుతోంది';
+
+  @override
+  String get cyclePhaseUnknown => 'ఇంకా చెప్పడానికి సరిపడా లేదు';
+
+  @override
   String get logFor => 'లాగ్ చేయండి';
 
   @override

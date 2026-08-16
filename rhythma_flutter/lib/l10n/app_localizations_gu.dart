@@ -227,6 +227,12 @@ class AppLocalizationsGu extends AppLocalizations {
   String get cyclePhaseLuteal => 'લ્યુટિયલ';
 
   @override
+  String get cyclePhaseLate => 'ચક્ર લાંબું ચાલી રહ્યું છે';
+
+  @override
+  String get cyclePhaseUnknown => 'હજુ કહેવા માટે પૂરતું નથી';
+
+  @override
   String get logFor => 'માટે લૉગ';
 
   @override

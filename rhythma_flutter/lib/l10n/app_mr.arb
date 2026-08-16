@@ -47,6 +47,8 @@
   "cyclePhaseFollicular": "फॉलिक्युलर",
   "cyclePhaseOvulation": "ओव्हुलेशन",
   "cyclePhaseLuteal": "ल्युटियल",
+  "cyclePhaseLate": "चक्र लांबले आहे",
+  "cyclePhaseUnknown": "अजून सांगण्याइतकी माहिती नाही",
   "logFor": "साठी नोंदवा",
   "logNone": "काहीही नाही",
   "logLight": "हलका",

@@ -537,6 +537,16 @@ abstract class AppLocalizations {
   /// **'Luteal'**
   String get cyclePhaseLuteal;
 
+  /// The cycle has run past its expected length, so which phase she is in
+  /// is no longer something we can state. Distinct from luteal on purpose:
+  /// reporting luteal forever pins a user in a phase that stopped being
+  /// true weeks ago (#487).
+  String get cyclePhaseLate;
+
+  /// No period logged and none declared, so there is no anchor to count
+  /// from. Saying so beats counting from a date we do not have.
+  String get cyclePhaseUnknown;
+
   // ── Ayurveda-inspired educational content (issue #323) ──────────
   //
   // These were added to app_localizations_en.dart without ever being
