@@ -537,6 +537,44 @@ abstract class AppLocalizations {
   /// **'Luteal'**
   String get cyclePhaseLuteal;
 
+  // ── Ayurveda-inspired educational content (issue #323) ──────────
+  //
+  // These were added to app_localizations_en.dart without ever being
+  // declared here, so `@override` had nothing to override and the
+  // English class carried bodiless declarations a concrete class may
+  // not have. Declaring them on the abstract class is what makes a
+  // missing translation a compile error instead of a runtime surprise.
+
+  /// No description provided for @ayurvedaWellnessTitle.
+  String get ayurvedaWellnessTitle;
+
+  /// No description provided for @ayurvedaDisclaimer.
+  String get ayurvedaDisclaimer;
+
+  /// No description provided for @ayurvedaMenstrualTitle.
+  String get ayurvedaMenstrualTitle;
+
+  /// No description provided for @ayurvedaMenstrualDescription.
+  String get ayurvedaMenstrualDescription;
+
+  /// No description provided for @ayurvedaFollicularTitle.
+  String get ayurvedaFollicularTitle;
+
+  /// No description provided for @ayurvedaFollicularDescription.
+  String get ayurvedaFollicularDescription;
+
+  /// No description provided for @ayurvedaOvulationTitle.
+  String get ayurvedaOvulationTitle;
+
+  /// No description provided for @ayurvedaOvulationDescription.
+  String get ayurvedaOvulationDescription;
+
+  /// No description provided for @ayurvedaLutealTitle.
+  String get ayurvedaLutealTitle;
+
+  /// No description provided for @ayurvedaLutealDescription.
+  String get ayurvedaLutealDescription;
+
   /// No description provided for @logFor.
   ///
   /// In en, this message translates to:
