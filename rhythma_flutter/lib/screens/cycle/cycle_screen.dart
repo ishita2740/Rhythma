@@ -234,6 +234,16 @@ class _CycleScreenState extends State<CycleScreen> {
     final currentPhaseKey = cycleProvider.phaseKey(selectedDate);
     final phaseContent = ayurvedaContent[currentPhaseKey] ?? [];
 
+    // Both of these are used throughout the log section below but were
+    // absent from the file, so it did not compile even before 4e294ed
+    // overwrote it. Restored verbatim from 1a43a99, where they were
+    // introduced, rather than reinvented: `selectedLog` backs every log
+    // row's current selection, and `hasSelections` gates the Save button
+    // and the summary block beneath it.
+    final selectedLog =
+        LocalStorageService.getCycleLogForDate(selectedDate) ?? {};
+    final hasSelections = selectedLog.isNotEmpty;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
       child: Column(
