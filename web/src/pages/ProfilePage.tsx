@@ -4,17 +4,25 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../auth/useAuth';
 import { fetchDashboard, fetchProfile, patchProfile, type DashboardData, type Profile } from '../api/endpoints';
 import { cycleSpread, formatSpread } from '../lib/cycleStats';
+import {
+  cycleLengthDisplay,
+  cycleLengthLabelKey,
+  phaseLabelKey,
+  phaseTone,
+} from '../lib/phase';
 import { useDocumentMeta } from '../lib/useDocumentMeta';
 
 const AVATAR_COLORS = ['#AA3BFF', '#E07AAD', '#52B3B0', '#E8946A', '#6A98E8', '#B3528A'];
 
-function phasePill(day: number | null, t: (k: string) => string): string {
-  if (day == null) return '—';
-  if (day <= 5) return t('profile.menstrual');
-  if (day <= 13) return t('profile.follicular');
-  if (day <= 16) return t('profile.ovulation');
-  return t('profile.luteal');
-}
+// The day-5/13/16 ladder that used to live here is gone (#486). It was the
+// same fixed ladder #316 removed from the Flutter app, and it disagreed
+// with the phase `/dashboard` already returns for anyone whose cycle is
+// not 28 days — Home and Profile could show different phases for one
+// account in the same second. It also had no way to say a period was
+// late: `luteal` was the fallthrough, so day 20 and day 200 read alike.
+//
+// The mapping from the server's phase to a label now lives in lib/phase.ts.
+// Nothing on this screen computes a phase.
 
 export function ProfilePage() {
   useDocumentMeta('meta.profile.title', 'meta.profile.description');
@@ -106,6 +114,15 @@ export function ProfilePage() {
   const spread = formatSpread(cycleSpread(lengths));
   const lastCycle = lengths.length > 0 ? lengths[lengths.length - 1] : null;
 
+  // Straight from the server, which derives the boundaries from this
+  // user's own cycle length rather than from a fixed ladder — so this
+  // pill and the one on Home cannot disagree.
+  const prediction = dashboard?.prediction;
+  // `profile.cycle_length` is what she typed at onboarding, not an
+  // average. Preferring the dashboard's computed average, and saying
+  // which one is being shown, is the other half of #486.
+  const cycleLengthStat = cycleLengthDisplay(dashboard, profile);
+
   return (
     <div className="page">
       <header className="page-header">
@@ -123,14 +140,29 @@ export function ProfilePage() {
           <p className="card-sub">
             {profile?.age != null ? t('profile.yearsOld', { age: profile.age }) : ''}
           </p>
-          <span className="phase-pill" style={{ borderColor: avatarColor, color: avatarColor }}>
-            {cycleDay != null ? `${t('profile.cycleDay', { day: cycleDay })} • ${phasePill(cycleDay, t)}` : '—'}
+          {/* `—` used to be the whole content when `cycleDay` was null,
+              which told the reader nothing. The phase label is always
+              rendered now: `unknown` is a sentence, not a dash. */}
+          <span
+            className={`phase-pill ${phaseTone(prediction)}`}
+            style={{ borderColor: avatarColor, color: avatarColor }}
+          >
+            {cycleDay != null
+              ? `${t('profile.cycleDay', { day: cycleDay })} • ${t(phaseLabelKey(prediction))}`
+              : t(phaseLabelKey(prediction))}
           </span>
         </div>
       </section>
 
       <section className="mini-stats">
-        <MiniStat label={t('profile.avgCycleLength')} value={profile?.cycle_length != null ? `${profile.cycle_length} ${t('profile.days')}` : dashboard?.cycle.total != null ? `${dashboard.cycle.total} ${t('profile.days')}` : '—'} />
+        <MiniStat
+          label={t(cycleLengthLabelKey(cycleLengthStat))}
+          value={
+            cycleLengthStat.days != null
+              ? `${cycleLengthStat.days} ${t('profile.days')}`
+              : '—'
+          }
+        />
         <MiniStat label={t('profile.avgBleeding')} value={dashboard?.insights.averageBleedingDuration != null ? `${dashboard.insights.averageBleedingDuration} ${t('profile.days')}` : '—'} />
         <MiniStat label={t('profile.cycleVariability')} value={spread == null ? '—' : `${spread} ${t('profile.days')}`} />
         <MiniStat label={t('profile.lastCycleLength')} value={lastCycle != null ? `${lastCycle} ${t('profile.days')}` : '—'} />
