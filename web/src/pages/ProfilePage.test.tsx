@@ -26,7 +26,7 @@ vi.mock('../auth/AuthContext', () => ({
 }));
 
 import { ProfilePage } from './ProfilePage';
-import { dashboardFixture, renderWithProviders } from '../test/utils';
+import { dashboardFixture, predictionFixture, renderWithProviders } from '../test/utils';
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -175,6 +175,191 @@ describe('ProfilePage — the neighbouring stats are unchanged', () => {
 
     await waitFor(async () =>
       expect(await statValue('Last cycle length')).toBe('30 days'),
+    );
+  });
+});
+
+// Issue #486. The pill was computed on this page from a fixed day-5/13/16
+// ladder — the same one #316 removed from the Flutter app — so it
+// disagreed with the phase `/dashboard` already returns, and `luteal` was
+// the fallthrough, meaning a period could never be shown as late.
+
+describe('ProfilePage — the phase pill comes from the server', () => {
+  /** The rendered text of the phase pill. */
+  async function pillText(): Promise<string> {
+    await waitFor(() => expect(fetchDashboard).toHaveBeenCalled());
+    const pill = await waitFor(() => {
+      const node = document.querySelector('.phase-pill');
+      expect(node).not.toBeNull();
+      return node!;
+    });
+    return pill.textContent ?? '';
+  }
+
+  it('shows the phase the dashboard reported, not one derived from the day', async () => {
+    // Day 12 with a 34-day cycle. The old ladder said `day <= 13` →
+    // "Follicular"; the server, scaling the boundaries to her own cycle
+    // length, says luteal. Home renders the server's answer, so the two
+    // screens contradicted each other for one account in one second.
+    fetchDashboard.mockResolvedValue(
+      dashboardFixture({
+        cycle: { day: 12, total: 34, nextPeriodDays: 22 },
+        prediction: predictionFixture({ phase: 'luteal' }),
+      }),
+    );
+
+    renderWithProviders(<ProfilePage />);
+
+    const text = await pillText();
+    expect(text).toContain('Luteal Phase');
+    expect(text).not.toContain('Follicular');
+  });
+
+  it('says a cycle is running long instead of pinning her in luteal forever', async () => {
+    // The ladder returned `luteal` for day 20, day 40 and day 200 alike.
+    fetchDashboard.mockResolvedValue(
+      dashboardFixture({
+        cycle: { day: 63, total: 28, nextPeriodDays: 0 },
+        prediction: predictionFixture({
+          phase: 'late',
+          isOverdue: true,
+          daysOverdue: 35,
+          daysUntilNextPeriod: -35,
+        }),
+      }),
+    );
+
+    renderWithProviders(<ProfilePage />);
+
+    const text = await pillText();
+    expect(text).toContain('Cycle running long');
+    expect(text).not.toContain('Luteal');
+  });
+
+  it('says so plainly when there is nothing to base a phase on', async () => {
+    // This rendered a bare `—`, which told the reader nothing at all.
+    fetchDashboard.mockResolvedValue(
+      dashboardFixture({
+        cycle: { day: null, total: 28, nextPeriodDays: null },
+        prediction: predictionFixture({ phase: 'unknown' }),
+      }),
+    );
+
+    renderWithProviders(<ProfilePage />);
+
+    const text = await pillText();
+    expect(text).toContain('Not enough to say yet');
+    expect(text).not.toBe('—');
+  });
+
+  it('does not break on a server that returns no prediction block', async () => {
+    fetchDashboard.mockResolvedValue(dashboardFixture({ prediction: null }));
+
+    renderWithProviders(<ProfilePage />);
+
+    expect(await pillText()).toContain('Not enough to say yet');
+  });
+
+  it('does not break when the dashboard request fails', async () => {
+    // The page already tolerates a failed dashboard; the pill must not be
+    // the thing that turns that into a crash.
+    fetchDashboard.mockRejectedValue(new Error('offline'));
+
+    renderWithProviders(<ProfilePage />);
+
+    expect(await pillText()).toContain('Not enough to say yet');
+  });
+
+  it('shows the period phase during bleeding', async () => {
+    fetchDashboard.mockResolvedValue(
+      dashboardFixture({
+        cycle: { day: 2, total: 28, nextPeriodDays: 26 },
+        prediction: predictionFixture({ phase: 'period' }),
+      }),
+    );
+
+    renderWithProviders(<ProfilePage />);
+
+    expect(await pillText()).toContain('Menstrual Phase');
+  });
+});
+
+describe('ProfilePage — the average cycle length tile', () => {
+  it('shows the average measured from logged cycles', async () => {
+    fetchProfile.mockResolvedValue({
+      id: 'u1',
+      full_name: 'Asha',
+      age: 27,
+      cycle_length: 28,
+    });
+    fetchDashboard.mockResolvedValue(
+      dashboardFixture({
+        insights: {
+          averageCycleLength: 33,
+          shortestCycleLength: 31,
+          longestCycleLength: 35,
+          averageBleedingDuration: 5,
+          sleepHours: '7.4h',
+        },
+      }),
+    );
+
+    renderWithProviders(<ProfilePage />);
+
+    // 33, not the 28 she typed at onboarding.
+    await waitFor(async () =>
+      expect(await statValue('Avg cycle length')).toBe('33 days'),
+    );
+  });
+
+  it('relabels the tile when it is falling back to the declared length', async () => {
+    // "Avg cycle length: 28 days" over a number the user typed is a label
+    // making a claim the value does not support.
+    fetchProfile.mockResolvedValue({
+      id: 'u1',
+      full_name: 'Asha',
+      age: 27,
+      cycle_length: 30,
+    });
+    fetchDashboard.mockResolvedValue(
+      dashboardFixture({
+        insights: {
+          averageCycleLength: null,
+          shortestCycleLength: null,
+          longestCycleLength: null,
+          averageBleedingDuration: 5,
+          sleepHours: null,
+        },
+      }),
+    );
+
+    renderWithProviders(<ProfilePage />);
+
+    await waitFor(async () =>
+      expect(await statValue('Cycle length you set')).toBe('30 days'),
+    );
+    expect(screen.queryByText('Avg cycle length')).not.toBeInTheDocument();
+  });
+
+  it('shows a dash rather than the 28-day default when there is no data', async () => {
+    fetchProfile.mockResolvedValue({ id: 'u1', full_name: 'Asha', age: 27 });
+    fetchDashboard.mockResolvedValue(
+      dashboardFixture({
+        insights: {
+          averageCycleLength: null,
+          shortestCycleLength: null,
+          longestCycleLength: null,
+          averageBleedingDuration: null,
+          sleepHours: null,
+        },
+        cycle: { day: 3, total: 28, nextPeriodDays: 25 },
+      }),
+    );
+
+    renderWithProviders(<ProfilePage />);
+
+    await waitFor(async () =>
+      expect(await statValue('Cycle length you set')).toBe('—'),
     );
   });
 });
