@@ -2,7 +2,7 @@ from datetime import date
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from core.auth import get_current_user
 # `UserService` used to be imported here and was never referenced. The
@@ -18,6 +18,16 @@ from services.health_observations_service import (
 )
 from services.prediction_service import dashboard_summary, predict
 from services.scoring_service import get_user_scores, compute_cycle_stats, as_date, DEFAULT_CYCLE_LENGTH
+from services.trend_service import build_trends
+
+#: How many day-documents the trends comparison reads.
+#:
+#: Two cycle windows is the target. At roughly one log per day a
+#: two-cycle span is ~60 documents for a typical cycle length, so 120
+#: leaves headroom for long cycles without letting the read grow without
+#: bound. The dashboard's own `_LOGS_LIMIT` of 10 stays where it is — it
+#: feeds the scoring models, which want the most recent handful.
+TRENDS_LOG_LIMIT = 120
 
 
 class DashboardUser(BaseModel):
@@ -158,11 +168,73 @@ class DashboardResponse(BaseModel):
 router = APIRouter(tags=["Dashboard"])
 
 
+class TrendWindow(BaseModel):
+    """One side of the comparison, so a client can show what was compared."""
+
+    start: str
+    end: str
+    days: int
+    loggedDays: int
+
+
+class TrendComparedWindows(BaseModel):
+    previous: TrendWindow
+    current: TrendWindow
+
+
+class TrendStatementModel(BaseModel):
+    """One comparison, as a key plus the numbers behind it.
+
+    ``text`` is an English fallback. Clients that have a translation
+    should render ``key`` and interpolate ``evidence`` themselves — the
+    same contract ``ObservationModel`` states for ``titleKey``/``bodyKey``,
+    which is why every number in the sentence is also in the dict.
+    """
+
+    metric: str = Field(
+        ..., description="sleep, stress, or a symptom name such as cramps."
+    )
+    direction: str = Field(..., description="increased, decreased, or unchanged.")
+    key: str
+    text: str
+    evidence: Dict[str, Any] = Field(default_factory=dict)
+
+
 class TrendsResponse(BaseModel):
+    #: The original four fields, unchanged in name, type and position, so
+    #: clients written against the previous shape keep working. Everything
+    #: below is additive.
     sleep: Optional[str] = None
     stress: Optional[str] = None
     symptoms: Dict[str, str] = Field(default_factory=dict)
     notEnoughData: bool = False
+
+    basis: Optional[str] = Field(
+        None,
+        description=(
+            "What was actually compared: `cycle` when two cycle windows "
+            "were reconstructed from logged flow, `recent_logs` when no "
+            "period could be found and the logged days were split in half "
+            "instead. Null when there was nothing to compare."
+        ),
+    )
+    comparedWindows: Optional[TrendComparedWindows] = Field(
+        None,
+        description=(
+            "The two windows the statements describe. Present so a client "
+            "can show the reader which spans are being compared rather "
+            "than asking them to trust a bare sentence."
+        ),
+    )
+    trends: List[TrendStatementModel] = Field(
+        default_factory=list,
+        description=(
+            "Every statement, with a localization key and the values that "
+            "produced it."
+        ),
+    )
+    disclaimer: str = ""
+    disclaimerKey: str = ""
 
 
 @router.get(
@@ -282,69 +354,46 @@ async def get_dashboard(current_user: dict = Depends(get_current_user)):
     response_model=TrendsResponse,
     summary="Get simple trends for sleep, stress and symptoms",
     description=(
-        "Compare the most-recent logged period with the immediately prior "
-        "period and return plain-language trend statements for sleep, "
-        "stress and symptom frequencies. Returns `notEnoughData=true` "
-        "when insufficient history exists."
+        "Compares two windows of the user's logged data and returns "
+        "plain-language trend statements for sleep, stress and symptom "
+        "frequencies.\n\n"
+        "`basis` says what was compared. When at least two periods can be "
+        "reconstructed from logged flow it is `cycle`, and the windows run "
+        "from one period start to the day before the next — the cycle "
+        "currently in progress is excluded, because averaging a few days "
+        "of a new cycle against a whole previous one is a comparison "
+        "between a sample and a population. When no period has been "
+        "logged it is `recent_logs`, and the logged days are split in half "
+        "by count instead; the field exists so the response never claims a "
+        "cycle comparison it did not make.\n\n"
+        "Every statement also appears in `trends` with a stable `key` and "
+        "an `evidence` dict, matching the contract "
+        "`/insights/{user_id}/observations` uses: `text` is an English "
+        "fallback and a client with a translation should render the key.\n\n"
+        "Returns `notEnoughData=true` when there are not two comparable "
+        "windows, or when neither window recorded a value for anything."
     ),
 )
 async def get_trends(current_user: dict = Depends(get_current_user)):
+    """Trends for the authenticated user.
+
+    This route used to do the comparison itself, on ``logs[0]`` against
+    ``logs[1]`` — two adjacent *day* documents, since ``upsert_log`` keys
+    one document per calendar day — while describing the result as a
+    period-over-period average (issue #484). The arithmetic now lives in
+    ``services/trend_service.py``, where it operates on reconstructed
+    cycle windows and can be tested without a request.
+
+    ``get_logs_for_user``'s default limit is deliberately raised here:
+    the default of 10 documents cannot hold two cycle windows for anyone
+    who logs more than a handful of days per cycle, so the window
+    reconstruction would fall back to ``recent_logs`` for exactly the
+    users with the most data.
+    """
     user_id = current_user["id"]
     # Reuse the same scoring_service-backed logs the dashboard uses.
     from services.scoring_service import CycleService
 
-    logs = CycleService.get_logs_for_user(user_id)
-    if not logs or len(logs) < 2:
-        return TrendsResponse(notEnoughData=True)
+    logs = CycleService.get_logs_for_user(user_id, limit=TRENDS_LOG_LIMIT)
 
-    # Most recent and previous period logs
-    recent = logs[0]
-    prev = logs[1]
-
-    def avg(values):
-        vals = [v for v in values if v is not None]
-        return round(sum(vals) / len(vals), 1) if vals else None
-
-    # Sleep
-    sleep_recent = recent.get("sleep_hours")
-    sleep_prev = prev.get("sleep_hours")
-    sleep_stmt = None
-    if sleep_recent is not None and sleep_prev is not None:
-        if sleep_recent > sleep_prev:
-            sleep_stmt = f"Average sleep has increased ({sleep_prev}h → {sleep_recent}h)."
-        elif sleep_recent < sleep_prev:
-            sleep_stmt = f"Average sleep has decreased ({sleep_prev}h → {sleep_recent}h)."
-        else:
-            sleep_stmt = f"Average sleep is unchanged ({sleep_recent}h)."
-
-    # Stress
-    stress_recent = recent.get("stress_level")
-    stress_prev = prev.get("stress_level")
-    stress_stmt = None
-    if stress_recent is not None and stress_prev is not None:
-        if stress_recent > stress_prev:
-            stress_stmt = f"Reported stress has increased ({stress_prev} → {stress_recent})."
-        elif stress_recent < stress_prev:
-            stress_stmt = f"Reported stress has decreased ({stress_prev} → {stress_recent})."
-        else:
-            stress_stmt = f"Reported stress is unchanged ({stress_recent})."
-
-    # Symptoms: compare frequency presence between periods for canonical symptoms
-    canonical_symptoms = ["cramps", "headache", "bloating", "acne"]
-    symptoms_result = {}
-    for s in canonical_symptoms:
-        recent_has = s in (recent.get("symptoms") or [])
-        prev_has = s in (prev.get("symptoms") or [])
-        if recent_has and not prev_has:
-            symptoms_result[s] = "Occurred this period but not the previous one."
-        elif not recent_has and prev_has:
-            symptoms_result[s] = "Occurred last period but not this one."
-        elif recent_has and prev_has:
-            symptoms_result[s] = "Occurred in both periods."
-
-    return TrendsResponse(
-        sleep=sleep_stmt,
-        stress=stress_stmt,
-        symptoms=symptoms_result,
-        notEnoughData=False,
-    )
+    return build_trends(logs, today=date.today())
