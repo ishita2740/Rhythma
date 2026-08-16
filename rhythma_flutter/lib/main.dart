@@ -6,10 +6,14 @@ import 'package:rhythma/l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+import 'components/biometric_auth_gate.dart';
 import 'components/bottom_nav.dart';
+import 'components/debug_data_indicator.dart';
 import 'components/shared.dart';
 import 'config/theme.dart';
+import 'config/supported_languages.dart';
 
+import 'providers/data_mode_provider.dart';
 import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart';
 import 'providers/cycle_provider.dart';
@@ -18,8 +22,8 @@ import 'providers/sync_status_provider.dart';
 import 'providers/dashboard_provider.dart';
 
 import 'screens/assistant/assistant_screen.dart';
+import 'screens/auth/language_selection_screen.dart';
 import 'screens/auth/login_screen.dart';
-import 'screens/auth/register_screen.dart';
 import 'screens/cycle/cycle_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/insights/insights_screen.dart';
@@ -41,7 +45,16 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await LocalStorageService.init();
+
+  // Migration: existing users who completed onboarding already chose a language.
+  // Mark language selection as completed so they are not shown the picker again.
+  if (LocalStorageService.onboardingCompleted &&
+      !LocalStorageService.languageSelectionCompleted) {
+    await LocalStorageService.setLanguageSelectionCompleted(true);
+  }
+
   await NotificationService.instance.init();
+  await NotificationService.instance.scheduleAllAutomaticNotifications();
   await FirestoreService.init();
 
   ApiClient.init(onUnauthorized: () {
@@ -60,6 +73,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => DataModeProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => CycleProvider()),
@@ -106,13 +120,7 @@ class _RhythmaAppState extends State<RhythmaApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('en'),
-        Locale('hi'),
-        Locale('ta'),
-        Locale('te'),
-        Locale('mr'),
-      ],
+      supportedLocales: appSupportedLanguages.map((l) => l.locale).toList(),
       home: FutureBuilder<String?>(
         // Confirms the stored token is still genuinely valid (not merely
         // present) via a lightweight /auth/me check, and scopes local
@@ -122,14 +130,17 @@ class _RhythmaAppState extends State<RhythmaApp> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const SplashScreen();
           }
-          return snapshot.data != null
-              ? const RhythmaRoot()
-              : const LoginScreen();
+          if (snapshot.data != null) {
+            return const BiometricAuthGate(child: RhythmaRoot());
+          }
+          if (!LocalStorageService.languageSelectionCompleted) {
+            return const LanguageSelectionScreen();
+          }
+          return const LoginScreen();
         },
       ),
       routes: {
         '/login': (_) => const LoginScreen(),
-        '/register': (_) => const RegisterScreen(),
         '/home': (_) => const RhythmaRoot(),
         '/assistant': (_) => const ShellBackground(child: AssistantScreen()),
       },
@@ -212,20 +223,25 @@ class _RhythmaShellState extends State<RhythmaShell> {
       decoration: BoxDecoration(
         gradient: RhythmaGradients.bg,
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        extendBody: true,
-        body: SafeArea(
-          bottom: false,
-          child: IndexedStack(
-            index: _currentIndex,
-            children: _screens,
+      child: Stack(
+        children: [
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            extendBody: true,
+            body: SafeArea(
+              bottom: false,
+              child: IndexedStack(
+                index: _currentIndex,
+                children: _screens,
+              ),
+            ),
+            bottomNavigationBar: RhythmaBottomNav(
+              currentIndex: _currentIndex,
+              onTap: (i) => setState(() => _currentIndex = i),
+            ),
           ),
-        ),
-        bottomNavigationBar: RhythmaBottomNav(
-          currentIndex: _currentIndex,
-          onTap: (i) => setState(() => _currentIndex = i),
-        ),
+          const DebugDataIndicator(),
+        ],
       ),
     );
   }

@@ -22,4 +22,11 @@ class CycleService {
   Future<void> submitLog(CycleLog log) async {
     await _dio.post('/cycle/log', data: log.toJson());
   }
+
+  /// Deletes a cycle log entry for [logId] (the date string YYYY-MM-DD)
+  /// on the backend. A failed call throws so the caller can surface the
+  /// error to the user.
+  Future<void> deleteLog(String logId) async {
+    await _dio.delete('/cycle/$logId');
+  }
 }

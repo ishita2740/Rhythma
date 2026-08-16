@@ -64,6 +64,21 @@ class AppLocalizationsMl extends AppLocalizations {
   String get selectLanguage => 'ഭാഷ തിരഞ്ഞെടുക്കുക';
 
   @override
+  String get langEnglish => 'English';
+
+  @override
+  String get langHindi => 'हिन्दी (Hindi)';
+
+  @override
+  String get langTamil => 'தமிழ் (Tamil)';
+
+  @override
+  String get langTelugu => 'తెలుగు (Telugu)';
+
+  @override
+  String get langMarathi => 'मराठी (Marathi)';
+
+  @override
   String get homeGreeting => 'നമസ്കാരം';
 
   @override
@@ -80,6 +95,10 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get homeHighEnergy => 'ഉയർന്ന ഊർജ്ജസ്വലത';
+
+  @override
+  String get homeFertileWindowDisclaimer =>
+      'ഇത് നിങ്ങൾ രേഖപ്പെടുത്തിയ ഡാറ്റയെ അടിസ്ഥാനമാക്കിയുള്ള ഒരു കണക്കാക്കൽ മാത്രമാണ്, ഇത് വൈദ്യോപദേശമോ ഗർഭനിരോധന ഉപദേശമോ അല്ല.';
 
   @override
   String get homeAiTitle => 'RHYTHMA AI';
@@ -303,8 +322,9 @@ class AppLocalizationsMl extends AppLocalizations {
       'നിങ്ങളുടെ ആരോഗ്യത്തെക്കുറിച്ച് എന്ത് വേണമെങ്കിലും ചോദിക്കൂ...';
 
   @override
-  String get assistantWelcome =>
-      'ഹായ് ആര്യ 🌸 ഞാൻ Rhythma, നിങ്ങളുടെ സ്വകാര്യ ആരോഗ്യ സഹായി. ആർത്തവചക്രം, ലക്ഷണങ്ങൾ, ആരോഗ്യം എന്നിവയെക്കുറിച്ച് എന്തും ചോദിക്കാം — ഇംഗ്ലീഷ്, ഹിന്ദി, മറാഠി, തമിഴ്, അല്ലെങ്കിൽ മലയാളത്തിൽ.';
+  String assistantWelcome(String name) {
+    return 'ഹായ് ആര്യ 🌸 ഞാൻ Rhythma, നിങ്ങളുടെ സ്വകാര്യ ആരോഗ്യ സഹായി. ആർത്തവചക്രം, ലക്ഷണങ്ങൾ, ആരോഗ്യം എന്നിവയെക്കുറിച്ച് എന്തും ചോദിക്കാം — ഇംഗ്ലീഷ്, ഹിന്ദി, മറാഠി, തമിഴ്, അല്ലെങ്കിൽ മലയാളത്തിൽ.';
+  }
 
   @override
   String get assistantSug1 => 'എന്തുകൊണ്ടാണ് എന്റെ ആർത്തവം ക്രമരഹിതമാകുന്നത്?';
@@ -320,6 +340,10 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get assistantSug5 => 'എന്റെ ആർത്തവം ക്രമരഹിതമാണ് — ഇത് സാധാരണമാണോ?';
+
+  @override
+  String get assistantDisclaimer =>
+      'ഈ അസിസ്റ്റന്റ് പൊതുവായ ആരോഗ്യ വിവരങ്ങൾ മാത്രമേ നൽകുന്നുള്ളൂ, ഇത് പ്രൊഫഷണൽ വൈദ്യോപദേശത്തിന് പകരമല്ല.';
 
   @override
   String get insightsTitle => 'ആരോഗ്യ വിവരങ്ങൾ';
@@ -375,6 +399,10 @@ class AppLocalizationsMl extends AppLocalizations {
   String get insightsRec3 => 'അണ്ഡോത്പാദന ആഴ്ചയിൽ 2.5 ലിറ്റർ വെള്ളം കുടിക്കുക';
 
   @override
+  String get insightsDisclaimer =>
+      'ഈ ഉൾക്കാഴ്ചകൾ നിങ്ങൾ രേഖപ്പെടുത്തിയ വിവരങ്ങളെ അടിസ്ഥാനമാക്കിയുള്ളതാണ്, വ്യക്തിഗത ട്രാക്കിംഗിന് മാത്രം ഉദ്ദേശിച്ചുള്ളതാണ്. ഇത് വൈദ്യ രോഗനിർണയമല്ല, യോഗ്യതയുള്ള വൈദ്യ വിദഗ്ധന്റെ ഉപദേശത്തിന് പകരമല്ല.';
+
+  @override
   String get profileTitle => 'പ്രൊഫൈൽ';
 
   @override
@@ -426,6 +454,9 @@ class AppLocalizationsMl extends AppLocalizations {
   String get profileSaveChanges => 'മാറ്റങ്ങൾ സേവ് ചെയ്യുക';
 
   @override
+  String get profileNameEmptyError => 'ദയവായി സാധുവായ പേര് നൽകുക';
+
+  @override
   String get profileAddContact => 'കോൺടാക്റ്റ് ചേർക്കുക';
 
   @override
@@ -446,6 +477,27 @@ class AppLocalizationsMl extends AppLocalizations {
   @override
   String get profileNoContacts =>
       'അടിയന്തിര കോൺടാക്റ്റുകളൊന്നും ഇതുവരെ ചേർത്തിട്ടില്ല.';
+
+  @override
+  String get profileAgeInvalidError => 'ദയവായി സാധുവായ പ്രായം നൽകുക';
+
+  @override
+  String get profileCycleInvalidError => 'ദയവായി സാധുവായ സൈക്കിൾ ദൈർഘ്യം നൽകുക';
+
+  @override
+  String get profilePhoneInvalidError => 'ദയവായി സാധുവായ ഫോൺ നമ്പർ നൽകുക';
+
+  @override
+  String get contactNameRequiredError => 'Contact name is required';
+
+  @override
+  String get edit => 'തിരുത്തുക';
+
+  @override
+  String get delete => 'ഇല്ലാതാക്കുക';
+
+  @override
+  String get onboardingAvatarOption => 'അവതാർ ഓപ്ഷൻ';
 
   @override
   String get navHome => 'ഹോം';
@@ -475,6 +527,19 @@ class AppLocalizationsMl extends AppLocalizations {
   @override
   String get settingsEmailError =>
       'ഇമെയിൽ ആപ്പ് തുറക്കാൻ കഴിഞ്ഞില്ല. ദയവായി support@rhythma.com എന്ന വിലാസത്തിൽ ഇമെയിൽ ചെയ്യുക';
+
+  @override
+  String get settingsData => 'Data';
+
+  @override
+  String get settingsExportData => 'Export My Data';
+
+  @override
+  String get settingsExportDataDesc =>
+      'Download your profile, contacts, and cycle logs as JSON';
+
+  @override
+  String get settingsExportSuccess => 'Data exported successfully';
 
   @override
   String get onboardingPrivacyNote =>
@@ -609,10 +674,129 @@ class AppLocalizationsMl extends AppLocalizations {
   String get onboardingPhoneInvalid => 'ദയവായി സാധുവായ ഫോൺ നമ്പർ നൽകുക';
 
   @override
+  String get onboardingAgeRequired => 'Please enter your age or select a range';
+
+  @override
+  String get onboardingHeightRequired =>
+      'Please enter your height or select a range';
+
+  @override
+  String get onboardingWeightRequired =>
+      'Please enter your weight or select a range';
+
+  @override
+  String get onboardingNotSure => 'Not sure';
+
+  @override
+  String get onboardingApproximate => 'Approximate';
+
+  @override
+  String get onboardingAgeHint => 'Enter your age';
+
+  @override
+  String get onboardingAgeUnit => 'years';
+
+  @override
+  String get onboardingHeightHint => 'Enter your height';
+
+  @override
+  String get onboardingHeightUnit => 'cm';
+
+  @override
+  String get onboardingWeightHint => 'Enter your weight';
+
+  @override
+  String get onboardingWeightUnit => 'kg';
+
+  @override
+  String get onboardingRangeUnder18 => 'Under 18';
+
+  @override
+  String get onboardingRange18to25 => '18–25';
+
+  @override
+  String get onboardingRange26to35 => '26–35';
+
+  @override
+  String get onboardingRange36to50 => '36–50';
+
+  @override
+  String get onboardingRange51to65 => '51–65';
+
+  @override
+  String get onboardingRangeOver65 => 'Over 65';
+
+  @override
+  String get onboardingRangeUnder150 => 'Under 150 cm';
+
+  @override
+  String get onboardingRange150to160 => '150–160 cm';
+
+  @override
+  String get onboardingRange161to170 => '161–170 cm';
+
+  @override
+  String get onboardingRange171to180 => '171–180 cm';
+
+  @override
+  String get onboardingRangeOver180 => 'Over 180 cm';
+
+  @override
+  String get onboardingRangeUnder50kg => 'Under 50 kg';
+
+  @override
+  String get onboardingRange50to65kg => '50–65 kg';
+
+  @override
+  String get onboardingRange66to80kg => '66–80 kg';
+
+  @override
+  String get onboardingRange81to100kg => '81–100 kg';
+
+  @override
+  String get onboardingRangeOver100kg => 'Over 100 kg';
+
+  @override
   String get onboardingTapToSelectDate => 'തീയതി തിരഞ്ഞെടുക്കാൻ ടാപ്പ് ചെയ്യുക';
 
   @override
   String get onboardingDays => 'ദിവസങ്ങൾ';
+
+  @override
+  String get onboardingApproximateLabel => 'When was your last period?';
+
+  @override
+  String get onboardingApproximateLessWeek => 'Less than a week ago';
+
+  @override
+  String get onboardingApproximate1to2Weeks => '1–2 ആഴ്ചകൾക്ക് മുമ്പ്';
+
+  @override
+  String get onboardingApproximate3to4Weeks => '3–4 ആഴ്ചകൾക്ക് മുമ്പ്';
+
+  @override
+  String get onboardingApproximateMoreMonth => 'ഒരു മാസത്തിലധികം മുമ്പ്';
+
+  @override
+  String get onboardingPickExactDate =>
+      'അതിനു പകരം കൃത്യമായ തീയതി തിരഞ്ഞെടുക്കുക';
+
+  @override
+  String get onboardingLastPeriodRequired =>
+      'നിങ്ങളുടെ അവസാന പിരീഡ് എപ്പോൾ ആരംഭിച്ചു എന്ന് തിരഞ്ഞെടുക്കുക';
+
+  @override
+  String get nudgeCompleteProfileTitle => 'കൂടുതൽ കൃത്യമായ പ്രവചനങ്ങൾ വേണോ?';
+
+  @override
+  String get nudgeCompleteProfileBody =>
+      'സൈക്കിൾ പ്രവചനങ്ങൾ മെച്ചപ്പെടുത്താൻ നിങ്ങളുടെ അവസാന പിരീഡിന്റെ കൃത്യമായ ആരംഭ തീയതി ചേർക്കുക.';
+
+  @override
+  String get nudgeCompleteProfileAction => 'അപ്‌ഡേറ്റ്';
+
+  @override
+  String get nudgeCompleteProfileDismiss => 'പിന്നീട്';
 
   @override
   String get smsScreenTitle => 'SMS വിവരങ്ങൾ';
@@ -712,4 +896,103 @@ class AppLocalizationsMl extends AppLocalizations {
   @override
   String get insightsNotEnoughTrendData =>
       'നിങ്ങളുടെ ട്രെൻഡ് കാണുന്നതിന് കുറഞ്ഞത് രണ്ട് ആർത്തവചക്രങ്ങളെങ്കിലും രേഖപ്പെടുത്തുക.';
+
+  @override
+  String get assistantAccessibilitySuggestedPrompt => 'Suggested prompt';
+
+  @override
+  String get assistantAccessibilityMessageInput => 'Message input';
+
+  @override
+  String get assistantAccessibilityMessageInputHint =>
+      'Type your question here';
+
+  @override
+  String get assistantAccessibilitySendMessage => 'Send message';
+
+  @override
+  String get assistantAccessibilitySendMessageHint =>
+      'Sends your message to the assistant';
+
+  @override
+  String get assistantAccessibilityTyping => 'Assistant is typing';
+
+  @override
+  String get languageSelectionError =>
+      'ഭാഷ സേവ് ചെയ്യാൻ കഴിഞ്ഞില്ല. ദയവായി വീണ്ടും ശ്രമിക്കുക.';
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get deleteAccountConfirmationTitle => 'Delete Account?';
+
+  @override
+  String get deleteAccountConfirmationDesc =>
+      'This action is permanent and cannot be undone. All your data will be wiped.';
+
+  @override
+  String get accountDeletedSuccess => 'Account deleted successfully.';
+
+  @override
+  String get langGujarati => 'ગુજરાતી (Gujarati)';
+
+  @override
+  String get welcomeToRhythma => 'Welcome to Rhythma';
+
+  @override
+  String get loginOrSignUpWithPhone => 'Log in or sign up with your phone number.';
+
+  @override
+  String get enterOtpSentToPhone => 'Enter the OTP sent to your phone';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get sendingOtp => 'Sending OTP...';
+
+  @override
+  String get otp => 'OTP';
+
+  @override
+  String get verifyOtp => 'Verify OTP';
+
+  @override
+  String get verifying => 'Verifying...';
+
+  @override
+  String get useDifferentPhoneNumber => 'Use a different phone number';
+
+  @override
+  String get pleaseEnterPhoneNumber => 'Please enter your phone number.';
+
+  @override
+  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number with country code (e.g., +91).';
+
+  @override
+  String get verificationFailed => 'Verification failed';
+
+  @override
+  String otpSentTo(String phone) => 'OTP sent to $phone';
+
+  @override
+  String get pleaseEnterOtp => 'Please enter the OTP.';
+
+  @override
+  String get invalidOtp => 'Invalid OTP. Please try again.';
+
+  @override
+  String get failedToGetIdToken => 'Failed to get ID token';
+  @override
+  String get logFlowVeryHeavy => 'Very Heavy';
+  @override
+  String get logFlowSpotting => 'Spotting';
+  @override
+  String get logSympSeverePain => 'Severe Pain';
+  @override
+  String get logSympFainting => 'Fainting';
 }

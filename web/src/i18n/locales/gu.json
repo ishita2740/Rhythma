@@ -1,0 +1,24 @@
+{
+  "auth": {
+    "loginTitle": "Rhythma માં લૉગ ઇન કરો",
+    "registerTitle": "તમારું ખાતું બનાવો",
+    "username": "વપરાશકર્તા નામ",
+    "email": "ઇમેલ",
+    "fullName": "પૂરું નામ (વૈકલ્પિક)",
+    "password": "પાસવર્ડ",
+    "loginButton": "લૉગ ઇન",
+    "loggingIn": "લૉગ ઇન થઈ રહ્યું છે…",
+    "registerButton": "રજિસ્ટર",
+    "registering": "ખાતું બનાવી રહ્યા છીએ…",
+    "loginError": "ખોટું વપરાશકર્તા નામ અથવા પાસવર્ડ.",
+    "registerError": "તમારું ખાતું બનાવી શકાયું નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.",
+    "noAccount": "ખાતું નથી?",
+    "registerLink": "રજિસ્ટર",
+    "haveAccount": "પહેલાંથી ખાતું છે?",
+    "loginLink": "લૉગ ઇન"
+  },
+  "home": {
+    "welcome": "સ્વાગત છે, {{name}}",
+    "logout": "લૉગ આઉટ"
+  }
+}

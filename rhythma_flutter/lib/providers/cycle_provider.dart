@@ -58,20 +58,79 @@ class CycleProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ── Cycle-length settings ────────────────────────────────────────────
+  // Read fresh from the profile each time (rather than cached at
+  // construction) so edits made on the Profile/Onboarding screens are
+  // reflected immediately without having to recreate the provider.
+
+  int get _periodDuration {
+    final profile = LocalStorageService.getProfile();
+    return (profile?['period_duration'] as num?)?.toInt() ?? 5;
+  }
+
+  int get _cycleLength {
+    final profile = LocalStorageService.getProfile();
+    return (profile?['cycle_length'] as num?)?.toInt() ?? 28;
+  }
+
+  /// Day-of-cycle for [date], counted from the saved `last_period` start
+  /// date (1-indexed, wraps across multiple cycle lengths). Falls back to
+  /// the plain day-of-month when no `last_period` has been saved yet.
+  int _getCycleDay(DateTime date) {
+    final profile = LocalStorageService.getProfile();
+    final lastPeriodStr = profile?['last_period'] as String?;
+    if (lastPeriodStr == null) return date.day;
+
+    final lastPeriod = DateTime.tryParse(lastPeriodStr);
+    if (lastPeriod == null) return date.day;
+
+    final normalizedStart =
+        DateTime(lastPeriod.year, lastPeriod.month, lastPeriod.day);
+    final normalizedDate = DateTime(date.year, date.month, date.day);
+
+    final daysSince = normalizedDate.difference(normalizedStart).inDays;
+    final cycleLength = _cycleLength;
+    if (cycleLength <= 0) return date.day;
+
+    // Modulo that stays positive even if `date` falls before `last_period`.
+    final cycleDay = ((daysSince % cycleLength) + cycleLength) % cycleLength;
+    return cycleDay + 1;
+  }
+
   // Phase logic
+  String phaseKey(DateTime date) {
+    final day = _getCycleDay(date);
+    final periodEnd = _periodDuration;
+    final follicularEnd = (_cycleLength / 2).floor() - 2;
+    final ovulationEnd = (_cycleLength / 2).floor() + 1;
+
+    if (day <= periodEnd) return 'menstrual';
+    if (day <= follicularEnd) return 'follicular';
+    if (day <= ovulationEnd) return 'ovulation';
+    return 'luteal';
+  }
+
   String phase(DateTime date, AppLocalizations l10n) {
-    final day = date.day;
-    if (day <= 5) return l10n.cyclePhasePeriod;
-    if (day <= 13) return l10n.cyclePhaseFollicular;
-    if (day <= 16) return l10n.cyclePhaseOvulation;
+    final day = _getCycleDay(date);
+    final periodEnd = _periodDuration;
+    final follicularEnd = (_cycleLength / 2).floor() - 2;
+    final ovulationEnd = (_cycleLength / 2).floor() + 1;
+
+    if (day <= periodEnd) return l10n.cyclePhasePeriod;
+    if (day <= follicularEnd) return l10n.cyclePhaseFollicular;
+    if (day <= ovulationEnd) return l10n.cyclePhaseOvulation;
     return l10n.cyclePhaseLuteal;
   }
 
   Color phaseColor(DateTime date) {
-    final day = date.day;
-    if (day <= 5) return RhythmaColors.rose;
-    if (day <= 13) return RhythmaColors.primary;
-    if (day <= 16) return RhythmaColors.teal;
+    final day = _getCycleDay(date);
+    final periodEnd = _periodDuration;
+    final follicularEnd = (_cycleLength / 2).floor() - 2;
+    final ovulationEnd = (_cycleLength / 2).floor() + 1;
+
+    if (day <= periodEnd) return RhythmaColors.rose;
+    if (day <= follicularEnd) return RhythmaColors.primary;
+    if (day <= ovulationEnd) return RhythmaColors.teal;
     return RhythmaColors.coral;
   }
 }

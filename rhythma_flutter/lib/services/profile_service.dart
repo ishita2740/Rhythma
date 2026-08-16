@@ -60,7 +60,7 @@ class ProfileService {
   /// others (e.g. internal flags like `phone`, `city`, `state`) are
   /// included if they exist in the local profile.
   static Map<String, dynamic> _buildPayload(Map<String, dynamic> data) {
-    const _allowed = {
+    const allowed = {
       'full_name',
       'age',
       'height_cm',
@@ -68,6 +68,7 @@ class ProfileService {
       'avatar',
       'language',
       'last_period',
+      'last_period_is_approximate',
       'cycle_length',
       'period_duration',
       'cycle_regular',
@@ -79,7 +80,7 @@ class ProfileService {
 
     final payload = <String, dynamic>{};
 
-    for (final key in _allowed) {
+    for (final key in allowed) {
       if (data.containsKey(key) && data[key] != null) {
         payload[key] = data[key];
       }

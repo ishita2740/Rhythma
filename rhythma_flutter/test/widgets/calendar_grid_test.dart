@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -6,11 +8,18 @@ import 'package:rhythma/models/cycle_log.dart';
 import 'package:rhythma/providers/cycle_provider.dart';
 import 'package:rhythma/screens/cycle/components/calendar_grid.dart';
 import 'package:rhythma/services/local_storage_service.dart';
+import '../test_helpers/local_storage_fixture.dart';
 
 void main() {
-  setUp(() {
-    LocalStorageService.isTesting = true;
-    LocalStorageService.mockCycleLogs = [];
+  late Directory tempDir;
+
+  setUp(() async {
+    tempDir = await setUpLocalStorage();
+    await seedCurrentUserId('test-user');
+  });
+
+  tearDown(() async {
+    await tearDownLocalStorage(tempDir);
   });
 
   Widget buildTestableWidget({required Widget child, CycleProvider? cycleProvider}) {
@@ -76,13 +85,15 @@ void main() {
     final now = DateTime.now();
     final seededDate = DateTime(now.year, now.month, 15);
 
-    LocalStorageService.mockCycleLogs = [
-      CycleLog(
-        startDate: seededDate,
-        flowIntensity: 'medium',
-        symptoms: ['cramps'],
-      ).toJson(),
-    ];
+    await tester.runAsync(() async {
+      await seedCycleLogs('test-user', [
+        CycleLog(
+          startDate: seededDate,
+          flowIntensity: 'medium',
+          symptoms: ['cramps'],
+        ).toJson(),
+      ]);
+    });
 
     final cycleProvider = CycleProvider();
     final pageController = PageController(initialPage: 12000);

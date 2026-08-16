@@ -45,12 +45,10 @@ class _SmsScreenState extends State<SmsScreen> {
     super.dispose();
   }
 
-  // The phone number here is loaded from /sms/settings, which is where
-  // this feature's phone number actually lives on the backend — there is
-  // no separate "profile" endpoint with a phone field to load from
-  // instead. This is intentional, not a placeholder: it's the same
-  // number the user set up for weekly summaries, reused here so the Send
-  // action doesn't need its own manual-entry field.
+  // The backend now exposes the user's canonical profile phone through
+  // /sms/settings while maintaining backward compatibility with older
+  // SMS-only phone numbers. This screen therefore uses the same phone
+  // number as the user's profile, avoiding duplicate phone management.
   Future<void> _loadSettings() async {
     final l10n = AppLocalizations.of(context)!;
     setState(() {

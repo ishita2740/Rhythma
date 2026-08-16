@@ -64,6 +64,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectLanguage => 'Select Language';
 
   @override
+  String get langEnglish => 'English';
+
+  @override
+  String get langHindi => 'हिन्दी (Hindi)';
+
+  @override
+  String get langTamil => 'தமிழ் (Tamil)';
+
+  @override
+  String get langTelugu => 'తెలుగు (Telugu)';
+
+  @override
+  String get langMarathi => 'मराठी (Marathi)';
+
+  @override
   String get homeGreeting => 'Namaste';
 
   @override
@@ -80,6 +95,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeHighEnergy => 'High energy';
+
+  @override
+  String get homeFertileWindowDisclaimer =>
+      'This is an estimate based on your logged data, not medical or contraceptive advice.';
 
   @override
   String get homeAiTitle => 'RHYTHMA AI';
@@ -205,6 +224,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cyclePhaseLuteal => 'Luteal';
+  String get ayurvedaWellnessTitle;
+String get ayurvedaDisclaimer;
+
+String get ayurvedaMenstrualTitle;
+String get ayurvedaMenstrualDescription;
+
+String get ayurvedaFollicularTitle;
+String get ayurvedaFollicularDescription;
+
+String get ayurvedaOvulationTitle;
+String get ayurvedaOvulationDescription;
+
+String get ayurvedaLutealTitle;
+String get ayurvedaLutealDescription;
 
   @override
   String get logFor => 'Log for';
@@ -300,8 +333,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get assistantInputHint => 'Ask anything about your health...';
 
   @override
-  String get assistantWelcome =>
-      'Hi Aarya 🌸 I\'m Rhythma, your private health companion. Ask me anything about your cycle, symptoms, or wellbeing — in English, Hindi, Marathi, or Tamil.';
+  String assistantWelcome(String name) {
+    return 'Hi $name 🌸 I\'m Rhythma, your private health companion. Ask me anything about your cycle, symptoms, or wellbeing — in English, Hindi, Marathi, or Tamil.';
+  }
 
   @override
   String get assistantSug1 => 'Why are my periods irregular?';
@@ -317,6 +351,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantSug5 => 'मेरे पीरियड्स अनियमित हैं — क्या यह सामान्य है?';
+
+  @override
+  String get assistantDisclaimer =>
+      'This assistant provides general wellness information only and is not a substitute for professional medical advice.';
 
   @override
   String get insightsTitle => 'Health Insights';
@@ -370,6 +408,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get insightsRec3 => 'Hydrate 2.5L during ovulation week';
 
   @override
+  String get insightsDisclaimer =>
+      'These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional.';
+
+  @override
   String get profileTitle => 'Profile';
 
   @override
@@ -421,6 +463,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSaveChanges => 'Save Changes';
 
   @override
+  String get profileNameEmptyError => 'Please enter a valid name';
+
+  @override
   String get profileAddContact => 'Add Contact';
 
   @override
@@ -440,6 +485,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileNoContacts => 'No emergency contacts set up yet.';
+
+  @override
+  String get profileAgeInvalidError => 'Please enter a valid age';
+
+  @override
+  String get profileCycleInvalidError => 'Please enter a valid cycle length';
+
+  @override
+  String get profilePhoneInvalidError => 'Please enter a valid phone number';
+
+  @override
+  String get contactNameRequiredError => 'Contact name is required';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get onboardingAvatarOption => 'Avatar Option';
 
   @override
   String get navHome => 'Home';
@@ -468,6 +534,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get settingsEmailError =>
       'Could not open email app. Please email us at support@rhythma.com';
+
+  @override
+  String get settingsData => 'Data';
+
+  @override
+  String get settingsExportData => 'Export My Data';
+
+  @override
+  String get settingsExportDataDesc =>
+      'Download your profile, contacts, and cycle logs as JSON';
+
+  @override
+  String get settingsExportSuccess => 'Data exported successfully';
 
   @override
   String get onboardingPrivacyNote =>
@@ -595,109 +674,46 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get onboardingWeightInvalid =>
       'Please enter a valid weight (20–300 kg)';
+      @override
+String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
 
-  @override
-  String get onboardingPhoneInvalid => 'Use international format, e.g. +919876543210';
+@override
+String get ayurvedaDisclaimer =>
+    'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.';
 
-  @override
-  String get onboardingTapToSelectDate => 'Tap to select date';
+@override
+String get ayurvedaMenstrualTitle => 'Rest and reflection';
 
-  @override
-  String get onboardingDays => 'days';
+@override
+String get ayurvedaMenstrualDescription =>
+    'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.';
 
-  @override
-  String get smsScreenTitle => 'SMS Summaries';
+@override
+String get ayurvedaFollicularTitle => 'Renewal and activity';
 
-  @override
-  String get smsScreenSubtitle => 'Stay informed even without the app';
+@override
+String get ayurvedaFollicularDescription =>
+    'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.';
 
-  @override
-  String get smsInfoCardTitle => 'Weekly Health Summary';
+@override
+String get ayurvedaOvulationTitle => 'Connection and balance';
 
-  @override
-  String get smsInfoCardBody =>
-      'Every week, Rhythma will send you a brief summary of your cycle status, health score, and any important patterns, directly to your phone via SMS. Works without data or the app.';
+@override
+String get ayurvedaOvulationDescription =>
+    'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.';
 
-  @override
-  String get smsConfigTitle => 'Configuration';
+@override
+String get ayurvedaLutealTitle => 'Grounding and routine';
 
+@override
+String get ayurvedaLutealDescription =>
+    'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
   @override
-  String get smsPhoneLabel => 'Phone Number';
-
+  String get logFlowVeryHeavy => 'Very Heavy';
   @override
-  String get smsPhoneHint => '+91 98765 43210';
-
+  String get logFlowSpotting => 'Spotting';
   @override
-  String get smsEnableWeekly => 'Enable weekly SMS';
-
+  String get logSympSeverePain => 'Severe Pain';
   @override
-  String get smsSaveSettings => 'Save Settings';
-
-  @override
-  String get smsSendSectionTitle => 'Send a Summary Now';
-
-  @override
-  String get smsSendRecipientPrefix => 'Sends the message below to:';
-
-  @override
-  String get smsSendNoPhone => 'Add and save a phone number above first.';
-
-  @override
-  String get smsSendButton => 'Send Summary Now';
-
-  @override
-  String get smsErrorEnterPhone => 'Please enter a phone number';
-
-  @override
-  String get smsErrorInvalidPhone =>
-      'Enter a valid phone number in international format, e.g. +919876543210';
-
-  @override
-  String get smsSuccessSaved => 'SMS settings saved successfully!';
-
-  @override
-  String get smsErrorAddPhoneFirst => 'Add and save a phone number first';
-
-  @override
-  String get smsSuccessSent => 'Summary sent to your phone!';
-
-  @override
-  String get smsErrorRateLimit =>
-      'You can send one summary per minute, please wait a bit and try again.';
-
-  @override
-  String get smsErrorSessionExpired =>
-      'Your session has expired. Please log in again.';
-
-  @override
-  String get smsErrorNetwork =>
-      'Couldn\'t reach the server. Check your connection and try again.';
-
-  @override
-  String get smsErrorGeneric => 'Something went wrong. Please try again.';
-
-  @override
-  String get smsLoadError =>
-      'Couldn\'t load your SMS settings. Pull to refresh or try again.';
-
-  @override
-  String get smsSummaryMessage =>
-      '🌸 Rhythma Health Summary\nThis is your on-demand summary from Rhythma.\nOpen the app for your latest cycle insights.\nReply STOP to unsubscribe.';
-
-  @override
-  String insightsLoadError(String error) {
-    return 'Couldn\'t load your insights: $error';
-  }
-
-  @override
-  String get insightsNotEnoughData =>
-      'Log a few more cycles on the Cycle tab to unlock your full health insights.';
-
-  @override
-  String get insightsNoSymptomsYet =>
-      'No symptoms logged yet — log some on the Cycle tab to see patterns here.';
-
-  @override
-  String get insightsNotEnoughTrendData =>
-      'Log at least two cycles to see your trend here.';
+  String get logSympFainting => 'Fainting';
 }

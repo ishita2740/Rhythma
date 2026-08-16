@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:rhythma/services/firestore_service.dart';
-import 'package:rhythma/services/local_storage_service.dart';
 
 void main() {
   late Directory tempDir;
@@ -12,8 +11,6 @@ void main() {
     TestWidgetsFlutterBinding.ensureInitialized();
     tempDir = await Directory.systemTemp.createTemp('firestore_test_dir');
     Hive.init(tempDir.path);
-    LocalStorageService.isTesting = true;
-    LocalStorageService.mockCycleLogs = [];
   });
 
   tearDown(() async {
@@ -24,13 +21,16 @@ void main() {
   });
 
   group('Null-safe stream getters', () {
-    test('cycleLogsStream returns empty stream when Firestore is not initialized', () async {
+    test(
+        'cycleLogsStream returns empty stream when Firestore is not initialized',
+        () async {
       final stream = FirestoreService.cycleLogsStream('test-user');
       final events = await stream.toList();
       expect(events, isEmpty);
     });
 
-    test('profileStream returns empty stream when Firestore is not initialized', () async {
+    test('profileStream returns empty stream when Firestore is not initialized',
+        () async {
       final stream = FirestoreService.profileStream('test-user');
       final events = await stream.toList();
       expect(events, isEmpty);
@@ -52,7 +52,8 @@ void main() {
   });
 
   group('Profile retry queue', () {
-    test('pending_cycle_sync box stores profile entries with correct fields', () async {
+    test('pending_cycle_sync box stores profile entries with correct fields',
+        () async {
       final box = await Hive.openBox<Map>('pending_cycle_sync');
       const userId = 'user-123';
       final profile = {
@@ -105,11 +106,12 @@ void main() {
       expect(allKeys, contains('profile::$userId'));
 
       // Verify type-based filtering
-      final cycleKeys = allKeys.where((k) => !k.startsWith('profile::')).toList();
+      final cycleKeys =
+          allKeys.where((k) => !k.startsWith('profile::')).toList();
       expect(cycleKeys, contains('cycle::$userId::2025-01-15'));
       expect(cycleKeys, isNot(contains('profile::$userId')));
 
-      final profileKey = 'profile::$userId';
+      const profileKey = 'profile::$userId';
       expect(allKeys, contains(profileKey));
     });
   });

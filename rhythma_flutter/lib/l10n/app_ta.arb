@@ -21,13 +21,13 @@
   "cancel": "ரத்து",
   "loggedOutSuccess": "வெற்றிகரமாக வெளியேறப்பட்டது",
   "selectLanguage": "மொழியைத் தேர்ந்தெடுக்கவும்",
-  
   "homeGreeting": "வணக்கம்",
   "homePhaseDesc": "நாள் 14 · அண்டவிடுப்பின் நிலை",
   "homeNextPeriod": "அடுத்த மாதவிடாய்",
   "homeDaysLabel": "நாட்கள்",
   "homeFertileWindow": "கருவுறுதல் காலம் · ",
   "homeHighEnergy": "அதிக ஆற்றல்",
+  "homeFertileWindowDisclaimer": "இது உங்கள் பதிவு செய்யப்பட்ட தரவின் அடிப்படையிலான மதிப்பீடு மட்டுமே, மருத்துவ அல்லது கருத்தடை ஆலோசனை அல்ல.",
   "homeAiTitle": "ரித்மா ஏஐ (Rhythma AI)",
   "homeAiSubtitle": "உங்கள் உடல் பற்றி உங்கள் மொழியிலேயே என்னிடம் கேளுங்கள்.",
   "homeAiPrompt": "எனது மாதவிடாய் ஏன் ஒழுங்கற்றது?",
@@ -45,7 +45,6 @@
   "homeLearnHormones": "ஹார்மோன்கள் 101",
   "homeLearnIron": "இரும்புச் சத்துள்ள உணவுகள்",
   "homeArticle": "கட்டுரை",
-  
   "cycleTrackerTitle": "சுழற்சி டிராக்கர்",
   "cyclePhasePeriod": "மாதவிடாய்",
   "cyclePhaseFollicular": "ஃபோலிகுலர்",
@@ -69,7 +68,6 @@
   "logSympAcne": "முகப்பரு",
   "logLabelEnergy": "ஆற்றல்",
   "logLabelSymptoms": "அறிகுறிகள்",
-  
   "homeErrorNetwork": "இணைய இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",
   "homeErrorAuth": "உங்கள் அமர்வு காலாவதியாகிவிட்டது. மீண்டும் உள்நுழையவும்.",
   "homeErrorServer": "எங்கள் பக்கம் ஏதோ தவறு நடந்தது. பின்னர் மீண்டும் முயற்சிக்கவும்.",
@@ -77,17 +75,22 @@
   "homeQuickLogTitle": "{label} பதிவு செய்யுங்கள்",
   "@homeQuickLogTitle": {
     "placeholders": {
-      "label": { "type": "String" }
+      "label": {
+        "type": "String"
+      }
     }
   },
   "homeQuickLogSaved": "{label} பதிவு செய்யப்பட்டது: {value}",
   "@homeQuickLogSaved": {
     "placeholders": {
-      "label": { "type": "String" },
-      "value": { "type": "String" }
+      "label": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
     }
   },
-
   "loginWelcomeBack": "மீண்டும் வரவேற்கிறோம்",
   "loginSubtitle": "உங்கள் தனிப்பட்ட ரித்மா பயணத்தைத் தொடர உள்நுழையவும்.",
   "loginUsername": "பயனர்பெயர்",
@@ -101,7 +104,6 @@
   "loginErrorNetwork": "இணைய இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",
   "loginErrorInvalidCredentials": "தவறான பயனர்பெயர் அல்லது கடவுச்சொல்.",
   "loginErrorGeneric": "உள்நுழைவு தோல்வியடைந்தது. மீண்டும் முயற்சிக்கவும்.",
-
   "registerTitle": "கணக்கை உருவாக்கு",
   "registerSubtitle": "உங்கள் ரித்மா உதவியாளருக்கு பாதுகாப்பான அணுகலை அமைக்கவும்.",
   "registerFullName": "முழு பெயர் (விரும்பினால்)",
@@ -131,17 +133,20 @@
   "registerAgeRange": "வயது 10 மற்றும் 120 க்கு இடையில் இருக்க வேண்டும்",
   "registerCycleInvalid": "சரியான சராசரி சுழற்சி நீளத்தை உள்ளிடவும்",
   "registerCycleRange": "சுழற்சி நீளம் 15 மற்றும் 45 நாட்களுக்கு இடையில் இருக்க வேண்டும்",
-
   "settingsConfirmTurnOn": "{feature} அம்சத்தை இயக்க விரும்புகிறீர்களா?",
   "@settingsConfirmTurnOn": {
     "placeholders": {
-      "feature": { "type": "String" }
+      "feature": {
+        "type": "String"
+      }
     }
   },
   "settingsConfirmTurnOff": "{feature} அம்சத்தை அணைக்க விரும்புகிறீர்களா?",
   "@settingsConfirmTurnOff": {
     "placeholders": {
-      "feature": { "type": "String" }
+      "feature": {
+        "type": "String"
+      }
     }
   },
   "settingsConfirm": "உறுதிப்படுத்து",
@@ -152,26 +157,29 @@
   "settingsMedicineReminderTitle": "மருந்து நினைவூட்டல்",
   "settingsMedicineReminderBody": "உங்கள் இரும்புச் சத்து துணை எடுக்கும் நேரம்!",
   "settingsThemeColor": "தீம் நிறம்",
-
   "profileNameRequired": "பெயர் காலியாக இருக்கக்கூடாது",
   "profileAgeInvalid": "வயது 10 மற்றும் 120 க்கு இடையில் இருக்க வேண்டும்",
   "profileCycleInvalid": "சுழற்சி நீளம் 15 மற்றும் 45 நாட்களுக்கு இடையில் இருக்க வேண்டும்",
   "profilePhoneInvalid": "சரியான தொலைபேசி எண்ணை உள்ளிடவும் (குறைந்தது 8 இலக்கங்கள்)",
-
   "cycleToday": "இன்று",
-
   "assistantError": "ஏதோ தவறு நடந்தது. மீண்டும் முயற்சிக்கவும்.",
-  
   "assistantTitle": "ரித்மா உதவியாளர்",
   "assistantSubtitle": "உங்கள் தனிப்பட்ட சுகாதார துணை",
   "assistantInputHint": "உங்கள் கேள்வியைக் கேட்கவும்...",
-  "assistantWelcome": "வணக்கம் ஆர்யா 🌸 நான் ரித்மா, உங்கள் தனிப்பட்ட சுகாதார துணை. உங்கள் சுழற்சி, அறிகுறிகள் பற்றி என்னிடம் கேளுங்கள் — ஆங்கிலம், இந்தி, மராத்தி அல்லது தமிழில்.",
+  "assistantWelcome": "வணக்கம் {name} 🌸 நான் ரித்மா, உங்கள் தனிப்பட்ட சுகாதார துணை. உங்கள் சுழற்சி, அறிகுறிகள் பற்றி என்னிடம் கேளுங்கள் — ஆங்கிலம், இந்தி, மராத்தி அல்லது தமிழில்.",
+  "@assistantWelcome": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "assistantSug1": "எனது மாதவிடாய் ஏன் ஒழுங்கற்றது?",
   "assistantSug2": "கடுமையான தசைப்பிடிப்பிற்கு காரணம் என்ன?",
   "assistantSug3": "35 நாள் சுழற்சி இயல்பானதா?",
   "assistantSug4": "PMS க்கு உதவும் உணவுகள்",
   "assistantSug5": "என் மாதவிடாய் ஒழுங்கற்றது — இது இயல்பானதா?",
-
+  "assistantDisclaimer": "இந்த உதவியாளர் பொதுவான ஆரோக்கிய தகவலை மட்டுமே வழங்குகிறது, தொழில்முறை மருத்துவ ஆலோசனைக்கு மாற்றாக இல்லை.",
   "insightsTitle": "சுகாதார நுண்ணறிவு",
   "insightsSubtitle": "கடந்த 90 நாட்கள்",
   "insightsMhsLabel": "மாதவிடாய் சுகாதார மதிப்பெண்",
@@ -189,7 +197,7 @@
   "insightsRec1": "மாதவிடாய் தொடங்குவதற்கு முன் இரும்புச் சத்துள்ள உணவுகளைச் சேர்க்கவும்",
   "insightsRec2": "லூட்டல் கட்ட நாட்களில் 10 நிமிட யோகா முயற்சிக்கவும்",
   "insightsRec3": "அண்டவிடுப்பின் வாரத்தில் 2.5L தண்ணீர் குடிக்கவும்",
-  
+  "insightsDisclaimer": "இந்த நுண்ணறிவுகள் நீங்கள் பதிவு செய்த தரவை அடிப்படையாகக் கொண்டவை, தனிப்பட்ட கண்காணிப்புக்காக மட்டுமே. இது மருத்துவ நோயறிதல் அல்ல, தகுதி வாய்ந்த மருத்துவ நிபுணரின் ஆலோசனைக்கு மாற்றாக இல்லை.",
   "profileTitle": "சுயவிவரம்",
   "profileYearsOld": "வயது",
   "profileCycleDay": "சுழற்சி நாள்",
@@ -214,18 +222,21 @@
   "profileEmergencyContactsTitle": "அவசரத் தொடர்புகள்",
   "profileAddNew": "புதிதாகச் சேர்க்கவும்",
   "profileNoContacts": "அவசரத் தொடர்புகள் எதுவும் இன்னும் அமைக்கப்படவில்லை.",
-  
+  "profileAgeInvalidError": "சரியான வயதை உள்ளிடவும்",
+  "profileCycleInvalidError": "சரியான மாதவிடாய் சுழற்சி காலத்தை உள்ளிடவும்",
+  "profilePhoneInvalidError": "சரியான தொலைபேசி எண்ணை உள்ளிடவும்",
+  "edit": "திருத்து",
+  "delete": "நீக்கு",
+  "onboardingAvatarOption": "அவதார் விருப்பம்",
   "navHome": "முகப்பு",
   "navCycle": "சுழற்சி",
   "navAsk": "கேள்வி",
   "navYou": "நீங்கள்",
   "navInsights": "நுண்ணறிவுகள்",
-  
   "settingsHelpSupport": "உதவி மற்றும் ஆதரவு",
   "settingsContactUs": "எங்களைத் தொடர்பு கொள்ளவும் / பிழையைப் புகாரளிக்கவும்",
   "settingsContactDesc": "எங்கள் ஆதரவுக் குழுவிற்கு மின்னஞ்சல் அனுப்பவும்",
   "settingsEmailError": "மின்னஞ்சல் பயன்பாட்டைத் திறக்க முடியவில்லை. தயவுசெய்து எங்களை support@rhythma.com இல் தொடர்பு கொள்ளவும்",
-
   "onboardingPrivacyNote": "உங்கள் தகவல் உங்கள் சாதனத்தில் மட்டுமே உள்ளது. உங்கள் அனுமதியின்றி நாங்கள் எப்போதும் உங்கள் தரவை பகிர மாட்டோம்.",
   "onboardingNext": "அடுத்து",
   "onboardingBack": "பின்",
@@ -263,5 +274,19 @@
   "onboardingNameRequired": "தயவுசெய்து உங்கள் பெயரை உள்ளிடவும்",
   "onboardingAgeInvalid": "தயவுசெய்து சரியான வயதை உள்ளிடவும் (10–120)",
   "onboardingHeightInvalid": "தயவுசெய்து சரியான உயரத்தை உள்ளிடவும் (50–250 செமீ)",
-  "onboardingWeightInvalid": "தயவுசெய்து சரியான எடையை உள்ளிடவும் (20–300 கிகி)"
+  "onboardingWeightInvalid": "தயவுசெய்து சரியான எடையை உள்ளிடவும் (20–300 கிகி)",
+  "ayurvedaWellnessTitle": "ஆயுர்வேதத்தை அடிப்படையாகக் கொண்ட நலவாழ்வு தகவல்",
+  "ayurvedaDisclaimer": "இது கல்வி நோக்கத்திற்கான தகவல் மட்டுமே. ஆயுர்வேதத்தை அடிப்படையாகக் கொண்ட இந்த உள்ளடக்கம் மருத்துவ ஆலோசனை, நோயறிதல் அல்லது சிகிச்சைக்கு மாற்றாகாது.",
+  "ayurvedaMenstrualTitle": "ஓய்வு மற்றும் சுயபராமரிப்பு",
+  "ayurvedaMenstrualDescription": "ஆயுர்வேத மரபுகளின்படி, மாதவிடாய் காலம் ஓய்வு, சுயபரிசீலனை மற்றும் மென்மையான சுயபராமரிப்பிற்கு முக்கியத்துவம் அளிக்கும் காலமாகக் கருதப்படுகிறது.",
+  "ayurvedaFollicularTitle": "புதுப்பிப்பு மற்றும் செயல்பாடு",
+  "ayurvedaFollicularDescription": "ஆயுர்வேத நலவாழ்வு மரபுகளின்படி, மாதவிடாய்க்குப் பிந்தைய காலம் புத்துணர்ச்சி மற்றும் படிப்படியாக செயல்பாட்டை அதிகரிக்கும் நேரமாகக் கருதப்படுகிறது.",
+  "ayurvedaOvulationTitle": "சமநிலை மற்றும் இணைப்பு",
+  "ayurvedaOvulationDescription": "சில ஆயுர்வேத மரபுகளின்படி, சுழற்சியின் நடுப்பகுதி உயிர்ச்சக்தி மற்றும் சமூக தொடர்புகள் அதிகரிக்கும் காலமாக விவரிக்கப்படுகிறது.",
+  "ayurvedaLutealTitle": "நிலைத்தன்மை மற்றும் ஒழுங்கான வாழ்க்கைமுறை",
+  "ayurvedaLutealDescription": "ஆயுர்வேத நலவாழ்வு மரபுகள், சுழற்சியின் இறுதி கட்டத்தில் அமைதியான தினசரி நடைமுறை மற்றும் விழிப்புணர்வுடன் சுயபராமரிப்பை வலியுறுத்துகின்றன.",
+  "logFlowVeryHeavy": "Very Heavy",
+  "logFlowSpotting": "Spotting",
+  "logSympSeverePain": "Severe Pain",
+  "logSympFainting": "Fainting"
 }

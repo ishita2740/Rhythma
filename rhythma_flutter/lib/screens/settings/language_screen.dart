@@ -5,17 +5,10 @@ import '../../config/theme.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/profile_provider.dart';
 import '../../components/shared.dart';
+import '../../config/supported_languages.dart';
 
 class LanguageScreen extends StatelessWidget {
   const LanguageScreen({super.key});
-
-  static const Map<String, String> languages = {
-    'English': 'en',
-    'हिन्दी (Hindi)': 'hi',
-    'தமிழ் (Tamil)': 'ta',
-    'తెలుగు (Telugu)': 'te',
-    'मराठी (Marathi)': 'mr'
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +30,11 @@ class LanguageScreen extends StatelessWidget {
         ),
         body: ListView.builder(
           padding: const EdgeInsets.all(20),
-          itemCount: languages.length,
+          itemCount: appSupportedLanguages.length,
           itemBuilder: (context, index) {
-            String langName = languages.keys.elementAt(index);
-            String langCode = languages.values.elementAt(index);
+            final lang = appSupportedLanguages[index];
+            String langCode = lang.code;
+            String langName = lang.nativeName;
             bool isSelected = currentLocaleCode == langCode;
 
             return Padding(

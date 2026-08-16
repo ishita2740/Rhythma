@@ -1,0 +1,92 @@
+/*
+ * The skip link, and the focus-visible rules the app was missing (#409).
+ */
+
+/*
+ * Off-screen rather than hidden.
+ *
+ * `display: none` and `visibility: hidden` both remove an element from
+ * the focus order, which would make this unreachable by the only user it
+ * exists for. Moving it out of the viewport keeps it focusable, and the
+ * :focus rule below brings it back.
+ */
+.skip-to-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+
+  padding: 0.75rem 1.25rem;
+  border: 2px solid var(--accent);
+  border-bottom-right-radius: 8px;
+
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+
+  /* Off-screen, not hidden. */
+  transform: translateY(-120%);
+  transition: transform 0.15s ease;
+}
+
+.skip-to-content:focus,
+.skip-to-content:focus-visible {
+  transform: translateY(0);
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-to-content {
+    transition: none;
+  }
+}
+
+/*
+ * The visually-hidden utility. Used by the route announcer, and by any
+ * label that should reach a screen reader without being drawn.
+ *
+ * `clip-path` plus a 1px box rather than `display: none`, for the same
+ * reason as above — this content must stay in the accessibility tree.
+ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * A visible focus indicator.
+ *
+ * The app had none, relying on the browser default — which the custom
+ * cursor styling makes hard to pick out against the app background, and
+ * which several of the app's own backgrounds wash out entirely.
+ *
+ * `:focus-visible` rather than `:focus` so a mouse click does not leave a
+ * ring behind on a button; the browser decides when the interaction was
+ * keyboard-driven.
+ */
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/*
+ * `<main>` carries tabIndex={-1} so the skip link and the route announcer
+ * can move focus to it. That makes it focusable programmatically but not
+ * by Tab — and it must not draw a ring, because the user did not focus it
+ * deliberately, they arrived at it.
+ */
+main[tabindex='-1']:focus,
+main[tabindex='-1']:focus-visible {
+  outline: none;
+}

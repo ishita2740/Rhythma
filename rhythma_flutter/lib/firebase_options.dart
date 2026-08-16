@@ -51,11 +51,11 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDCZCyCuH9tswVx7gk5rwFKAvuoaDv38Ew',
-    appId: '1:295173464321:android:11ab7622f287c0bdaefb00',
-    messagingSenderId: '295173464321',
-    projectId: 'opensource2004',
-    storageBucket: 'opensource2004.firebasestorage.app',
+    apiKey: 'AIzaSyCqv8taDJfzVwophhZEHhxEmg22JXwqRNQ',
+    appId: '1:772690012297:android:63aa466e1fe809cabc3e58',
+    messagingSenderId: '772690012297',
+    projectId: 'rhythma',
+    storageBucket: 'rhythma.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(

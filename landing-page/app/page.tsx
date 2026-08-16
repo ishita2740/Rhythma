@@ -134,13 +134,13 @@ export default function Page() {
             },
             {
               icon: Heart,
-              title: 'Health Score',
-              desc: 'Comprehensive wellness score combining cycle, sleep, stress, and lifestyle data.'
+              title: 'Factual Cycle Statistics',
+              desc: 'Calculate average cycle lengths, shortest/longest cycles, and average bleeding duration directly from history.'
             },
             {
               icon: BarChart3,
-              title: 'Variability Index',
-              desc: 'Track cycle irregularities over 6-12 months and spot potential concerns early.'
+              title: 'Trends & Consistency',
+              desc: 'Observe variations in your cycle consistency over time and view educational wellness trends.'
             },
             {
               icon: Lock,
@@ -218,7 +218,7 @@ export default function Page() {
           <div className="rounded-2xl overflow-hidden shadow-lg border border-[#E8DDD5] h-80 relative group hover:shadow-xl hover:border-[#E94B7B]/30 transition-all duration-300">
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1_F3b3nYwlPTEYppjpDtV-0w-JvgAyGJczG3bgl1mBOmkv6zumGwH56.webp"
-              alt="Menstrual Health Score dashboard with comprehensive component breakdown"
+              alt="Factual cycle statistics and metrics dashboard"
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
@@ -226,7 +226,7 @@ export default function Page() {
           <div className="rounded-2xl overflow-hidden shadow-lg border border-[#E8DDD5] h-80 relative group hover:shadow-xl hover:border-[#E94B7B]/30 transition-all duration-300">
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202026-06-08%20150542-59Yr8TlHYgwXRXrHYVDbjV2PBXyeG1.png"
-              alt="Cycle Variability Index showing 6-month pattern analysis"
+              alt="Cycle consistency trends and historical cycle logging"
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
             />

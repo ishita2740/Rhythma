@@ -16,9 +16,6 @@ void main() {
     // Create a temporary directory for Hive files to avoid touching real data
     tempDir = await Directory.systemTemp.createTemp('hive_test_dir');
     Hive.init(tempDir.path);
-    
-    // Ensure we are testing the real Hive integration, not the mock variables
-    LocalStorageService.isTesting = false; 
   });
 
   tearDown(() async {
@@ -66,16 +63,17 @@ void main() {
     // ---------------------------------------------------------
     // 4. Prove that the files on disk are actually encrypted
     // ---------------------------------------------------------
-    // Close all boxes
+    // Close all boxes first
     await Hive.close();
-    
-    // If we try to open an encrypted box WITHOUT the cipher, Hive should throw an error 
-    // or fail because the bytes are scrambled.
-    try {
-      await Hive.openBox<Map>('cycle_logs'); // No cipher provided!
-      fail('Expected Hive to throw an error when opening an encrypted box without a cipher');
-    } catch (e) {
-      expect(e, isNotNull);
-    }
+
+    // Read raw file bytes — if encryption worked, the plaintext
+    // values should NOT appear verbatim in the on-disk file.
+    final cycleBoxFile = File('${tempDir.path}/cycle_logs.hive');
+    final rawBytes = await cycleBoxFile.readAsBytes();
+    final rawString = String.fromCharCodes(rawBytes);
+    expect(rawString, isNot(contains('heavy')),
+        reason: 'Encrypted file should not contain plaintext "heavy"');
+    expect(rawString, isNot(contains('Test User')),
+        reason: 'Encrypted file should not contain plaintext "Test User"');
   });
 }

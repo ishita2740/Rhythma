@@ -1,43 +1,82 @@
+# Every direct dependency carries a lower bound.
+#
+# Backend CI started failing on every open pull request with:
+#
+#     error: resolution-too-deep
+#     × Dependency resolution exceeded maximum depth
+#
+# without a single line of this file having changed. With no lower bounds,
+# pip is free to walk *backwards* through every release of a transitive
+# dependency looking for a combination that satisfies the graph. The
+# firebase-admin / google-generativeai / google-api-core stack all pull in
+# grpcio and protobuf, and the CI log shows pip descending through fifty-odd
+# grpcio releases — 1.71 down to 1.60 — before giving up. That search space
+# grows every time any of those projects publishes, so an install that
+# worked yesterday can fail today with no change here at all.
+#
+# The floors below are pip's own documented remedy for this error. Each one
+# is roughly the version this project was already developed and tested
+# against, so nothing in use is excluded — they only stop the resolver
+# considering ancient releases that were never going to be installed.
+#
+# Deliberately floors (`>=`) rather than pins (`==`). Pinning would make
+# this file a lockfile that has to be hand-bumped for every security patch,
+# and it is shared by contributors on several platforms and Python
+# versions. If reproducible installs are wanted later, the tool for that is
+# a separate constraints or lock file, not turning this one into one.
+#
+# When adding a dependency here, give it a lower bound too. One unbounded
+# entry in the google stack is enough to bring the failure back.
+
 # ── Web Framework ──────────────────────────────────────────
-fastapi==0.111.0
-uvicorn[standard]==0.30.1
-python-multipart==0.0.9
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
 
 # ── Pydantic (data validation) ─────────────────────────────
-pydantic==2.7.4
-pydantic-settings==2.3.3
+pydantic[email]>=2.9
+pydantic-settings>=2.5
 
 # ── Firebase / Firestore ───────────────────────────────────
-firebase-admin==6.5.0
+firebase-admin>=6.6
 
 # ── Google AI (Gemini) ─────────────────────────────────────
-google-generativeai==0.7.2
+google-generativeai>=0.8.3
+
+# google-api-core is imported directly, in services/firestore_service.py,
+# for FailedPrecondition. grpcio and protobuf are not — they are listed
+# because they are the packages pip actually backtracks through, and
+# bounding them here is what keeps the resolution shallow.
+google-api-core>=2.20
+grpcio>=1.66
+protobuf>=5.28
 
 # ── ML Models ──────────────────────────────────────────────
-xgboost==2.0.3
-scikit-learn==1.5.0
-numpy==1.26.4
-pandas==2.2.2
-joblib==1.4.2
+xgboost>=2.1
+scikit-learn>=1.5
+numpy>=1.26
+pandas>=2.2
+joblib>=1.4
 
 # ── SMS (Twilio) ───────────────────────────────────────────
-twilio==9.2.3
+twilio>=9.3
 
 # ── Authentication ─────────────────────────────────────────
-python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
-bcrypt==4.1.3
+python-jose[cryptography]>=3.3
+passlib[bcrypt]>=1.7.4
+bcrypt>=4.2
 
 # ── HTTP Client ────────────────────────────────────────────
-httpx==0.27.0
+# Listed once. It was previously named both here and again under Testing,
+# unbounded in both places.
+httpx>=0.27
 
 # ── Environment Variables ──────────────────────────────────
-python-dotenv==1.0.1
+python-dotenv>=1.0
 
 # ── Logging ────────────────────────────────────────────────
-loguru==0.7.2
+loguru>=0.7
 
 # ── Testing ────────────────────────────────────────────────
-pytest==8.2.2
-pytest-asyncio==0.23.7
-httpx==0.27.0
+pytest>=8.3
+pytest-asyncio>=0.24

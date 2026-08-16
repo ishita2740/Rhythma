@@ -1,17 +1,27 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:rhythma/l10n/app_localizations.dart';
 import 'package:rhythma/providers/locale_provider.dart';
 import 'package:rhythma/providers/theme_provider.dart';
-import 'package:rhythma/providers/profile_provider.dart'; // <-- added import
+import 'package:rhythma/providers/profile_provider.dart';
 import 'package:rhythma/screens/settings/language_screen.dart';
 import 'package:rhythma/screens/settings/theme_screen.dart';
-import 'package:rhythma/services/local_storage_service.dart';
+import 'package:rhythma/config/supported_languages.dart';
+import '../../test_helpers/local_storage_fixture.dart';
 
 void main() {
-  setUp(() {
-    LocalStorageService.isTesting = true;
+  late Directory tempDir;
+
+  setUp(() async {
+    tempDir = await setUpLocalStorage();
+    await seedCurrentUserId('test-user');
+  });
+
+  tearDown(() async {
+    await tearDownLocalStorage(tempDir);
   });
 
   Future<void> pumpScreen(
@@ -51,8 +61,8 @@ void main() {
 
       expect(find.text('Select Language'), findsOneWidget);
 
-      for (final langName in LanguageScreen.languages.keys) {
-        expect(find.text(langName), findsOneWidget);
+      for (final lang in appSupportedLanguages) {
+        expect(find.text(lang.nativeName), findsOneWidget);
       }
 
       expect(
@@ -70,7 +80,11 @@ void main() {
       final localeProvider = LocaleProvider();
       await pumpScreen(tester, const LanguageScreen(), localeProvider: localeProvider);
 
-      await tester.tap(find.text('हिन्दी (Hindi)'));
+      // Tap inside runAsync so mergeProfileWithSync (which calls Dio) completes
+      await tester.runAsync(() async {
+        await tester.tap(find.text('हिन्दी (Hindi)'));
+        await Future.delayed(const Duration(seconds: 1));
+      });
       await tester.pumpAndSettle();
 
       expect(localeProvider.locale.languageCode, 'hi');
@@ -97,11 +111,14 @@ void main() {
       expect(tester.widget<SwitchListTile>(darkModeSwitch).value, isFalse);
       expect(themeProvider.isDarkMode, isFalse);
 
-      await tester.tap(darkModeSwitch);
+      await tester.runAsync(() async {
+        await tester.tap(darkModeSwitch);
+        await Future.delayed(const Duration(seconds: 1));
+      });
       await tester.pumpAndSettle();
 
-      expect(tester.widget<SwitchListTile>(darkModeSwitch).value, isTrue);
       expect(themeProvider.isDarkMode, isTrue);
+      expect(tester.widget<SwitchListTile>(darkModeSwitch).value, isTrue);
     });
 
     testWidgets('tapping a swatch updates ThemeProvider.primaryColor',
@@ -122,7 +139,10 @@ void main() {
       });
       expect(swatchFinder, findsOneWidget);
 
-      await tester.tap(swatchFinder);
+      await tester.runAsync(() async {
+        await tester.tap(swatchFinder);
+        await Future.delayed(const Duration(seconds: 1));
+      });
       await tester.pumpAndSettle();
 
       expect(themeProvider.primaryColor, rosePink);

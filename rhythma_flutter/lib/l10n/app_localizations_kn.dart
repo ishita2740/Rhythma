@@ -64,6 +64,21 @@ class AppLocalizationsKn extends AppLocalizations {
   String get selectLanguage => 'ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ';
 
   @override
+  String get langEnglish => 'English';
+
+  @override
+  String get langHindi => 'हिन्दी (Hindi)';
+
+  @override
+  String get langTamil => 'தமிழ் (Tamil)';
+
+  @override
+  String get langTelugu => 'తెలుగు (Telugu)';
+
+  @override
+  String get langMarathi => 'मराठी (Marathi)';
+
+  @override
   String get homeGreeting => 'ನಮಸ್ತೆ';
 
   @override
@@ -80,6 +95,10 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get homeHighEnergy => 'ಹೆಚ್ಚಿನ ಶಕ್ತಿ';
+
+  @override
+  String get homeFertileWindowDisclaimer =>
+      'ಇದು ನೀವು ದಾಖಲಿಸಿದ ಡೇಟಾ ಆಧಾರಿತ ಅಂದಾಜು ಮಾತ್ರ, ವೈದ್ಯಕೀಯ ಅಥವಾ ಗರ್ಭನಿರೋಧಕ ಸಲಹೆ ಅಲ್ಲ.';
 
   @override
   String get homeAiTitle => 'RHYTHMA AI';
@@ -300,8 +319,9 @@ class AppLocalizationsKn extends AppLocalizations {
   String get assistantInputHint => 'ನಿಮ್ಮ ಆರೋಗ್ಯದ ಬಗ್ಗೆ ಏನ್ನನ್ನಾದರೂ ಕೇಳಿ...';
 
   @override
-  String get assistantWelcome =>
-      'ಹಲೋ ಆರ್ಯ 🌸 ನಾನು Rhythma, ನಿಮ್ಮ ಖಾಸಗಿ ಆರೋಗ್ಯ ಸಹಚರ. ನಿಮ್ಮ ಋತುಚಕ್ರ, ಲಕ್ಷಣಗಳು ಅಥವಾ ಆರೋಗ್ಯದ ಬಗ್ಗೆ ಇಂಗ್ಲಿಷ್, ಹಿಂದಿ, ಮರಾಠಿ ಅಥವಾ ತಮಿಳಿನಲ್ಲಿ ಏನನ್ನಾದರೂ ಕೇಳಿ.';
+  String assistantWelcome(String name) {
+    return 'ಹಲೋ ಆರ್ಯ 🌸 ನಾನು Rhythma, ನಿಮ್ಮ ಖಾಸಗಿ ಆರೋಗ್ಯ ಸಹಚರ. ನಿಮ್ಮ ಋತುಚಕ್ರ, ಲಕ್ಷಣಗಳು ಅಥವಾ ಆರೋಗ್ಯದ ಬಗ್ಗೆ ಇಂಗ್ಲಿಷ್, ಹಿಂದಿ, ಮರಾಠಿ ಅಥವಾ ತಮಿಳಿನಲ್ಲಿ ಏನನ್ನಾದರೂ ಕೇಳಿ.';
+  }
 
   @override
   String get assistantSug1 => 'ನನ್ನ ಮುಟ್ಟು ಅನಿಯಮಿತವಾಗಿರುವುದೇಕೆ?';
@@ -317,6 +337,10 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get assistantSug5 => 'मेरे पीरियड्स अनियमित हैं — क्या यह सामान्य है?';
+
+  @override
+  String get assistantDisclaimer =>
+      'ಈ ಸಹಾಯಕ ಸಾಮಾನ್ಯ ಆರೋಗ್ಯ ಮಾಹಿತಿಯನ್ನು ಮಾತ್ರ ಒದಗಿಸುತ್ತದೆ ಮತ್ತು ವೃತ್ತಿಪರ ವೈದ್ಯಕೀಯ ಸಲಹೆಗೆ ಬದಲಿಯಲ್ಲ.';
 
   @override
   String get insightsTitle => 'ಆರೋಗ್ಯ ಒಳನೋಟಗಳು';
@@ -372,6 +396,10 @@ class AppLocalizationsKn extends AppLocalizations {
   String get insightsRec3 => 'ಅಂಡೋತ್ಪತ್ತಿಯ ವಾರದಲ್ಲಿ 2.5L ನೀರು ಕುಡಿಯಿರಿ';
 
   @override
+  String get insightsDisclaimer =>
+      'ಈ ಒಳನೋಟಗಳು ನೀವು ದಾಖಲಿಸಿದ ಮಾಹಿತಿಯ ಆಧಾರದ ಮೇಲೆ ಇವೆ ಮತ್ತು ವೈಯಕ್ತಿಕ ಟ್ರ್ಯಾಕಿಂಗ್‌ಗಾಗಿ ಮಾತ್ರ. ಇದು ವೈದ್ಯಕೀಯ ರೋಗನಿರ್ಣಯವಲ್ಲ ಮತ್ತು ಅರ್ಹ ವೈದ್ಯಕೀಯ ವೃತ್ತಿಪರರ ಸಲಹೆಗೆ ಬದಲಿಯಲ್ಲ.';
+
+  @override
   String get profileTitle => 'ಪ್ರೊಫೈಲ್';
 
   @override
@@ -423,6 +451,9 @@ class AppLocalizationsKn extends AppLocalizations {
   String get profileSaveChanges => 'ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ';
 
   @override
+  String get profileNameEmptyError => 'ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಹೆಸರನ್ನು ನಮೂದಿಸಿ';
+
+  @override
   String get profileAddContact => 'ಸಂಪರ್ಕ ಸಂಖ್ಯೆ ಸೇರಿಸಿ';
 
   @override
@@ -443,6 +474,29 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get profileNoContacts =>
       'ಇನ್ನೂ ಯಾವುದೇ ತುರ್ತು ಸಂಪರ್ಕಗಳನ್ನು ಹೊಂದಿಸಿಲ್ಲ.';
+
+  @override
+  String get profileAgeInvalidError => 'ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ವಯಸ್ಸನ್ನು ನಮೂದಿಸಿ';
+
+  @override
+  String get profileCycleInvalidError =>
+      'ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಋತುಚಕ್ರದ ಅವಧಿಯನ್ನು ನಮೂದಿಸಿ';
+
+  @override
+  String get profilePhoneInvalidError =>
+      'ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ';
+
+  @override
+  String get contactNameRequiredError => 'Contact name is required';
+
+  @override
+  String get edit => 'ಸಂಪಾದಿಸಿ';
+
+  @override
+  String get delete => 'ಅಳಿಸಿ';
+
+  @override
+  String get onboardingAvatarOption => 'ಅವತಾರ ಆಯ್ಕೆ';
 
   @override
   String get navHome => 'ಹೋಮ್';
@@ -471,6 +525,19 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get settingsEmailError =>
       'ಇಮೇಲ್ ಆ್ಯಪ್ ತೆರೆಯಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು support@rhythma.com ಗೆ ಇಮೇಲ್ ಮಾಡಿ';
+
+  @override
+  String get settingsData => 'Data';
+
+  @override
+  String get settingsExportData => 'Export My Data';
+
+  @override
+  String get settingsExportDataDesc =>
+      'Download your profile, contacts, and cycle logs as JSON';
+
+  @override
+  String get settingsExportSuccess => 'Data exported successfully';
 
   @override
   String get onboardingPrivacyNote =>
@@ -607,10 +674,128 @@ class AppLocalizationsKn extends AppLocalizations {
       'ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ';
 
   @override
+  String get onboardingAgeRequired => 'Please enter your age or select a range';
+
+  @override
+  String get onboardingHeightRequired =>
+      'Please enter your height or select a range';
+
+  @override
+  String get onboardingWeightRequired =>
+      'Please enter your weight or select a range';
+
+  @override
+  String get onboardingNotSure => 'Not sure';
+
+  @override
+  String get onboardingApproximate => 'Approximate';
+
+  @override
+  String get onboardingAgeHint => 'Enter your age';
+
+  @override
+  String get onboardingAgeUnit => 'years';
+
+  @override
+  String get onboardingHeightHint => 'Enter your height';
+
+  @override
+  String get onboardingHeightUnit => 'cm';
+
+  @override
+  String get onboardingWeightHint => 'Enter your weight';
+
+  @override
+  String get onboardingWeightUnit => 'kg';
+
+  @override
+  String get onboardingRangeUnder18 => 'Under 18';
+
+  @override
+  String get onboardingRange18to25 => '18–25';
+
+  @override
+  String get onboardingRange26to35 => '26–35';
+
+  @override
+  String get onboardingRange36to50 => '36–50';
+
+  @override
+  String get onboardingRange51to65 => '51–65';
+
+  @override
+  String get onboardingRangeOver65 => 'Over 65';
+
+  @override
+  String get onboardingRangeUnder150 => 'Under 150 cm';
+
+  @override
+  String get onboardingRange150to160 => '150–160 cm';
+
+  @override
+  String get onboardingRange161to170 => '161–170 cm';
+
+  @override
+  String get onboardingRange171to180 => '171–180 cm';
+
+  @override
+  String get onboardingRangeOver180 => 'Over 180 cm';
+
+  @override
+  String get onboardingRangeUnder50kg => 'Under 50 kg';
+
+  @override
+  String get onboardingRange50to65kg => '50–65 kg';
+
+  @override
+  String get onboardingRange66to80kg => '66–80 kg';
+
+  @override
+  String get onboardingRange81to100kg => '81–100 kg';
+
+  @override
+  String get onboardingRangeOver100kg => 'Over 100 kg';
+
+  @override
   String get onboardingTapToSelectDate => 'ದಿನಾಂಕ ಆಯ್ಕೆ ಮಾಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ';
 
   @override
   String get onboardingDays => 'ದಿನಗಳು';
+
+  @override
+  String get onboardingApproximateLabel => 'When was your last period?';
+
+  @override
+  String get onboardingApproximateLessWeek => 'Less than a week ago';
+
+  @override
+  String get onboardingApproximate1to2Weeks => '1–2 ವಾರಗಳ ಹಿಂದೆ';
+
+  @override
+  String get onboardingApproximate3to4Weeks => '3–4 ವಾರಗಳ ಹಿಂದೆ';
+
+  @override
+  String get onboardingApproximateMoreMonth => 'ಒಂದು ತಿಂಗಳಿಗಿಂತ ಹೆಚ್ಚು ಹಿಂದೆ';
+
+  @override
+  String get onboardingPickExactDate => 'ಬದಲಿಗೆ ನಿಖರವಾದ ದಿನಾಂಕ ಆಯ್ಕೆಮಾಡಿ';
+
+  @override
+  String get onboardingLastPeriodRequired =>
+      'ನಿಮ್ಮ ಕೊನೆಯ ಋತುಮತಿ ಯಾವಾಗ ಪ್ರಾರಂಭವಾಯಿತು ಎಂಬುದನ್ನು ಆಯ್ಕೆಮಾಡಿ';
+
+  @override
+  String get nudgeCompleteProfileTitle => 'ಹೆಚ್ಚು ನಿಖರವಾದ ಮುನ್ಸೂಚನೆಗಳು ಬೇಕೇ?';
+
+  @override
+  String get nudgeCompleteProfileBody =>
+      'ಚಕ್ರ ಮುನ್ಸೂಚನೆಗಳನ್ನು ಸುಧಾರಿಸಲು ನಿಮ್ಮ ಕೊನೆಯ ಋತುಮತಿಯ ನಿಖರವಾದ ಪ್ರಾರಂಭ ದಿನಾಂಕವನ್ನು ಸೇರಿಸಿ.';
+
+  @override
+  String get nudgeCompleteProfileAction => 'ನವೀಕರಿಸಿ';
+
+  @override
+  String get nudgeCompleteProfileDismiss => 'ನಂತರ';
 
   @override
   String get smsScreenTitle => 'SMS ಸಾರಾಂಶಗಳು';
@@ -709,4 +894,103 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get insightsNotEnoughTrendData =>
       'ನಿಮ್ಮ ಟ್ರೆಂಡ್ ನೋಡಲು ಕನಿಷ್ಠ ಎರಡು ಋತುಚಕ್ರಗಳನ್ನು ದಾಖಲಿಸಿ.';
+
+  @override
+  String get assistantAccessibilitySuggestedPrompt => 'Suggested prompt';
+
+  @override
+  String get assistantAccessibilityMessageInput => 'Message input';
+
+  @override
+  String get assistantAccessibilityMessageInputHint =>
+      'Type your question here';
+
+  @override
+  String get assistantAccessibilitySendMessage => 'Send message';
+
+  @override
+  String get assistantAccessibilitySendMessageHint =>
+      'Sends your message to the assistant';
+
+  @override
+  String get assistantAccessibilityTyping => 'Assistant is typing';
+
+  @override
+  String get languageSelectionError =>
+      'ಭಾಷೆಯನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.';
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get deleteAccountConfirmationTitle => 'Delete Account?';
+
+  @override
+  String get deleteAccountConfirmationDesc =>
+      'This action is permanent and cannot be undone. All your data will be wiped.';
+
+  @override
+  String get accountDeletedSuccess => 'Account deleted successfully.';
+
+  @override
+  String get langGujarati => 'ગુજરાતી (Gujarati)';
+
+  @override
+  String get welcomeToRhythma => 'Welcome to Rhythma';
+
+  @override
+  String get loginOrSignUpWithPhone => 'Log in or sign up with your phone number.';
+
+  @override
+  String get enterOtpSentToPhone => 'Enter the OTP sent to your phone';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get sendingOtp => 'Sending OTP...';
+
+  @override
+  String get otp => 'OTP';
+
+  @override
+  String get verifyOtp => 'Verify OTP';
+
+  @override
+  String get verifying => 'Verifying...';
+
+  @override
+  String get useDifferentPhoneNumber => 'Use a different phone number';
+
+  @override
+  String get pleaseEnterPhoneNumber => 'Please enter your phone number.';
+
+  @override
+  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number with country code (e.g., +91).';
+
+  @override
+  String get verificationFailed => 'Verification failed';
+
+  @override
+  String otpSentTo(String phone) => 'OTP sent to $phone';
+
+  @override
+  String get pleaseEnterOtp => 'Please enter the OTP.';
+
+  @override
+  String get invalidOtp => 'Invalid OTP. Please try again.';
+
+  @override
+  String get failedToGetIdToken => 'Failed to get ID token';
+  @override
+  String get logFlowVeryHeavy => 'Very Heavy';
+  @override
+  String get logFlowSpotting => 'Spotting';
+  @override
+  String get logSympSeverePain => 'Severe Pain';
+  @override
+  String get logSympFainting => 'Fainting';
 }

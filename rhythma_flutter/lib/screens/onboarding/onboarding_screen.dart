@@ -1,11 +1,17 @@
+// ignore_for_file: deprecated_member_use
+
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../../config/supported_languages.dart';
 import '../../config/theme.dart';
 import '../../providers/locale_provider.dart';
 import '../../services/local_storage_service.dart';
 import '../../providers/profile_provider.dart';
+import 'package:flutter/semantics.dart';
 
 /// The 5-step offline-first onboarding flow.
 /// On completion, writes all collected data to LocalStorageService and
@@ -60,14 +66,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   // Step 5 – Permissions
   bool _notificationsEnabled = false;
   bool _dataConsent = false;
+  // ignore: unused_field
   String? _consentError;
+  // ignore: unused_field
   String? _phoneError;
 
   late AnimationController _pageAnimController;
   late Animation<double> _pageFade;
-
-  // E.164 format: leading '+' followed by 1-15 digits.
-  static final _e164 = RegExp(r'^\+[1-9]\d{1,14}$');
 
   @override
   void initState() {
@@ -100,16 +105,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 
   // ── Data ──────────────────────────────────────────────────────────────────
-
-  static const List<Map<String, String>> _languages = [
-    {'code': 'en', 'label': 'English'},
-    {'code': 'hi', 'label': 'हिन्दी'},
-    {'code': 'ta', 'label': 'தமிழ்'},
-    {'code': 'te', 'label': 'తెలుగు'},
-    {'code': 'mr', 'label': 'मराठी'},
-  ];
-  
-  bool? get selected => null;
 
   // ── Navigation ────────────────────────────────────────────────────────────
 
@@ -152,8 +147,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     }
 
     if (_currentPage == 3) {
-      final phone = _phoneController.text.trim();
-      if (phone.isNotEmpty && !_e164.hasMatch(phone)) {
+      final digitsOnly = _phoneController.text.replaceAll(RegExp(r'[^0-9]'), '');
+      if (_phoneController.text.trim().isNotEmpty && (digitsOnly.length < 7 || digitsOnly.length > 15)) {
         setState(() => _phoneError = l.onboardingPhoneInvalid);
         return false;
       }
@@ -189,6 +184,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       );
       if (!mounted) return;
       setState(() => _currentPage++);
+
+      
+      SemanticsService.announce(
+        'Step ${_currentPage + 1} of $_totalPages',
+         Directionality.of(context),
+      );
+
       _pageAnimController.forward();
     } else {
       await _saveAndComplete();
@@ -205,7 +207,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       );
       if (!mounted) return;
       setState(() => _currentPage--);
-      _pageAnimController.forward();
+
+      SemanticsService.announce(
+        'Step ${_currentPage + 1} of $_totalPages',
+        Directionality.of(context),
+     );
+
+     _pageAnimController.forward();
     }
   }
 
@@ -248,7 +256,14 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     // 3. Mark onboarding done for this user account.
     await LocalStorageService.setOnboardingCompleted(true);
 
-    widget.onComplete();
+    if (!mounted) return;
+
+    SemanticsService.announce(
+  'Onboarding complete',
+  Directionality.of(context),
+);
+
+  widget.onComplete();
   }
 
   // ── UI ────────────────────────────────────────────────────────────────────
@@ -288,30 +303,37 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     );
   }
 
-  Widget _buildProgressBar() {
-    return Padding(
+ Widget _buildProgressBar() {
+  return Semantics(
+    label: 'Onboarding progress',
+    value: 'Step ${_currentPage + 1} of $_totalPages',
+    readOnly: true,
+    child: Padding(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
-      child: Row(
-        children: List.generate(_totalPages, (i) {
-          final active = i <= _currentPage;
-          return Expanded(
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              margin: const EdgeInsets.symmetric(horizontal: 3),
-              height: 4,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                color: active
-                    ? RhythmaColors.primary
-                    : RhythmaColors.primary.withValues(alpha: 0.2),
-              ),
-            ),
-          );
-        }),
-      ),
-    );
-  }
+      child: ExcludeSemantics(
+        child: Row(
+          children: List.generate(_totalPages, (i) {
+            final active = i <= _currentPage;
 
+            return Expanded(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                height: 4,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  color: active
+                      ? RhythmaColors.primary
+                      : RhythmaColors.primary.withValues(alpha: 0.2),
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
+    ),
+  );
+}
   Widget _buildNavBar(AppLocalizations l) {
     final isLast = _currentPage == _totalPages - 1;
     return Padding(
@@ -369,15 +391,27 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         children: [
           _buildStepHeader(l.onboardingStep1Title, l.onboardingStep1Subtitle),
           const SizedBox(height: 32),
-          ...List.generate(_languages.length, (i) {
-            final lang = _languages[i];
-            final selected = lang['code'] == _selectedLanguage;
-            return GestureDetector(
+          ...List.generate(appSupportedLanguages.length, (i) {
+            final lang = appSupportedLanguages[i];
+            final selected = lang.code == _selectedLanguage;
+           return Semantics(
+             label: '${lang.nativeName} language',
+             selected: selected,
+             button: true,
+             hint: 'Double tap to select language',
+             child: GestureDetector(
               onTap: () {
-                setState(() => _selectedLanguage = lang['code']!);
-                context.read<LocaleProvider>().setLocale(Locale(lang['code']!));
-              },
-              child: AnimatedContainer(
+               setState(() => _selectedLanguage = lang.code);
+
+             SemanticsService.announce(
+              '${lang.nativeName} selected',
+              Directionality.of(context),
+            );
+
+      context.read<LocaleProvider>()
+          .setLocale(Locale(lang.code));
+    },
+    child: AnimatedContainer(
                 duration: const Duration(milliseconds: 220),
                 margin: const EdgeInsets.only(bottom: 12),
                 padding:
@@ -396,7 +430,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 child: Row(
                   children: [
                     Text(
-                      lang['label']!,
+                      lang.nativeName,
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight:
@@ -413,6 +447,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   ],
                 ),
               ),
+             ),
             );
           }),
           const SizedBox(height: 24),
@@ -468,9 +503,21 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               itemBuilder: (_, i) {
                 final avatarPath = OnboardingScreen.avatars[i];
                 final selected = _selectedAvatar == avatarPath;
-                return GestureDetector(
-                  onTap: () => setState(() => _selectedAvatar = avatarPath),
-                  child: AnimatedContainer(
+               return Semantics(
+                 label: 'Avatar ${i + 1}',
+                 selected: selected,
+                 button: true,
+                 hint: 'Double tap to select avatar',
+                 child: GestureDetector(
+                  onTap: () {
+                   setState(() => _selectedAvatar = avatarPath);
+
+                   SemanticsService.announce(
+                    'Avatar ${i + 1} selected',
+                    Directionality.of(context),
+             );
+           },
+          child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     margin: const EdgeInsets.only(right: 12),
                     width: 60,
@@ -495,6 +542,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       ),
                     ),
                   ),
+                 ),
                 );
               },
             ),
@@ -556,106 +604,109 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         children: [
           _buildStepHeader(l.onboardingStep3Title, l.onboardingStep3Subtitle),
           const SizedBox(height: 28),
-          Text(l.onboardingLastPeriodLabel,
-              style: TextStyle(fontSize: 14, color: RhythmaColors.mutedFg)),
-          const SizedBox(height: 8),
-          GestureDetector(
-            onTap: () async {
-              final picked = await showDatePicker(
-                context: context,
-                initialDate: _lastPeriodDate ??
-                    DateTime.now().subtract(const Duration(days: 14)),
-                firstDate: DateTime.now().subtract(const Duration(days: 365)),
-                lastDate: DateTime.now(),
-                builder: (context, child) {
-                  final isDark =
-                      Theme.of(context).brightness == Brightness.dark;
-                  return Theme(
-                    data: Theme.of(context).copyWith(
-                      colorScheme: isDark
-                          ? ColorScheme.dark(
-                              primary: RhythmaColors.primary,
-                              onPrimary: RhythmaColors.primaryFg,
-                              surface: RhythmaColors.surface,
-                              onSurface: RhythmaColors.foreground,
-                            )
-                          : ColorScheme.light(
-                              primary: RhythmaColors.primary,
-                              onPrimary: RhythmaColors.primaryFg,
-                              surface: RhythmaColors.surface,
-                              onSurface: RhythmaColors.foreground,
-                            ),
-                    ),
-                    child: child!,
-                  );
-                },
-              );
-              if (picked != null) setState(() => _lastPeriodDate = picked);
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: RhythmaColors.surface,
+         Text(
+  l.onboardingLastPeriodLabel,
+  style: TextStyle(
+    fontSize: 14,
+    color: RhythmaColors.mutedFg,
+  ),
+),
+const SizedBox(height: 8),
 
-                border: Border.all(color: RhythmaColors.primary.withValues(alpha: 0.3)),
-             ),
-              child: Row(
-                children: [
-                  Icon(Icons.calendar_today_rounded,
-                      color: RhythmaColors.primary, size: 20),
-                  const SizedBox(width: 12),
-                  Text(
-                    _lastPeriodDate == null
-                        ? l.onboardingTapToSelectDate
-                        : '${_lastPeriodDate!.day}/${_lastPeriodDate!.month}/${_lastPeriodDate!.year}',
-                    style: TextStyle(
-                      color: _lastPeriodDate == null
-                          ? RhythmaColors.mutedFg
-                          : RhythmaColors.foreground,
-                      fontSize: 15,
+Text(
+  'Choose the first day of your last period.',
+  style: TextStyle(
+    fontSize: 13,
+    color: RhythmaColors.mutedFg,
+  ),
+),
+const SizedBox(height: 12),
+
+Semantics(
+  label: 'Last period date',
+  hint: 'Double tap to open calendar and select a date',
+  button: true,
+  child: GestureDetector(
+    onTap: () async {
+      final picked = await showDatePicker(
+        context: context,
+        initialDate: _lastPeriodDate ??
+            DateTime.now().subtract(const Duration(days: 14)),
+        firstDate: DateTime.now().subtract(
+          const Duration(days: 365),
+        ),
+        lastDate: DateTime.now(),
+        builder: (context, child) {
+          final isDark =
+              Theme.of(context).brightness == Brightness.dark;
+
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: isDark
+                  ? ColorScheme.dark(
+                      primary: RhythmaColors.primary,
+                      onPrimary: RhythmaColors.primaryFg,
+                      surface: RhythmaColors.surface,
+                      onSurface: RhythmaColors.foreground,
+                    )
+                  : ColorScheme.light(
+                      primary: RhythmaColors.primary,
+                      onPrimary: RhythmaColors.primaryFg,
+                      surface: RhythmaColors.surface,
+                      onSurface: RhythmaColors.foreground,
                     ),
-                  ),
-                ],
-              ),
+            ),
+            child: child!,
+          );
+        },
+      );
+
+      if (picked != null) {
+        setState(() => _lastPeriodDate = picked);
+
+        SemanticsService.announce(
+          'Date selected',
+          Directionality.of(context),
+        );
+      }
+    },
+    child: Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 14,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: RhythmaColors.surface,
+        border: Border.all(
+          color: RhythmaColors.primary.withValues(alpha: 0.3),
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.calendar_today_rounded,
+            color: RhythmaColors.primary,
+            size: 20,
+          ),
+          const SizedBox(width: 12),
+          Text(
+            _lastPeriodDate == null
+                ? l.onboardingTapToSelectDate
+                : '${_lastPeriodDate!.day}/${_lastPeriodDate!.month}/${_lastPeriodDate!.year}',
+            style: TextStyle(
+              color: _lastPeriodDate == null
+                  ? RhythmaColors.mutedFg
+                  : RhythmaColors.foreground,
+              fontSize: 15,
             ),
           ),
-          const SizedBox(height: 24),
-          _buildSliderField(
-            label: l.onboardingCycleLengthLabel,
-            value: _cycleLength.toDouble(),
-            min: 21,
-            max: 45,
-            divisions: 24,
-            displayValue: '$_cycleLength ${l.onboardingDays}',
-            onChanged: (v) => setState(() => _cycleLength = v.round()),
-          ),
-          const SizedBox(height: 20),
-          _buildSliderField(
-            label: l.onboardingPeriodDurationLabel,
-            value: _periodDuration.toDouble(),
-            min: 2,
-            max: 10,
-            divisions: 8,
-            displayValue: '$_periodDuration ${l.onboardingDays}',
-            onChanged: (v) => setState(() => _periodDuration = v.round()),
-          ),
-          const SizedBox(height: 24),
-          Text(l.onboardingCycleRegularityLabel,
-              style: TextStyle(fontSize: 14, color: RhythmaColors.mutedFg)),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                  child: _buildToggleChip(l.onboardingRegular, _isRegular,
-                      () => setState(() => _isRegular = true))),
-              const SizedBox(width: 12),
-              Expanded(
-                  child: _buildToggleChip(l.onboardingIrregular, !_isRegular,
-                      () => setState(() => _isRegular = false))),
-            ],
-          ),
         ],
+      ),
+    ),
+  ),
+),
+        ]
       ),
     );
   }
@@ -673,8 +724,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           _buildTextField(
             controller: _phoneController,
             label: l.onboardingPhoneLabel,
-            hint: l.onboardingPhoneHint,
-            error: _phoneError,
             keyboardType: TextInputType.phone,
             textInputAction: TextInputAction.next,
           ),
@@ -705,6 +754,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         children: [
           _buildStepHeader(l.onboardingStep5Title, l.onboardingStep5Subtitle),
           const SizedBox(height: 36),
+          // Notification toggle
           _buildSwitchTile(
             icon: '📅',
             title: l.onboardingEnableNotifications,
@@ -713,6 +763,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             onChanged: (v) => setState(() => _notificationsEnabled = v),
           ),
           const SizedBox(height: 32),
+          // Data consent checkbox
           GestureDetector(
             onTap: () {
               setState(() {
@@ -729,9 +780,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   height: 24,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
-                    color: _dataConsent
-                        ? RhythmaColors.primary
-                        : Colors.transparent,
+                    color: _dataConsent ? RhythmaColors.primary : Colors.transparent,
                     border: Border.all(
                       color: _consentError != null
                           ? Colors.redAccent
@@ -760,8 +809,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                         const SizedBox(height: 4),
                         Text(
                           _consentError!,
-                          style: const TextStyle(
-                              color: Colors.redAccent, fontSize: 12),
+                          style: const TextStyle(color: Colors.redAccent, fontSize: 12),
                         ),
                       ],
                     ],
@@ -849,6 +897,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     );
   }
 
+  // ignore: unused_element
   Widget _buildSliderField({
     required String label,
     required double value,
@@ -889,19 +938,37 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     );
   }
 
-  Widget _buildToggleChip(String label, bool selected, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
+  // ignore: unused_element
+  Widget _buildToggleChip(
+  String label,
+  bool selected,
+  VoidCallback onTap,
+) {
+  return Semantics(
+    label: label,
+    selected: selected,
+    button: true,
+    hint: 'Double tap to select',
+    child: GestureDetector(
+      onTap: () {
+        onTap();
+
+        SemanticsService.announce(
+          '$label selected',
+          Directionality.of(context),
+        );
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-            color: selected
-          ? RhythmaColors.primary.withValues(alpha: 0.15)
-             : RhythmaColors.surface,
+          color: selected
+              ? RhythmaColors.primary.withValues(alpha: 0.15)
+              : RhythmaColors.surface,
           border: Border.all(
-            color: selected ? RhythmaColors.primary : Colors.transparent,
+            color:
+                selected ? RhythmaColors.primary : Colors.transparent,
             width: 2,
           ),
         ),
@@ -909,17 +976,21 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           child: Text(
             label,
             style: TextStyle(
-              fontWeight: selected ? FontWeight.bold : FontWeight.w500,
-              color:
-                  selected ? RhythmaColors.primary : RhythmaColors.foreground,
+              fontWeight:
+                  selected ? FontWeight.bold : FontWeight.w500,
+              color: selected
+                  ? RhythmaColors.primary
+                  : RhythmaColors.foreground,
               fontSize: 15,
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
+  // ignore: unused_element
   Widget _buildSwitchTile({
     required String icon,
     required String title,
@@ -966,10 +1037,14 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               ],
             ),
           ),
-          Switch(
-            value: value,
-            onChanged: onChanged,
-            activeThumbColor: RhythmaColors.primary,
+          Semantics(
+           label: title,
+           toggled: value,
+           child: Switch(
+           value: value,
+           onChanged: onChanged,
+           activeThumbColor: RhythmaColors.primary,
+           ),
           ),
         ],
       ),

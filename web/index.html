@@ -1,10 +1,73 @@
 <!doctype html>
-<html lang="en">
+<!--
+  `lang` is a starting value only. It is rewritten at runtime to match the
+  locale the user has chosen — see `useDocumentLanguage` in
+  src/lib/useDocumentMeta.ts. It matters more than it looks: a screen
+  reader picks its speech synthesizer from this attribute, so leaving it
+  pinned to "en" handed Devanagari and Tamil text to an English voice.
+-->
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>web</title>
+
+    <!--
+      Static defaults. Each page overrides the title and description at
+      runtime via `useDocumentMeta`, but these are what a crawler that does
+      not execute JavaScript sees, and what shows in the tab for the moment
+      before hydration.
+    -->
+    <title>Rhythma — menstrual health tracking and guidance</title>
+    <meta
+      name="description"
+      content="Rhythma is a multilingual women's health companion: track your cycle, understand your own patterns, and get guidance grounded in your logged data. Available in nine Indian languages."
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icon-192.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <!--
+      Matches --accent in src/index.css. Two values so the browser chrome
+      follows the theme instead of showing a light bar above a dark app;
+      the app declares `color-scheme: light dark` and honours both.
+    -->
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#aa3bff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16171d" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Add to Home Screen on iOS, which ignores the manifest. -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Rhythma" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+    <!--
+      Open Graph and Twitter. The likeliest way this link travels is pasted
+      into WhatsApp, which renders og:* — without these it previews as a
+      bare URL, which for a health app reads as something not to click.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Rhythma" />
+    <meta property="og:title" content="Rhythma — menstrual health tracking and guidance" />
+    <meta
+      property="og:description"
+      content="Track your cycle, understand your own patterns, and get guidance grounded in your logged data. Available in nine Indian languages."
+    />
+    <meta property="og:image" content="/icon-512.svg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Rhythma — menstrual health tracking and guidance" />
+    <meta
+      name="twitter:description"
+      content="Track your cycle, understand your own patterns, and get guidance grounded in your logged data."
+    />
+
+    <!--
+      This app shows menstrual and reproductive health data. A referrer
+      carrying the full path — `/provider/patients/{id}` — to a third-party
+      host is a leak, so send the origin only. The backend sets the same
+      policy on its own responses (#405); this covers the static page,
+      which the backend never touches.
+    -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
   </head>
   <body>
     <div id="root"></div>

@@ -13,7 +13,10 @@ import '../../services/local_storage_service.dart';
 import '../../utils/log_options.dart';
 import '../cycle/components/log_entry_sheet.dart';
 import '../insights/insights_screen.dart';
+import '../profile/profile_screen.dart';
 import '../settings/language_screen.dart';
+
+import 'package:url_launcher/url_launcher_string.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,25 +35,48 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _loadCachedDashboard();
     _fetchDashboardData();
   }
 
+  void _loadCachedDashboard() {
+    final cached = LocalStorageService.getCachedDashboard();
+    if (cached != null) {
+      setState(() {
+        _userData = cached['user'] ?? {};
+        _cycleData = cached['cycle'] ?? {};
+        _insights = cached['insights'] ?? {};
+        _loading = false;
+      });
+    }
+  }
+
   Future<void> _fetchDashboardData() async {
-    setState(() => _loading = true);
     try {
       final dio = ApiClient.dio;
       final response = await dio.get('/dashboard');
+      final data = {
+        'user': response.data['user'] ?? {},
+        'cycle': response.data['cycle'] ?? {},
+        'insights': response.data['insights'] ?? {},
+      };
+      await LocalStorageService.saveCachedDashboard(data);
+      if (!mounted) return;
       setState(() {
-        _userData = response.data['user'] ?? {};
-        _cycleData = response.data['cycle'] ?? {};
-        _insights = response.data['insights'] ?? {};
+        _userData = data['user'] as Map<String, dynamic>;
+        _cycleData = data['cycle'] as Map<String, dynamic>;
+        _insights = data['insights'] as Map<String, dynamic>;
         _loading = false;
+        _error = '';
       });
     } catch (e) {
-      setState(() {
-        _error = e.toString();
-        _loading = false;
-      });
+      if (!mounted) return;
+      if (_loading) {
+        setState(() {
+          _error = e.toString();
+          _loading = false;
+        });
+      }
     }
   }
 
@@ -99,8 +125,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final nextPeriodDays = _cycleData['nextPeriodDays'] ?? 14;
     final cycleDay = _cycleData['day'] ?? 14;
     final totalCycle = _cycleData['total'] ?? 28;
-    final mhs = _insights['mhs'] ?? 82;
-    final cvi = _insights['cvi'] ?? 'Low';
+    final avgCycle = _insights['averageCycleLength'] ?? 28;
+    final avgBleeding = _insights['averageBleedingDuration'] ?? 5;
     final sleepHours = _insights['sleepHours'] ?? '7.2h';
 
     return SingleChildScrollView(
@@ -143,6 +169,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 _HeaderIcon(
+                  icon: Icons.sos_rounded,
+                  color: RhythmaColors.coral,
+                  onTap: () {
+                    final contacts = LocalStorageService.getEmergencyContacts();
+                    if (contacts.isNotEmpty) {
+                      final phone = contacts.first['phone']?.replaceAll(RegExp(r'[^\d+]'), '');
+                      if (phone != null && phone.isNotEmpty) {
+                        launchUrlString('tel:$phone');
+                        return;
+                      }
+                    }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(l10n.profileNoContacts)),
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
+                _HeaderIcon(
                   icon: Icons.language_rounded,
                   onTap: () {
                     Navigator.push(
@@ -160,6 +204,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
+
+          // ── Approximate date nudge ────────────────────────────
+          if (_shouldShowNudge(localProfile))
+            _buildNudgeBanner(context, l10n, localProfile),
 
           // ── Cycle ring + prediction ──────────────────────────
           GlassCard(
@@ -239,6 +287,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                               ),
+                              const SizedBox(height: 4),
+                              Text(
+                                l10n.homeFertileWindowDisclaimer,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: RhythmaColors.mutedFg,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -253,13 +309,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       children: [
                         _StatCell(
-                            label: 'MHS',
-                            value: '$mhs',
+                            label: 'Avg Cycle',
+                            value: '${avgCycle}d',
                             color: RhythmaColors.primary),
                         _StatDivider(),
                         _StatCell(
-                            label: 'CVI',
-                            value: '$cvi',
+                            label: 'Bleeding',
+                            value: '${avgBleeding}d',
                             color: RhythmaColors.teal),
                         _StatDivider(),
                         _StatCell(
@@ -379,12 +435,8 @@ class _HomeScreenState extends State<HomeScreen> {
             action: l10n.homeLogAll,
             onAction: () {
               final currentDate = DateTime.now();
-              final dateKey = currentDate.toIso8601String().split('T')[0];
-              final logs = LocalStorageService.getCycleLogs();
-              final existingLog = logs.cast<Map<String, dynamic>?>().firstWhere(
-                    (log) => log?['start_date'] == dateKey,
-                    orElse: () => null,
-                  );
+              final existingLog =
+                  LocalStorageService.getCycleLogForDate(currentDate);
 
               LogEntrySheet.show(
                 context,
@@ -552,6 +604,108 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // ─── Helpers ────────────────────────────────────────────────────────────
 
+  bool _shouldShowNudge(Map<String, dynamic> profile) {
+    if (profile['last_period_is_approximate'] != true) return false;
+    if (LocalStorageService.getNudgeDismissed('last_period_exact')) return false;
+
+    // Prefer onboarding_completed_at; fall back to last_period date for
+    // existing users who completed onboarding before this field was added.
+    final completedAt = profile['onboarding_completed_at'] as String?;
+    if (completedAt != null) {
+      final date = DateTime.tryParse(completedAt);
+      if (date != null) return DateTime.now().difference(date).inDays >= 3;
+    }
+
+    final lastPeriod = profile['last_period'] as String?;
+    if (lastPeriod != null) {
+      final date = DateTime.tryParse(lastPeriod);
+      if (date != null) return DateTime.now().difference(date).inDays >= 3;
+    }
+
+    // If neither date is available, show the nudge so the user can update.
+    return true;
+  }
+
+  Widget _buildNudgeBanner(
+      BuildContext context, AppLocalizations l10n, Map<String, dynamic> profile) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: RhythmaColors.primary.withValues(alpha: 0.08),
+          border: Border.all(
+              color: RhythmaColors.primary.withValues(alpha: 0.2)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.lightbulb_rounded,
+                    color: RhythmaColors.primary, size: 20),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    l10n.nudgeCompleteProfileTitle,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: RhythmaColors.foreground,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              l10n.nudgeCompleteProfileBody,
+              style: TextStyle(
+                  fontSize: 13, color: RhythmaColors.mutedFg),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: RhythmaColors.primary,
+                    foregroundColor: RhythmaColors.primaryFg,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) =>
+                              const ProfileScreen()),
+                    );
+                  },
+                  child: Text(l10n.nudgeCompleteProfileAction,
+                      style: const TextStyle(fontSize: 13)),
+                ),
+                const SizedBox(width: 8),
+                TextButton(
+                  onPressed: () async {
+                    await LocalStorageService.setNudgeDismissed(
+                        'last_period_exact', true);
+                    setState(() {});
+                  },
+                  child: Text(l10n.nudgeCompleteProfileDismiss,
+                      style: TextStyle(
+                          fontSize: 13, color: RhythmaColors.mutedFg)),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _showComingSoonDialog(BuildContext context, String topic) {
     final l10n = AppLocalizations.of(context)!;
     showDialog(
@@ -707,21 +861,27 @@ class _HomeScreenState extends State<HomeScreen> {
 class _HeaderIcon extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onTap;
-  const _HeaderIcon({required this.icon, this.onTap});
+  final Color? color;
+
+  const _HeaderIcon({required this.icon, this.onTap, this.color});
 
   @override
-  Widget build(BuildContext context) {
-    return GlassCard(
-      padding: EdgeInsets.zero,
-      borderRadius: 20,
-      onTap: onTap,
-      child: SizedBox(
-        width: 38,
-        height: 38,
-        child: Icon(icon, size: 18, color: RhythmaColors.foreground),
+Widget build(BuildContext context) {
+  return GlassCard(
+    padding: EdgeInsets.zero,
+    borderRadius: 20,
+    onTap: onTap,
+    child: SizedBox(
+      width: 48,
+      height: 48,
+      child: Icon(
+        icon,
+        size: 18,
+        color: RhythmaColors.foreground,
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 class _StatCell extends StatelessWidget {

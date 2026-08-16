@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/firestore_service.dart';
 import '../services/local_storage_service.dart';
 import '../services/profile_service.dart';
 
@@ -47,12 +48,22 @@ class ProfileProvider extends ChangeNotifier {
     _profile = LocalStorageService.getProfile() ?? {};
     notifyListeners();
 
-    // 2. Attempt backend sync with the full (merged) profile.
+    // 2. Attempt REST API backend sync (fire-and-forget, errors are
+    //    swallowed by ProfileService).
     try {
       await ProfileService.patchProfile(_profile);
-      return null; // success
-    } catch (_) {
-      return 'Changes saved locally. They will sync when connection returns.';
+    } catch (_) {}
+
+    // 3. Attempt direct Firestore sync.  When offline this queues the
+    //    update into the existing pending_cycle_sync Hive box so it is
+    //    retried automatically when connectivity is restored.
+    final uid = LocalStorageService.currentUserId;
+    if (uid != null && LocalStorageService.cloudSyncEnabled) {
+      try {
+        await FirestoreService.syncProfile(userId: uid);
+      } catch (_) {}
     }
+
+    return null;
   }
 }

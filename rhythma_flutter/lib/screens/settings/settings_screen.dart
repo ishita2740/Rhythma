@@ -4,6 +4,8 @@ import 'package:rhythma/l10n/app_localizations.dart';
 import '../../components/shared.dart';
 import '../../config/theme.dart';
 import '../../services/auth_service.dart';
+import '../../services/export_service.dart';
+import '../../services/local_storage_service.dart';
 import '../../services/notification_service.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/theme_provider.dart';
@@ -11,6 +13,7 @@ import 'language_screen.dart';
 import 'theme_screen.dart';
 import '../sms/sms_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:rhythma/services/report_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -20,10 +23,10 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // Notification Toggles
-  bool _cycleTracking = true;
+  bool _cycleTracking = LocalStorageService.periodPredictionReminders;
   bool _medicineAlerts = true;
   bool _wellnessTips = false;
+  bool _loggingReminders = LocalStorageService.loggingReminders;
 
   void _showLogoutDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -143,6 +146,112 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  void _showDeleteAccountDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.3),
+      builder: (context) => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Material(
+            color: Colors.transparent,
+            child: GlassCard(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const TintedIcon(
+                    icon: Icons.delete_forever_rounded,
+                    color: Colors.redAccent,
+                    size: 48,
+                  ),
+                  const SizedBox(height: 18),
+                  Text(
+                    l10n.deleteAccount,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.redAccent,
+                        ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    l10n.deleteAccountConfirmationDesc,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: RhythmaColors.mutedFg,
+                        ),
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: RhythmaColors.border),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                          ),
+                          child: Text(
+                            l10n.cancel,
+                            style: TextStyle(color: RhythmaColors.mutedFg),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            Navigator.pop(context); // Close dialog
+
+                            try {
+                              await AuthService().deleteAccount();
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(l10n.accountDeletedSuccess),
+                                  ),
+                                );
+                                Navigator.of(context, rootNavigator: true)
+                                    .pushNamedAndRemoveUntil(
+                                        '/login', (route) => false);
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Failed to delete account: $e'),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                          ),
+                          child: Text(l10n.deleteAccount),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<bool> _showConfirmationDialog(
       String title, String content, bool newValue) async {
     final result = await showDialog<bool>(
@@ -180,10 +289,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final l10n = AppLocalizations.of(context)!;
     final currentLocaleCode =
         context.watch<LocaleProvider>().locale.languageCode;
-    String currentLanguageName = LanguageScreen.languages.entries
-        .firstWhere((entry) => entry.value == currentLocaleCode,
-            orElse: () => const MapEntry('English', 'en'))
-        .key;
+    String currentLanguageName = ({
+          'en': l10n.langEnglish,
+          'hi': l10n.langHindi,
+          'ta': l10n.langTamil,
+          'te': l10n.langTelugu,
+          'mr': l10n.langMarathi,
+        }[currentLocaleCode] ??
+        l10n.langEnglish);
 
     return Container(
       decoration: BoxDecoration(gradient: RhythmaGradients.bg),
@@ -269,6 +382,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         setState(() {
                           _cycleTracking = value;
                         });
+                        await LocalStorageService.setPeriodPredictionReminders(value);
+                        if (value) {
+                          bool granted = await NotificationService.instance
+                              .requestPermissions();
+                          if (granted) {
+                            NotificationService.instance
+                                .schedulePeriodPredictionReminder();
+                          } else {
+                            setState(() {
+                              _cycleTracking = false;
+                            });
+                          }
+                        } else {
+                          NotificationService.instance
+                              .cancelNotification(2001);
+                        }
                       }
                     },
                   ),
@@ -335,6 +464,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     },
                   ),
                   Divider(height: 1, color: RhythmaColors.border),
+                  SwitchListTile(
+                    secondary: TintedIcon(
+                      icon: Icons.edit_calendar_rounded,
+                      color: RhythmaColors.mutedFg,
+                      size: 36,
+                    ),
+                    title: Text('Logging Reminders'),
+                    subtitle: Text('Remind to log if no data for today'),
+                    value: _loggingReminders,
+                    activeThumbColor: RhythmaColors.primary,
+                    onChanged: (bool value) async {
+                      bool confirm = await _showConfirmationDialog(
+                          'Logging Reminders', 'logging reminders', value);
+                      if (confirm) {
+                        setState(() {
+                          _loggingReminders = value;
+                        });
+                        await LocalStorageService.setLoggingReminders(value);
+                        if (value) {
+                          bool granted = await NotificationService.instance
+                              .requestPermissions();
+                          if (granted) {
+                            NotificationService.instance
+                                .scheduleLoggingReminder();
+                          } else {
+                            setState(() {
+                              _loggingReminders = false;
+                            });
+                          }
+                        } else {
+                          NotificationService.instance
+                              .cancelNotification(2002);
+                        }
+                      }
+                    },
+                  ),
+                  Divider(height: 1, color: RhythmaColors.border),
                   ListTile(
                     leading: TintedIcon(
                       icon: Icons.notifications_active_rounded,
@@ -365,12 +531,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       size: 36,
                     ),
                     title: const Text('SMS Cycle Summaries'),
-                    subtitle: const Text('Get a text summary sent to your phone'),
-                    trailing: Icon(Icons.chevron_right_rounded, color: RhythmaColors.mutedFg),
+                    subtitle:
+                        const Text('Get a text summary sent to your phone'),
+                    trailing: Icon(Icons.chevron_right_rounded,
+                        color: RhythmaColors.mutedFg),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SmsScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const SmsScreen()),
                       );
                     },
                   ),
@@ -471,6 +640,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const SizedBox(height: 24),
 
+            // Data Section
+            SectionHeader(title: l10n.settingsData),
+            GlassCard(
+              padding: EdgeInsets.zero,
+              child: ListTile(
+                leading: const TintedIcon(
+                  icon: Icons.download_rounded,
+                  color: RhythmaColors.teal,
+                  size: 36,
+                ),
+                title: Text(l10n.settingsExportData),
+                subtitle: Text(l10n.settingsExportDataDesc),
+                trailing: Icon(Icons.chevron_right_rounded,
+                    color: RhythmaColors.mutedFg),
+                onTap: () async {
+                  try {
+                    await ExportService.exportAndShare();
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(l10n.settingsExportSuccess)),
+                      );
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Export failed: $e'),
+                        ),
+                      );
+                    }
+                  }
+                },
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
             // Help & Support Section
             SectionHeader(title: l10n.settingsHelpSupport),
             GlassCard(
@@ -526,6 +732,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 trailing: Icon(Icons.chevron_right_rounded,
                     color: RhythmaColors.mutedFg),
                 onTap: () => _showLogoutDialog(context),
+              ),
+            ),
+            const SizedBox(height: 16),
+            GlassCard(
+              padding: EdgeInsets.zero,
+              child: ListTile(
+                leading: const TintedIcon(
+                  icon: Icons.delete_forever_rounded,
+                  color: Colors.redAccent,
+                  size: 36,
+                ),
+                title: Text(
+                  l10n.deleteAccount,
+                  style: const TextStyle(
+                    color: Colors.redAccent,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                trailing: Icon(Icons.chevron_right_rounded,
+                    color: RhythmaColors.mutedFg),
+                onTap: () => _showDeleteAccountDialog(context),
               ),
             ),
             const SizedBox(height: 20),

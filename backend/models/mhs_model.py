@@ -9,13 +9,83 @@ Composite of:
   - Symptom severity           — 15% weight
   - Lifestyle (exercise/diet)  — 15% weight
 
-The full model is a Logistic Regression ensemble trained on
-anonymized synthetic data. This module provides the scoring logic
-and a placeholder for the trained .joblib artifact.
+The score is a weighted average of five component scores,
+computed directly from cycle logs and profile data.
+
+Planned: Replace this hand-written weighted average with a
+Logistic Regression ensemble trained on anonymized synthetic
+data.
+
+Lifestyle score uses `exercise_frequency` and `diet_type` from
+the user profile.  These fields need to be added to the
+`UserProfileUpdate` / `UserProfileResponse` Pydantic models in
+`backend/models/user.py` (tracked in issue #112).  Until then
+the default fallback of 70.0 is used.
 """
 
 from typing import Optional
 from .cvi_model import predict_cvi
+
+# ── Lifestyle score mapping ────────────────────────────────────────────
+# Expected profile keys (add to UserProfileUpdate/UserProfileResponse):
+#   - exercise_frequency: "daily", "weekly", "rarely", "never"
+#   - diet_type:          "balanced", "vegetarian", "vegan", "high_protein"
+
+_EXERCISE_SCORES = {
+    "daily": 100.0,
+    "weekly": 70.0,
+    "rarely": 30.0,
+    "never": 0.0,
+}
+
+_DIET_SCORES = {
+    "balanced": 100.0,
+    "vegetarian": 80.0,
+    "vegan": 70.0,
+    "high_protein": 80.0,
+}
+
+_DEFAULT_EXERCISE_SCORE = 50.0
+_DEFAULT_DIET_SCORE = 50.0
+_FALLBACK_LIFESTYLE_SCORE = 70.0
+
+
+def _compute_lifestyle_score(profile: Optional[dict]) -> float:
+    """Compute the lifestyle component score (0–100) from profile data.
+
+    Uses `exercise_frequency` and `diet_type` values from the profile
+    dict.  Falls back to sensible defaults when the profile or its
+    relevant keys are missing.
+
+    Mapping:
+        exercise_frequency | score
+        -------------------+-------
+        daily              | 100
+        weekly             |  70
+        rarely             |  30
+        never              |   0
+        missing/unknown    |  50
+
+        diet_type      | score
+        ---------------+-------
+        balanced       | 100
+        vegetarian     |  80
+        vegan          |  70
+        high_protein   |  80
+        missing/unknown|  50
+
+    Composite: (exercise_score + diet_score) / 2
+    """
+    if profile is None:
+        return _FALLBACK_LIFESTYLE_SCORE
+
+    exercise_score = _EXERCISE_SCORES.get(
+        profile.get("exercise_frequency"), _DEFAULT_EXERCISE_SCORE
+    )
+    diet_score = _DIET_SCORES.get(
+        profile.get("diet_type"), _DEFAULT_DIET_SCORE
+    )
+    return (exercise_score + diet_score) / 2.0
 
 
 def predict_mhs(cycle_logs: list[dict], profile: Optional[dict] = None) -> Optional[float]:
@@ -24,7 +94,8 @@ def predict_mhs(cycle_logs: list[dict], profile: Optional[dict] = None) -> Optio
 
     Args:
         cycle_logs: List of recent cycle log dicts (most recent first).
-        profile:    Optional user profile with lifestyle attributes.
+        profile:    Optional user profile with lifestyle attributes
+                    (exercise_frequency, diet_type).
 
     Returns None if there is insufficient data (< 2 logs).
     """
@@ -53,8 +124,8 @@ def predict_mhs(cycle_logs: list[dict], profile: Optional[dict] = None) -> Optio
     avg_symptoms = sum(symptom_counts) / len(symptom_counts)
     symptom_score = max(0.0, 100 - avg_symptoms * 10)
 
-    # 5. Lifestyle placeholder (will use profile data when available)
-    lifestyle_score = 70.0  # Default until tracking is wired
+    # 5. Lifestyle score from profile (falls back to 70.0 if unavailable)
+    lifestyle_score = _compute_lifestyle_score(profile)
 
     # Weighted composite
     mhs = (
