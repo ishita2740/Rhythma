@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _fetchDashboardData() async {
     try {
       final dio = ApiClient.dio;
-      final response = await dio.get('/dashboard');
+      final response = await dio.get('/dashboard?fields=user,cycle,topObservation,prediction,cycleConsistency,cycleConsistencyDescription,insights');
       final data = {
         'user': response.data['user'] ?? {},
         'cycle': response.data['cycle'] ?? {},
