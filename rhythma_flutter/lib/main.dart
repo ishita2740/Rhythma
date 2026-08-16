@@ -35,6 +35,7 @@ import 'services/auth_service.dart';
 import 'services/firestore_service.dart';
 import 'services/local_storage_service.dart';
 import 'services/notification_service.dart';
+import 'services/offline_sync_service.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -56,6 +57,7 @@ Future<void> main() async {
   await NotificationService.instance.init();
   await NotificationService.instance.scheduleAllAutomaticNotifications();
   await FirestoreService.init();
+  await OfflineSyncService.init();
 
   ApiClient.init(onUnauthorized: () {
     final navigator = rootNavigatorKey.currentState;
