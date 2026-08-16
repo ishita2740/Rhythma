@@ -228,6 +228,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get cyclePhaseLuteal => 'ल्यूटियल';
 
   @override
+  String get cyclePhaseLate => 'चक्र लंबा चल रहा है';
+
+  @override
+  String get cyclePhaseUnknown => 'अभी कुछ कहने के लिए पर्याप्त नहीं';
+
+  @override
   String get logFor => 'के लिए लॉग';
 
   @override
@@ -986,4 +992,34 @@ class AppLocalizationsHi extends AppLocalizations {
   String get logSympSeverePain => 'Severe Pain';
   @override
   String get logSympFainting => 'Fainting';
+
+  @override
+  String get ayurvedaWellnessTitle => 'आयुर्वेद-प्रेरित स्वास्थ्य जानकारी';
+
+  @override
+  String get ayurvedaDisclaimer => 'केवल शैक्षिक जानकारी। आयुर्वेद-प्रेरित सामग्री चिकित्सा सलाह, निदान या उपचार नहीं है।';
+
+  @override
+  String get ayurvedaMenstrualTitle => 'आराम और आत्मचिंतन';
+
+  @override
+  String get ayurvedaMenstrualDescription => 'आयुर्वेदिक परंपराएँ मासिक धर्म के समय आराम, आत्मचिंतन और हल्की स्व-देखभाल पर ध्यान देने का वर्णन करती हैं।';
+
+  @override
+  String get ayurvedaFollicularTitle => 'नवीनीकरण और गतिविधि';
+
+  @override
+  String get ayurvedaFollicularDescription => 'आयुर्वेदिक स्वास्थ्य परंपराएँ मासिक धर्म के बाद की अवधि को नवीनीकरण और धीरे-धीरे गतिविधि बढ़ाने से जोड़ती हैं।';
+
+  @override
+  String get ayurvedaOvulationTitle => 'संतुलन और जुड़ाव';
+
+  @override
+  String get ayurvedaOvulationDescription => 'कुछ आयुर्वेदिक परंपराएँ चक्र के मध्य को जीवन शक्ति और सामाजिक जुड़ाव से संबंधित समय के रूप में वर्णित करती हैं।';
+
+  @override
+  String get ayurvedaLutealTitle => 'स्थिरता और दिनचर्या';
+
+  @override
+  String get ayurvedaLutealDescription => 'आयुर्वेदिक स्वास्थ्य परंपराएँ चक्र के बाद के हिस्से में शांत दिनचर्या और जागरूक स्व-देखभाल पर जोर देती हैं।';
 }

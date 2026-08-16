@@ -226,6 +226,12 @@ class AppLocalizationsKn extends AppLocalizations {
   String get cyclePhaseLuteal => 'ಲ್ಯೂಟಿಯಲ್';
 
   @override
+  String get cyclePhaseLate => 'ಚಕ್ರ ದೀರ್ಘವಾಗಿ ಸಾಗುತ್ತಿದೆ';
+
+  @override
+  String get cyclePhaseUnknown => 'ಹೇಳಲು ಇನ್ನೂ ಸಾಕಷ್ಟು ಮಾಹಿತಿ ಇಲ್ಲ';
+
+  @override
   String get logFor => 'ದಾಖಲಿಸಿ:';
 
   @override
@@ -993,4 +999,34 @@ class AppLocalizationsKn extends AppLocalizations {
   String get logSympSeverePain => 'Severe Pain';
   @override
   String get logSympFainting => 'Fainting';
+
+  @override
+  String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
+
+  @override
+  String get ayurvedaDisclaimer => 'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.';
+
+  @override
+  String get ayurvedaMenstrualTitle => 'Rest and reflection';
+
+  @override
+  String get ayurvedaMenstrualDescription => 'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.';
+
+  @override
+  String get ayurvedaFollicularTitle => 'Renewal and activity';
+
+  @override
+  String get ayurvedaFollicularDescription => 'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.';
+
+  @override
+  String get ayurvedaOvulationTitle => 'Connection and balance';
+
+  @override
+  String get ayurvedaOvulationDescription => 'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.';
+
+  @override
+  String get ayurvedaLutealTitle => 'Grounding and routine';
+
+  @override
+  String get ayurvedaLutealDescription => 'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
 }

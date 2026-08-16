@@ -224,20 +224,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cyclePhaseLuteal => 'Luteal';
-  String get ayurvedaWellnessTitle;
-String get ayurvedaDisclaimer;
 
-String get ayurvedaMenstrualTitle;
-String get ayurvedaMenstrualDescription;
+  @override
+  String get cyclePhaseLate => 'Cycle running long';
 
-String get ayurvedaFollicularTitle;
-String get ayurvedaFollicularDescription;
-
-String get ayurvedaOvulationTitle;
-String get ayurvedaOvulationDescription;
-
-String get ayurvedaLutealTitle;
-String get ayurvedaLutealDescription;
+  @override
+  String get cyclePhaseUnknown => 'Not enough to say yet';
 
   @override
   String get logFor => 'Log for';
@@ -674,40 +666,40 @@ String get ayurvedaLutealDescription;
   @override
   String get onboardingWeightInvalid =>
       'Please enter a valid weight (20–300 kg)';
-      @override
-String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
+  @override
+  String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
 
-@override
-String get ayurvedaDisclaimer =>
-    'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.';
+  @override
+  String get ayurvedaDisclaimer =>
+      'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.';
 
-@override
-String get ayurvedaMenstrualTitle => 'Rest and reflection';
+  @override
+  String get ayurvedaMenstrualTitle => 'Rest and reflection';
 
-@override
-String get ayurvedaMenstrualDescription =>
-    'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.';
+  @override
+  String get ayurvedaMenstrualDescription =>
+      'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.';
 
-@override
-String get ayurvedaFollicularTitle => 'Renewal and activity';
+  @override
+  String get ayurvedaFollicularTitle => 'Renewal and activity';
 
-@override
-String get ayurvedaFollicularDescription =>
-    'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.';
+  @override
+  String get ayurvedaFollicularDescription =>
+      'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.';
 
-@override
-String get ayurvedaOvulationTitle => 'Connection and balance';
+  @override
+  String get ayurvedaOvulationTitle => 'Connection and balance';
 
-@override
-String get ayurvedaOvulationDescription =>
-    'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.';
+  @override
+  String get ayurvedaOvulationDescription =>
+      'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.';
 
-@override
-String get ayurvedaLutealTitle => 'Grounding and routine';
+  @override
+  String get ayurvedaLutealTitle => 'Grounding and routine';
 
-@override
-String get ayurvedaLutealDescription =>
-    'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
+  @override
+  String get ayurvedaLutealDescription =>
+      'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
   @override
   String get logFlowVeryHeavy => 'Very Heavy';
   @override
