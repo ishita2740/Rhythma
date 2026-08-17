@@ -29,4 +29,16 @@ class CycleService {
   Future<void> deleteLog(String logId) async {
     await _dio.delete('/cycle/$logId');
   }
+
+  /// Fetches a paginated list of cycle history for the user.
+  Future<Map<String, dynamic>> getCycleHistory(String userId, {int offset = 0, int limit = 15}) async {
+    final response = await _dio.get(
+      '/cycle/$userId/history',
+      queryParameters: {
+        'offset': offset,
+        'limit': limit,
+      },
+    );
+    return response.data;
+  }
 }

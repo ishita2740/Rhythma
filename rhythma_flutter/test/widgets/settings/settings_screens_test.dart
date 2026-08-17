@@ -82,7 +82,7 @@ void main() {
 
       // Tap inside runAsync so mergeProfileWithSync (which calls Dio) completes
       await tester.runAsync(() async {
-        await tester.tap(find.text('हिन्दी (Hindi)'));
+        await tester.tap(find.text('हिन्दी'));
         await Future.delayed(const Duration(seconds: 1));
       });
       await tester.pumpAndSettle();
@@ -90,7 +90,7 @@ void main() {
       expect(localeProvider.locale.languageCode, 'hi');
       expect(
         find.descendant(
-          of: find.widgetWithText(ListTile, 'हिन्दी (Hindi)'),
+          of: find.widgetWithText(ListTile, 'हिन्दी'),
           matching: find.byIcon(Icons.check_circle_rounded),
         ),
         findsOneWidget,

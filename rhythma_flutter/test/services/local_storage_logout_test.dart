@@ -9,7 +9,7 @@ void main() {
       'dashboard_cache': {'cycle': 'cached'},
     };
 
-    final prefix = 'user1::';
+    const prefix = 'user1::';
     final keysToDelete =
         mockStorage.keys.where((k) => k.startsWith(prefix)).toList();
 

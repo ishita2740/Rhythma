@@ -214,6 +214,18 @@ class MockQuery:
         ]
         return self._derive(filtered)
 
+    def count(self):
+        class _CountAggregation:
+            def __init__(self, count_val):
+                self.val = count_val
+            def get(self):
+                # google-cloud-firestore format: list of list of namedtuples/objects with .value
+                class ResultObj:
+                    def __init__(self, v):
+                        self.value = v
+                return [[ResultObj(self.val)]]
+        return _CountAggregation(len(self._documents))
+
     def stream(self):
         # Start with the filtered documents
         docs = self._documents[:]
@@ -303,6 +315,9 @@ class MockCollectionReference:
 
     def where(self, field, op, value):
         return MockQuery(self._all_documents()).where(field, op, value)
+
+    def count(self):
+        return MockQuery(self._all_documents()).count()
 
     # `order_by`, `limit` and `offset` used to be no-ops on the collection
     # that returned `self`, accepting their arguments and discarding them.
@@ -603,15 +618,27 @@ class CycleService:
                     "start_date", "<=", CycleService._as_day_start(end_date)
                 )
 
+            # Get total count
+            try:
+                # Firestore's count() aggregation
+                total_count = query.count().get()[0][0].value
+            except AttributeError:
+                # Fallback for mock if something goes wrong, though mock is updated
+                total_count = len(list(query.stream()))
+
             query = query.order_by(
                 "start_date", direction=firestore.Query.DESCENDING
             )
 
+            # Fetch one older log (offset - 1) if possible to compute cycle_length for the newest log on this page
+            fetch_offset = max(0, offset - 1) if offset > 0 else 0
+            extra_fetch = 1 if offset > 0 else 0
+            
             if offset:
-                query = query.offset(offset)
+                query = query.offset(fetch_offset)
 
-            # One more than asked for: its presence is the "has more" answer.
-            query = query.limit(limit + 1)
+            # limit + extra_fetch + 1 (for has_more)
+            query = query.limit(limit + extra_fetch + 1)
 
             results = []
             for doc in query.stream():
@@ -619,8 +646,28 @@ class CycleService:
                 data["id"] = doc.id
                 results.append(data)
 
-            has_more = len(results) > limit
-            return results[:limit], has_more
+            # If we fetched an extra newer log, use it to compute cycle_length for results[1], then remove it
+            has_more = len(results) > limit + extra_fetch
+            
+            # Slice down to just what we fetched + extra
+            results = results[:limit + extra_fetch]
+            
+            # Compute cycle_length: days to next log (which is before it in the list)
+            # E.g., results = [Oct 10, Oct 5, Oct 1] -> Oct 5 cycle length = (10 - 5) = 5 days.
+            for i in range(len(results) - 1, -1, -1):
+                if i > 0:
+                    curr_date = CycleService._as_day_start(results[i]["start_date"])
+                    next_date = CycleService._as_day_start(results[i - 1]["start_date"])
+                    results[i]["cycle_length"] = (next_date - curr_date).days
+                else:
+                    # Newest log returned from query has no "next" log in this set
+                    results[i]["cycle_length"] = None
+                    
+            if extra_fetch and results:
+                # Remove the extra newer log we fetched just for length computation
+                results.pop(0)
+
+            return results, has_more, total_count
         except FailedPrecondition as e:
             raise HTTPException(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,

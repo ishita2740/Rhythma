@@ -224,20 +224,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cyclePhaseLuteal => 'Luteal';
-  String get ayurvedaWellnessTitle;
-String get ayurvedaDisclaimer;
-
-String get ayurvedaMenstrualTitle;
-String get ayurvedaMenstrualDescription;
-
-String get ayurvedaFollicularTitle;
-String get ayurvedaFollicularDescription;
-
-String get ayurvedaOvulationTitle;
-String get ayurvedaOvulationDescription;
-
-String get ayurvedaLutealTitle;
-String get ayurvedaLutealDescription;
 
   @override
   String get logFor => 'Log for';
@@ -350,7 +336,7 @@ String get ayurvedaLutealDescription;
   String get assistantSug4 => 'Foods that help with PMS';
 
   @override
-  String get assistantSug5 => 'मेरे पीरियड्स अनियमित हैं — क्या यह सामान्य है?';
+  String get assistantSug5 => 'My periods are irregular — is this normal?';
 
   @override
   String get assistantDisclaimer =>
@@ -674,46 +660,247 @@ String get ayurvedaLutealDescription;
   @override
   String get onboardingWeightInvalid =>
       'Please enter a valid weight (20–300 kg)';
-      @override
-String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
 
-@override
-String get ayurvedaDisclaimer =>
-    'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.';
+  @override
+  String get onboardingPhoneInvalid => 'Invalid phone';
 
-@override
-String get ayurvedaMenstrualTitle => 'Rest and reflection';
+  @override
+  String get onboardingTapToSelectDate => 'Tap date';
 
-@override
-String get ayurvedaMenstrualDescription =>
-    'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.';
+  @override
+  String get langGujarati => 'Gujarati';
 
-@override
-String get ayurvedaFollicularTitle => 'Renewal and activity';
+  @override
+  String get deleteAccount => 'Delete Account';
 
-@override
-String get ayurvedaFollicularDescription =>
-    'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.';
+  @override
+  String get deleteAccountConfirmationDesc => 'Sure?';
 
-@override
-String get ayurvedaOvulationTitle => 'Connection and balance';
+  @override
+  String get accountDeletedSuccess => 'Deleted';
 
-@override
-String get ayurvedaOvulationDescription =>
-    'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.';
+  @override
+  String get smsErrorGeneric => 'Error';
 
-@override
-String get ayurvedaLutealTitle => 'Grounding and routine';
+  @override
+  String get smsErrorEnterPhone => 'Enter phone';
 
-@override
-String get ayurvedaLutealDescription =>
-    'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
+  @override
+  String get smsErrorInvalidPhone => 'Invalid phone';
+
+  @override
+  String get smsSuccessSaved => 'Saved';
+
+  @override
+  String get smsErrorAddPhoneFirst => 'Add phone';
+
+  @override
+  String get smsSummaryMessage => 'Summary';
+
+  @override
+  String get smsSuccessSent => 'Sent';
+
+  @override
+  String get smsErrorRateLimit => 'Rate limit';
+
+  @override
+  String get smsErrorSessionExpired => 'Expired';
+
+  @override
+  String get smsErrorNetwork => 'Network';
+
+  @override
+  String get smsScreenTitle => 'SMS';
+
+  @override
+  String get smsScreenSubtitle => 'SMS desc';
+
+  @override
+  String get smsInfoCardTitle => 'Info';
+
+  @override
+  String get smsInfoCardBody => 'Info body';
+
+  @override
+  String get smsConfigTitle => 'Config';
+
+  @override
+  String get smsPhoneLabel => 'Phone';
+
+  @override
+  String get smsPhoneHint => 'Phone hint';
+
+  @override
+  String get smsEnableWeekly => 'Weekly';
+
+  @override
+  String get smsSaveSettings => 'Save';
+
+  @override
+  String get smsSendSectionTitle => 'Send Summary';
+
+  @override
+  String get smsSendRecipientPrefix => 'To';
+
+  @override
+  String get smsSendNoPhone => 'No phone';
+
+  @override
+  String get smsSendButton => 'Send';
+
+  @override
+  String get insightsNotEnoughData => 'Not enough data';
+
+  @override
+  String get insightsNoSymptomsYet => 'No symp';
+
+  @override
+  String get insightsNotEnoughTrendData => 'No trend';
+
+  @override
+  String insightsLoadError(String error) {
+    return 'Error $error';
+  }
+
+  @override
+  String get assistantAccessibilitySuggestedPrompt => 'Suggested prompt';
+
+  @override
+  String get assistantAccessibilityMessageInput => 'Message input';
+
+  @override
+  String get assistantAccessibilityMessageInputHint => 'Message input hint';
+
+  @override
+  String get assistantAccessibilitySendMessage => 'Send message';
+
+  @override
+  String get assistantAccessibilitySendMessageHint => 'Send message hint';
+
+  @override
+  String get assistantAccessibilityTyping => 'Typing...';
+
+  @override
+  String get languageSelectionError => 'Select language error';
+
+  @override
+  String get pleaseEnterPhoneNumber => 'Please enter phone number';
+
+  @override
+  String get pleaseEnterValidPhoneNumber => 'Please enter valid phone number';
+
+  @override
+  String get verificationFailed => 'Verification failed';
+
+  @override
+  String otpSentTo(String phone) {
+    return 'OTP sent to $phone';
+  }
+
+  @override
+  String get pleaseEnterOtp => 'Please enter OTP';
+
+  @override
+  String get invalidOtp => 'Invalid OTP';
+
+  @override
+  String get failedToGetIdToken => 'Failed to get ID token';
+
+  @override
+  String get welcomeToRhythma => 'Welcome to Rhythma';
+
+  @override
+  String get enterOtpSentToPhone => 'Enter OTP sent to phone';
+
+  @override
+  String get loginOrSignUpWithPhone => 'Login or Sign up with phone';
+
+  @override
+  String get phoneNumber => 'Phone number';
+
+  @override
+  String get sendingOtp => 'Sending OTP...';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get otp => 'OTP';
+
+  @override
+  String get verifying => 'Verifying...';
+
+  @override
+  String get verifyOtp => 'Verify OTP';
+
+  @override
+  String get useDifferentPhoneNumber => 'Use different phone number';
+
+  @override
+  String get nudgeCompleteProfileTitle => 'Complete Profile';
+
+  @override
+  String get nudgeCompleteProfileBody => 'Complete profile body';
+
+  @override
+  String get nudgeCompleteProfileAction => 'Action';
+
+  @override
+  String get nudgeCompleteProfileDismiss => 'Dismiss';
+
+  @override
+  String get cycleHistory => 'Cycle History';
+
+  @override
+  String get noLogsYet => 'No logs yet';
+
+  @override
+  String get dayCycle => 'Day cycle';
+
+  @override
+  String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
+
+  @override
+  String get ayurvedaDisclaimer =>
+      'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.';
+
+  @override
+  String get ayurvedaMenstrualTitle => 'Rest and reflection';
+
+  @override
+  String get ayurvedaMenstrualDescription =>
+      'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.';
+
+  @override
+  String get ayurvedaFollicularTitle => 'Renewal and activity';
+
+  @override
+  String get ayurvedaFollicularDescription =>
+      'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.';
+
+  @override
+  String get ayurvedaOvulationTitle => 'Connection and balance';
+
+  @override
+  String get ayurvedaOvulationDescription =>
+      'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.';
+
+  @override
+  String get ayurvedaLutealTitle => 'Grounding and routine';
+
+  @override
+  String get ayurvedaLutealDescription =>
+      'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
+
   @override
   String get logFlowVeryHeavy => 'Very Heavy';
+
   @override
   String get logFlowSpotting => 'Spotting';
+
   @override
   String get logSympSeverePain => 'Severe Pain';
+
   @override
   String get logSympFainting => 'Fainting';
 }
