@@ -86,7 +86,7 @@ class NotificationService {
       body: body,
       scheduledDate: tzDate,
       notificationDetails: platformChannelSpecifics,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     );
   }
 
@@ -155,7 +155,7 @@ class NotificationService {
           'Get your supplies ready!',
       scheduledDate: tzDate,
       notificationDetails: platformChannelSpecifics,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     );
   }
 
@@ -191,7 +191,7 @@ class NotificationService {
           'Take a moment to track how you\'re feeling!',
       scheduledDate: tzDate,
       notificationDetails: platformChannelSpecifics,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     );
   }
 
@@ -203,16 +203,21 @@ class NotificationService {
 
   /// Reschedule all automatic notifications based on current settings.
   Future<void> scheduleAllAutomaticNotifications() async {
-    if (!LocalStorageService.periodPredictionReminders &&
-        !LocalStorageService.loggingReminders) {
-      return;
-    }
+    try {
+      if (!LocalStorageService.periodPredictionReminders &&
+          !LocalStorageService.loggingReminders) {
+        return;
+      }
 
-    if (LocalStorageService.periodPredictionReminders) {
-      await schedulePeriodPredictionReminder();
-    }
-    if (LocalStorageService.loggingReminders) {
-      await scheduleLoggingReminder();
+      if (LocalStorageService.periodPredictionReminders) {
+        await schedulePeriodPredictionReminder();
+      }
+      if (LocalStorageService.loggingReminders) {
+        await scheduleLoggingReminder();
+      }
+    } catch (e) {
+      // Print the error so it doesn't crash the entire app startup.
+      print('Error scheduling automatic notifications: $e');
     }
   }
 

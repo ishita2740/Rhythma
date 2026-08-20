@@ -5,6 +5,7 @@ import 'package:rhythma/providers/profile_provider.dart';
 import 'package:rhythma/providers/locale_provider.dart';
 import 'package:rhythma/services/auth_service.dart';
 import 'package:rhythma/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -54,6 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _loading = true);
     
     try {
+      if (kDebugMode) {
+        await FirebaseAuth.instance.setSettings(appVerificationDisabledForTesting: true);
+      }
       await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: phone,
         verificationCompleted: (PhoneAuthCredential credential) async {
@@ -168,16 +172,28 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 36),
                 
                 if (!_otpSent) ...[
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 4, bottom: 8),
+                      child: Text(
+                        l10n.phoneNumber,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                    ),
+                  ),
                   TextField(
                     controller: _phoneController,
                     enabled: !_loading,
                     keyboardType: TextInputType.phone,
                     textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                      labelText: l10n.phoneNumber,
+                    decoration: const InputDecoration(
                       hintText: '+91 9876543210',
-                      prefixIcon: const Icon(Icons.phone_outlined),
-                      border: const OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.phone_outlined),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -196,17 +212,29 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ] else ...[
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 4, bottom: 8),
+                      child: Text(
+                        l10n.otp,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                    ),
+                  ),
                   TextField(
                     controller: _otpController,
                     enabled: !_loading,
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.done,
                     onSubmitted: (_) => _verifyOtp(),
-                    decoration: InputDecoration(
-                      labelText: l10n.otp,
+                    decoration: const InputDecoration(
                       hintText: '123456',
-                      prefixIcon: const Icon(Icons.password_outlined),
-                      border: const OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.password_outlined),
                     ),
                   ),
                   const SizedBox(height: 24),

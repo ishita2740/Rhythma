@@ -3,11 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rhythma/providers/locale_provider.dart';
 import 'package:rhythma/services/local_storage_service.dart';
+import 'dart:io';
+import '../test_helpers/local_storage_fixture.dart';
 
 void main() {
+  late Directory tempDir;
   setUp(() async {
-    SharedPreferences.setMockInitialValues({});
-    await LocalStorageService.init();
+    tempDir = await setUpLocalStorage();
+  });
+
+  tearDown(() async {
+    await tearDownLocalStorage(tempDir);
   });
 
   group('LocaleProvider', () {

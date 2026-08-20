@@ -224,20 +224,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cyclePhaseLuteal => 'Luteal';
-  String get ayurvedaWellnessTitle;
-String get ayurvedaDisclaimer;
-
-String get ayurvedaMenstrualTitle;
-String get ayurvedaMenstrualDescription;
-
-String get ayurvedaFollicularTitle;
-String get ayurvedaFollicularDescription;
-
-String get ayurvedaOvulationTitle;
-String get ayurvedaOvulationDescription;
-
-String get ayurvedaLutealTitle;
-String get ayurvedaLutealDescription;
 
   @override
   String get logFor => 'Log for';
@@ -350,7 +336,7 @@ String get ayurvedaLutealDescription;
   String get assistantSug4 => 'Foods that help with PMS';
 
   @override
-  String get assistantSug5 => 'मेरे पीरियड्स अनियमित हैं — क्या यह सामान्य है?';
+  String get assistantSug5 => 'My periods are irregular — is this normal?';
 
   @override
   String get assistantDisclaimer =>
@@ -674,46 +660,240 @@ String get ayurvedaLutealDescription;
   @override
   String get onboardingWeightInvalid =>
       'Please enter a valid weight (20–300 kg)';
-      @override
-String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
 
-@override
-String get ayurvedaDisclaimer =>
-    'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.';
+  @override
+  String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
 
-@override
-String get ayurvedaMenstrualTitle => 'Rest and reflection';
+  @override
+  String get ayurvedaDisclaimer =>
+      'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.';
 
-@override
-String get ayurvedaMenstrualDescription =>
-    'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.';
+  @override
+  String get ayurvedaMenstrualTitle => 'Rest and reflection';
 
-@override
-String get ayurvedaFollicularTitle => 'Renewal and activity';
+  @override
+  String get ayurvedaMenstrualDescription =>
+      'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.';
 
-@override
-String get ayurvedaFollicularDescription =>
-    'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.';
+  @override
+  String get ayurvedaFollicularTitle => 'Renewal and activity';
 
-@override
-String get ayurvedaOvulationTitle => 'Connection and balance';
+  @override
+  String get ayurvedaFollicularDescription =>
+      'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.';
 
-@override
-String get ayurvedaOvulationDescription =>
-    'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.';
+  @override
+  String get ayurvedaOvulationTitle => 'Connection and balance';
 
-@override
-String get ayurvedaLutealTitle => 'Grounding and routine';
+  @override
+  String get ayurvedaOvulationDescription =>
+      'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.';
 
-@override
-String get ayurvedaLutealDescription =>
-    'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
+  @override
+  String get ayurvedaLutealTitle => 'Grounding and routine';
+
+  @override
+  String get ayurvedaLutealDescription =>
+      'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
+
   @override
   String get logFlowVeryHeavy => 'Very Heavy';
+
   @override
   String get logFlowSpotting => 'Spotting';
+
   @override
   String get logSympSeverePain => 'Severe Pain';
+
   @override
   String get logSympFainting => 'Fainting';
+
+  @override
+  String get smsErrorNetwork => 'Network error. Please try again.';
+
+  @override
+  String get smsErrorGeneric => 'Something went wrong. Please try again.';
+
+  @override
+  String get smsScreenTitle => 'SMS Settings';
+
+  @override
+  String get smsScreenSubtitle => 'Configure your SMS alerts';
+
+  @override
+  String get smsInfoCardTitle => 'How it works';
+
+  @override
+  String get smsInfoCardBody => 'We\'ll send you weekly insights via SMS.';
+
+  @override
+  String get smsConfigTitle => 'Configuration';
+
+  @override
+  String get smsPhoneLabel => 'Phone Number';
+
+  @override
+  String get smsPhoneHint => 'Enter phone number';
+
+  @override
+  String get smsEnableWeekly => 'Enable Weekly SMS';
+
+  @override
+  String get smsSaveSettings => 'Save Settings';
+
+  @override
+  String get smsSendSectionTitle => 'Send SMS';
+
+  @override
+  String get smsSendRecipientPrefix => 'To: ';
+
+  @override
+  String get smsSendNoPhone => 'No phone number configured';
+
+  @override
+  String get smsSummaryMessage => 'This is a summary message.';
+
+  @override
+  String get smsSendButton => 'Send Now';
+
+  @override
+  String get insightsNotEnoughTrendData =>
+      'Not enough data to show a trend yet.';
+
+  @override
+  String get insightsNoSymptomsYet => 'No symptoms logged yet.';
+
+  @override
+  String get onboardingPhoneInvalid => 'Please enter a valid phone number.';
+
+  @override
+  String get onboardingTapToSelectDate => 'Tap to select date';
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get deleteAccountConfirmationDesc =>
+      'Are you sure you want to delete your account? This action cannot be undone.';
+
+  @override
+  String get accountDeletedSuccess => 'Account deleted successfully.';
+
+  @override
+  String get smsErrorEnterPhone => 'Please enter a phone number.';
+
+  @override
+  String get smsErrorInvalidPhone => 'Invalid phone number format.';
+
+  @override
+  String get smsSuccessSaved => 'SMS settings saved.';
+
+  @override
+  String get smsErrorAddPhoneFirst => 'Please add a phone number first.';
+
+  @override
+  String get smsSuccessSent => 'SMS sent successfully.';
+
+  @override
+  String get smsErrorRateLimit => 'Too many requests. Please try again later.';
+
+  @override
+  String get smsErrorSessionExpired => 'Session expired. Please log in again.';
+
+  @override
+  String get verifying => 'Verifying...';
+
+  @override
+  String get verifyOtp => 'Verify OTP';
+
+  @override
+  String get useDifferentPhoneNumber => 'Use different phone number';
+
+  @override
+  String get nudgeCompleteProfileTitle => 'Complete your profile';
+
+  @override
+  String get nudgeCompleteProfileBody =>
+      'Help us understand your health better.';
+
+  @override
+  String get nudgeCompleteProfileAction => 'Complete Now';
+
+  @override
+  String get nudgeCompleteProfileDismiss => 'Later';
+
+  @override
+  String insightsLoadError(String error) {
+    return 'Failed to load insights: $error';
+  }
+
+  @override
+  String get insightsNotEnoughData => 'Not enough data yet.';
+
+  @override
+  String get assistantAccessibilityTyping => 'Typing...';
+
+  @override
+  String get languageSelectionError => 'Please select a language.';
+
+  @override
+  String get pleaseEnterPhoneNumber => 'Please enter a phone number.';
+
+  @override
+  String get pleaseEnterValidPhoneNumber =>
+      'Please enter a valid phone number.';
+
+  @override
+  String get verificationFailed => 'Verification failed. Please try again.';
+
+  @override
+  String otpSentTo(String phone) {
+    return 'OTP sent to $phone';
+  }
+
+  @override
+  String get pleaseEnterOtp => 'Please enter the OTP.';
+
+  @override
+  String get invalidOtp => 'Invalid OTP. Please try again.';
+
+  @override
+  String get failedToGetIdToken => 'Failed to authenticate.';
+
+  @override
+  String get welcomeToRhythma => 'Welcome to Rhythma';
+
+  @override
+  String get enterOtpSentToPhone => 'Enter OTP sent to your phone';
+
+  @override
+  String get loginOrSignUpWithPhone =>
+      'Log in or sign up with your phone number';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get sendingOtp => 'Sending OTP...';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get otp => 'OTP';
+
+  @override
+  String get assistantAccessibilitySuggestedPrompt => 'Suggested prompt';
+
+  @override
+  String get assistantAccessibilityMessageInput => 'Message input';
+
+  @override
+  String get assistantAccessibilityMessageInputHint => 'Type a message';
+
+  @override
+  String get assistantAccessibilitySendMessage => 'Send message';
+
+  @override
+  String get assistantAccessibilitySendMessageHint => 'Double tap to send';
 }

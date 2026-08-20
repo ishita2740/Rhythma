@@ -255,5 +255,79 @@
   "logFlowVeryHeavy": "Very Heavy",
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logSympFainting": "Fainting",
+  "smsErrorNetwork": "Network error. Please try again.",
+  "smsErrorGeneric": "Something went wrong. Please try again.",
+  "smsScreenTitle": "SMS Settings",
+  "smsScreenSubtitle": "Configure your SMS alerts",
+  "smsInfoCardTitle": "How it works",
+  "smsInfoCardBody": "We'll send you weekly insights via SMS.",
+  "smsConfigTitle": "Configuration",
+  "smsPhoneLabel": "Phone Number",
+  "smsPhoneHint": "Enter phone number",
+  "smsEnableWeekly": "Enable Weekly SMS",
+  "smsSaveSettings": "Save Settings",
+  "smsSendSectionTitle": "Send SMS",
+  "smsSendRecipientPrefix": "To: ",
+  "smsSendNoPhone": "No phone number configured",
+  "smsSummaryMessage": "This is a summary message.",
+  "smsSendButton": "Send Now",
+  "insightsNotEnoughTrendData": "Not enough data to show a trend yet.",
+  "insightsNoSymptomsYet": "No symptoms logged yet.",
+  "onboardingPhoneInvalid": "Please enter a valid phone number.",
+  "onboardingTapToSelectDate": "Tap to select date",
+  "deleteAccount": "Delete Account",
+  "deleteAccountConfirmationDesc": "Are you sure you want to delete your account? This action cannot be undone.",
+  "accountDeletedSuccess": "Account deleted successfully.",
+  "smsErrorEnterPhone": "Please enter a phone number.",
+  "smsErrorInvalidPhone": "Invalid phone number format.",
+  "smsSuccessSaved": "SMS settings saved.",
+  "smsErrorAddPhoneFirst": "Please add a phone number first.",
+  "smsSuccessSent": "SMS sent successfully.",
+  "smsErrorRateLimit": "Too many requests. Please try again later.",
+  "smsErrorSessionExpired": "Session expired. Please log in again.",
+  "verifying": "Verifying...",
+  "verifyOtp": "Verify OTP",
+  "useDifferentPhoneNumber": "Use different phone number",
+  "nudgeCompleteProfileTitle": "Complete your profile",
+  "nudgeCompleteProfileBody": "Help us understand your health better.",
+  "nudgeCompleteProfileAction": "Complete Now",
+  "nudgeCompleteProfileDismiss": "Later",
+  "insightsLoadError": "Failed to load insights: {error}",
+  "@insightsLoadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsNotEnoughData": "Not enough data yet.",
+  "assistantAccessibilityTyping": "Typing...",
+  "languageSelectionError": "Please select a language.",
+  "pleaseEnterPhoneNumber": "Please enter a phone number.",
+  "pleaseEnterValidPhoneNumber": "Please enter a valid phone number.",
+  "verificationFailed": "Verification failed. Please try again.",
+  "otpSentTo": "OTP sent to {phone}",
+  "@otpSentTo": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "pleaseEnterOtp": "Please enter the OTP.",
+  "invalidOtp": "Invalid OTP. Please try again.",
+  "failedToGetIdToken": "Failed to authenticate.",
+  "welcomeToRhythma": "Welcome to Rhythma",
+  "enterOtpSentToPhone": "Enter OTP sent to your phone",
+  "loginOrSignUpWithPhone": "Log in or sign up with your phone number",
+  "phoneNumber": "Phone Number",
+  "sendingOtp": "Sending OTP...",
+  "getOtp": "Get OTP",
+  "otp": "OTP",
+  "assistantAccessibilitySuggestedPrompt": "Suggested prompt",
+  "assistantAccessibilityMessageInput": "Message input",
+  "assistantAccessibilityMessageInputHint": "Type a message",
+  "assistantAccessibilitySendMessage": "Send message",
+  "assistantAccessibilitySendMessageHint": "Double tap to send"
 }

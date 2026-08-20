@@ -70,6 +70,7 @@ secrets.json
 service-account*.json
 firebase-credentials.json
 firebase-key.json
+*firebase-adminsdk*.json
 
 # =========================
 # IDE / EDITORS
