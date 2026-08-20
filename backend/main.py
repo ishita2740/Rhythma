@@ -95,6 +95,23 @@ async def lifespan(app: FastAPI):
     except Exception as exc:  # pragma: no cover - defensive
         logger.warning(f"Could not sweep expired auth tokens: {exc}")
 
+    # `rate_limits` has the same shape and had the same problem (#499). A
+    # bucket is only ever rewritten, never deleted — `reset()` runs after a
+    # successful login and deliberately only for the account-keyed half —
+    # so the collection grew by one permanent document per address and per
+    # attempted email address, forever. Swept here rather than in a job for
+    # the same reason as the tokens above: a deployment with no scheduler
+    # should still stay bounded, and the rows this walks are the ones
+    # already past their expiry.
+    from services.rate_limit_service import RateLimitService
+
+    try:
+        removed = RateLimitService.purge_expired()
+        if removed:
+            logger.info(f"Swept {removed} expired rate-limit bucket(s) at startup.")
+    except Exception as exc:  # pragma: no cover - defensive
+        logger.warning(f"Could not sweep expired rate-limit buckets: {exc}")
+
     yield
     logger.info("Rhythma backend shutting down.")
 
