@@ -10,7 +10,12 @@ class MockDioResponse {
   final int statusCode;
   final Map<String, dynamic>? data;
 
-  const MockDioResponse(this.statusCode, [this.data]);
+  /// Extra response headers, one entry per value. Used by the retry tests
+  /// to serve a `Retry-After`, which is the header the backend's 429s
+  /// carry and which the client has to honour rather than guess past.
+  final Map<String, List<String>>? headers;
+
+  const MockDioResponse(this.statusCode, [this.data, this.headers]);
 }
 
 /// Replaces [ApiClient.dio]'s HTTP client with one that serves canned JSON
@@ -33,6 +38,7 @@ class MockDioAdapter implements HttpClientAdapter {
       response.statusCode,
       headers: {
         Headers.contentTypeHeader: [Headers.jsonContentType],
+        ...?response.headers,
       },
     );
   }
