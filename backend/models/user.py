@@ -3,6 +3,8 @@ from typing import Optional
 from datetime import datetime
 import re
 
+from core.profile_validation import normalize_last_period
+
 class UserCreate(BaseModel):
     phone: str = Field(..., description="Phone number with country code")
     username: Optional[str] = Field(
@@ -52,7 +54,14 @@ class UserProfileUpdate(BaseModel):
     weight_kg: Optional[float] = Field(None, ge=10.0, le=500.0)
     avatar: Optional[str] = None
     language: Optional[str] = None
-    last_period: Optional[str] = None          # ISO 8601 date string e.g. "2024-06-01"
+    last_period: Optional[str] = Field(
+        None,
+        description=(
+            "Start date of the most recent period, as YYYY-MM-DD. A full "
+            "ISO-8601 timestamp is accepted and reduced to its date. "
+            "Cannot be in the future or more than ten years ago."
+        ),
+    )
     last_period_is_approximate: Optional[bool] = None
     cycle_length: Optional[int] = Field(None, ge=15, le=60)
     period_duration: Optional[int] = Field(None, ge=1, le=15)
@@ -70,6 +79,24 @@ class UserProfileUpdate(BaseModel):
         
     city: Optional[str] = None
     state: Optional[str] = None
+
+    @field_validator("last_period")
+    def validate_last_period(cls, value: Optional[str]) -> Optional[str]:
+        """Reject a last period that is malformed, in the future, or ancient.
+
+        Every other field on this model is bounded — `age` is 10-120,
+        `cycle_length` is 15-60, `period_duration` is 1-15 — and this one
+        was free text, despite being the anchor `prediction_service` hangs
+        the whole forecast off. A value it cannot parse silently empties
+        the Home screen; a value in the future gives the user a fertile
+        window computed from a period that has not happened (#501).
+
+        The rules live in `core/profile_validation` rather than here, for
+        the reason `core/cycle_validation` gives for holding the log rules:
+        so a second profile write path cannot skip them.
+        """
+        return normalize_last_period(value)
+
 
 class UserProfileResponse(BaseModel):
     """Full profile response — auth identity merged with health profile."""
