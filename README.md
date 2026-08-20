@@ -505,6 +505,8 @@ npm run dev
 | `FIREBASE_SERVICE_ACCOUNT_JSON` or `FIREBASE_SERVICE_ACCOUNT_PATH` | Yes (one of the two) | Firebase Admin SDK credentials for Firestore access |
 | `GEMINI_API_KEY` | Optional | Enables the backend's `/assistant/chat` endpoint |
 | `TWILIO_ACCOUNT_SID` / `TWILIO_AUTH_TOKEN` / `TWILIO_PHONE_NUMBER` | Optional | Enables the `/sms/send-summary` endpoint |
+| `TRUSTED_PROXY_IPS` | Behind a proxy | Addresses or CIDR blocks the app's own load balancer connects from, or `*`. Unset means `X-Forwarded-For` is ignored and the socket address is used — safe, but it buckets every caller behind a balancer together, so the per-IP rate limits stop distinguishing users. See [docs/deploy_backend.md](docs/deploy_backend.md#trusted-proxies). |
+| `TRUSTED_PROXY_HOPS` | Optional | How many `X-Forwarded-For` entries your own infrastructure appends. Defaults to `0`, correct for a single reverse proxy. |
 
 **Flutter (`rhythma_flutter/.env`)**
 
