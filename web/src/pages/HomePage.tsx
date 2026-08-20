@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../auth/useAuth';
 import { fetchDashboard, submitCycleLog, type CycleLogInput, type DashboardData } from '../api/endpoints';
+import { Modal } from '../components/Modal';
 import { ScoreRing } from '../components/charts';
 import { PredictionCard } from '../components/PredictionCard';
 import { toISODate } from '../lib/dates';
@@ -90,17 +91,6 @@ export function HomePage() {
   useEffect(() => {
     void load();
   }, [load]);
-
-  useEffect(() => {
-    if (!activeTile) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setActiveTile(null);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeTile]);
 
   const handleQuickLog = async (option: { value: string; labelKey: string }) => {
     if (!activeTile || saving) return;
@@ -222,30 +212,39 @@ export function HomePage() {
         <span className="chevron">›</span>
       </Link>
 
-      {activeTile ? (
-        <div className="modal-backdrop" role="presentation" onClick={() => setActiveTile(null)}>
-          <div className="quick-log-panel" role="dialog" aria-label={t(activeTile.labelKey)} onClick={(e) => e.stopPropagation()}>
-            <h3>
+      {/* A real dialog: focus moves in on open and back to the tile on
+          close, Tab is trapped inside it, and the page behind is hidden
+          from assistive technology (#502). Tapping several tiles in a row
+          is the intended interaction, and dropping focus to <body> on
+          each close made that a walk from the top of the page. */}
+      <Modal
+        open={activeTile !== null}
+        onClose={() => setActiveTile(null)}
+        panelClassName="quick-log-panel"
+        title={
+          activeTile ? (
+            <>
               {activeTile.emoji} {t(activeTile.labelKey)}
-            </h3>
-            <div className="chip-row">
-              {activeTile.options.map((opt) => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  className="chip"
-                  onClick={() => void handleQuickLog(opt)}
-                >
-                  {t(opt.labelKey)}
-                </button>
-              ))}
-            </div>
-            <button type="button" className="ghost-btn" onClick={() => setActiveTile(null)}>
-              {t('common.cancel')}
+            </>
+          ) : null
+        }
+      >
+        <div className="chip-row">
+          {activeTile?.options.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              className="chip"
+              onClick={() => void handleQuickLog(opt)}
+            >
+              {t(opt.labelKey)}
             </button>
-          </div>
+          ))}
         </div>
-      ) : null}
+        <button type="button" className="ghost-btn" onClick={() => setActiveTile(null)}>
+          {t('common.cancel')}
+        </button>
+      </Modal>
     </div>
   );
 }

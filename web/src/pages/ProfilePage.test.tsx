@@ -178,3 +178,62 @@ describe('ProfilePage — the neighbouring stats are unchanged', () => {
     );
   });
 });
+
+describe('ProfilePage — the edit dialog (issue #502)', () => {
+  async function openEdit() {
+    const userEvent = (await import('@testing-library/user-event')).default;
+    const user = userEvent.setup();
+    fetchDashboard.mockResolvedValue(dashboardFixture());
+
+    renderWithProviders(<ProfilePage />);
+
+    const opener = await screen.findByRole('button', { name: /Edit/i });
+    await user.click(opener);
+
+    return { user, opener };
+  }
+
+  it('opens as a modal dialog with an accessible name', async () => {
+    await openEdit();
+
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveAttribute('aria-modal', 'true');
+    expect(dialog).toHaveAccessibleName(/Edit/i);
+  });
+
+  it('is still the form, so its Save button submits it', async () => {
+    await openEdit();
+
+    expect(screen.getByRole('dialog').tagName).toBe('FORM');
+  });
+
+  it('closes on Escape, which it could not do before', async () => {
+    // This panel had no Escape handler at all — Home's was a `window`
+    // listener that page installed for itself, and Profile never got one.
+    const { user } = await openEdit();
+
+    await user.keyboard('{Escape}');
+
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
+    );
+  });
+
+  it('returns focus to the row that opened it', async () => {
+    const { user, opener } = await openEdit();
+
+    await user.keyboard('{Escape}');
+
+    await waitFor(() => expect(opener).toHaveFocus());
+  });
+
+  it('keeps Tab inside the dialog', async () => {
+    const { user } = await openEdit();
+    const dialog = screen.getByRole('dialog');
+
+    for (let step = 0; step < 12; step += 1) {
+      await user.tab();
+      expect(dialog.contains(document.activeElement)).toBe(true);
+    }
+  });
+});

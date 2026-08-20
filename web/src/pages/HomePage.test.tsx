@@ -247,3 +247,62 @@ describe('the next-period answer (issue #419)', () => {
     expect(screen.getByText('16')).toBeInTheDocument();
   });
 });
+
+describe('the quick-log dialog (issue #502)', () => {
+  async function openSleepTile() {
+    const user = userEvent.setup();
+    fetchDashboard.mockResolvedValue(dashboardFixture());
+
+    renderWithProviders(<HomePage />);
+
+    const tile = await screen.findByRole('button', { name: /Sleep/i });
+    await user.click(tile);
+
+    return { user, tile };
+  }
+
+  it('opens as a modal dialog named by the tile', async () => {
+    await openSleepTile();
+
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveAttribute('aria-modal', 'true');
+    expect(dialog).toHaveAccessibleName(/Sleep/i);
+  });
+
+  it('moves focus into the dialog rather than leaving it on the tile', async () => {
+    await openSleepTile();
+
+    expect(screen.getByRole('dialog')).toHaveFocus();
+  });
+
+  it('keeps Tab inside the dialog', async () => {
+    const { user } = await openSleepTile();
+    const dialog = screen.getByRole('dialog');
+
+    for (let step = 0; step < 8; step += 1) {
+      await user.tab();
+      expect(dialog.contains(document.activeElement)).toBe(true);
+    }
+  });
+
+  it('returns focus to the tile on Escape', async () => {
+    const { user, tile } = await openSleepTile();
+
+    await user.keyboard('{Escape}');
+
+    // Logging several tiles in a row is the intended interaction, and
+    // dropping focus to <body> made the second one a walk from the top of
+    // the page.
+    await waitFor(() => expect(tile).toHaveFocus());
+  });
+
+  it('returns focus to the tile after logging a value', async () => {
+    const { user, tile } = await openSleepTile();
+    submitCycleLog.mockResolvedValue({});
+
+    await user.click(screen.getByRole('button', { name: /8 hours|8h|8/i }));
+
+    await waitFor(() => expect(submitCycleLog).toHaveBeenCalled());
+    await waitFor(() => expect(tile).toHaveFocus());
+  });
+});

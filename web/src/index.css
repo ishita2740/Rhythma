@@ -476,6 +476,27 @@ p {
   padding: 1rem;
 }
 
+/* The panel is focused on open so its name is announced before its
+   contents (#502). It is not a Tab stop, so the ring browsers draw on it
+   is telling the user about a control they cannot return to — the visible
+   focus that matters here is on the controls inside. Only this one
+   outline is suppressed; every other `:focus-visible` in the app is
+   untouched. */
+.quick-log-panel:focus,
+.edit-panel:focus {
+  outline: none;
+}
+
+/* Was an <h3> written out by each screen. Now the dialog's accessible
+   name, rendered once by the component and pointed at by
+   `aria-labelledby`, so the name assistive technology reads is the same
+   string the user can see. */
+.modal-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
 .quick-log-panel,
 .edit-panel {
   width: 100%;
