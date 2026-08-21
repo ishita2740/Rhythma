@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rhythma/l10n/app_localizations.dart';
@@ -7,6 +10,7 @@ import '../../components/charts.dart';
 import '../../providers/theme_provider.dart';
 import '../../services/api_client.dart';
 import '../../services/report_service.dart';
+import '../../models/educational_article.dart';
 
 /// All data on this screen comes from GET /dashboard — nothing here is
 /// computed locally from Hive. That endpoint already returns real,
@@ -33,6 +37,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
   List<int> _cycleLengthTrend = [];
   Map<String, double> _symptomFrequency = {};
   int? _recentStressLevel;
+  List<EducationalArticle> _educationalContent = [];
+  bool _educationalContentError = false;
 
   @override
   void initState() {
@@ -45,6 +51,16 @@ class _InsightsScreenState extends State<InsightsScreen> {
       _loading = true;
       _error = '';
     });
+
+    try {
+      final jsonString = await rootBundle.loadString('assets/content/education.json');
+      final decoded = jsonDecode(jsonString) as List<dynamic>;
+      _educationalContent = decoded.map((e) => EducationalArticle.fromJson(e as Map<String, dynamic>)).toList();
+      _educationalContentError = false;
+    } catch (e) {
+      debugPrint('Failed to load educational content: $e');
+      _educationalContentError = true;
+    }
 
     try {
       final response = await ApiClient.dio.get('/dashboard');
@@ -494,7 +510,30 @@ GlassCard(
   ),
 ),
 
-const SizedBox(height: 14),
+            const SizedBox(height: 14),
+
+            SectionHeader(title: l10n.insightsEducationalLibrary),
+            if (_educationalContentError)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 14),
+                child: Text(
+                  l10n.insightsEducationLoadError,
+                  style: TextStyle(color: RhythmaColors.rose, fontSize: 13),
+                ),
+              )
+            else if (_educationalContent.isEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 14),
+                child: Text(
+                  l10n.insightsNoContent,
+                  style: TextStyle(color: RhythmaColors.mutedFg, fontSize: 13),
+                ),
+              )
+            else
+              ..._educationalContent.map((article) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _buildEducationalCard(context, article),
+              )),
 
             // Wellness recommendations
 
@@ -515,6 +554,131 @@ const SizedBox(height: 14),
           ],
         ),
       ),
+    );
+  }
+  Widget _buildEducationalCard(BuildContext context, EducationalArticle article) {
+    return GlassCard(
+      padding: EdgeInsets.zero,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: const TintedIcon(
+          icon: Icons.menu_book_rounded,
+          color: RhythmaColors.teal,
+          size: 32,
+        ),
+        title: Text(
+          article.title,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: RhythmaColors.foreground,
+          ),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4.0),
+          child: Text(
+            article.summary,
+            style: TextStyle(
+              fontSize: 12,
+              color: RhythmaColors.mutedFg,
+            ),
+          ),
+        ),
+        trailing: Icon(
+          Icons.chevron_right_rounded,
+          color: RhythmaColors.mutedFg,
+        ),
+        onTap: () {
+          _showArticleSheet(context, article);
+        },
+      ),
+    );
+  }
+
+  void _showArticleSheet(BuildContext context, EducationalArticle article) {
+    final l10n = AppLocalizations.of(context)!;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: RhythmaColors.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: RhythmaColors.mutedFg.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    article.title,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: RhythmaColors.foreground,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    article.content,
+                    style: TextStyle(
+                      fontSize: 14,
+                      height: 1.6,
+                      color: RhythmaColors.foreground.withOpacity(0.9),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  if (article.sourceName.isNotEmpty && article.sourceUrl.isNotEmpty)
+                    InkWell(
+                      onTap: () async {
+                        final uri = Uri.parse(article.sourceUrl);
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(uri);
+                        }
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.link_rounded, size: 16, color: RhythmaColors.primary),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                '${l10n.insightsSource}: ${article.sourceName}',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: RhythmaColors.primary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  const SizedBox(height: 12),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

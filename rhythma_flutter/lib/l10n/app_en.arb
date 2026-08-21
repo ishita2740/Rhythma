@@ -256,4 +256,9 @@
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
   "logSympFainting": "Fainting"
+
+  ,"insightsEducationalLibrary": "Educational Library",
+  "insightsNoContent": "No content available.",
+  "insightsSource": "Source",
+  "insightsEducationLoadError": "Failed to load educational content."
 }
