@@ -161,6 +161,29 @@ class AppLocalizationsHi extends AppLocalizations {
   String get homeRetry => 'Retry';
 
   @override
+  String get notificationPeriodTitle => 'पीरियड जल्द आने की संभावना';
+
+  @override
+  String notificationPeriodBody(String days) {
+    return 'आपका पीरियड लगभग $days दिन में आने की संभावना है। ज़रूरी चीज़ें तैयार रखने का अच्छा समय है।';
+  }
+
+  @override
+  String get notificationLogPeriodTitle => 'आपके चक्र को फिर से पटरी पर लाएँ';
+
+  @override
+  String get notificationLogPeriodBody => 'आपने काफ़ी समय से कोई पीरियड दर्ज नहीं किया, इसलिए हम अगला अनुमान नहीं लगा सकते। Rhythma खोलकर अपना पिछला पीरियड दर्ज करें।';
+
+  @override
+  String get notificationLogReminderTitle => 'अपना दिन दर्ज करने का समय';
+
+  @override
+  String get notificationLogReminderBody => 'आपने आज कुछ दर्ज नहीं किया। अभी एक पल देने से आपके अनुमान बेहतर होंगे।';
+
+  @override
+  String get notificationChannelReminders => 'Rhythma अनुस्मारक';
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

@@ -161,6 +161,29 @@ class AppLocalizationsMr extends AppLocalizations {
   String get homeRetry => 'Retry';
 
   @override
+  String get notificationPeriodTitle => 'मासिक पाळी लवकर येण्याची शक्यता';
+
+  @override
+  String notificationPeriodBody(String days) {
+    return 'तुमची मासिक पाळी सुमारे $days दिवसांत येण्याची शक्यता आहे. आवश्यक गोष्टी तयार ठेवण्याची ही चांगली वेळ आहे.';
+  }
+
+  @override
+  String get notificationLogPeriodTitle => 'तुमचे चक्र पुन्हा रुळावर आणूया';
+
+  @override
+  String get notificationLogPeriodBody => 'तुम्ही बऱ्याच दिवसांपासून मासिक पाळी नोंदवली नाही, त्यामुळे पुढील अंदाज लावता येत नाही. Rhythma उघडून तुमची शेवटची पाळी नोंदवा.';
+
+  @override
+  String get notificationLogReminderTitle => 'तुमचा दिवस नोंदवण्याची वेळ';
+
+  @override
+  String get notificationLogReminderBody => 'तुम्ही आज काहीही नोंदवले नाही. आत्ता थोडा वेळ दिल्यास तुमचे अंदाज अधिक अचूक होतील.';
+
+  @override
+  String get notificationChannelReminders => 'Rhythma स्मरणपत्रे';
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

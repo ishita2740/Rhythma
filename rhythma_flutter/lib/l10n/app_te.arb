@@ -213,5 +213,19 @@
   "logFlowVeryHeavy": "Very Heavy",
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logSympFainting": "Fainting",
+  "notificationPeriodTitle": "త్వరలో పీరియడ్ రావచ్చు",
+  "notificationPeriodBody": "మీ పీరియడ్ సుమారు {days} రోజుల్లో రావచ్చు. అవసరమైనవి సిద్ధం చేసుకోవడానికి మంచి సమయం.",
+  "@notificationPeriodBody": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationLogPeriodTitle": "మీ సైకిల్‌ను మళ్లీ సరైన దారిలో పెడదాం",
+  "notificationLogPeriodBody": "మీరు చాలా కాలంగా పీరియడ్ నమోదు చేయలేదు, అందుకే తదుపరిది అంచనా వేయలేము. Rhythma తెరిచి మీ చివరి పీరియడ్‌ను నమోదు చేయండి.",
+  "notificationLogReminderTitle": "మీ రోజును నమోదు చేసే సమయం",
+  "notificationLogReminderBody": "మీరు ఈరోజు ఏమీ నమోదు చేయలేదు. ఇప్పుడు కొద్ది సమయం ఇస్తే మీ అంచనాలు మెరుగవుతాయి.",
+  "notificationChannelReminders": "Rhythma రిమైండర్‌లు"
 }

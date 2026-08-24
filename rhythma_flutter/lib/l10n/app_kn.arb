@@ -254,5 +254,19 @@
   "logFlowVeryHeavy": "Very Heavy",
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logSympFainting": "Fainting",
+  "notificationPeriodTitle": "ಶೀಘ್ರದಲ್ಲೇ ಮುಟ್ಟು ಬರಬಹುದು",
+  "notificationPeriodBody": "ನಿಮ್ಮ ಮುಟ್ಟು ಸುಮಾರು {days} ದಿನಗಳಲ್ಲಿ ಬರಬಹುದು. ಬೇಕಾದವುಗಳನ್ನು ಸಿದ್ಧಪಡಿಸಿಕೊಳ್ಳಲು ಒಳ್ಳೆಯ ಸಮಯ.",
+  "@notificationPeriodBody": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationLogPeriodTitle": "ನಿಮ್ಮ ಚಕ್ರವನ್ನು ಮತ್ತೆ ಸರಿದಾರಿಗೆ ತರೋಣ",
+  "notificationLogPeriodBody": "ನೀವು ಬಹಳ ಸಮಯದಿಂದ ಮುಟ್ಟನ್ನು ದಾಖಲಿಸಿಲ್ಲ, ಆದ್ದರಿಂದ ಮುಂದಿನದನ್ನು ಊಹಿಸಲಾಗದು. Rhythma ತೆರೆದು ನಿಮ್ಮ ಕೊನೆಯ ಮುಟ್ಟನ್ನು ದಾಖಲಿಸಿ.",
+  "notificationLogReminderTitle": "ನಿಮ್ಮ ದಿನವನ್ನು ದಾಖಲಿಸುವ ಸಮಯ",
+  "notificationLogReminderBody": "ನೀವು ಇಂದು ಏನನ್ನೂ ದಾಖಲಿಸಿಲ್ಲ. ಈಗ ಸ್ವಲ್ಪ ಸಮಯ ನೀಡಿದರೆ ನಿಮ್ಮ ಊಹೆಗಳು ಉತ್ತಮವಾಗುತ್ತವೆ.",
+  "notificationChannelReminders": "Rhythma ಜ್ಞಾಪನೆಗಳು"
 }

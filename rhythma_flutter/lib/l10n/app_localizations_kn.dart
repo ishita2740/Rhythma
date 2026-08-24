@@ -161,6 +161,29 @@ class AppLocalizationsKn extends AppLocalizations {
   String get homeRetry => 'ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ';
 
   @override
+  String get notificationPeriodTitle => 'ಶೀಘ್ರದಲ್ಲೇ ಮುಟ್ಟು ಬರಬಹುದು';
+
+  @override
+  String notificationPeriodBody(String days) {
+    return 'ನಿಮ್ಮ ಮುಟ್ಟು ಸುಮಾರು $days ದಿನಗಳಲ್ಲಿ ಬರಬಹುದು. ಬೇಕಾದವುಗಳನ್ನು ಸಿದ್ಧಪಡಿಸಿಕೊಳ್ಳಲು ಒಳ್ಳೆಯ ಸಮಯ.';
+  }
+
+  @override
+  String get notificationLogPeriodTitle => 'ನಿಮ್ಮ ಚಕ್ರವನ್ನು ಮತ್ತೆ ಸರಿದಾರಿಗೆ ತರೋಣ';
+
+  @override
+  String get notificationLogPeriodBody => 'ನೀವು ಬಹಳ ಸಮಯದಿಂದ ಮುಟ್ಟನ್ನು ದಾಖಲಿಸಿಲ್ಲ, ಆದ್ದರಿಂದ ಮುಂದಿನದನ್ನು ಊಹಿಸಲಾಗದು. Rhythma ತೆರೆದು ನಿಮ್ಮ ಕೊನೆಯ ಮುಟ್ಟನ್ನು ದಾಖಲಿಸಿ.';
+
+  @override
+  String get notificationLogReminderTitle => 'ನಿಮ್ಮ ದಿನವನ್ನು ದಾಖಲಿಸುವ ಸಮಯ';
+
+  @override
+  String get notificationLogReminderBody => 'ನೀವು ಇಂದು ಏನನ್ನೂ ದಾಖಲಿಸಿಲ್ಲ. ಈಗ ಸ್ವಲ್ಪ ಸಮಯ ನೀಡಿದರೆ ನಿಮ್ಮ ಊಹೆಗಳು ಉತ್ತಮವಾಗುತ್ತವೆ.';
+
+  @override
+  String get notificationChannelReminders => 'Rhythma ಜ್ಞಾಪನೆಗಳು';
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

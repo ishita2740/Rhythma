@@ -264,5 +264,19 @@
   "logFlowVeryHeavy": "Very Heavy",
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logSympFainting": "Fainting",
+  "notificationPeriodTitle": "પિરિયડ જલદી આવવાની શક્યતા",
+  "notificationPeriodBody": "તમારો પિરિયડ આશરે {days} દિવસમાં આવવાની શક્યતા છે. જરૂરી વસ્તુઓ તૈયાર રાખવાનો સારો સમય છે.",
+  "@notificationPeriodBody": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationLogPeriodTitle": "તમારું ચક્ર ફરી પાટા પર લાવીએ",
+  "notificationLogPeriodBody": "તમે ઘણા સમયથી પિરિયડ નોંધ્યો નથી, તેથી અમે આગળનો અંદાજ લગાવી શકતા નથી. Rhythma ખોલીને તમારો છેલ્લો પિરિયડ નોંધો.",
+  "notificationLogReminderTitle": "તમારો દિવસ નોંધવાનો સમય",
+  "notificationLogReminderBody": "તમે આજે કંઈ નોંધ્યું નથી. હમણાં થોડી ક્ષણ આપવાથી તમારા અંદાજ વધુ સારા થશે.",
+  "notificationChannelReminders": "Rhythma રિમાઇન્ડર"
 }

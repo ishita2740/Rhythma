@@ -161,6 +161,29 @@ class AppLocalizationsMl extends AppLocalizations {
   String get homeRetry => 'വീണ്ടും ശ്രമിക്കുക';
 
   @override
+  String get notificationPeriodTitle => 'ഉടൻ ആർത്തവം പ്രതീക്ഷിക്കാം';
+
+  @override
+  String notificationPeriodBody(String days) {
+    return 'നിങ്ങളുടെ ആർത്തവം ഏകദേശം $days ദിവസത്തിനുള്ളിൽ പ്രതീക്ഷിക്കാം. ആവശ്യമുള്ളവ തയ്യാറാക്കാൻ നല്ല സമയം.';
+  }
+
+  @override
+  String get notificationLogPeriodTitle => 'നിങ്ങളുടെ സൈക്കിൾ വീണ്ടും ശരിയാക്കാം';
+
+  @override
+  String get notificationLogPeriodBody => 'നിങ്ങൾ കുറേ നാളായി ആർത്തവം രേഖപ്പെടുത്തിയിട്ടില്ല, അതിനാൽ അടുത്തത് പ്രവചിക്കാനാവില്ല. Rhythma തുറന്ന് നിങ്ങളുടെ അവസാന ആർത്തവം രേഖപ്പെടുത്തുക.';
+
+  @override
+  String get notificationLogReminderTitle => 'നിങ്ങളുടെ ദിവസം രേഖപ്പെടുത്താൻ സമയമായി';
+
+  @override
+  String get notificationLogReminderBody => 'നിങ്ങൾ ഇന്ന് ഒന്നും രേഖപ്പെടുത്തിയിട്ടില്ല. ഇപ്പോൾ അൽപം സമയം നൽകിയാൽ പ്രവചനങ്ങൾ മെച്ചപ്പെടും.';
+
+  @override
+  String get notificationChannelReminders => 'Rhythma ഓർമ്മപ്പെടുത്തലുകൾ';
+
+  @override
   String get homeMhs => 'MHS';
 
   @override
