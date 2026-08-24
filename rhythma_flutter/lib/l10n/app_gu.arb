@@ -264,5 +264,40 @@
   "logFlowVeryHeavy": "Very Heavy",
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logSympFainting": "Fainting",
+  "homeSavedDataNotice": "{when} નો સાચવેલો ડેટા બતાવી રહ્યા છીએ",
+  "@homeSavedDataNotice": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "homeCouldNotRefresh": "તાજું કરી શકાયું નથી — તમે કદાચ ઑફલાઇન છો",
+  "homeSavedDataTooOld": "તમારો સાચવેલો ડેટા એટલો જૂનો છે કે વિશ્વસનીય ચક્ર દિવસ બતાવી શકાય નહીં. તાજું કરવા ઇન્ટરનેટ સાથે જોડાઓ.",
+  "homeAgeJustNow": "હમણાં જ",
+  "homeAgeMinutes": "{count} મિનિટ પહેલાં",
+  "@homeAgeMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "homeAgeHours": "{count} કલાક પહેલાં",
+  "@homeAgeHours": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "homeAgeDays": "{count} દિવસ પહેલાં",
+  "@homeAgeDays": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  }
 }

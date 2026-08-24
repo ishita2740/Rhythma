@@ -213,5 +213,40 @@
   "logFlowVeryHeavy": "Very Heavy",
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logSympFainting": "Fainting",
+  "homeSavedDataNotice": "{when} నాటి సేవ్ చేసిన సమాచారం చూపబడుతోంది",
+  "@homeSavedDataNotice": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "homeCouldNotRefresh": "రిఫ్రెష్ చేయలేకపోయాం — మీరు ఆఫ్‌లైన్‌లో ఉండవచ్చు",
+  "homeSavedDataTooOld": "మీ సేవ్ చేసిన సమాచారం చాలా పాతది, నమ్మదగిన సైకిల్ రోజును చూపలేము. రిఫ్రెష్ చేయడానికి ఇంటర్నెట్‌కు కనెక్ట్ అవ్వండి.",
+  "homeAgeJustNow": "ఇప్పుడే",
+  "homeAgeMinutes": "{count} నిమిషాల క్రితం",
+  "@homeAgeMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "homeAgeHours": "{count} గంటల క్రితం",
+  "@homeAgeHours": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "homeAgeDays": "{count} రోజుల క్రితం",
+  "@homeAgeDays": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  }
 }

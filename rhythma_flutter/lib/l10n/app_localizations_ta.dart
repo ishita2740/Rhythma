@@ -160,6 +160,35 @@ class AppLocalizationsTa extends AppLocalizations {
   String get homeRetry => 'Retry';
 
   @override
+  String homeSavedDataNotice(String when) {
+    return '$when சேமிக்கப்பட்ட தரவு காட்டப்படுகிறது';
+  }
+
+  @override
+  String get homeCouldNotRefresh => 'புதுப்பிக்க முடியவில்லை — நீங்கள் ஆஃப்லைனில் இருக்கலாம்';
+
+  @override
+  String get homeSavedDataTooOld => 'உங்கள் சேமித்த தரவு மிகவும் பழையது, நம்பகமான சுழற்சி நாளைக் காட்ட முடியாது. புதுப்பிக்க இணையத்துடன் இணையவும்.';
+
+  @override
+  String get homeAgeJustNow => 'இப்போதுதான்';
+
+  @override
+  String homeAgeMinutes(String count) {
+    return '$count நிமிடங்களுக்கு முன்பு';
+  }
+
+  @override
+  String homeAgeHours(String count) {
+    return '$count மணி நேரத்திற்கு முன்பு';
+  }
+
+  @override
+  String homeAgeDays(String count) {
+    return '$count நாட்களுக்கு முன்பு';
+  }
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

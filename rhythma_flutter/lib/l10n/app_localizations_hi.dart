@@ -161,6 +161,35 @@ class AppLocalizationsHi extends AppLocalizations {
   String get homeRetry => 'Retry';
 
   @override
+  String homeSavedDataNotice(String when) {
+    return '$when का सहेजा गया डेटा दिखाया जा रहा है';
+  }
+
+  @override
+  String get homeCouldNotRefresh => 'ताज़ा नहीं किया जा सका — शायद आप ऑफ़लाइन हैं';
+
+  @override
+  String get homeSavedDataTooOld => 'आपका सहेजा गया डेटा इतना पुराना है कि सही चक्र दिवस नहीं बताया जा सकता। ताज़ा करने के लिए इंटरनेट से जुड़ें।';
+
+  @override
+  String get homeAgeJustNow => 'अभी';
+
+  @override
+  String homeAgeMinutes(String count) {
+    return '$count मिनट पहले';
+  }
+
+  @override
+  String homeAgeHours(String count) {
+    return '$count घंटे पहले';
+  }
+
+  @override
+  String homeAgeDays(String count) {
+    return '$count दिन पहले';
+  }
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

@@ -160,6 +160,35 @@ class AppLocalizationsGu extends AppLocalizations {
   String get homeRetry => 'ફરી પ્રયાસ કરો';
 
   @override
+  String homeSavedDataNotice(String when) {
+    return '$when નો સાચવેલો ડેટા બતાવી રહ્યા છીએ';
+  }
+
+  @override
+  String get homeCouldNotRefresh => 'તાજું કરી શકાયું નથી — તમે કદાચ ઑફલાઇન છો';
+
+  @override
+  String get homeSavedDataTooOld => 'તમારો સાચવેલો ડેટા એટલો જૂનો છે કે વિશ્વસનીય ચક્ર દિવસ બતાવી શકાય નહીં. તાજું કરવા ઇન્ટરનેટ સાથે જોડાઓ.';
+
+  @override
+  String get homeAgeJustNow => 'હમણાં જ';
+
+  @override
+  String homeAgeMinutes(String count) {
+    return '$count મિનિટ પહેલાં';
+  }
+
+  @override
+  String homeAgeHours(String count) {
+    return '$count કલાક પહેલાં';
+  }
+
+  @override
+  String homeAgeDays(String count) {
+    return '$count દિવસ પહેલાં';
+  }
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

@@ -109,6 +109,13 @@ class AuthService {
 
   Future<void> logout() async {
     await SecureStorage.clearAuth();
+    // The saved dashboard goes, before the account id does. It holds a
+    // name and a cycle day, and `_scoped()` falls back to the unscoped key
+    // once `currentUserId` is null — so leaving it behind is how the next
+    // person on a shared phone gets shown the last person's cycle day
+    // (#510). Everything else stays: logging out is not "delete my data",
+    // and her logs are still here when she signs back in.
+    await LocalStorageService.clearCachedDashboard();
     // Clears which account is "active" locally — does not delete that
     // account's cached data, so it's still there if they log back in.
     await LocalStorageService.setCurrentUserId(null);

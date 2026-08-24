@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'dashboard_cache.dart';
+
 /// Keys used in Hive boxes
 class _Keys {
   static const cycleBox = 'cycle_logs';
@@ -347,16 +349,77 @@ class LocalStorageService {
   }
 
   // ── Dashboard Cache ────────────────────────────────────────────────────
+  //
+  // `dashboard_cache_timestamp` has been written on every save since the
+  // cache was added, and until #510 nothing read it: there was no getter,
+  // no expiry, and no way for a caller to find out whether the payload it
+  // had just been handed was thirty seconds old or six weeks. Reading the
+  // raw payload alone is still possible — `getCachedDashboard()` below —
+  // but the screens use `readCachedDashboard()`, which cannot hand back
+  // data without also handing back its age.
 
+  /// The raw saved payload, with no opinion about its age.
+  ///
+  /// Prefer [readCachedDashboard]. This is kept because "give me exactly
+  /// what is stored" is a legitimate thing for a test or a diagnostic to
+  /// want, and because removing it would break callers for a reason that
+  /// has nothing to do with them.
   static Map<String, dynamic>? getCachedDashboard() {
     final raw = _settings.get(_scoped(_Keys.dashboardCache));
     return raw != null ? Map<String, dynamic>.from(raw as Map) : null;
+  }
+
+  /// When the saved dashboard was written, or null if nothing is saved.
+  ///
+  /// Returns null rather than throwing on an unparseable value: a corrupt
+  /// timestamp means "we do not know how old this is", and the policy in
+  /// `dashboard_cache.dart` treats not knowing as too old to show.
+  static DateTime? getCachedDashboardSavedAt() {
+    final raw = _settings.get(_scoped(_Keys.dashboardCacheTimestamp));
+    if (raw is! String) return null;
+    return DateTime.tryParse(raw);
+  }
+
+  /// How long ago the saved dashboard was written, or null if none is.
+  static Duration? getCachedDashboardAge({DateTime? now}) {
+    final savedAt = getCachedDashboardSavedAt();
+    if (savedAt == null) return null;
+    return (now ?? DateTime.now()).difference(savedAt);
+  }
+
+  /// The saved dashboard together with a verdict on whether it may be
+  /// shown, and whether showing it obliges the screen to say how old it is.
+  ///
+  /// This is the call `HomeScreen` makes. The policy lives in
+  /// `dashboard_cache.dart` as pure functions of `(savedAt, now)` so the
+  /// thresholds can be tested without Hive and without the wall clock.
+  static DashboardCacheEntry readCachedDashboard({
+    DateTime? now,
+    DashboardCachePolicy policy = kDashboardCachePolicy,
+  }) {
+    return policy.evaluate(
+      data: getCachedDashboard(),
+      savedAt: getCachedDashboardSavedAt(),
+      now: now ?? DateTime.now(),
+    );
   }
 
   static Future<void> saveCachedDashboard(Map<String, dynamic> data) async {
     await _settings.put(_scoped(_Keys.dashboardCache), data);
     await _settings.put(
         _scoped(_Keys.dashboardCacheTimestamp), DateTime.now().toIso8601String());
+  }
+
+  /// Drop the saved dashboard and its timestamp for the current account.
+  ///
+  /// There was no way to do this. `deleteCurrentUserData()` sweeps the
+  /// scoped keys by prefix and then deletes the two *unscoped* legacy
+  /// ones, but neither path runs once `currentUserId` is null — which is
+  /// the state immediately after logout. So on a shared phone the next
+  /// person could be shown the previous account's cycle day.
+  static Future<void> clearCachedDashboard() async {
+    await _settings.delete(_scoped(_Keys.dashboardCache));
+    await _settings.delete(_scoped(_Keys.dashboardCacheTimestamp));
   }
 
   // ── Clear all data ─────────────────────────────────────────────────────

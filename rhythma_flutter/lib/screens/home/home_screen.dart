@@ -9,6 +9,7 @@ import '../../providers/theme_provider.dart';
 import '../../providers/profile_provider.dart';
 import '../../services/api_client.dart';
 import '../../services/cycle_service.dart';
+import '../../services/dashboard_cache.dart';
 import '../../services/local_storage_service.dart';
 import '../../utils/log_options.dart';
 import '../cycle/components/log_entry_sheet.dart';
@@ -32,6 +33,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic> _insights = {};
   String _error = '';
 
+  /// How old the data on screen is, when it came from the cache.
+  ///
+  /// Null once a live fetch has succeeded. Non-null means everything
+  /// rendered below was saved this long ago and may no longer be true —
+  /// which the user is told, rather than left to discover (#510).
+  Duration? _shownDataAge;
+
+  /// True when a saved dashboard existed but was too old to show.
+  bool _cacheExpired = false;
+
+  /// True when the last refresh failed while cached data was on screen.
+  ///
+  /// This is the state that used to be unrepresentable. The old `catch`
+  /// only reported an error `if (_loading)`, and rendering the cache had
+  /// already set `_loading = false` — so for any user who had loaded the
+  /// dashboard once, a failed refresh was swallowed entirely and the
+  /// screen looked exactly like a successful load.
+  bool _refreshFailed = false;
+
   @override
   void initState() {
     super.initState();
@@ -40,15 +60,25 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _loadCachedDashboard() {
-    final cached = LocalStorageService.getCachedDashboard();
-    if (cached != null) {
-      setState(() {
-        _userData = cached['user'] ?? {};
-        _cycleData = cached['cycle'] ?? {};
-        _insights = cached['insights'] ?? {};
-        _loading = false;
-      });
+    final entry = LocalStorageService.readCachedDashboard();
+
+    if (!entry.hasUsableData) {
+      // Either nothing is saved, or what is saved is too old for its day
+      // counts to mean anything. Both leave the screen loading; the
+      // difference is what we say if the refresh then fails.
+      setState(() => _cacheExpired = entry.isExpired);
+      return;
     }
+
+    final data = entry.data!;
+    setState(() {
+      _userData = data['user'] ?? {};
+      _cycleData = data['cycle'] ?? {};
+      _insights = data['insights'] ?? {};
+      _loading = false;
+      _cacheExpired = false;
+      _shownDataAge = entry.needsAgeNotice ? entry.age : null;
+    });
   }
 
   Future<void> _fetchDashboardData() async {
@@ -68,16 +98,101 @@ class _HomeScreenState extends State<HomeScreen> {
         _insights = data['insights'] as Map<String, dynamic>;
         _loading = false;
         _error = '';
+        // Live data: nothing on screen is stale any more.
+        _shownDataAge = null;
+        _refreshFailed = false;
+        _cacheExpired = false;
       });
     } catch (e) {
       if (!mounted) return;
-      if (_loading) {
-        setState(() {
+      setState(() {
+        if (_loading) {
+          // Nothing to fall back on — the full error screen is right.
           _error = e.toString();
           _loading = false;
-        });
-      }
+        } else {
+          // Cached data is on screen. Say the refresh failed instead of
+          // replacing a usable screen with an error, and instead of
+          // saying nothing at all, which is what used to happen.
+          _refreshFailed = true;
+        }
+      });
     }
+  }
+
+  /// Retry, keeping whatever is already on screen.
+  Future<void> _retryRefresh() async {
+    setState(() => _refreshFailed = false);
+    await _fetchDashboardData();
+  }
+
+  /// "2 hours ago", in the reader's own language.
+  ///
+  /// The unit and the count come from `describeCacheAge`; the sentence is
+  /// assembled from l10n so the number can sit where each language puts
+  /// it rather than where English does.
+  String _ageLabel(AppLocalizations l10n, Duration age) {
+    final described = describeCacheAge(age);
+    switch (described.unit) {
+      case CacheAgeUnit.justNow:
+        return l10n.homeAgeJustNow;
+      case CacheAgeUnit.minutes:
+        return l10n.homeAgeMinutes('${described.count}');
+      case CacheAgeUnit.hours:
+        return l10n.homeAgeHours('${described.count}');
+      case CacheAgeUnit.days:
+        return l10n.homeAgeDays('${described.count}');
+    }
+  }
+
+  /// The banner above the dashboard when what is shown is not live.
+  ///
+  /// Returns null when the data is current, which is the ordinary case —
+  /// a permanent "you are online" strip would be noise.
+  Widget? _stalenessBanner(AppLocalizations l10n) {
+    final age = _shownDataAge;
+    if (!_refreshFailed && age == null) return null;
+
+    final lines = <String>[
+      if (_refreshFailed) l10n.homeCouldNotRefresh,
+      if (age != null) l10n.homeSavedDataNotice(_ageLabel(l10n, age)),
+    ];
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: RhythmaColors.mutedFg.withOpacity(0.10),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.cloud_off_outlined,
+              size: 18, color: RhythmaColors.mutedFg),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (final line in lines)
+                  Text(
+                    line,
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      color: RhythmaColors.mutedFg,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          if (_refreshFailed)
+            TextButton(
+              onPressed: _retryRefresh,
+              child: Text(l10n.homeRetry),
+            ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -102,7 +217,15 @@ class _HomeScreenState extends State<HomeScreen> {
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 8),
-            Text(_error, style: TextStyle(color: RhythmaColors.mutedFg)),
+            Text(
+              // A saved dashboard exists but is too old for its cycle day
+              // to be worth showing. Saying so is more use than the raw
+              // exception, which describes the network and not the
+              // decision (#510).
+              _cacheExpired ? l10n.homeSavedDataTooOld : _error,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: RhythmaColors.mutedFg),
+            ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _fetchDashboardData,
@@ -129,11 +252,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final avgBleeding = _insights['averageBleedingDuration'] ?? 5;
     final sleepHours = _insights['sleepHours'] ?? '7.2h';
 
+    // Above everything in the tree below, because it changes how every
+    // number under it should be read.
+    final stalenessBanner = _stalenessBanner(l10n);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // ── Not-live notice ─────────────────────────────────
+          if (stalenessBanner != null) stalenessBanner,
+
           // ── Header ──────────────────────────────────────────
           Padding(
             padding: const EdgeInsets.fromLTRB(2, 8, 2, 20),

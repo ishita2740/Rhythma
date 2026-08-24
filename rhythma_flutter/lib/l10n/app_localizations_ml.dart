@@ -161,6 +161,35 @@ class AppLocalizationsMl extends AppLocalizations {
   String get homeRetry => 'വീണ്ടും ശ്രമിക്കുക';
 
   @override
+  String homeSavedDataNotice(String when) {
+    return '$when സൂക്ഷിച്ച വിവരം കാണിക്കുന്നു';
+  }
+
+  @override
+  String get homeCouldNotRefresh => 'പുതുക്കാനായില്ല — നിങ്ങൾ ഓഫ്‌ലൈനിലായിരിക്കാം';
+
+  @override
+  String get homeSavedDataTooOld => 'നിങ്ങളുടെ സൂക്ഷിച്ച വിവരം വളരെ പഴയതാണ്, വിശ്വസനീയമായ സൈക്കിൾ ദിവസം കാണിക്കാനാവില്ല. പുതുക്കാൻ ഇന്റർനെറ്റുമായി ബന്ധിപ്പിക്കുക.';
+
+  @override
+  String get homeAgeJustNow => 'ഇപ്പോൾ';
+
+  @override
+  String homeAgeMinutes(String count) {
+    return '$count മിനിറ്റ് മുമ്പ്';
+  }
+
+  @override
+  String homeAgeHours(String count) {
+    return '$count മണിക്കൂർ മുമ്പ്';
+  }
+
+  @override
+  String homeAgeDays(String count) {
+    return '$count ദിവസം മുമ്പ്';
+  }
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

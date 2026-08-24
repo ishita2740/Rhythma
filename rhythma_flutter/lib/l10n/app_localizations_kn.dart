@@ -161,6 +161,35 @@ class AppLocalizationsKn extends AppLocalizations {
   String get homeRetry => 'ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ';
 
   @override
+  String homeSavedDataNotice(String when) {
+    return '$when ಉಳಿಸಿದ ಮಾಹಿತಿ ತೋರಿಸಲಾಗುತ್ತಿದೆ';
+  }
+
+  @override
+  String get homeCouldNotRefresh => 'ರಿಫ್ರೆಶ್ ಮಾಡಲಾಗಲಿಲ್ಲ — ನೀವು ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿರಬಹುದು';
+
+  @override
+  String get homeSavedDataTooOld => 'ನಿಮ್ಮ ಉಳಿಸಿದ ಮಾಹಿತಿ ತುಂಬಾ ಹಳೆಯದು, ವಿಶ್ವಸನೀಯ ಚಕ್ರದ ದಿನವನ್ನು ತೋರಿಸಲಾಗದು. ರಿಫ್ರೆಶ್ ಮಾಡಲು ಇಂಟರ್ನೆಟ್‌ಗೆ ಸಂಪರ್ಕಿಸಿ.';
+
+  @override
+  String get homeAgeJustNow => 'ಈಗಷ್ಟೇ';
+
+  @override
+  String homeAgeMinutes(String count) {
+    return '$count ನಿಮಿಷಗಳ ಹಿಂದೆ';
+  }
+
+  @override
+  String homeAgeHours(String count) {
+    return '$count ಗಂಟೆಗಳ ಹಿಂದೆ';
+  }
+
+  @override
+  String homeAgeDays(String count) {
+    return '$count ದಿನಗಳ ಹಿಂದೆ';
+  }
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

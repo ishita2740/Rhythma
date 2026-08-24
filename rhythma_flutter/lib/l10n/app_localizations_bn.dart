@@ -161,6 +161,35 @@ class AppLocalizationsBn extends AppLocalizations {
   String get homeRetry => 'পুনরায় চেষ্টা করুন';
 
   @override
+  String homeSavedDataNotice(String when) {
+    return '$when এর সংরক্ষিত তথ্য দেখানো হচ্ছে';
+  }
+
+  @override
+  String get homeCouldNotRefresh => 'রিফ্রেশ করা যায়নি — আপনি হয়তো অফলাইনে আছেন';
+
+  @override
+  String get homeSavedDataTooOld => 'আপনার সংরক্ষিত তথ্য এত পুরনো যে নির্ভরযোগ্য চক্র দিন দেখানো যাচ্ছে না। রিফ্রেশ করতে ইন্টারনেটে সংযুক্ত হোন।';
+
+  @override
+  String get homeAgeJustNow => 'এইমাত্র';
+
+  @override
+  String homeAgeMinutes(String count) {
+    return '$count মিনিট আগে';
+  }
+
+  @override
+  String homeAgeHours(String count) {
+    return '$count ঘণ্টা আগে';
+  }
+
+  @override
+  String homeAgeDays(String count) {
+    return '$count দিন আগে';
+  }
+
+  @override
   String get homeMhs => 'MHS';
 
   @override
