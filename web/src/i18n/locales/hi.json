@@ -230,7 +230,9 @@
     "errorPrefix": "Error",
     "disclaimer": "Please consult a healthcare professional for medical advice.",
     "rateLimited": "You're sending messages too quickly. Please wait a moment.",
-    "storedOnDevice": "यह बातचीत इसी डिवाइस पर रखी जाती है और लॉग आउट करने पर हटा दी जाती है।",
+    "conversationStorage": "यह बातचीत आपके खाते में और इस डिवाइस पर सहेजी जाती है। इसे मिटाने पर यह दोनों जगहों से हट जाती है।",
+    "clearing": "मिटाया जा रहा है…",
+    "clearFailed": "सर्वर पर सहेजी गई बातचीत नहीं मिटाई जा सकी — वह अब भी सहेजी हुई है। कृपया फिर से कोशिश करें।",
     "clearConversation": "बातचीत हटाएँ"
   },
   "insights": {

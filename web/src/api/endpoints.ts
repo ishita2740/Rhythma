@@ -385,6 +385,30 @@ export async function fetchSupportedLanguages(): Promise<SupportedLanguage[]> {
   return response.data;
 }
 
+/** What the server removed when the conversation was cleared. */
+export interface ClearConversationResult {
+  cleared: boolean;
+  messagesRemoved: number;
+}
+
+/**
+ * Delete the stored conversation for the signed-in account.
+ *
+ * The transcript the model is given lives on the server, not in this
+ * browser. `clearHistory()` in `lib/chatHistory.ts` removes the local copy
+ * — which is what the screen renders — and `POST /assistant/chat` goes on
+ * loading the stored one into the prompt regardless (issue #509). Both
+ * have to happen, and this is the half that was missing.
+ *
+ * Deliberately not swallowed here. A clear that failed must reach the
+ * caller so the screen can say so; reporting success for a conversation
+ * that is still on the server is the bug this fixes, one layer up.
+ */
+export async function clearAssistantConversation(): Promise<ClearConversationResult> {
+  const response = await apiClient.delete<ClearConversationResult>('/assistant/conversation');
+  return response.data;
+}
+
 // ─── SMS ────────────────────────────────────────────────────────────────────
 
 export interface SmsSettings {

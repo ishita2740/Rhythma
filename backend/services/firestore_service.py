@@ -19,6 +19,11 @@ from core.errors import upstream_error
 # with a form of the address the write path would never have stored (#380).
 from core.email_identity import normalize_email
 
+# The project-wide logger (see utils/logger.py). Used here only for the
+# paths that recover from a failure rather than raising it — a fallback
+# that leaves no trace is indistinguishable from a path that never ran.
+from utils.logger import logger
+
 # ─── Mock Firestore Client for Local Development ──────────────────────────
 #
 # Every backend test runs against this (`initialize_firebase()` falls back
@@ -826,50 +831,179 @@ class AssistantConversationService:
     Firestore's 1 MiB per-document limit (each message is ~200 bytes,
     so 50 messages is ~10 KiB) and keeps retrieval of the most recent N
     messages a single document read.
+
+    Three things changed here for issue #509, and all three come from the
+    same root: this store was written as though it were a cache nobody
+    else had opinions about, when it is in fact the conversation the model
+    is given and the user believes she controls.
+
+    **It can be cleared.** There was no delete. Both clients' "clear
+    conversation" removed a local key and reset the screen, while
+    ``POST /assistant/chat`` kept loading these messages and putting them
+    in the prompt — so a user who cleared a conversation about a possible
+    pregnancy asked an unrelated question next and got an answer composed
+    in the context of the one she had just deleted. A control that empties
+    the screen and leaves the data is worse than no control, because the
+    user acted on a belief the app gave her.
+
+    **Appending cannot lose a turn.** ``add_messages`` was a
+    read-modify-write on an array with no transaction, so two turns in
+    flight at once — the web tab and the phone, a double-tap on send — both
+    read the same array and the second write discarded the first exchange.
+
+    **Reading does not write.** ``get_recent_messages`` went through
+    ``get_or_create``, which ``set()`` a document when none existed. Merely
+    opening the assistant created a row for a user who never sent
+    anything: a write per idle visit, and a document
+    ``data_privacy_service`` then has to walk on export and on deletion.
     """
 
     COLLECTION = "conversations"
 
     @staticmethod
-    def get_or_create(user_id: str) -> dict:
-        now = datetime.now(timezone.utc)
-        doc_ref = db.collection(AssistantConversationService.COLLECTION).document(user_id)
-        doc = doc_ref.get()
-        if doc.exists:
-            return doc.to_dict()
-        conversation = {
+    def _document(user_id: str):
+        return db.collection(AssistantConversationService.COLLECTION).document(user_id)
+
+    @staticmethod
+    def _new_conversation(user_id: str, now: datetime) -> Dict[str, Any]:
+        return {
             "user_id": user_id,
             "messages": [],
             "created_at": now,
             "updated_at": now,
         }
+
+    @staticmethod
+    def get_or_create(user_id: str) -> dict:
+        """The conversation document, creating an empty one if absent.
+
+        Retained for callers that genuinely want the document to exist.
+        The read path deliberately no longer uses it — see
+        :meth:`get_recent_messages`.
+        """
+        now = datetime.now(timezone.utc)
+        doc_ref = AssistantConversationService._document(user_id)
+        doc = doc_ref.get()
+        if doc.exists:
+            return doc.to_dict()
+        conversation = AssistantConversationService._new_conversation(user_id, now)
         doc_ref.set(conversation)
         return conversation
 
     @staticmethod
+    def get_conversation(user_id: str) -> Optional[Dict[str, Any]]:
+        """The stored conversation, or ``None``. Never writes."""
+        doc = AssistantConversationService._document(user_id).get()
+        if not doc.exists:
+            return None
+        return doc.to_dict()
+
+    @staticmethod
     def get_recent_messages(user_id: str, limit: int = 10) -> list:
-        conversation = AssistantConversationService.get_or_create(user_id)
-        return conversation.get("messages", [])[-limit:]
+        """The most recent ``limit`` turns, without creating a document.
+
+        A read that creates a row is a write dressed as a read: it makes
+        an idle visit cost a Firestore write, and it puts a document in a
+        collection that the privacy export and the deletion cascade both
+        have to walk. Only :meth:`add_messages` creates.
+        """
+        conversation = AssistantConversationService.get_conversation(user_id)
+        if not conversation:
+            return []
+        messages = conversation.get("messages") or []
+        return messages[-limit:] if limit and limit > 0 else list(messages)
 
     @staticmethod
     def add_messages(user_id: str, new_messages: list) -> None:
+        """Append turns to the conversation, keeping the newest 50.
+
+        Runs inside a Firestore transaction when the client offers one, so
+        a concurrent turn cannot silently discard this one. The in-memory
+        mock has no ``transaction()``, and neither does any test double, so
+        the non-transactional path is kept as a fallback — it is the same
+        read-modify-write as before, and it is safe there for the reason
+        the mock is safe generally: one process, no concurrency.
+        """
+        if not new_messages:
+            return
+
         now = datetime.now(timezone.utc)
-        doc_ref = db.collection(AssistantConversationService.COLLECTION).document(user_id)
-        doc = doc_ref.get()
-        if not doc.exists:
-            conversation = {
+        doc_ref = AssistantConversationService._document(user_id)
+
+        def _merge(existing: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+            messages = list((existing or {}).get("messages") or [])
+            messages.extend(new_messages)
+            if len(messages) > MAX_CONVERSATION_MESSAGES:
+                messages = messages[-MAX_CONVERSATION_MESSAGES:]
+            return {
                 "user_id": user_id,
-                "messages": [],
-                "created_at": now,
+                "messages": messages,
+                "created_at": (existing or {}).get("created_at", now),
                 "updated_at": now,
             }
-            doc_ref.set(conversation)
+
+        transaction = AssistantConversationService._begin_transaction()
+        if transaction is not None:
+            try:
+                AssistantConversationService._append_in_transaction(
+                    transaction, doc_ref, _merge
+                )
+                return
+            except Exception:
+                # A transaction that could not run is not a reason to lose
+                # the exchange. Fall through to the direct write and log,
+                # rather than dropping the turn the user just took.
+                logger.warning(
+                    "Could not append the assistant turn transactionally; "
+                    "falling back to a direct write"
+                )
+
+        doc = doc_ref.get()
+        existing = doc.to_dict() if doc.exists else None
+        doc_ref.set(_merge(existing))
+
+    @staticmethod
+    def _begin_transaction():
+        """A Firestore transaction, or ``None`` when the client has none."""
+        factory = getattr(db, "transaction", None)
+        if not callable(factory):
+            return None
+        try:
+            return factory()
+        except Exception:  # pragma: no cover - defensive
+            return None
+
+    @staticmethod
+    def _append_in_transaction(transaction, doc_ref, merge) -> None:
+        """Read, merge and write inside one transaction.
+
+        Split out so the transactional path is reachable from a test with
+        a stand-in transaction, which is the only way to assert it without
+        a live Firestore.
+        """
+        snapshot = doc_ref.get(transaction=transaction)
+        existing = snapshot.to_dict() if getattr(snapshot, "exists", False) else None
+        transaction.set(doc_ref, merge(existing))
+        commit = getattr(transaction, "commit", None)
+        if callable(commit):
+            commit()
+
+    @staticmethod
+    def clear_conversation(user_id: str) -> int:
+        """Delete this user's stored conversation. Returns turns removed.
+
+        The count is what makes the client's confirmation honest: "cleared
+        12 messages" and "there was nothing stored" are different things to
+        say, and a screen that claims to have cleared something it did not
+        find is the bug this method exists to fix.
+        """
+        try:
+            doc_ref = AssistantConversationService._document(user_id)
             doc = doc_ref.get()
-        current = doc.to_dict().get("messages", [])
-        current.extend(new_messages)
-        if len(current) > MAX_CONVERSATION_MESSAGES:
-            current = current[-MAX_CONVERSATION_MESSAGES:]
-        doc_ref.update({
-            "messages": current,
-            "updated_at": now,
-        })
+            if not doc.exists:
+                return 0
+            removed = len((doc.to_dict() or {}).get("messages") or [])
+            doc_ref.delete()
+            return removed
+        except Exception as e:
+            raise upstream_error("Clearing your assistant conversation", e)

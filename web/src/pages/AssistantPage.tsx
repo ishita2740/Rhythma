@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../auth/useAuth';
-import { sendChatMessage, type ChatMessage } from '../api/endpoints';
+import { clearAssistantConversation, sendChatMessage, type ChatMessage } from '../api/endpoints';
 import {
   clearHistory,
   loadHistory,
@@ -131,7 +131,40 @@ export function AssistantPage() {
     void send(input);
   };
 
-  const clearConversation = () => {
+  const [clearing, setClearing] = useState(false);
+  const [clearError, setClearError] = useState('');
+
+  /**
+   * Clear the conversation — both copies of it.
+   *
+   * This used to be two lines: drop one `localStorage` key, reset the
+   * screen. The transcript the model is actually given lives on the
+   * server, and `POST /assistant/chat` loads it into the prompt on every
+   * turn — so a user who cleared a conversation about a possible
+   * pregnancy asked something unrelated next and got an answer composed
+   * in the context of the one she had just deleted (issue #509).
+   *
+   * The order matters. The server copy goes first, and the local copy and
+   * the screen are only cleared once it is gone: emptying the screen
+   * first and then failing would leave the user believing something that
+   * is not true, which is the exact failure being fixed. A failure is
+   * reported and nothing is cleared.
+   */
+  const clearConversation = async () => {
+    if (clearing) return;
+
+    setClearing(true);
+    setClearError('');
+
+    try {
+      await clearAssistantConversation();
+    } catch {
+      setClearError(t('assistant.clearFailed'));
+      return;
+    } finally {
+      setClearing(false);
+    }
+
     clearHistory(userId);
     setMessages([greeting()]);
   };
@@ -217,11 +250,26 @@ export function AssistantPage() {
           thing someone on a shared computer needs to know before she
           types a question about her body (#420). */}
       <div className="assistant-privacy">
-        <p className="disclaimer">{t('assistant.storedOnDevice')}</p>
+        {/* This used to read "kept on this device and cleared when you log
+            out", which was not true — the conversation is also stored
+            against the account and is what the assistant is given on every
+            turn (#509). Saying where data lives is only worth doing if the
+            sentence is accurate. */}
+        <p className="disclaimer">{t('assistant.conversationStorage')}</p>
         {canClear ? (
-          <button type="button" className="ghost-btn" onClick={clearConversation}>
-            {t('assistant.clearConversation')}
+          <button
+            type="button"
+            className="ghost-btn"
+            onClick={() => void clearConversation()}
+            disabled={clearing}
+          >
+            {clearing ? t('assistant.clearing') : t('assistant.clearConversation')}
           </button>
+        ) : null}
+        {clearError ? (
+          <p className="error-text" role="alert">
+            {clearError}
+          </p>
         ) : null}
       </div>
 

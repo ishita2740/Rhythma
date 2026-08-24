@@ -11,9 +11,13 @@ import userEvent from '@testing-library/user-event';
 // same leak.
 
 const sendChatMessage = vi.fn();
+const clearAssistantConversation = vi.fn();
 
 vi.mock('../../api/endpoints', () => ({
   sendChatMessage: (...args: unknown[]) => sendChatMessage(...args),
+  // Added for #509: clearing now has to delete the conversation stored
+  // against the account, not just the copy in this browser.
+  clearAssistantConversation: (...args: unknown[]) => clearAssistantConversation(...args),
 }));
 
 let currentUser: { id: string; username: string } | null = null;
@@ -50,6 +54,7 @@ beforeEach(() => {
     language: 'en',
     disclaimer: 'Please consult a healthcare professional.',
   });
+  clearAssistantConversation.mockResolvedValue({ cleared: true, messagesRemoved: 1 });
 });
 
 describe('a shared browser', () => {
@@ -121,22 +126,30 @@ describe('clearing from the screen', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('clears the transcript from the screen and from storage', async () => {
+  it('clears the transcript from the screen, from storage, and from the server', async () => {
     saveHistory(ASHA.id, [{ role: 'user', content: PRIVATE_QUESTION }]);
     renderWithProviders(<AssistantPage />);
     expect(await screen.findByText(PRIVATE_QUESTION)).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('button', { name: /clear conversation/i }));
 
-    expect(screen.queryByText(PRIVATE_QUESTION)).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.queryByText(PRIVATE_QUESTION)).not.toBeInTheDocument(),
+    );
     expect(localStorage.getItem(`${LEGACY_KEY}:${ASHA.id}`)).toBeNull();
+    // The half that was missing (#509): the stored conversation is what
+    // the model is given on the next turn, so clearing only the browser
+    // left the cleared exchange shaping answers.
+    expect(clearAssistantConversation).toHaveBeenCalledTimes(1);
   });
 
-  it('says the transcript is kept on this device', () => {
-    // It was not obvious, and it is the kind of thing someone on a shared
-    // computer needs to know before typing a question about her body.
+  it('says where the transcript is kept, accurately', () => {
+    // This used to assert "kept on this device", which is what the string
+    // said and what was not true: the conversation is also saved against
+    // the account and is what the assistant reads on every turn (#509).
     renderWithProviders(<AssistantPage />);
 
+    expect(screen.getByText(/saved to your account/i)).toBeInTheDocument();
     expect(screen.getByText(/kept on this device/i)).toBeInTheDocument();
   });
 });
