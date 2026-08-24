@@ -6,31 +6,35 @@
  *
  * - The browser language detector reports region tags — `en-US`, `hi-IN` —
  *   rather than bare codes.
- * - The web app registers Bengali (`bn`), which the assistant's own
- *   `GET /assistant/languages` does not list.
+ * - The web app registers nine locales the assistant does not serve, of
+ *   which Bengali is the one the assistant's own picker offered.
  *
- * The backend now validates this field (it is interpolated into the model
+ * The backend validates this field (it is interpolated into the model
  * prompt, so it cannot stay free text), which means an unmapped value is a
  * 422 rather than a silently-ignored one. Answering in English beats
  * refusing to answer, so an unsupported UI language falls back rather than
- * failing.
+ * failing — but the screen has to *say* it fell back, which is what
+ * `isAssistantLanguageFallback` is for and what nothing called (#512).
+ *
+ * The list itself now comes from `supportedLanguages.ts`. It used to be a
+ * literal here, which is one of the five copies that had drifted apart.
  */
 
-/** Codes served by GET /assistant/languages. */
-export const ASSISTANT_LANGUAGES = [
-  'en',
-  'hi',
-  'mr',
-  'ta',
-  'te',
-  'kn',
-  'ml',
-  'gu',
-] as const;
+import {
+  ASSISTANT_LANGUAGE_CODES,
+  baseLanguage,
+  isAssistantLanguage,
+} from './supportedLanguages';
 
-export type AssistantLanguage = (typeof ASSISTANT_LANGUAGES)[number];
+/**
+ * Codes served by GET /assistant/languages.
+ *
+ * Derived from the single source of truth rather than restated, so a
+ * language cannot be marked assistant-capable there and missing here.
+ */
+export const ASSISTANT_LANGUAGES = ASSISTANT_LANGUAGE_CODES;
 
-const SUPPORTED = new Set<string>(ASSISTANT_LANGUAGES);
+export type AssistantLanguage = string;
 
 /**
  * Reduce a UI language tag to a code the assistant accepts.
@@ -39,11 +43,8 @@ const SUPPORTED = new Set<string>(ASSISTANT_LANGUAGES);
  * assistant), anything unrecognized → `en`.
  */
 export function toAssistantLanguage(uiLanguage: string | undefined): AssistantLanguage {
-  if (!uiLanguage) return 'en';
-
-  const base = uiLanguage.trim().toLowerCase().replace(/_/g, '-').split('-')[0];
-
-  return SUPPORTED.has(base) ? (base as AssistantLanguage) : 'en';
+  const base = baseLanguage(uiLanguage);
+  return isAssistantLanguage(base) ? base : 'en';
 }
 
 /**
@@ -55,6 +56,6 @@ export function toAssistantLanguage(uiLanguage: string | undefined): AssistantLa
  */
 export function isAssistantLanguageFallback(uiLanguage: string | undefined): boolean {
   if (!uiLanguage) return false;
-  const base = uiLanguage.trim().toLowerCase().replace(/_/g, '-').split('-')[0];
-  return base !== 'en' && !SUPPORTED.has(base);
+  const base = baseLanguage(uiLanguage);
+  return base !== 'en' && !isAssistantLanguage(base);
 }

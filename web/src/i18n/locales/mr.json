@@ -231,7 +231,10 @@
     "disclaimer": "Please consult a healthcare professional for medical advice.",
     "rateLimited": "You're sending messages too quickly. Please wait a moment.",
     "storedOnDevice": "हे संभाषण याच डिव्हाइसवर ठेवले जाते आणि लॉग आउट केल्यावर काढून टाकले जाते.",
-    "clearConversation": "संभाषण काढा"
+    "clearConversation": "संभाषण काढा",
+    "languageLabel": "सहाय्यकासाठी भाषा निवडा",
+    "englishLanguageName": "इंग्रजी",
+    "languageFallback": "सहाय्यक अद्याप या भाषेत उत्तर देऊ शकत नाही, त्यामुळे तो {{language}} मध्ये उत्तर देईल."
   },
   "insights": {
     "title": "Insights",

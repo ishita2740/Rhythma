@@ -1543,6 +1543,18 @@ p {
 
 /* ── Assistant transcript privacy (issue #420) ────────────────────────── */
 
+/* The assistant cannot answer in nine of the seventeen shipped locales.
+   Saying so beats replying in English with no explanation (#512), but it
+   is a note about a limitation and not an error, so it reads as a quiet
+   line above the conversation rather than as a warning. */
+.assistant-language-notice {
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  text-align: center;
+}
+
 .assistant-privacy {
   display: flex;
   align-items: center;

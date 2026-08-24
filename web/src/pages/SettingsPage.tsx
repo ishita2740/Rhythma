@@ -1,40 +1,28 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../auth/useAuth';
-import { fetchSupportedLanguages, patchProfile, type SupportedLanguage } from '../api/endpoints';
+import { patchProfile } from '../api/endpoints';
 import { useDocumentMeta } from '../lib/useDocumentMeta';
-
-const FALLBACK_LANGUAGES: SupportedLanguage[] = [
-  { code: 'en', name: 'English' },
-  { code: 'hi', name: 'Hindi' },
-  { code: 'mr', name: 'Marathi' },
-  { code: 'ta', name: 'Tamil' },
-  { code: 'te', name: 'Telugu' },
-  { code: 'kn', name: 'Kannada' },
-  { code: 'ml', name: 'Malayalam' },
-];
-
-const LANGUAGE_KEY: Record<string, string> = {
-  en: 'settings.english',
-  hi: 'settings.hindi',
-  mr: 'settings.marathi',
-  ta: 'settings.tamil',
-  te: 'settings.telugu',
-  kn: 'settings.kannada',
-  ml: 'settings.malayalam',
-};
+import { APP_LANGUAGES, isSameLanguage } from '../lib/supportedLanguages';
 
 export function SettingsPage() {
   useDocumentMeta('meta.settings.title', 'meta.settings.description');
   const { t, i18n } = useTranslation();
   const { logout } = useAuth();
 
-  const [languages, setLanguages] = useState<SupportedLanguage[]>(FALLBACK_LANGUAGES);
-
-  useEffect(() => {
-    fetchSupportedLanguages().then(setLanguages).catch(() => undefined);
-  }, []);
+  // The list is what this app ships, not what a request happens to
+  // return. It used to be seeded from a seven-entry literal and then
+  // replaced by `GET /assistant/languages` — so Gujarati, which the
+  // backend serves and `gu.json` fully translates, disappeared entirely
+  // whenever that request failed, which is the condition this app is
+  // built around. And the `catch(() => undefined)` meant the failure was
+  // not reported either (#512).
+  //
+  // The endpoint is still the authority on what the *assistant* answers
+  // in; that is `AppLanguage.assistant`, and it belongs on the assistant
+  // screen rather than here. Which language the interface is in is a
+  // fact about the bundle, and the bundle is local.
+  const languages = APP_LANGUAGES;
 
   const changeLanguage = async (code: string) => {
     await i18n.changeLanguage(code);
@@ -57,16 +45,30 @@ export function SettingsPage() {
           </div>
         </div>
         <div className="language-list">
-          {languages.map((lang) => (
-            <button
-              key={lang.code}
-              type="button"
-              className={`chip${i18n.language === lang.code ? ' active' : ''}`}
-              onClick={() => void changeLanguage(lang.code)}
-            >
-              {LANGUAGE_KEY[lang.code] ? t(LANGUAGE_KEY[lang.code]) : lang.name}
-            </button>
-          ))}
+          {languages.map((lang) => {
+            // `isSameLanguage`, not `===`. The browser language detector
+            // reports region tags, and `'hi-IN' === 'hi'` is false — so on
+            // a phone set to Hindi this screen rendered in Hindi with no
+            // chip highlighted, and the user had to select a language she
+            // was already using to make the screen admit it (#512).
+            const active = isSameLanguage(i18n.language, lang.code);
+            return (
+              <button
+                key={lang.code}
+                type="button"
+                lang={lang.code}
+                className={`chip${active ? ' active' : ''}`}
+                aria-pressed={active}
+                onClick={() => void changeLanguage(lang.code)}
+              >
+                {/* The name in its own script. Every chip but Gujarati
+                    used to render this way; `LANGUAGE_KEY` had no `gu`
+                    entry, so the one language nobody had added a key for
+                    was shown in the wrong alphabet. */}
+                {lang.nativeName}
+              </button>
+            );
+          })}
         </div>
 
         <Link to="/sharing" className="menu-item glass-card">
