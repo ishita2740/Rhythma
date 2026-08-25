@@ -113,6 +113,24 @@ DEFAULT_PERIOD_DAYS = 5
 #: further than we can.
 DEFAULT_FORECAST_HORIZON = 3
 
+#: How many cycles the forecast may roll forward past the *first* predicted
+#: date before it gives up (#519).
+#:
+#: The forecast is anchored on the last logged period. When a user is
+#: overdue, the first projected date is behind ``today`` and the series has
+#: to be advanced to reach dates that are genuinely ahead. Advancing is
+#: right for a user who is a few days or a cycle late; it stops being right
+#: somewhere, because each step compounds an estimate on top of an anchor
+#: that is already known to be wrong — the period it predicted did not
+#: arrive when it said.
+#:
+#: Three is the same judgement ``PHASE_LATE`` encodes: past roughly three
+#: missed cycles the anchor has stopped being evidence about this month,
+#: and the honest output is no forecast rather than a confident row of
+#: dates derived from nothing. ``is_overdue`` and ``days_overdue`` still
+#: describe the situation; they are the fields that matter then.
+MAX_PROJECTION_CYCLES = 3
+
 CONFIDENCE_HIGH = "high"
 CONFIDENCE_MEDIUM = "medium"
 CONFIDENCE_LOW = "low"
@@ -482,6 +500,56 @@ def _last_period_start(
     return as_date(declared)
 
 
+def project_upcoming_periods(
+    first_predicted: date,
+    cycle_length: int,
+    today: date,
+    horizon: int = DEFAULT_FORECAST_HORIZON,
+    max_projection_cycles: int = MAX_PROJECTION_CYCLES,
+) -> List[date]:
+    """Period starts still ahead of ``today``, soonest first.
+
+    The forecast used to be built by stepping forward from
+    ``first_predicted`` without asking whether the date being appended had
+    already happened::
+
+        cursor = next_period
+        for _ in range(max(0, horizon)):
+            upcoming.append(cursor)
+            cursor = cursor + timedelta(days=estimate.days)
+
+    ``first_predicted`` is deliberately not clamped to ``today`` — that is
+    what lets ``days_until_next_period`` go negative, which is the single
+    most useful thing this module says. Inheriting the un-clamped anchor
+    here was the mistake: a user nineteen days overdue got a list whose
+    first entry was nineteen days in the past, rendered by
+    ``web/src/pages/CyclePage.tsx`` under the word "Upcoming" (#519).
+
+    A date falling exactly on ``today`` is upcoming. "Your period is
+    expected today" is a real answer and the rest of the payload already
+    gives it — ``days_until_next_period`` is 0 and ``is_overdue`` is false.
+    Yesterday is not.
+
+    Returns an empty list rather than a stale one when reaching the first
+    future date would take more than ``max_projection_cycles`` steps. See
+    :data:`MAX_PROJECTION_CYCLES` for why there is a ceiling at all. An
+    empty list is what a caller already gets when there is no anchor to
+    project from, and it means the same thing in both cases: we cannot say.
+    """
+    if horizon <= 0 or cycle_length <= 0:
+        return []
+
+    cursor = first_predicted
+    steps = 0
+    while cursor < today:
+        if steps >= max_projection_cycles:
+            return []
+        cursor = cursor + timedelta(days=cycle_length)
+        steps += 1
+
+    return [cursor + timedelta(days=cycle_length * index) for index in range(horizon)]
+
+
 # ─── Public API ───────────────────────────────────────────────────────────
 
 
@@ -532,11 +600,12 @@ def predict(
     luteal = luteal_length_for(estimate.days)
     ovulation = next_period - timedelta(days=luteal)
 
-    upcoming: List[date] = []
-    cursor = next_period
-    for _ in range(max(0, horizon)):
-        upcoming.append(cursor)
-        cursor = cursor + timedelta(days=estimate.days)
+    upcoming = project_upcoming_periods(
+        next_period,
+        estimate.days,
+        today,
+        horizon=max(0, horizon),
+    )
 
     return Prediction(
         cycle_length=estimate,
@@ -613,8 +682,10 @@ __all__ = [
     "estimate_cycle_length",
     "luteal_length_for",
     "observed_gaps",
+    "MAX_PROJECTION_CYCLES",
     "phase_for",
     "predict",
+    "project_upcoming_periods",
     "range_half_width",
     "reject_outliers",
     "spread_of",
