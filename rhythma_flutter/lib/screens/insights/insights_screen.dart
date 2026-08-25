@@ -7,6 +7,7 @@ import '../../components/charts.dart';
 import '../../providers/theme_provider.dart';
 import '../../services/api_client.dart';
 import '../../services/report_service.dart';
+import '../../utils/cycle_stats.dart';
 
 /// All data on this screen comes from GET /dashboard — nothing here is
 /// computed locally from Hive. That endpoint already returns real,
@@ -78,14 +79,6 @@ class _InsightsScreenState extends State<InsightsScreen> {
     }
   }
 
-  int _variability(List<int> lengths) {
-    if (lengths.length < 2) return 0;
-    final mean = lengths.reduce((a, b) => a + b) / lengths.length;
-    final variance =
-        lengths.map((v) => (v - mean) * (v - mean)).reduce((a, b) => a + b) / lengths.length;
-    return variance <= 0 ? 0 : variance.round();
-  }
-
   String _symptomLabel(String key, AppLocalizations l10n) {
     switch (key) {
       case 'cramps':
@@ -155,8 +148,17 @@ class _InsightsScreenState extends State<InsightsScreen> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final variability = _variability(_cycleLengthTrend);
-    final isStable = variability <= 3;
+    // Mean absolute deviation from this user's own average, in days —
+    // the same figure `web/src/lib/cycleStats.ts` reports, so the app and
+    // the web app stop disagreeing about the same account (#522).
+    //
+    // `null` when there are fewer than two usable cycles. That is a third
+    // state, not a falsy second one: "steady", "variable" and "not enough
+    // logged yet to say" are different things, and the old `return 0`
+    // collapsed the last into the first — telling a user who had logged
+    // nothing that her cycles were healthy and stabilising.
+    final spread = cycleSpread(_cycleLengthTrend);
+    final isStable = isSteadyCycle(spread);
 
     return RefreshIndicator(
       onRefresh: _load,
@@ -294,8 +296,16 @@ class _InsightsScreenState extends State<InsightsScreen> {
                 Expanded(
                   child: _MiniCard(
                     label: l10n.insightsVar,
-                    value: _cycleLengthTrend.length >= 2 ? '$variability ${l10n.homeDaysLabel}' : '—',
-                    delta: isStable ? l10n.logEnergyLow : l10n.insightsModerate,
+                    // "±2 days", not "4 days". The `±` says what the
+                    // number is: how far a typical cycle falls from her
+                    // average, rather than a bare quantity whose units
+                    // were days² and whose label said days.
+                    value: spread == null
+                        ? '—'
+                        : '±${spread.spreadLabel} ${l10n.homeDaysLabel}',
+                    delta: isStable == null
+                        ? '—'
+                        : (isStable ? l10n.logEnergyLow : l10n.insightsModerate),
                     trendUp: false,
                     color: RhythmaColors.teal,
                     icon: Icons.graphic_eq_rounded,
@@ -365,7 +375,11 @@ class _InsightsScreenState extends State<InsightsScreen> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              isStable ? l10n.insightsStabilizing : l10n.insightsModerate,
+                              isStable == null
+                                  ? '—'
+                                  : (isStable
+                                      ? l10n.insightsStabilizing
+                                      : l10n.insightsModerate),
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
@@ -378,15 +392,30 @@ class _InsightsScreenState extends State<InsightsScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
-                          color: (isStable ? RhythmaColors.teal : RhythmaColors.coral).withOpacity(0.14),
+                          // Muted while there is nothing to judge, rather
+                          // than the teal that reads as an all-clear.
+                          color: (isStable == null
+                                  ? RhythmaColors.mutedFg
+                                  : (isStable
+                                      ? RhythmaColors.teal
+                                      : RhythmaColors.coral))
+                              .withOpacity(0.14),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          isStable ? l10n.insightsHealthy : l10n.insightsModerate,
+                          isStable == null
+                              ? '—'
+                              : (isStable
+                                  ? l10n.insightsHealthy
+                                  : l10n.insightsModerate),
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            color: isStable ? RhythmaColors.teal : RhythmaColors.coral,
+                            color: isStable == null
+                                ? RhythmaColors.mutedFg
+                                : (isStable
+                                    ? RhythmaColors.teal
+                                    : RhythmaColors.coral),
                           ),
                         ),
                       ),
