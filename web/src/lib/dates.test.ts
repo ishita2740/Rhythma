@@ -14,6 +14,7 @@ import {
   startOfMonth,
   toISODate,
 } from './dates';
+import type { CyclePhase } from './dates';
 
 // These are local-time helpers with no library behind them, so the failure
 // modes are the classic ones: UTC drift, month rollover, and leap days.
@@ -136,13 +137,32 @@ describe('cycleDayFor', () => {
     expect(cycleDayFor(new Date(2026, 4, 15), '2026-05-01')).toBe(15);
   });
 
-  it('falls back to the day of the month with no last period', () => {
-    expect(cycleDayFor(new Date(2026, 4, 17), null)).toBe(17);
-    expect(cycleDayFor(new Date(2026, 4, 17))).toBe(17);
+  // The two tests that used to sit here asserted the day-of-month
+  // fallback, which is the bug in #520 rather than a behaviour worth
+  // keeping: it made `phaseFor` paint a five-day period on the 1st to the
+  // 5th of every month the user had not logged.
+
+  it('returns null with no last period rather than the day of the month', () => {
+    expect(cycleDayFor(new Date(2026, 4, 17), null)).toBeNull();
+    expect(cycleDayFor(new Date(2026, 4, 17))).toBeNull();
+    expect(cycleDayFor(new Date(2026, 4, 17), '')).toBeNull();
   });
 
-  it('falls back rather than returning a non-positive day for an earlier date', () => {
-    expect(cycleDayFor(new Date(2026, 3, 20), '2026-05-01')).toBe(20);
+  it('returns null for a date before the last period', () => {
+    // One anchor describes the cycle that started on it and the ones
+    // after. It says nothing about April.
+    expect(cycleDayFor(new Date(2026, 3, 20), '2026-05-01')).toBeNull();
+  });
+
+  it('returns null for the day immediately before the anchor', () => {
+    // The boundary, and the one most likely to be on screen: 30 April was
+    // reported as cycle day 30 — a plausible number, in the luteal phase,
+    // for a date a cycle earlier than anything logged.
+    expect(cycleDayFor(new Date(2026, 3, 30), '2026-05-01')).toBeNull();
+  });
+
+  it('still counts forward across a month boundary', () => {
+    expect(cycleDayFor(new Date(2026, 5, 2), '2026-05-01')).toBe(33);
   });
 });
 
@@ -251,5 +271,91 @@ describe('month windows', () => {
     // every month change, which is the cost this design avoids.
     const { start, end } = monthWindow(parseISODate('2026-01-15'));
     expect(daysBetween(parseISODate(start), parseISODate(end))).toBeLessThan(100);
+  });
+});
+
+// ─── The calendar does not invent a cycle it has no anchor for (#520) ─────
+//
+// `cycleDayFor` fell back to `date.getDate()` for any date before the
+// anchor as well as for a missing one, and a day-of-month is a perfectly
+// well-formed cycle day — so `phaseFor` turned the calendar month into a
+// cycle. These assert the shape of the whole rendered month, because the
+// bug was not one wrong cell; it was a complete, plausible, invented cycle.
+
+describe('phaseFor before the anchor (issue #520)', () => {
+  const ANCHOR = '2026-08-10';
+
+  it('does not paint a period on the first five days of an earlier month', () => {
+    // The headline symptom. These rendered `period`, in `#E07AAD` — the
+    // same pink as a real logged period, indistinguishable from one.
+    for (const day of [1, 2, 3, 4, 5]) {
+      const iso = `2026-07-0${day}`;
+      expect(phaseFor(parseISODate(iso), ANCHOR)).toBe('unknown');
+    }
+  });
+
+  it('reports unknown for every day of an earlier month', () => {
+    const phases = new Set<string>();
+    for (let day = 1; day <= 31; day++) {
+      const iso = `2026-07-${String(day).padStart(2, '0')}`;
+      phases.add(phaseFor(parseISODate(iso), ANCHOR));
+    }
+    // Previously this set was {period, follicular, ovulation, luteal} —
+    // an entire fabricated cycle, keyed to the calendar month.
+    expect([...phases]).toEqual(['unknown']);
+  });
+
+  it('reports unknown for the day immediately before the anchor', () => {
+    // 9 August rendered as `follicular`, because 9 is the day of the
+    // month — the boundary is wrong by a full cycle at exactly the point
+    // a user is most likely to be looking.
+    expect(phaseFor(parseISODate('2026-08-09'), ANCHOR)).toBe('unknown');
+  });
+
+  it('reports unknown when there is no anchor at all', () => {
+    expect(phaseFor(parseISODate('2026-07-03'), null)).toBe('unknown');
+    expect(phaseFor(parseISODate('2026-07-03'), undefined)).toBe('unknown');
+  });
+
+  it('is unchanged on and after the anchor', () => {
+    // The regression guard. Everything from the anchor forward must keep
+    // behaving exactly as it did.
+    expect(phaseFor(parseISODate('2026-08-10'), ANCHOR)).toBe('period');
+    expect(phaseFor(parseISODate('2026-08-14'), ANCHOR)).toBe('period');
+    expect(phaseFor(parseISODate('2026-08-20'), ANCHOR)).toBe('follicular');
+    expect(phaseFor(parseISODate('2026-08-23'), ANCHOR)).toBe('ovulation');
+    expect(phaseFor(parseISODate('2026-08-30'), ANCHOR)).toBe('luteal');
+    expect(phaseFor(parseISODate('2026-09-20'), ANCHOR)).toBe('late');
+  });
+});
+
+describe('PHASE_COLORS', () => {
+  it('covers every phase', () => {
+    // The calendar indexes this map with whatever `phaseFor` returned. A
+    // missing entry is `undefined`, which renders as an unstyled cell
+    // rather than as an error.
+    const phases: CyclePhase[] = [
+      'period',
+      'follicular',
+      'ovulation',
+      'luteal',
+      'late',
+      'unknown',
+    ];
+    for (const phase of phases) {
+      expect(PHASE_COLORS[phase]).toMatch(/^#[0-9A-Fa-f]{6}$/);
+    }
+  });
+
+  it('does not give unknown a cycle colour', () => {
+    // The whole point: a cell we know nothing about must not be tinted
+    // like one we do.
+    const cycleColours = [
+      PHASE_COLORS.period,
+      PHASE_COLORS.follicular,
+      PHASE_COLORS.ovulation,
+      PHASE_COLORS.luteal,
+    ];
+    expect(cycleColours).not.toContain(PHASE_COLORS.unknown);
   });
 });

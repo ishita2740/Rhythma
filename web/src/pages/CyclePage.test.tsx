@@ -398,7 +398,15 @@ describe('cycle outlook (issue #419)', () => {
     renderWithProviders(<CyclePage />);
 
     expect(await screen.findByText(/3 days late/i)).toBeInTheDocument();
-    expect(screen.getByText(/running long/i)).toBeInTheDocument();
+
+    // Two places now, not one: the outlook pill, and the log heading below
+    // the calendar. The heading used to read "Luteal" here, because
+    // `phaseLabel` switched on four phases and sent everything else to a
+    // `default:` arm — so `late` was displayed as the very phase it exists
+    // to avoid claiming (#520).
+    const late = screen.getAllByText(/running long/i);
+    expect(late).toHaveLength(2);
+    expect(late[0]).toHaveClass('status-pill', 'phase-late');
   });
 
   it('still renders the calendar when the prediction call fails', async () => {
@@ -410,5 +418,62 @@ describe('cycle outlook (issue #419)', () => {
     await waitFor(() => expect(fetchCycleHistoryRange).toHaveBeenCalled());
     expect(screen.queryByText(/cycle outlook/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/couldn.t load/i)).not.toBeInTheDocument();
+  });
+});
+
+// ─── The calendar does not invent a cycle for months it has no anchor for ──
+//
+// Issue #520. `cycleDayFor` fell back to the day of the month for any date
+// before the last logged period, so paging back a month produced a
+// complete, plausible, entirely fabricated cycle — a five-day period on
+// the 1st to the 5th, in the same pink as a real one.
+
+describe('calendar phases before the anchor (issue #520)', () => {
+  const PERIOD_PINK = 'rgb(224, 122, 173)'; // PHASE_COLORS.period, as the DOM reports it
+
+  async function renderWithAnchor(lastPeriod: string) {
+    fetchProfile.mockResolvedValue({ last_period: lastPeriod });
+    renderWithProviders(<CyclePage />);
+    await waitFor(() => expect(fetchProfile).toHaveBeenCalled());
+  }
+
+  function previousMonth() {
+    return screen.getByRole('button', { name: /previous month/i });
+  }
+
+  it('does not tint any cell of an earlier month as a period', async () => {
+    // The anchor is today, so every cell of the previous month precedes
+    // it. Before the fix the 1st to the 5th were period-pink.
+    const today = new Date();
+    const iso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(
+      today.getDate(),
+    ).padStart(2, '0')}`;
+    await renderWithAnchor(iso);
+
+    await userEvent.click(previousMonth());
+
+    const grid = document.querySelector('.calendar-grid') as HTMLElement;
+    const tinted = within(grid)
+      .getAllByRole('button')
+      .filter((cell) => cell.style.color === PERIOD_PINK);
+
+    expect(tinted).toHaveLength(0);
+  });
+
+  it('describes a selected day before the anchor as unknown rather than luteal', async () => {
+    const today = new Date();
+    const iso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(
+      today.getDate(),
+    ).padStart(2, '0')}`;
+    await renderWithAnchor(iso);
+
+    await userEvent.click(previousMonth());
+
+    const grid = document.querySelector('.calendar-grid') as HTMLElement;
+    const firstOfMonth = within(grid).getByRole('button', { name: '1' });
+    await userEvent.click(firstOfMonth);
+
+    // "Log for <date> · <phase>". It used to say "Period" here.
+    expect(screen.getByRole('heading', { name: /not enough data/i })).toBeInTheDocument();
   });
 });
