@@ -47,6 +47,10 @@ from dataclasses import dataclass, field
 from datetime import date, timedelta
 from typing import Any, Dict, List, Optional, Sequence
 
+from services.cycle_periods import (
+    MAX_PLAUSIBLE_CYCLE_DAYS,
+    MIN_PLAUSIBLE_CYCLE_DAYS,
+)
 from services.scoring_service import DEFAULT_CYCLE_LENGTH, as_date
 
 # ─── Tunables ─────────────────────────────────────────────────────────────
@@ -54,8 +58,13 @@ from services.scoring_service import DEFAULT_CYCLE_LENGTH, as_date
 #: Gaps outside this band are treated as data problems (a missed month of
 #: logging, a typo'd year) rather than as cycles. Including a 180-day gap
 #: as a "cycle" would poison every downstream number.
-MIN_PLAUSIBLE_CYCLE_DAYS = 15
-MAX_PLAUSIBLE_CYCLE_DAYS = 60
+#:
+#: Imported rather than declared. This module and
+#: ``health_observations_service`` each had their own copy of the same two
+#: numbers, and ``scoring_service`` had no copy at all — which is how one
+#: ``/dashboard`` response came to carry two different average cycle
+#: lengths (#518). Re-exported so the many existing references to
+#: ``prediction_service.MIN_PLAUSIBLE_CYCLE_DAYS`` keep resolving.
 
 #: Exponential weight decay per cycle going backwards. 0.75 means the most
 #: recent cycle counts 4x the one four cycles ago — enough to track a
