@@ -38,7 +38,13 @@ from core.rate_limits import (
     client_ip,
     enforce as enforce_rate_limit,
 )
-from models.user import UserCreate, UserResponse, UserProfileUpdate, UserProfileResponse
+from models.user import (
+    CLEARABLE_PROFILE_FIELDS,
+    UserCreate,
+    UserResponse,
+    UserProfileUpdate,
+    UserProfileResponse,
+)
 from services.firestore_service import UserService
 
 import os
@@ -279,19 +285,66 @@ async def update_profile(
 ):
     """Merges profile fields onto the authenticated user's Firestore document.
 
-    Uses PATCH semantics: only fields explicitly provided (non-None) are
-    written.  This allows the Flutter app to send partial updates (e.g.
-    just avatar or just cycle_length) without clobbering unrelated fields.
+    Uses PATCH semantics: a field the request does not mention is left
+    alone. This allows the Flutter app to send partial updates (e.g. just
+    avatar or just cycle_length) without clobbering unrelated fields.
+
+    **An omitted field and an explicit ``null`` are different things
+    (issue #533).** This used to read ``model_dump()``, which reports
+    *every* field on an all-optional model, with ``None`` for the ones the
+    client never sent — so the ``if v is not None`` filter that makes
+    PATCH work at all also made a deliberate ``null`` indistinguishable
+    from silence. No field could be cleared through this endpoint. A user
+    who emptied the Age box in the web Edit Profile form and saved got a
+    200, and her old age back on the next render, with nothing anywhere
+    saying the removal had been refused.
+
+    ``exclude_unset=True`` reports only the keys that were actually
+    present in the request body, which is the distinction the route
+    needs. What each case means:
+
+    * **absent** — untouched.
+    * **a value** — written, after the model's own bounds have passed.
+    * **``null``** — cleared, if the field is in
+      ``CLEARABLE_PROFILE_FIELDS``. ``email`` and ``phone`` are not:
+      those are changed by being given a new value, and emptying the
+      account's identity key is not something a client should be able to
+      ask for by accident.
 
     Reuses the existing UserService.update_user() method — no new
     service layer introduced.
     """
-    updates = {k: v for k, v in profile_data.model_dump().items() if v is not None}
+    supplied = profile_data.model_dump(exclude_unset=True)
+
+    rejected = [
+        field
+        for field, value in supplied.items()
+        if value is None and field not in CLEARABLE_PROFILE_FIELDS
+    ]
+    if rejected:
+        # 422, matching what the model's own bounds return, and naming the
+        # fields — a client that sends `{"email": null}` has a bug, and a
+        # silent no-op would leave it looking like the write succeeded,
+        # which is the shape of the problem being fixed here.
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=(
+                "These fields cannot be cleared: "
+                + ", ".join(sorted(rejected))
+                + ". Send a new value instead of null."
+            ),
+        )
+
+    updates = supplied
     if updates:
         UserService.update_user(current_user["id"], updates)
     user = UserService.get_user_by_id(current_user["id"])
     if not user:
-        from fastapi import HTTPException, status
+        # `HTTPException` and `status` were re-imported here, inside the
+        # function. That shadowed the module-level names for the *whole*
+        # body, so any earlier `raise HTTPException(...)` in this function
+        # was an UnboundLocalError rather than a 4xx. Both names are
+        # already imported at the top of the module.
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found",

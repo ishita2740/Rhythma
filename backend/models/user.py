@@ -38,13 +38,62 @@ class UserResponse(BaseModel):
     created_at: datetime
     updated_at: Optional[datetime] = None
 
+#: Fields an explicit ``null`` may remove from a profile (issue #533).
+#:
+#: The route used to filter its payload with ``if v is not None``, which
+#: is what makes PATCH semantics work at all — without it, sending
+#: ``{"age": 30}`` would blank the other fifteen fields. But it also made
+#: an explicit ``null`` indistinguishable from an omitted field, so *no*
+#: field on this model could ever be cleared. A user who emptied the Age
+#: box and saved got a 200 and her old age back.
+#:
+#: ``model_dump(exclude_unset=True)`` tells the two cases apart. This set
+#: says which of them a client is allowed to clear. It is an allowlist
+#: rather than "everything": clearing an identity key through a profile
+#: PATCH is not something a client should be able to ask for by accident,
+#: which is why ``email`` and ``phone`` are absent — they are changed by
+#: being given a new value, never by being emptied.
+CLEARABLE_PROFILE_FIELDS = frozenset(
+    {
+        "full_name",
+        "age",
+        "height_cm",
+        "weight_kg",
+        "avatar",
+        "language",
+        "last_period",
+        "last_period_is_approximate",
+        "cycle_length",
+        "period_duration",
+        "cycle_regular",
+        "notifications_enabled",
+        "city",
+        "state",
+    }
+)
+
+
 class UserProfileUpdate(BaseModel):
     """PATCH-semantics profile update — all fields optional.
 
     Stores extended health and preference data on the existing Firestore
-    user document alongside the authentication fields.  Only non-None
-    fields are written so callers can do partial updates safely.
+    user document alongside the authentication fields.
+
+    **Omitted and ``null`` are different things (issue #533).** A field
+    the request does not mention is left alone. A field sent explicitly as
+    ``null`` is *cleared*, provided it is in
+    :data:`CLEARABLE_PROFILE_FIELDS`. The route reads
+    ``model_dump(exclude_unset=True)`` to tell them apart; it used to read
+    ``model_dump()``, which reports every field with ``None`` for the ones
+    that were never sent, so the two cases collapsed into one and nothing
+    could be removed from a profile at all.
+
+    The fields are declared in one block, with the validator after them.
+    They used to be interleaved — ``city`` and ``state`` sat *below*
+    ``validate_phone`` — which is legal and is why the duplicate ``phone``
+    on :class:`UserProfileResponse` went unnoticed for as long as it did.
     """
+
     full_name: Optional[str] = Field(None, max_length=100)
     email: Optional[EmailStr] = None
     age: Optional[int] = Field(None, ge=10, le=120)
@@ -59,6 +108,8 @@ class UserProfileUpdate(BaseModel):
     cycle_regular: Optional[bool] = None
     notifications_enabled: Optional[bool] = None
     phone: Optional[str] = None
+    city: Optional[str] = None
+    state: Optional[str] = None
 
     @field_validator("phone")
     def validate_phone(cls, value: Optional[str]) -> Optional[str]:
@@ -67,9 +118,6 @@ class UserProfileUpdate(BaseModel):
                 "Phone number must be in E.164 format, e.g. +919876543210."
             )
         return value
-        
-    city: Optional[str] = None
-    state: Optional[str] = None
 
 class UserProfileResponse(BaseModel):
     """Full profile response — auth identity merged with health profile."""
@@ -89,7 +137,12 @@ class UserProfileResponse(BaseModel):
     period_duration: Optional[int] = None
     cycle_regular: Optional[bool] = None
     notifications_enabled: Optional[bool] = None
-    phone: Optional[str] = None
+    # `phone` was declared twice in this class, ~15 lines apart. Both
+    # declarations were identical so the second simply won, which is why
+    # nobody noticed. #381 was the same pattern with a worse outcome:
+    # `DashboardPrediction` was declared twice, the second won, and the
+    # typed fields on the first were silently dropped from the served
+    # schema. The duplicate is removed; `phone` is declared once, above.
     city: Optional[str] = None
     state: Optional[str] = None
     created_at: Optional[datetime] = None

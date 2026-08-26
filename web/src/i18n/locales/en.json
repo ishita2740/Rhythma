@@ -291,7 +291,9 @@
     "nameRequired": "Name is required",
     "ageInvalid": "Age must be between 10 and 120",
     "cycleInvalid": "Cycle length must be between 15 and 45",
-    "days": "days"
+    "days": "days",
+    "saveFailed": "Your changes could not be saved. Please try again.",
+    "saveOffline": "Your changes could not be saved — you appear to be offline. They have not been lost; try again when you have a connection."
   },
   "privacy": {
     "title": "Your data",
