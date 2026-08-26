@@ -350,7 +350,16 @@
     "noPhone": "No phone number saved yet",
     "send": "Send",
     "phoneRequired": "A phone number is required to enable SMS summaries.",
-    "phoneInvalid": "Phone number must be in E.164 format, e.g. +919876543210."
+    "phoneInvalid": "Phone number must be in E.164 format, e.g. +919876543210.",
+    "settingsSaved": "SMS settings saved.",
+    "cadenceNote": "When this is on, Rhythma texts you a summary once a week. You can also send one right now below.",
+    "saveBeforeSending": "Save your settings before sending — a summary always goes to the number saved on your account.",
+    "enableBeforeSending": "Turn on SMS summaries above before sending one.",
+    "willSendTo": "This will be sent to {{phone}}.",
+    "previewLabel": "What will be sent",
+    "previewLength": "{{count}} characters — one SMS.",
+    "previewUnavailable": "The preview could not be loaded just now.",
+    "sent": "Summary sent to {{phone}}."
   },
   "provider": {
     "loginTitle": "Healthcare provider sign in",

@@ -505,6 +505,7 @@ npm run dev
 | `FIREBASE_SERVICE_ACCOUNT_JSON` or `FIREBASE_SERVICE_ACCOUNT_PATH` | Yes (one of the two) | Firebase Admin SDK credentials for Firestore access |
 | `GEMINI_API_KEY` | Optional | Enables the backend's `/assistant/chat` endpoint |
 | `TWILIO_ACCOUNT_SID` / `TWILIO_AUTH_TOKEN` / `TWILIO_PHONE_NUMBER` | Optional | Enables the `/sms/send-summary` endpoint |
+| `SMS_DISPATCH_TOKEN` | Optional | Shared secret for `POST /sms/dispatch-due`, the batch an external cron calls to send the weekly SMS summaries. Unset, the endpoint returns `503` and no scheduled summaries are sent. |
 
 **Flutter (`rhythma_flutter/.env`)**
 
