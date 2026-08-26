@@ -22,6 +22,7 @@ from core.auth import (
     verify_password,
 )
 from core.email_identity import normalize_email
+from core.email_ownership import apply_email_change, enforce_email_available
 from core.password_policy import enforce_password_policy, requirements as password_requirements
 from core.rate_limits import (
     EMAIL_VERIFY_IP,
@@ -285,13 +286,70 @@ async def update_profile(
 
     Reuses the existing UserService.update_user() method — no new
     service layer introduced.
+
+    **`email` is checked before it is written (issue #531).** It used to
+    go straight through with the rest of the payload, so one authenticated
+    request could put a second `users` document into the collection under
+    an address that already identified somebody else — the collision
+    `POST /auth/register` has always refused with a 409, reached by a
+    different route.
+
+    That is not a cosmetic duplicate. Email is the identity key here, and
+    `login`, `forgot-password`, `reset-password` and `ConsentService.grant`
+    all resolve an account through `UserService.get_user_by_email`, which
+    ends in an unordered `.limit(1)` query: with two matching documents,
+    *which one comes back is unspecified*. The victim's correct password
+    stops verifying, her own password reset can land on the other
+    document, and a patient sharing her cycle history with a clinician by
+    address can have the consent bind to whichever provider-role account
+    claimed it.
+
+    `core/email_ownership` holds the decision rather than these four
+    lines, because this bug is what a guard written into one write path
+    and not inherited by the next one looks like.
     """
+    user_id = current_user["id"]
+
+    # The account is read once, up front, for two reasons: the address it
+    # currently holds is what makes "she re-submitted her own email in
+    # different capitalisation" a no-op rather than a 409, and a request
+    # for an account that has since been deleted should 404 before it
+    # writes anything rather than after.
+    existing = UserService.get_user_by_id(user_id)
+    if not existing:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+
     updates = {k: v for k, v in profile_data.model_dump().items() if v is not None}
+
+    # Raises 409 on a collision, before any field is written. Doing this
+    # ahead of the write is the whole point: a partial update that stored
+    # the name and rejected the address would leave the profile in a state
+    # the client did not ask for.
+    email_change = enforce_email_available(
+        user_id=user_id,
+        requested_email=updates.get("email"),
+        current_email=existing.get("email"),
+    )
+    apply_email_change(updates, email_change)
+
     if updates:
-        UserService.update_user(current_user["id"], updates)
-    user = UserService.get_user_by_id(current_user["id"])
+        UserService.update_user(user_id, updates)
+
+    # A brand-new address has had no more proof of control than one typed
+    # into the registration form, so `apply_email_change` has just reset
+    # `email_verified`. Issue the token that lets her prove it, through
+    # the same namespace `register` and `resend-verification` use.
+    if email_change.is_new_address:
+        verification_token = generate_verification_token(email_change.normalized)
+        logger.info(
+            f"Email verification token for {email_change.normalized}: {verification_token}"
+        )
+
+    user = UserService.get_user_by_id(user_id)
     if not user:
-        from fastapi import HTTPException, status
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found",
