@@ -167,7 +167,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get homeCvi => 'CVI';
 
   @override
-  String get homeSleep => 'नींद';
+  String get homeSleep => 'Sleep';
 
   @override
   String get homeComingSoon => 'Coming Soon';
@@ -179,28 +179,26 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get homeErrorNetwork =>
-      'कृपया अपना इंटरनेट कनेक्शन जांचें और फिर से प्रयास करें।';
+      'Please check your internet connection and try again.';
 
   @override
-  String get homeErrorAuth =>
-      'आपका सत्र समाप्त हो गया है। कृपया फिर से लॉग इन करें।';
+  String get homeErrorAuth => 'Your session has expired. Please log in again.';
 
   @override
   String get homeErrorServer =>
-      'हमारी तरफ से कुछ गड़बड़ हुई है। कृपया बाद में फिर से प्रयास करें।';
+      'Something went wrong on our end. Please try again later.';
 
   @override
-  String get homeErrorGeneric =>
-      'डेटा लोड करने में असमर्थ। कृपया फिर से प्रयास करें।';
+  String get homeErrorGeneric => 'Unable to load data. Please try again.';
 
   @override
   String homeQuickLogTitle(String label) {
-    return '$label लॉग करें';
+    return 'Log $label';
   }
 
   @override
   String homeQuickLogSaved(String label, String value) {
-    return '$label लॉग किया गया: $value';
+    return '$label logged: $value';
   }
 
   @override
@@ -213,7 +211,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get cycleTrackerTitle => 'चक्र ट्रैकर';
 
   @override
-  String get cycleToday => 'आज';
+  String get cycleToday => 'Today';
 
   @override
   String get cyclePhasePeriod => 'मासिक धर्म';
@@ -321,8 +319,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get assistantInputHint => 'अपना प्रश्न पूछें...';
 
   @override
-  String get assistantWelcome =>
-      'नमस्ते आर्या 🌸 मैं रिद्मा हूँ, आपकी निजी स्वास्थ्य सहयोगी। अपने मासिक धर्म चक्र, लक्षणों या स्वास्थ्य से जुड़ा कोई भी प्रश्न मुझसे अंग्रेज़ी, हिंदी, मराठी या तमिल में पूछ सकती हैं।';
+  String assistantWelcome(String name) {
+    return 'नमस्ते $name 🌸 मैं रिद्मा हूँ, आपकी निजी स्वास्थ्य सहयोगी। अपने मासिक धर्म चक्र, लक्षणों या स्वास्थ्य से जुड़ा कोई भी प्रश्न मुझसे अंग्रेज़ी, हिंदी, मराठी या तमिल में पूछ सकती हैं।';
+  }
 
   @override
   String get assistantSug1 => 'मेरे मासिक धर्म अनियमित क्यों हैं?';
@@ -664,356 +663,368 @@ class AppLocalizationsHi extends AppLocalizations {
       'कृपया वैध वज़न दर्ज करें (20–300 किग्रा)';
 
   @override
-  String get onboardingPhoneInvalid => 'कृपया एक मान्य फ़ोन नंबर दर्ज करें';
+  String get ayurvedaWellnessTitle => 'आयुर्वेद-प्रेरित स्वास्थ्य जानकारी';
 
   @override
-  String get onboardingAgeRequired =>
-      'कृपया अपनी आयु दर्ज करें या एक सीमा चुनें';
+  String get ayurvedaDisclaimer =>
+      'केवल शैक्षिक जानकारी। आयुर्वेद-प्रेरित सामग्री चिकित्सा सलाह, निदान या उपचार नहीं है।';
 
   @override
-  String get onboardingHeightRequired =>
-      'कृपया अपनी ऊँचाई दर्ज करें या एक सीमा चुनें';
+  String get ayurvedaMenstrualTitle => 'आराम और आत्मचिंतन';
 
   @override
-  String get onboardingWeightRequired =>
-      'कृपया अपना वज़न दर्ज करें या एक सीमा चुनें';
+  String get ayurvedaMenstrualDescription =>
+      'आयुर्वेदिक परंपराएँ मासिक धर्म के समय आराम, आत्मचिंतन और हल्की स्व-देखभाल पर ध्यान देने का वर्णन करती हैं।';
 
   @override
-  String get onboardingNotSure => 'पक्का नहीं';
+  String get ayurvedaFollicularTitle => 'नवीनीकरण और गतिविधि';
 
   @override
-  String get onboardingApproximate => 'अनुमानित';
+  String get ayurvedaFollicularDescription =>
+      'आयुर्वेदिक स्वास्थ्य परंपराएँ मासिक धर्म के बाद की अवधि को नवीनीकरण और धीरे-धीरे गतिविधि बढ़ाने से जोड़ती हैं।';
 
   @override
-  String get onboardingAgeHint => 'अपनी आयु दर्ज करें';
+  String get ayurvedaOvulationTitle => 'संतुलन और जुड़ाव';
 
   @override
-  String get onboardingAgeUnit => 'वर्ष';
+  String get ayurvedaOvulationDescription =>
+      'कुछ आयुर्वेदिक परंपराएँ चक्र के मध्य को जीवन शक्ति और सामाजिक जुड़ाव से संबंधित समय के रूप में वर्णित करती हैं।';
 
   @override
-  String get onboardingHeightHint => 'अपनी ऊँचाई दर्ज करें';
+  String get ayurvedaLutealTitle => 'स्थिरता और दिनचर्या';
 
   @override
-  String get onboardingHeightUnit => 'सेमी';
+  String get ayurvedaLutealDescription =>
+      'आयुर्वेदिक स्वास्थ्य परंपराएँ चक्र के बाद के हिस्से में शांत दिनचर्या और जागरूक स्व-देखभाल पर जोर देती हैं।';
 
   @override
-  String get onboardingWeightHint => 'अपना वज़न दर्ज करें';
+  String get logFlowVeryHeavy => 'Very Heavy';
 
   @override
-  String get onboardingWeightUnit => 'किलो';
+  String get logFlowSpotting => 'Spotting';
 
   @override
-  String get onboardingRangeUnder18 => '18 से कम';
+  String get logSympSeverePain => 'Severe Pain';
 
   @override
-  String get onboardingRange18to25 => '18–25';
-
-  @override
-  String get onboardingRange26to35 => '26–35';
-
-  @override
-  String get onboardingRange36to50 => '36–50';
-
-  @override
-  String get onboardingRange51to65 => '51–65';
-
-  @override
-  String get onboardingRangeOver65 => '65 से अधिक';
-
-  @override
-  String get onboardingRangeUnder150 => '150 सेमी से कम';
-
-  @override
-  String get onboardingRange150to160 => '150–160 सेमी';
-
-  @override
-  String get onboardingRange161to170 => '161–170 सेमी';
-
-  @override
-  String get onboardingRange171to180 => '171–180 सेमी';
-
-  @override
-  String get onboardingRangeOver180 => '180 सेमी से अधिक';
-
-  @override
-  String get onboardingRangeUnder50kg => '50 किलो से कम';
-
-  @override
-  String get onboardingRange50to65kg => '50–65 किलो';
-
-  @override
-  String get onboardingRange66to80kg => '66–80 किलो';
-
-  @override
-  String get onboardingRange81to100kg => '81–100 किलो';
-
-  @override
-  String get onboardingRangeOver100kg => '100 किलो से अधिक';
-
-  @override
-  String get onboardingTapToSelectDate => 'तारीख चुनने के लिए टैप करें';
-
-  @override
-  String get onboardingDays => 'दिन';
-
-  @override
-  String get onboardingApproximateLabel => 'When was your last period?';
-
-  @override
-  String get onboardingApproximateLessWeek => 'Less than a week ago';
-
-  @override
-  String get onboardingApproximate1to2Weeks => '1–2 सप्ताह पहले';
-
-  @override
-  String get onboardingApproximate3to4Weeks => '3–4 सप्ताह पहले';
-
-  @override
-  String get onboardingApproximateMoreMonth => 'एक महीने से अधिक पहले';
-
-  @override
-  String get onboardingPickExactDate => 'इसके बजाय सटीक तिथि चुनें';
-
-  @override
-  String get onboardingLastPeriodRequired =>
-      'कृपया अपने पिछले मासिक धर्म की शुरुआत की तिथि चुनें';
-
-  @override
-  String get nudgeCompleteProfileTitle => 'और सटीक भविष्यवाणियाँ चाहती हैं?';
-
-  @override
-  String get nudgeCompleteProfileBody =>
-      'चक्र भविष्यवाणियों में सुधार के लिए अपने पिछले मासिक धर्म की सटीक तिथि जोड़ें।';
-
-  @override
-  String get nudgeCompleteProfileAction => 'अपडेट करें';
-
-  @override
-  String get nudgeCompleteProfileDismiss => 'बाद में';
-
-  @override
-  String get smsScreenTitle => 'एसएमएस सारांश';
-
-  @override
-  String get smsScreenSubtitle => 'ऐप के बिना भी जानकारी पाएं';
-
-  @override
-  String get smsInfoCardTitle => 'साप्ताहिक स्वास्थ्य सारांश';
-
-  @override
-  String get smsInfoCardBody =>
-      'हर सप्ताह, रिद्मा आपको आपके चक्र की स्थिति, स्वास्थ्य स्कोर और किसी भी महत्वपूर्ण पैटर्न का संक्षिप्त सारांश सीधे एसएमएस के ज़रिए आपके फ़ोन पर भेजेगी, बिना डेटा या ऐप के भी काम करता है।';
-
-  @override
-  String get smsConfigTitle => 'कॉन्फ़िगरेशन';
-
-  @override
-  String get smsPhoneLabel => 'फ़ोन नंबर';
+  String get logSympFainting => 'Fainting';
 
   @override
   String get smsPhoneHint => '+91 98765 43210';
 
   @override
-  String get smsEnableWeekly => 'साप्ताहिक एसएमएस सक्षम करें';
-
-  @override
-  String get smsSaveSettings => 'सेटिंग्स सहेजें';
-
-  @override
-  String get smsSendSectionTitle => 'अभी सारांश भेजें';
-
-  @override
-  String get smsSendRecipientPrefix =>
-      'नीचे दिया गया संदेश इस नंबर पर भेजा जाएगा:';
-
-  @override
-  String get smsSendNoPhone => 'पहले ऊपर फ़ोन नंबर जोड़ें और सहेजें।';
-
-  @override
-  String get smsSendButton => 'सारांश अभी भेजें';
-
-  @override
-  String get smsErrorEnterPhone => 'कृपया फ़ोन नंबर दर्ज करें';
-
-  @override
-  String get smsErrorInvalidPhone =>
-      'अंतरराष्ट्रीय प्रारूप में मान्य फ़ोन नंबर दर्ज करें, जैसे +919876543210';
-
-  @override
-  String get smsSuccessSaved => 'एसएमएस सेटिंग्स सफलतापूर्वक सहेजी गईं!';
-
-  @override
-  String get smsErrorAddPhoneFirst => 'पहले फ़ोन नंबर जोड़ें और सहेजें';
-
-  @override
-  String get smsSuccessSent => 'सारांश आपके फ़ोन पर भेज दिया गया!';
-
-  @override
-  String get smsErrorRateLimit =>
-      'आप प्रति मिनट केवल एक सारांश भेज सकते हैं, कृपया थोड़ी देर बाद पुनः प्रयास करें।';
-
-  @override
-  String get smsErrorSessionExpired =>
-      'आपका सत्र समाप्त हो गया है। कृपया फिर से लॉग इन करें।';
-
-  @override
-  String get smsErrorNetwork =>
-      'सर्वर तक नहीं पहुंच सके। अपना कनेक्शन जांचें और पुनः प्रयास करें।';
-
-  @override
-  String get smsErrorGeneric => 'कुछ गलत हो गया। कृपया पुनः प्रयास करें।';
-
-  @override
-  String get smsLoadError =>
-      'आपकी एसएमएस सेटिंग्स लोड नहीं हो सकीं। रीफ्रेश करें या पुनः प्रयास करें।';
-
-  @override
   String get smsSummaryMessage =>
-      '🌸 रिद्मा स्वास्थ्य सारांश\nयह रिद्मा से आपका ऑन-डिमांड सारांश है।\nअपनी नवीनतम चक्र जानकारी के लिए ऐप खोलें।\nसदस्यता समाप्त करने के लिए STOP उत्तर दें।';
+      '🌸 Rhythma Health Summary\nThis is your on-demand summary from Rhythma.\nOpen the app for your latest cycle insights.\nReply STOP to unsubscribe.';
 
   @override
-  String insightsLoadError(String error) {
-    return 'आपकी जानकारी लोड नहीं हो सकी: $error';
-  }
-
-  @override
-  String get insightsNotEnoughData =>
-      'अपने पूर्ण स्वास्थ्य अंतर्दृष्टि को अनलॉक करने के लिए Cycle टैब पर कुछ और चक्र लॉग करें।';
-
-  @override
-  String get insightsNoSymptomsYet =>
-      'अभी तक कोई लक्षण लॉग नहीं किया गया है - यहाँ पैटर्न देखने के लिए Cycle टैब पर कुछ लॉग करें।';
-
-  @override
-  String get insightsNotEnoughTrendData =>
-      'Log at least two cycles to see your trend here.';
-
-  @override
-  String get assistantAccessibilitySuggestedPrompt => 'Suggested prompt';
-
-  @override
-  String get assistantAccessibilityMessageInput => 'Message input';
+  String get smsSendSectionTitle => 'Send a Summary Now';
 
   @override
   String get assistantAccessibilityMessageInputHint =>
       'Type your question here';
 
   @override
+  String get onboardingRangeOver65 => 'Over 65';
+
+  @override
+  String get onboardingRange150to160 => '150–160 cm';
+
+  @override
+  String get insightsNoSymptomsYet =>
+      'No symptoms logged yet — log some on the Cycle tab to see patterns here.';
+
+  @override
+  String get failedToGetIdToken => 'Failed to get ID token';
+
+  @override
+  String get verifying => 'Verifying...';
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get onboardingRangeUnder150 => 'Under 150 cm';
+
+  @override
+  String get pleaseEnterOtp => 'Please enter the OTP.';
+
+  @override
+  String get insightsNotEnoughData =>
+      'Log a few more cycles on the Cycle tab to unlock your full health insights.';
+
+  @override
+  String get smsInfoCardTitle => 'Weekly Health Summary';
+
+  @override
+  String get assistantAccessibilitySuggestedPrompt => 'Suggested prompt';
+
+  @override
+  String get invalidOtp => 'Invalid OTP. Please try again.';
+
+  @override
+  String get deleteAccountConfirmationTitle => 'Delete Account?';
+
+  @override
+  String get pleaseEnterPhoneNumber => 'Please enter your phone number.';
+
+  @override
+  String get onboardingApproximate3to4Weeks => '3–4 weeks ago';
+
+  @override
+  String get onboardingApproximate1to2Weeks => '1–2 weeks ago';
+
+  @override
+  String get nudgeCompleteProfileDismiss => 'Maybe later';
+
+  @override
+  String get nudgeCompleteProfileTitle => 'Want more accurate predictions?';
+
+  @override
   String get assistantAccessibilitySendMessage => 'Send message';
+
+  @override
+  String get onboardingRangeOver180 => 'Over 180 cm';
+
+  @override
+  String get smsSendRecipientPrefix => 'Sends the message below to:';
+
+  @override
+  String get onboardingRangeUnder50kg => 'Under 50 kg';
+
+  @override
+  String get smsErrorInvalidPhone =>
+      'Enter a valid phone number in international format, e.g. +919876543210';
+
+  @override
+  String insightsLoadError(String error) {
+    return 'Couldn\'t load your insights: $error';
+  }
+
+  @override
+  String get sendingOtp => 'Sending OTP...';
+
+  @override
+  String get smsPhoneLabel => 'Phone Number';
+
+  @override
+  String get onboardingRange51to65 => '51–65';
+
+  @override
+  String get smsSendNoPhone => 'Add and save a phone number above first.';
+
+  @override
+  String get enterOtpSentToPhone => 'Enter the OTP sent to your phone';
+
+  @override
+  String get onboardingHeightUnit => 'cm';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get nudgeCompleteProfileBody =>
+      'Add the exact start date of your last period to improve cycle predictions.';
+
+  @override
+  String get onboardingPhoneInvalid =>
+      'Use international format, e.g. +919876543210';
+
+  @override
+  String get onboardingApproximateLessWeek => 'Less than a week ago';
+
+  @override
+  String get onboardingRange171to180 => '171–180 cm';
+
+  @override
+  String get smsErrorNetwork =>
+      'Couldn\'t reach the server. Check your connection and try again.';
+
+  @override
+  String get onboardingRange18to25 => '18–25';
+
+  @override
+  String get onboardingRange66to80kg => '66–80 kg';
+
+  @override
+  String get smsLoadError =>
+      'Couldn\'t load your SMS settings. Pull to refresh or try again.';
 
   @override
   String get assistantAccessibilitySendMessageHint =>
       'Sends your message to the assistant';
 
   @override
-  String get assistantAccessibilityTyping => 'Assistant is typing';
+  String get onboardingRangeUnder18 => 'Under 18';
 
   @override
-  String get languageSelectionError =>
-      'भाषा सहेजने में असमर्थ। कृपया पुनः प्रयास करें।';
+  String get onboardingApproximateMoreMonth => 'More than a month ago';
 
   @override
-  String get deleteAccount => 'Delete Account';
+  String get smsSuccessSaved => 'SMS settings saved successfully!';
 
   @override
-  String get deleteAccountConfirmationTitle => 'Delete Account?';
-
-  @override
-  String get deleteAccountConfirmationDesc =>
-      'This action is permanent and cannot be undone. All your data will be wiped.';
+  String get onboardingRange81to100kg => '81–100 kg';
 
   @override
   String get accountDeletedSuccess => 'Account deleted successfully.';
 
   @override
-  String get langGujarati => 'ગુજરાતી (Gujarati)';
-
-  @override
-  String get welcomeToRhythma => 'Welcome to Rhythma';
-
-  @override
-  String get loginOrSignUpWithPhone => 'Log in or sign up with your phone number.';
-
-  @override
-  String get enterOtpSentToPhone => 'Enter the OTP sent to your phone';
+  String get onboardingNotSure => 'Not sure';
 
   @override
   String get phoneNumber => 'Phone Number';
 
   @override
-  String get getOtp => 'Get OTP';
+  String get welcomeToRhythma => 'Welcome to Rhythma';
 
   @override
-  String get sendingOtp => 'Sending OTP...';
+  String get onboardingDays => 'days';
 
   @override
   String get otp => 'OTP';
 
   @override
+  String get insightsNotEnoughTrendData =>
+      'Log at least two cycles to see your trend here.';
+
+  @override
+  String get smsErrorRateLimit =>
+      'You can send one summary per minute, please wait a bit and try again.';
+
+  @override
+  String get onboardingTapToSelectDate => 'Tap to select date';
+
+  @override
+  String get smsEnableWeekly => 'Enable weekly SMS';
+
+  @override
+  String get onboardingLastPeriodRequired =>
+      'Please select when your last period started';
+
+  @override
+  String get pleaseEnterValidPhoneNumber =>
+      'Please enter a valid phone number with country code (e.g., +91).';
+
+  @override
+  String get onboardingAgeUnit => 'years';
+
+  @override
+  String get smsSuccessSent => 'Summary sent to your phone!';
+
+  @override
+  String get onboardingWeightHint => 'Enter your weight';
+
+  @override
+  String get onboardingAgeRequired => 'Please enter your age or select a range';
+
+  @override
+  String get onboardingRange36to50 => '36–50';
+
+  @override
+  String get onboardingRangeOver100kg => 'Over 100 kg';
+
+  @override
+  String get languageSelectionError =>
+      'Unable to save language. Please try again.';
+
+  @override
+  String get loginOrSignUpWithPhone =>
+      'Log in or sign up with your phone number.';
+
+  @override
+  String get assistantAccessibilityTyping => 'Assistant is typing';
+
+  @override
+  String get onboardingWeightRequired =>
+      'Please enter your weight or select a range';
+
+  @override
+  String otpSentTo(String phone) {
+    return 'OTP sent to $phone';
+  }
+
+  @override
+  String get smsErrorAddPhoneFirst => 'Add and save a phone number first';
+
+  @override
   String get verifyOtp => 'Verify OTP';
 
   @override
-  String get verifying => 'Verifying...';
+  String get onboardingHeightHint => 'Enter your height';
 
   @override
-  String get useDifferentPhoneNumber => 'Use a different phone number';
-
-  @override
-  String get pleaseEnterPhoneNumber => 'Please enter your phone number.';
-
-  @override
-  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number with country code (e.g., +91).';
+  String get onboardingRange161to170 => '161–170 cm';
 
   @override
   String get verificationFailed => 'Verification failed';
 
   @override
-  String otpSentTo(String phone) => 'OTP sent to $phone';
+  String get onboardingApproximateLabel => 'When was your last period?';
 
   @override
-  String get pleaseEnterOtp => 'Please enter the OTP.';
+  String get smsErrorGeneric => 'Something went wrong. Please try again.';
 
   @override
-  String get invalidOtp => 'Invalid OTP. Please try again.';
+  String get useDifferentPhoneNumber => 'Use a different phone number';
 
   @override
-  String get failedToGetIdToken => 'Failed to get ID token';
-  @override
-  String get logFlowVeryHeavy => 'Very Heavy';
-  @override
-  String get logFlowSpotting => 'Spotting';
-  @override
-  String get logSympSeverePain => 'Severe Pain';
-  @override
-  String get logSympFainting => 'Fainting';
+  String get smsScreenSubtitle => 'Stay informed even without the app';
 
   @override
-  String get ayurvedaWellnessTitle => 'आयुर्वेद-प्रेरित स्वास्थ्य जानकारी';
+  String get onboardingHeightRequired =>
+      'Please enter your height or select a range';
 
   @override
-  String get ayurvedaDisclaimer => 'केवल शैक्षिक जानकारी। आयुर्वेद-प्रेरित सामग्री चिकित्सा सलाह, निदान या उपचार नहीं है।';
+  String get onboardingRange50to65kg => '50–65 kg';
 
   @override
-  String get ayurvedaMenstrualTitle => 'आराम और आत्मचिंतन';
+  String get smsInfoCardBody =>
+      'Every week, Rhythma will send you a brief summary of your cycle status, health score, and any important patterns, directly to your phone via SMS. Works without data or the app.';
 
   @override
-  String get ayurvedaMenstrualDescription => 'आयुर्वेदिक परंपराएँ मासिक धर्म के समय आराम, आत्मचिंतन और हल्की स्व-देखभाल पर ध्यान देने का वर्णन करती हैं।';
+  String get smsSendButton => 'Send Summary Now';
 
   @override
-  String get ayurvedaFollicularTitle => 'नवीनीकरण और गतिविधि';
+  String get onboardingAgeHint => 'Enter your age';
 
   @override
-  String get ayurvedaFollicularDescription => 'आयुर्वेदिक स्वास्थ्य परंपराएँ मासिक धर्म के बाद की अवधि को नवीनीकरण और धीरे-धीरे गतिविधि बढ़ाने से जोड़ती हैं।';
+  String get nudgeCompleteProfileAction => 'Update';
 
   @override
-  String get ayurvedaOvulationTitle => 'संतुलन और जुड़ाव';
+  String get onboardingWeightUnit => 'kg';
 
   @override
-  String get ayurvedaOvulationDescription => 'कुछ आयुर्वेदिक परंपराएँ चक्र के मध्य को जीवन शक्ति और सामाजिक जुड़ाव से संबंधित समय के रूप में वर्णित करती हैं।';
+  String get smsScreenTitle => 'SMS Summaries';
 
   @override
-  String get ayurvedaLutealTitle => 'स्थिरता और दिनचर्या';
+  String get onboardingPickExactDate => 'Pick exact date instead';
 
   @override
-  String get ayurvedaLutealDescription => 'आयुर्वेदिक स्वास्थ्य परंपराएँ चक्र के बाद के हिस्से में शांत दिनचर्या और जागरूक स्व-देखभाल पर जोर देती हैं।';
+  String get smsErrorEnterPhone => 'Please enter a phone number';
+
+  @override
+  String get assistantAccessibilityMessageInput => 'Message input';
+
+  @override
+  String get smsSaveSettings => 'Save Settings';
+
+  @override
+  String get smsErrorSessionExpired =>
+      'Your session has expired. Please log in again.';
+
+  @override
+  String get langGujarati => 'ગુજરાતી (Gujarati)';
+
+  @override
+  String get onboardingApproximate => 'Approximate';
+
+  @override
+  String get onboardingRange26to35 => '26–35';
+
+  @override
+  String get smsConfigTitle => 'Configuration';
+
+  @override
+  String get deleteAccountConfirmationDesc =>
+      'This action is permanent and cannot be undone. All your data will be wiped.';
 }
