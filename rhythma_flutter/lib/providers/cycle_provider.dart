@@ -4,21 +4,61 @@ import '../config/theme.dart';
 import '../services/local_storage_service.dart';
 
 class CycleProvider extends ChangeNotifier {
-  final DateTime _today = DateTime.now();
+  /// How this provider asks what day it is.
+  ///
+  /// Injectable so a test can step across midnight instead of waiting for
+  /// it. Before this existed there was no seam at all — the class called
+  /// `DateTime.now()` directly, which is why the existing future-date test
+  /// had to phrase itself as `DateTime.now().add(...)`.
+  final DateTime Function() _clock;
 
   late DateTime _selectedDate;
   late DateTime _displayedMonth;
 
-  CycleProvider() {
-    _selectedDate = DateTime(_today.year, _today.month, _today.day);
-    _displayedMonth = DateTime(_today.year, _today.month);
+  /// The last day [refreshIfDayChanged] observed, so a rollover can be
+  /// detected without notifying listeners on every resume.
+  late DateTime _lastKnownDay;
+
+  CycleProvider({DateTime Function()? clock}) : _clock = clock ?? DateTime.now {
+    final startOfToday = today;
+    _selectedDate = startOfToday;
+    _displayedMonth = DateTime(startOfToday.year, startOfToday.month);
+    _lastKnownDay = startOfToday;
+  }
+
+  /// Midnight of the current day, resolved fresh on every read.
+  ///
+  /// This used to be `final DateTime _today = DateTime.now()`, captured once
+  /// in a field initialiser — and `main.dart` builds this provider once for
+  /// the lifetime of the process. A backgrounded app is not killed on any
+  /// schedule the user controls, so `_today` was "whatever day it was when
+  /// Rhythma last cold-started".
+  ///
+  /// `CalendarGrid` called `DateTime.now()` itself, so the grid stayed
+  /// current while the provider did not. They disagreed silently: the grid
+  /// drew today's cell as tappable, the tap called [selectDate], and
+  /// [selectDate] rejected it as a future date against a stale "today". The
+  /// tap did nothing at all — no selection, no error — until the app was
+  /// force-quit.
+  ///
+  /// The grid now reads this getter rather than the clock, so there is one
+  /// answer to "what day is it" on this screen instead of two.
+  DateTime get today {
+    final now = _clock();
+    return DateTime(now.year, now.month, now.day);
   }
 
   DateTime get selectedDate => _selectedDate;
   DateTime get displayedMonth => _displayedMonth;
 
+  /// Whether [displayedMonth] is the month the user is actually in.
+  bool get displayedMonthIsCurrent {
+    final startOfToday = today;
+    return _displayedMonth.year == startOfToday.year &&
+        _displayedMonth.month == startOfToday.month;
+  }
+
   void selectDate(DateTime date) {
-    final today = DateTime(_today.year, _today.month, _today.day);
     final normalized = DateTime(date.year, date.month, date.day);
     if (normalized.isAfter(today)) return; // no logging for future days
     if (_selectedDate != normalized) {
@@ -36,9 +76,46 @@ class CycleProvider extends ChangeNotifier {
   }
 
   void jumpToToday() {
-    _displayedMonth = DateTime(_today.year, _today.month);
-    _selectedDate = DateTime(_today.year, _today.month, _today.day);
+    final startOfToday = today;
+    _displayedMonth = DateTime(startOfToday.year, startOfToday.month);
+    _selectedDate = startOfToday;
+    _lastKnownDay = startOfToday;
     notifyListeners();
+  }
+
+  /// Repaint if the date has changed since this was last checked.
+  ///
+  /// Resolving [today] per call fixes the *behaviour* — a tap on today's
+  /// cell is accepted again — but it does not repaint a screen that is
+  /// already on top when the date changes underneath it. The today ring
+  /// would sit on yesterday until something else triggered a rebuild.
+  ///
+  /// `CycleScreen` calls this when the app resumes, which is the moment
+  /// that matters and the one we can actually observe. Returns whether the
+  /// day had in fact changed, so a caller can do more than repaint.
+  bool refreshIfDayChanged() {
+    final startOfToday = today;
+    if (startOfToday == _lastKnownDay) return false;
+
+    // The selection follows the date only when it was pinned to what used
+    // to be today. A user who deliberately selected an earlier day and
+    // left the app open should come back to the day she chose.
+    final selectionWasToday = _selectedDate == _lastKnownDay;
+    // Likewise the month: a user parked on "this month" should still be on
+    // this month, not on the one that just ended. A month she navigated to
+    // deliberately is left where she put it.
+    final monthWasCurrent = _displayedMonth.year == _lastKnownDay.year &&
+        _displayedMonth.month == _lastKnownDay.month;
+
+    _lastKnownDay = startOfToday;
+    if (selectionWasToday) {
+      _selectedDate = startOfToday;
+    }
+    if (monthWasCurrent) {
+      _displayedMonth = DateTime(startOfToday.year, startOfToday.month);
+    }
+    notifyListeners();
+    return true;
   }
 
   /// Whether anything has actually been saved for [date] (Home quick-log
