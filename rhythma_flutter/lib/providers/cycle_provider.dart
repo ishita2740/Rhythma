@@ -51,13 +51,6 @@ class CycleProvider extends ChangeNotifier {
   DateTime get selectedDate => _selectedDate;
   DateTime get displayedMonth => _displayedMonth;
 
-  /// Whether [displayedMonth] is the month the user is actually in.
-  bool get displayedMonthIsCurrent {
-    final startOfToday = today;
-    return _displayedMonth.year == startOfToday.year &&
-        _displayedMonth.month == startOfToday.month;
-  }
-
   void selectDate(DateTime date) {
     final normalized = DateTime(date.year, date.month, date.day);
     if (normalized.isAfter(today)) return; // no logging for future days

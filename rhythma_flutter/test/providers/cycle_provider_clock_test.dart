@@ -131,17 +131,6 @@ void main() {
 
       expect(provider.selectedDate, DateTime(2026, 3, 10));
     });
-
-    test('displayedMonthIsCurrent goes false when the month rolls over', () {
-      final clock = _FakeClock(DateTime(2026, 3, 31, 23, 55));
-      final provider = CycleProvider(clock: clock.call);
-
-      expect(provider.displayedMonthIsCurrent, isTrue);
-
-      clock.set(DateTime(2026, 4, 1, 0, 5));
-
-      expect(provider.displayedMonthIsCurrent, isFalse);
-    });
   });
 
   group('CycleProvider.refreshIfDayChanged (#539)', () {
