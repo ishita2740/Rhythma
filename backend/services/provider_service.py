@@ -13,12 +13,14 @@ relationship record, not a profile field — and it keeps the set of
 collections a deletion cascade must cover explicitly enumerated.
 """
 
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
 
 from fastapi import HTTPException, status
 
 from services import access_log_service
+from utils.logger import logger
 from services.firestore_service import UserService
 from services.scoring_service import get_user_scores
 
@@ -109,6 +111,41 @@ def _provider_display_name(provider_id: str) -> Optional[str]:
         or provider.get("username")
         or provider.get("email")
     )
+
+
+@dataclass(frozen=True)
+class PatientPage:
+    """One page of provider dashboard cards, and how far it got.
+
+    Issue #538: the envelope used to be assembled from two numbers taken on
+    either side of a filter that can drop rows. ``has_more`` was measured on
+    the *consent* window, before patients whose account no longer exists were
+    skipped; ``nextOffset`` was measured on the *summaries*, after. So the
+    offset the client was told to resume from was short by exactly the number
+    of rows that were dropped, and the next page re-served consents the
+    previous one had already consumed.
+
+    Re-serving a consent is not only a duplicate card. Every summary written
+    also writes an access-log row, so a patient's own "your data was viewed"
+    history gained an entry for a view that happened once. An audit trail
+    that over-counts is not safe to reason from — a patient cannot tell a
+    real second visit from a paging artifact.
+
+    Carrying ``consumed`` is what fixes it: ``has_more`` and ``next_offset``
+    are both derived from the same quantity, how far into the consent list
+    this page actually got, so they cannot disagree.
+    """
+
+    summaries: List[Dict[str, Any]] = field(default_factory=list)
+    #: How many consents this page walked past, survivors and skips alike.
+    #: The client's next offset is this many further on, never fewer.
+    consumed: int = 0
+    #: Consents skipped because the patient's account no longer exists.
+    #: Reported rather than swallowed so a roster quietly full of deleted
+    #: accounts is visible instead of inferred from short pages.
+    skipped: int = 0
+    has_more: bool = False
+    next_offset: Optional[int] = None
 
 
 class ConsentService:
@@ -256,10 +293,9 @@ class ProviderService:
         The HTTP endpoint no longer uses it, because the work here grows
         without a ceiling — see the page method for what that costs.
         """
-        summaries, _ = ProviderService.patient_summaries_page(
+        return ProviderService.patient_summaries_page(
             provider_id, limit=None
-        )
-        return summaries
+        ).summaries
 
     @staticmethod
     def patient_summaries_page(
@@ -267,11 +303,8 @@ class ProviderService:
         *,
         limit: Optional[int] = DEFAULT_PATIENTS_PAGE,
         offset: int = 0,
-    ) -> Tuple[List[Dict[str, Any]], bool]:
-        """One page of dashboard cards, plus whether more exist.
-
-        Returns ``(summaries, has_more)``, the same shape
-        ``access_log_service.list_for_patient`` returns.
+    ) -> PatientPage:
+        """One page of dashboard cards, and how far into the roster it got.
 
         The slice happens on the *consents* — before the fan-out — and that
         is the whole point of this method rather than a nicety of where the
@@ -287,24 +320,52 @@ class ProviderService:
         look at page four — and it means a patient's "your data was viewed"
         history stops counting views that never happened.
 
+        **Why this walks rather than slices** (issue #538). A consent whose
+        patient has since deleted her account is skipped, so the number of
+        summaries produced is not the number of consents consumed. Slicing
+        ``consents[offset : offset + limit]`` and reporting the *summary*
+        count as the next offset handed the client an offset short by the
+        number of skips, and the next page re-served consents this one had
+        already used — duplicate cards, and a second access-log row for a
+        view that happened once.
+
+        So the loop advances until it has ``limit`` summaries or the roster
+        runs out, and ``PatientPage.consumed`` records how far it got. Both
+        ``has_more`` and ``next_offset`` come off that single number, which
+        is what stops them disagreeing. It also means a page of ``limit`` is
+        ``limit`` rows whenever the roster can supply them, so a run of
+        deleted patients is absorbed inside one request instead of being
+        handed back as an empty page with ``hasMore: true``.
+
+        The extra work is in-memory only: ``list_active_for_provider``
+        already materialises the consents, and the expensive fan-out still
+        runs once per surviving row, still capped at ``limit``.
+
         ``limit=None`` disables paging, for the whole-roster callers that
         predate this.
         """
-        summaries: List[Dict[str, Any]] = []
         provider_name = _provider_display_name(provider_id)
-
         consents = ConsentService.list_active_for_provider(provider_id)
-        if limit is None:
-            window, has_more = consents, False
-        else:
-            window = consents[offset : offset + limit + 1]
-            has_more = len(window) > limit
-            window = window[:limit]
 
-        for consent in window:
+        summaries: List[Dict[str, Any]] = []
+        skipped = 0
+        cursor = max(0, offset)
+        start = cursor
+
+        while cursor < len(consents):
+            if limit is not None and len(summaries) >= limit:
+                break
+            consent = consents[cursor]
+            cursor += 1
+
             patient = UserService.get_user_by_id(consent["patient_id"])
             if not patient:
+                # The consent outlived the account. Counted, not silently
+                # dropped: `cursor` has already moved past it, so the
+                # client's next offset accounts for it either way.
+                skipped += 1
                 continue
+
             scores = get_user_scores(consent["patient_id"])
             access_log_service.record(
                 provider_id=provider_id,
@@ -331,7 +392,26 @@ class ProviderService:
                     "hasEnoughDataForInsights": scores["has_enough_data_for_insights"],
                 }
             )
-        return summaries, has_more
+
+        consumed = cursor - start
+        has_more = cursor < len(consents)
+
+        if skipped:
+            # Worth a line in the log. A roster with a lot of these is a
+            # deletion cascade that left consent documents behind, and the
+            # only other evidence of it is pages that come back short.
+            logger.info(
+                f"Skipped {skipped} consent(s) with no surviving patient "
+                f"account while building a provider patient page"
+            )
+
+        return PatientPage(
+            summaries=summaries,
+            consumed=consumed,
+            skipped=skipped,
+            has_more=has_more,
+            next_offset=cursor if has_more else None,
+        )
 
     @staticmethod
     def patient_detail(provider_id: str, patient_id: str) -> Dict[str, Any]:
