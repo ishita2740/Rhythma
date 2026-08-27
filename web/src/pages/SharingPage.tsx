@@ -10,6 +10,9 @@ import {
 } from '../api/endpoints';
 import { useDocumentMeta } from '../lib/useDocumentMeta';
 
+/** Matches the server default in `access_log_service.DEFAULT_ACCESS_LOG_PAGE`. */
+const ACCESS_LOG_PAGE_SIZE = 20;
+
 function formatDate(value: string | null | undefined): string {
   if (!value) return '—';
   const date = new Date(value);
@@ -50,6 +53,9 @@ export function SharingPage() {
 
   const [consents, setConsents] = useState<Consent[]>([]);
   const [accessLog, setAccessLog] = useState<AccessLogEntry[]>([]);
+  const [accessLogNextOffset, setAccessLogNextOffset] = useState<number | null>(null);
+  const [loadingMoreAccessLog, setLoadingMoreAccessLog] = useState(false);
+  const [accessLogError, setAccessLogError] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -64,14 +70,44 @@ export function SharingPage() {
       // two. `.catch` rather than a second try/except for that reason.
       const [nextConsents, log] = await Promise.all([
         fetchConsents(),
-        fetchAccessLog().catch(() => null),
+        fetchAccessLog(ACCESS_LOG_PAGE_SIZE, 0).catch(() => null),
       ]);
       setConsents(nextConsents);
       setAccessLog(log?.entries ?? []);
+      // Issue #540: this page used to take `log.entries` and drop
+      // `log.page`, so the list stopped at the first twenty rows with
+      // nothing on screen to say so. The list is newest-first, which means
+      // what fell off the end was the *oldest* history — and "has anyone
+      // been looking at my records, and since when" is the question this
+      // screen exists to answer.
+      setAccessLogNextOffset(log?.page?.hasMore ? log.page.nextOffset : null);
+      setAccessLogError('');
     } catch {
       setError(t('sharing.loadError'));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadMoreAccessLog = async () => {
+    if (accessLogNextOffset === null || loadingMoreAccessLog) return;
+    setLoadingMoreAccessLog(true);
+    setAccessLogError('');
+    try {
+      const log = await fetchAccessLog(ACCESS_LOG_PAGE_SIZE, accessLogNextOffset);
+      // Appended, and `nextOffset` comes off the server's envelope rather
+      // than being computed from `accessLog.length` here — the server is
+      // the only party that knows whether a short page means the history
+      // ended or something was skipped.
+      setAccessLog((current) => [...current, ...log.entries]);
+      setAccessLogNextOffset(log.page?.hasMore ? log.page.nextOffset : null);
+    } catch {
+      // Deliberately narrow: a failed "load more" must not discard the
+      // entries already on screen. A patient who can see fourteen rows and
+      // cannot fetch the fifteenth should keep her fourteen.
+      setAccessLogError(t('sharing.accessLogLoadMoreError'));
+    } finally {
+      setLoadingMoreAccessLog(false);
     }
   };
 
@@ -195,21 +231,45 @@ export function SharingPage() {
         ) : accessLog.length === 0 ? (
           <p className="empty-note">{t('sharing.accessLogEmpty')}</p>
         ) : (
-          accessLog.map((entry) => (
-            <div key={entry.id} className="list-row">
-              <div className="list-row-main">
-                <span className="list-row-title">
-                  {entry.providerName ?? t('sharing.unknownProvider')}
-                </span>
-                <span className="list-row-sub">
-                  {entry.view === 'patient_detail'
-                    ? t('sharing.viewedFullRecord')
-                    : t('sharing.viewedSummaryCard')}
-                </span>
+          <>
+            {accessLog.map((entry) => (
+              <div key={entry.id} className="list-row">
+                <div className="list-row-main">
+                  <span className="list-row-title">
+                    {entry.providerName ?? t('sharing.unknownProvider')}
+                  </span>
+                  <span className="list-row-sub">
+                    {entry.view === 'patient_detail'
+                      ? t('sharing.viewedFullRecord')
+                      : t('sharing.viewedSummaryCard')}
+                  </span>
+                </div>
+                <span className="list-row-sub">{formatDateTime(entry.accessedAt)}</span>
               </div>
-              <span className="list-row-sub">{formatDateTime(entry.accessedAt)}</span>
-            </div>
-          ))
+            ))}
+
+            {accessLogError ? <p className="error-text">{accessLogError}</p> : null}
+
+            {accessLogNextOffset !== null ? (
+              <>
+                {/* Said out loud while more remain, so the visible list is
+                    never mistakable for the whole history. */}
+                <p className="card-sub">
+                  {t('sharing.accessLogShowing', { count: accessLog.length })}
+                </p>
+                <button
+                  type="button"
+                  className="ghost-btn"
+                  disabled={loadingMoreAccessLog}
+                  onClick={() => void loadMoreAccessLog()}
+                >
+                  {loadingMoreAccessLog
+                    ? t('common.loading')
+                    : t('sharing.accessLogLoadMore')}
+                </button>
+              </>
+            ) : null}
+          </>
         )}
       </section>
     </div>
