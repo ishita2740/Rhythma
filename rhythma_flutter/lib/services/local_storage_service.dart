@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -21,6 +23,7 @@ class _Keys {
   static const currentUserId = 'current_user_id';
   static const dashboardCache = 'dashboard_cache';
   static const dashboardCacheTimestamp = 'dashboard_cache_timestamp';
+  static const deviceId = 'device_id';
 }
 
 /// Manages all on-device storage via Hive.
@@ -223,6 +226,32 @@ class LocalStorageService {
 
   static int? getPrimaryColor() {
     return _settings.get(_Keys.primaryColor) as int?;
+  }
+
+  // ── Device identity ────────────────────────────────────────────────────
+
+  /// A stable id for this installation, created on first use.
+  ///
+  /// Deliberately unscoped: it identifies the handset, not the account, so
+  /// two accounts on one phone share it and one account on two phones does
+  /// not. That is the whole point — [FirestoreService]'s last-write-wins
+  /// stamps `device_id` on every synced document so a conflict can say
+  /// *which copy* won, and it was stamping [currentUserId], which is the
+  /// same value on every device an account is signed in to and therefore
+  /// carried no information at all.
+  ///
+  /// Not a hardware identifier. A random value generated locally answers
+  /// "was this the same install?" without collecting anything about the
+  /// device, which is the only question the sync asks.
+  static Future<String> deviceId() async {
+    final existing = _settings.get(_Keys.deviceId) as String?;
+    if (existing != null && existing.isNotEmpty) return existing;
+
+    final random = Random.secure();
+    final bytes = List<int>.generate(16, (_) => random.nextInt(256));
+    final generated = base64UrlEncode(bytes).replaceAll('=', '');
+    await _settings.put(_Keys.deviceId, generated);
+    return generated;
   }
 
   static Future<void> setPrimaryColor(int colorValue) async {
