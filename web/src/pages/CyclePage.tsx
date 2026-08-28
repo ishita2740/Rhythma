@@ -71,6 +71,17 @@ const SYMPTOM_OPTIONS: OptionDef[] = [
 
 const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
+/**
+ * The single-value fields this screen renders.
+ *
+ * `notes` and `end_date` are deliberately absent. Both exist on a log and
+ * neither has a control here, so including them would let a screen that
+ * cannot show a note delete one — and a note is in the provider view, the
+ * PDF report and the privacy export. `symptoms` is handled separately
+ * because comparing and clearing a list is not the same operation.
+ */
+const EDITABLE_FIELDS = ['flow_intensity', 'mood', 'sleep_hours', 'stress_level'] as const;
+
 function phaseLabel(t: (k: string) => string, phase: CyclePhase): string {
   switch (phase) {
     case 'period':
@@ -196,15 +207,52 @@ export function CyclePage() {
     setSaveError('');
   };
 
-  const hasSelections = (d: CycleLogInput | null): boolean => {
+  /**
+   * What the day looks like now, as this screen would send it.
+   *
+   * Every field the screen renders is included, `null` where the user has
+   * cleared it, because the chips are toggles and a deselection is an
+   * answer. The previous version added a key only when it was truthy, so a
+   * cleared field vanished from the payload and the request became
+   * indistinguishable from one where nothing was touched — the screen said
+   * "Saved to your account", reloaded, and lit the chip back up (#549).
+   */
+  const buildPayload = (d: CycleLogInput): CycleLogInput => ({
+    start_date: selectedIso,
+    flow_intensity: d.flow_intensity ?? null,
+    mood: d.mood ?? null,
+    sleep_hours: d.sleep_hours ?? null,
+    stress_level: d.stress_level ?? null,
+    // `[]` rather than `null`: unticking every symptom is an empty list, and
+    // the server stores it as one.
+    symptoms: d.symptoms ?? [],
+  });
+
+  /**
+   * Whether saving would change anything on the server.
+   *
+   * This replaces a "has the user selected anything?" check, which had the
+   * same shape as the payload bug: clearing the last chip left nothing
+   * selected, so the Save button went *disabled* and the user could not
+   * send the correction she had just made.
+   */
+  const isDirty = (d: CycleLogInput | null): boolean => {
     if (!d) return false;
-    return Boolean(
-      d.flow_intensity ||
-        d.mood ||
-        d.sleep_hours != null ||
-        d.stress_level != null ||
-        (d.symptoms && d.symptoms.length > 0),
-    );
+    const stored = logs.get(selectedIso);
+    if (!stored) {
+      // Nothing saved for this day: there is something to send only if she
+      // has chosen something.
+      return (
+        EDITABLE_FIELDS.some((field) => d[field] != null) ||
+        (d.symptoms?.length ?? 0) > 0
+      );
+    }
+    if (EDITABLE_FIELDS.some((field) => (d[field] ?? null) !== (stored[field] ?? null))) {
+      return true;
+    }
+    const before = stored.symptoms ?? [];
+    const after = d.symptoms ?? [];
+    return before.length !== after.length || before.some((s, i) => s !== after[i]);
   };
 
   const save = async () => {
@@ -212,13 +260,7 @@ export function CyclePage() {
     setSaving(true);
     setSaveError('');
     try {
-      const payload: CycleLogInput = { start_date: selectedIso };
-      if (draft.flow_intensity) payload.flow_intensity = draft.flow_intensity;
-      if (draft.mood) payload.mood = draft.mood;
-      if (draft.sleep_hours != null) payload.sleep_hours = draft.sleep_hours;
-      if (draft.stress_level != null) payload.stress_level = draft.stress_level;
-      if (draft.symptoms && draft.symptoms.length > 0) payload.symptoms = draft.symptoms;
-      await submitCycleLog(payload);
+      await submitCycleLog(buildPayload(draft));
       setSaved(true);
       void load();
     } catch {
@@ -438,7 +480,7 @@ export function CyclePage() {
         {saved ? <p className="success-text">✓ {t('cycle.savedToAccount')}</p> : null}
         {saveError ? <p className="error-text">{saveError}</p> : null}
 
-        <button type="button" className="primary-btn full" disabled={saving || !hasSelections(draft)} onClick={() => void save()}>
+        <button type="button" className="primary-btn full" disabled={saving || !isDirty(draft)} onClick={() => void save()}>
           {saving ? t('common.loading') : t('cycle.saveLog')}
         </button>
 

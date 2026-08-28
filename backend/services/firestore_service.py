@@ -7,6 +7,13 @@ from typing import Optional, Dict, Any
 from fastapi import HTTPException, status
 from google.api_core.exceptions import FailedPrecondition  # for missing index detection
 
+# Firestore's "remove this key" sentinel. Imported from the Google client
+# rather than through `firebase_admin.firestore` because the test suite
+# replaces `firebase_admin` with a `MagicMock` — every attribute of which
+# is a fresh mock rather than the real sentinel, so `value is DELETE_FIELD`
+# would silently mean something different under test than in production.
+from google.cloud.firestore_v1 import DELETE_FIELD
+
 # `upstream_error` logs the real Firestore exception (with traceback and the
 # current request id) and returns a safe error to raise. It replaces the
 # `detail=f"...: {str(e)}"` pattern that used to interpolate raw Google API
@@ -74,13 +81,26 @@ class MockDocumentReference:
         on a deleted account "succeeded" under test and would have raised
         in production — precisely the asymmetry a test double exists to
         prevent.
+
+        ``DELETE_FIELD`` removes the key rather than storing the sentinel
+        (issue #549). Without this the mock would keep a
+        ``Sentinel`` object in the document and hand it back on the next
+        read, so a test covering a field being cleared would see the
+        field still present — and holding something no client could
+        parse. The rule for this mock is that it may be narrower than
+        Firestore but never looser, and silently storing a write
+        instruction as a value is looser.
         """
         if not self.exists or self.data is None:
             raise MockNotFound(
                 f"No document to update: {self.collection.name}/{self.id}"
             )
         merged = dict(self.data)
-        merged.update(_copy_document(update_data))
+        for key, value in _copy_document(update_data).items():
+            if value is DELETE_FIELD:
+                merged.pop(key, None)
+            else:
+                merged[key] = value
         self.data = merged
         self.collection.store[self.id] = merged
 
@@ -91,7 +111,18 @@ class MockDocumentReference:
         stored document is not the caller's object; the surviving
         duplicate of this method stored the dict by reference, which made
         a later mutation of that dict an invisible write.
+
+        ``DELETE_FIELD`` is rejected rather than handled, because real
+        Firestore rejects it too: there is nothing to delete in a document
+        that is being created. A caller that means "leave this out" should
+        leave it out.
         """
+        if document_data and any(
+            value is DELETE_FIELD for value in document_data.values()
+        ):
+            raise ValueError(
+                "DELETE_FIELD cannot be used in set(); omit the field instead"
+            )
         stored = _copy_document(document_data)
         self.collection.store[self.id] = stored
         self.data = stored
@@ -678,6 +709,44 @@ class CycleService:
         return f"{user_id}_{log_date.isoformat()}"
 
     @staticmethod
+    def _prepare_write(fields: Dict[str, Any], *, for_new_document: bool) -> Dict[str, Any]:
+        """Normalise a caller's field dict into something Firestore takes.
+
+        Two conversions, both about the difference between a value and an
+        instruction.
+
+        A bare ``date`` becomes a UTC-midnight ``datetime``, matching what
+        the rest of this class stores, so a query ordering on the field
+        does not have to interleave two types.
+
+        A ``None`` becomes ``DELETE_FIELD`` — "remove this key" — which is
+        what makes a logged value removable at all (issue #549). It used
+        to be impossible: the routes stripped every ``None`` before
+        calling in here, so a mis-tapped flow intensity or a note naming a
+        clinic could be *edited* but never taken back, and deleting the
+        whole day was the only way out.
+
+        ``for_new_document`` is the one asymmetry. Firestore's ``set``
+        refuses the sentinel, correctly — there is nothing to delete in a
+        document being created — so a clearing of a field that has never
+        been written is simply dropped. That is not a special case so much
+        as the same answer arrived at more cheaply: the field ends up
+        absent either way.
+        """
+        prepared: Dict[str, Any] = {}
+        for key, value in fields.items():
+            if value is None:
+                if not for_new_document:
+                    prepared[key] = DELETE_FIELD
+                continue
+            if isinstance(value, date) and not isinstance(value, datetime):
+                value = datetime.combine(
+                    value, datetime.min.time(), tzinfo=timezone.utc
+                )
+            prepared[key] = value
+        return prepared
+
+    @staticmethod
     def upsert_log(user_id: str, log_date: date, fields: Dict[str, Any]) -> str:
         """Create or update *that day's* cycle log with O(1) lookup.
 
@@ -689,6 +758,12 @@ class CycleService:
         thing being tapped, e.g. `{"flow_intensity": "light"}`) and the
         Cycle screen's "Save" button (a full `fields` dict with everything
         selected for that day).
+
+        A field whose value is ``None`` is *removed* rather than skipped
+        (issue #549). The route only passes a key the caller actually
+        sent, so an omitted field never reaches here and cannot be
+        cleared by accident — the distinction the merge semantics depend
+        on is drawn there, where the request body is still visible.
         """
         try:
             doc_id = CycleService._log_doc_id(user_id, log_date)
@@ -697,18 +772,21 @@ class CycleService:
 
             day_start = datetime.combine(log_date, datetime.min.time(), tzinfo=timezone.utc)
             now = datetime.now(timezone.utc)
-            update_fields = dict(fields)
-
-            for key, value in list(update_fields.items()):
-                if isinstance(value, date) and not isinstance(value, datetime):
-                    update_fields[key] = datetime.combine(value, datetime.min.time(), tzinfo=timezone.utc)
 
             if existing.exists:
+                update_fields = CycleService._prepare_write(
+                    fields, for_new_document=False
+                )
                 update_fields["updated_at"] = now
                 doc_ref.update(update_fields)
                 return doc_id
 
-            new_data = {**update_fields, "user_id": user_id, "start_date": day_start, "created_at": now}
+            new_data = {
+                **CycleService._prepare_write(fields, for_new_document=True),
+                "user_id": user_id,
+                "start_date": day_start,
+                "created_at": now,
+            }
             doc_ref.set(new_data)
             return doc_id
         except Exception as e:
@@ -753,7 +831,11 @@ class CycleService:
 
     @staticmethod
     def update_log(user_id: str, log_id: str, fields: Dict[str, Any]) -> str:
-        """Update a specific cycle log by ID."""
+        """Update a specific cycle log by ID.
+
+        A field whose value is ``None`` is removed, on the same terms as
+        :meth:`upsert_log` — see ``_prepare_write`` (issue #549).
+        """
         try:
             doc_ref = db.collection("cycle_logs").document(log_id)
             doc = doc_ref.get()
@@ -770,11 +852,9 @@ class CycleService:
                     detail="Not authorized to update this log"
                 )
                 
-            update_fields = dict(fields)
-            for key, value in list(update_fields.items()):
-                if isinstance(value, date) and not isinstance(value, datetime):
-                    update_fields[key] = datetime.combine(value, datetime.min.time(), tzinfo=timezone.utc)
-            
+            update_fields = CycleService._prepare_write(
+                fields, for_new_document=False
+            )
             update_fields["updated_at"] = datetime.now(timezone.utc)
             doc_ref.update(update_fields)
             return log_id
