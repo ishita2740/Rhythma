@@ -326,6 +326,32 @@ class LocalStorageService {
     await _settings.put(_scoped('nudge_$key'), value);
   }
 
+  // ── Pending profile push ───────────────────────────────────────────
+
+  /// Whether this account's local profile has changes the server has not
+  /// accepted yet.
+  ///
+  /// Set when a profile is saved and cleared when `PATCH /auth/profile`
+  /// confirms it. Scoped per account, because it is a fact about one
+  /// account's data rather than about the handset.
+  ///
+  /// It exists because onboarding never reached the server at all
+  /// (issue #551): everything a user typed on those five screens lived
+  /// only in Hive, so every server-side prediction fell back to a 28-day
+  /// population default and a reinstall lost the lot. The push can fail —
+  /// this is an offline-first app aimed at users who often have no
+  /// connection at the moment they finish signing up — so "we still owe
+  /// the server this" has to be remembered rather than retried once and
+  /// forgotten.
+  static bool get profileNeedsPush {
+    return _settings.get(_scoped('profile_needs_push'), defaultValue: false)
+        as bool;
+  }
+
+  static Future<void> setProfileNeedsPush(bool value) async {
+    await _settings.put(_scoped('profile_needs_push'), value);
+  }
+
   // ── Notification Preferences ─────────────────────────────────────────
 
   static bool get periodPredictionReminders {

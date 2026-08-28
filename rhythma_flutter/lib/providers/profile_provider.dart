@@ -28,6 +28,34 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Save [data] locally and push it to the backend.
+  ///
+  /// Returns whether the server took it. On `false` the profile is still
+  /// saved on the device and is flagged as owed to the server, so
+  /// [AuthService.validateSession] pushes it on the next launch that has
+  /// a connection.
+  ///
+  /// Used by onboarding, which used to call [saveProfile] and stop
+  /// (issue #551). Nothing else pushed it either, so the five screens a
+  /// user fills in when she signs up produced a Firestore document with
+  /// no `last_period`, no `cycle_length` and no name — and every
+  /// server-side prediction fell back to a 28-day population default
+  /// while the number she had declared sat unread on the handset.
+  ///
+  /// The local write comes first and is never conditional on the push.
+  /// Hive stays the source of truth; this only stops it being the *only*
+  /// copy.
+  Future<bool> saveProfileWithSync(Map<String, dynamic> data) async {
+    await saveProfile(data);
+    await LocalStorageService.setProfileNeedsPush(true);
+
+    final accepted = await ProfileService.patchProfile(data);
+    if (accepted) {
+      await LocalStorageService.setProfileNeedsPush(false);
+    }
+    return accepted;
+  }
+
   Future<void> mergeProfile(Map<String, dynamic> updates) async {
     await LocalStorageService.mergeProfile(updates);
     _profile = LocalStorageService.getProfile() ?? {};
@@ -48,10 +76,15 @@ class ProfileProvider extends ChangeNotifier {
     _profile = LocalStorageService.getProfile() ?? {};
     notifyListeners();
 
-    // 2. Attempt REST API backend sync (fire-and-forget, errors are
-    //    swallowed by ProfileService).
+    // 2. Attempt REST API backend sync (errors are swallowed by
+    //    ProfileService, which reports them as `false` rather than
+    //    throwing). A refused push leaves the flag set, so the next
+    //    launch with a connection sends it.
+    await LocalStorageService.setProfileNeedsPush(true);
     try {
-      await ProfileService.patchProfile(_profile);
+      if (await ProfileService.patchProfile(_profile)) {
+        await LocalStorageService.setProfileNeedsPush(false);
+      }
     } catch (_) {}
 
     // 3. Attempt direct Firestore sync.  When offline this queues the

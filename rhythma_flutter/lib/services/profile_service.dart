@@ -17,20 +17,33 @@ class ProfileService {
   /// PATCH `/api/v1/auth/profile` — merge [data] onto the backend user
   /// document.  Only non-null values are sent.
   ///
-  /// Silently swallows all errors (connection, timeout, 5xx, etc.).
-  /// The caller should always persist locally before calling this.
-  static Future<void> patchProfile(Map<String, dynamic> data) async {
+  /// Never throws: connection failures, timeouts and 5xx are all expected
+  /// in offline-first usage, and the caller has already persisted locally.
+  ///
+  /// Returns whether the server actually took the update. This used to
+  /// return `void`, which made "the backend has this" and "the backend
+  /// has never heard of this" the same outcome to every caller — and one
+  /// of those callers is onboarding, where the difference is the whole
+  /// question (issue #551). A caller that does not care can ignore it and
+  /// behave exactly as before.
+  static Future<bool> patchProfile(Map<String, dynamic> data) async {
     try {
       // Strip out fields the backend profile endpoint doesn't accept
       // (e.g. internal Hive keys, phone number formatting artefacts).
       final payload = _buildPayload(data);
-      if (payload.isEmpty) return;
-      await _dio.patch('/auth/profile', data: payload);
+      // Nothing to send is not a failure — there is no state on the
+      // server that disagrees with the device.
+      if (payload.isEmpty) return true;
+      final response = await _dio.patch('/auth/profile', data: payload);
+      final status = response.statusCode ?? 0;
+      return status >= 200 && status < 300;
     } on DioException catch (_) {
       // Network unavailable, timeout, or server error — all are expected
       // in offline-first usage.  Local Hive data is already saved.
+      return false;
     } catch (_) {
       // Any unexpected error — never bubble up to the user.
+      return false;
     }
   }
 
