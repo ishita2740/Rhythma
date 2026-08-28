@@ -28,6 +28,8 @@ import '../test_helpers/local_storage_fixture.dart';
 /// would have made every other test here pass while production kept
 /// throwing. It is worth reading before the rest.
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   late Directory tempDir;
 
   setUp(() async {
