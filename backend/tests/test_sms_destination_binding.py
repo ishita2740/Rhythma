@@ -351,11 +351,28 @@ def test_a_short_summary_is_returned_untouched():
 # ─── registered_phone ─────────────────────────────────────────────────────
 
 
-def test_registered_phone_prefers_the_same_field_the_settings_screen_shows():
-    """A user must not see one number and have the summary sent to another."""
-    assert registered_phone({"phone": OWN_NUMBER, "sms_phone_number": "+1"}) == (
-        OWN_NUMBER
-    )
+def test_registered_phone_prefers_the_number_chosen_for_sms():
+    """The number she saved wins over the number she signs in with.
+
+    This assertion is the reverse of the one it replaces, and the reversal
+    is the point of issue #547. The old order (``phone`` first) was
+    correct only while ``POST /settings`` wrote the same value into both
+    fields — which is exactly what it must stop doing, because ``phone``
+    is the account's login identity. With the write removed, preferring
+    ``phone`` would make saving an SMS number a no-op for anyone who has
+    a login number.
+
+    The screen and the send path both call this, so they still agree with
+    each other, which is what the replaced test was protecting.
+    """
+    assert registered_phone(
+        {"phone": "+919000000009", "sms_phone_number": OWN_NUMBER}
+    ) == OWN_NUMBER
+
+
+def test_registered_phone_falls_back_to_the_account_number():
+    """Accounts that never opened the SMS screen behave exactly as before."""
+    assert registered_phone({"phone": OWN_NUMBER}) == OWN_NUMBER
 
 
 def test_registered_phone_falls_back_to_the_sms_specific_field():
