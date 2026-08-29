@@ -411,11 +411,46 @@ export async function saveSmsSettings(settings: SmsSettings): Promise<SmsSetting
   return response.data;
 }
 
-export async function sendSmsSummary(phone_number: string, message: string) {
-  const response = await apiClient.post<{ message: string; sid: string }>('/sms/send-summary', {
-    phone_number,
-    message,
-  });
+/**
+ * The summary that would be sent right now, and where it would go.
+ *
+ * Built server-side by the same function that builds the real body, so
+ * what the screen shows and what arrives on the phone cannot drift
+ * (issue #532). Reads only; sends nothing.
+ */
+export interface SmsPreview {
+  body: string;
+  destination: string;
+  characters: number;
+  enabled: boolean;
+}
+
+export async function fetchSmsPreview(): Promise<SmsPreview> {
+  const response = await apiClient.get<SmsPreview>('/sms/preview');
+  return response.data;
+}
+
+/**
+ * Send the cycle summary to the number saved on the account.
+ *
+ * Takes no arguments, deliberately. It used to take `(phone_number,
+ * message)`, and both were fictions:
+ *
+ * - `message` has been ignored server-side since #382 — the body is
+ *   generated from the user's own data — but the client went on building
+ *   `"SMS Summaries — 26/08/2026"` and sending it, so anyone reading this
+ *   file believed that was the text of the SMS.
+ * - `phone_number` was read from the live input field rather than from
+ *   the saved setting, so typing a number and tapping "Send now" before
+ *   tapping "Save settings" produced a 403 telling the user her own
+ *   number was not hers. The destination is the account's; there is
+ *   nothing for a caller to choose.
+ */
+export async function sendSmsSummary() {
+  const response = await apiClient.post<{ message: string; sid: string }>(
+    '/sms/send-summary',
+    {},
+  );
   return response.data;
 }
 

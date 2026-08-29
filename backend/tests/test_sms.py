@@ -53,9 +53,28 @@ def test_save_sms_settings_validation_failure(auth_headers):
     assert response.status_code == 400
     assert "phone number is required" in response.json()["detail"]
 
+@pytest.fixture
+def sms_enabled_headers(auth_headers):
+    """An account that has actually switched SMS summaries on.
+
+    ``POST /sms/send-summary`` now refuses when the toggle is off
+    (issue #532) — it used to consult it on neither path, so "off" and
+    "on" sent the same message. These tests were written against the old
+    behaviour and are about Twilio, not about the toggle, so they turn it
+    on the way a user does: through the settings endpoint.
+    """
+    client.post(
+        "/api/v1/sms/settings",
+        json={"phoneNumber": "+1234567890", "enabled": True},
+        headers=auth_headers,
+    )
+    RateLimitService.clear_all()
+    return auth_headers
+
+
 @patch("api.sms.os.getenv")
 @patch("twilio.rest.Client")
-def test_send_summary_success(MockClient, mock_getenv, auth_headers):
+def test_send_summary_success(MockClient, mock_getenv, sms_enabled_headers):
 
     def side_effect(key):
         if key == "TWILIO_ACCOUNT_SID": return "sid"
@@ -69,14 +88,14 @@ def test_send_summary_success(MockClient, mock_getenv, auth_headers):
     mock_client_instance.messages.create.return_value = MagicMock(sid="mock-sid")
     
     payload = {"phone_number": "+1234567890", "message": "Test summary"}
-    response = client.post("/api/v1/sms/send-summary", json=payload, headers=auth_headers)
+    response = client.post("/api/v1/sms/send-summary", json=payload, headers=sms_enabled_headers)
     
     assert response.status_code == 200
     assert response.json()["message"] == "SMS sent successfully"
 
 @patch("api.sms.os.getenv")
 @patch("twilio.rest.Client")
-def test_send_summary_provider_failure(MockClient, mock_getenv, auth_headers):
+def test_send_summary_provider_failure(MockClient, mock_getenv, sms_enabled_headers):
 
     def side_effect(key):
         if key == "TWILIO_ACCOUNT_SID": return "sid"
@@ -90,7 +109,7 @@ def test_send_summary_provider_failure(MockClient, mock_getenv, auth_headers):
     mock_client_instance.messages.create.side_effect = Exception("Twilio down")
     
     payload = {"phone_number": "+1234567890", "message": "Test summary"}
-    response = client.post("/api/v1/sms/send-summary", json=payload, headers=auth_headers)
+    response = client.post("/api/v1/sms/send-summary", json=payload, headers=sms_enabled_headers)
     
     assert response.status_code == 500
     assert "Failed to send SMS" in response.json()["detail"]

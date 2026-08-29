@@ -27,14 +27,19 @@ only thing this endpoint is for is the cycle summary, and the summary is
 built from data the server already holds.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from datetime import datetime, timezone
+
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, status
 from core.auth import get_current_user
+from services import sms_dispatch_service
 from services.firestore_service import UserService
 from services.rate_limit_service import RateLimitService
+from utils.logger import logger
 from pydantic import BaseModel, Field
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 import os
 import re
+import secrets
 
 PHONE_PATTERN = r"^\+[1-9]\d{1,14}$"
 
@@ -85,6 +90,58 @@ def registered_phone(user: Optional[Dict[str, Any]]) -> Optional[str]:
         return None
     candidate = (user.get("phone") or user.get("sms_phone_number") or "").strip()
     return candidate or None
+
+
+def _resolve_destination(user: Dict[str, Any]) -> str:
+    """The number this summary goes to, or a 409 explaining why there isn't one.
+
+    Shared by ``POST /send-summary`` and ``GET /preview`` so the screen
+    that previews a message and the route that sends it cannot disagree
+    about whether the account is ready.
+    """
+    destination = registered_phone(user)
+    if not destination:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "No phone number is saved on this account. "
+                "Save one in SMS settings before sending a summary."
+            ),
+        )
+
+    if not re.match(PHONE_PATTERN, destination):
+        # Reachable only for a document written before `POST /settings`
+        # validated the field. Better a clear 409 than handing Twilio a
+        # string it will reject with its own error.
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "The phone number saved on this account is not in E.164 "
+                "format. Please save it again in SMS settings."
+            ),
+        )
+
+    return destination
+
+
+def _require_sms_enabled(user: Dict[str, Any]) -> None:
+    """Refuse to text a user who has switched SMS summaries off (issue #532).
+
+    The toggle used to be consulted nowhere: not by a scheduler, because
+    none existed, and not by the send route. Off meant the same as on.
+
+    409 rather than 403: the account is allowed to use this feature, it
+    has simply turned it off — a conflict with stored state, which is what
+    a client can resolve by pointing the user at the toggle.
+    """
+    if not user.get("sms_enabled"):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "SMS summaries are switched off for this account. Turn them "
+                "on in SMS settings first."
+            ),
+        )
 
 
 def _fit_to_one_segment(text: str) -> str:
@@ -151,6 +208,46 @@ def generate_cycle_sms_summary(user_id: str) -> str:
     return _fit_to_one_segment(summary)
 
 
+def send_sms(destination: str, body: str) -> str:
+    """Hand one message to Twilio and return its sid.
+
+    Extracted from ``POST /sms/send-summary`` (issue #532) because the
+    scheduled dispatcher needs the identical call. Two copies of "how do
+    we send an SMS" is how the weekly summary and the on-demand one come
+    to be sent from different numbers, or with different credentials
+    checked, or with one of them missing a guard the other has.
+
+    Raises ``HTTPException`` rather than a bare exception so the manual
+    route can let it propagate untouched. ``dispatch_due`` catches
+    everything per user, so the batch is unaffected by the choice.
+    """
+    try:
+        from twilio.rest import Client
+    except ImportError:
+        raise HTTPException(
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+            detail="Twilio is not installed. Please install it with `pip install twilio`."
+        )
+
+    account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+    auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+    from_phone = os.getenv("TWILIO_PHONE_NUMBER")
+
+    if not account_sid or not auth_token or not from_phone:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Twilio credentials are not configured. Please set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and TWILIO_PHONE_NUMBER in .env."
+        )
+
+    client = Client(account_sid, auth_token)
+    message = client.messages.create(
+        body=body,
+        from_=from_phone,
+        to=destination,
+    )
+    return message.sid
+
+
 class SMSSettings(BaseModel):
     phoneNumber: Optional[str] = ""
     enabled: bool = False
@@ -165,9 +262,51 @@ class SMSSettingsResponse(BaseModel):
     enabled: bool
 
 
+class SMSPreviewResponse(BaseModel):
+    """The message that would be sent, and where it would go.
+
+    Exists so the "Send now" screen can show the user what is about to be
+    texted about her body before she sends it (issue #532). The web page
+    rendered her own phone number in the element whose class is
+    `sms-preview`, so the destination sat where the preview belongs and
+    the message itself was never shown anywhere.
+
+    Generated by the same function that builds the real body, so a preview
+    that matched the sent message only by coincidence is not possible.
+    """
+
+    body: str
+    destination: str
+    characters: int
+    enabled: bool
+
+
 class SMSSendResponse(BaseModel):
     message: str
     sid: str
+
+
+class SMSDispatchOutcome(BaseModel):
+    userId: str
+    status: str
+    detail: Optional[str] = None
+
+
+class SMSDispatchResponse(BaseModel):
+    """What one scheduled batch did.
+
+    ``skipped`` is broken down by reason rather than totalled: "nobody has
+    it switched on" and "everybody was texted yesterday" are the same
+    ``sent: 0`` otherwise, and they call for opposite responses from
+    whoever is reading it.
+    """
+
+    ranAt: Optional[str] = None
+    sent: int
+    failed: int
+    skipped: Dict[str, int]
+    intervalDays: int
+    outcomes: List[SMSDispatchOutcome]
 
 
 router = APIRouter(tags=["SMS"])
@@ -243,7 +382,8 @@ async def save_sms_settings(
         "previous contract still validate. New client work should send an "
         "empty body.\n\n"
         "Returns `409` when no number is saved yet — save one through "
-        "`POST /sms/settings` first."
+        "`POST /sms/settings` first, and `409` when SMS summaries are "
+        "switched off on the account."
     ),
 )
 async def send_sms_summary(
@@ -261,6 +401,12 @@ async def send_sms_summary(
     request sends nothing and costs nothing, so spending the user's
     one-per-minute allowance on it would mean a client bug locks her out
     of the feature for a minute at a time.
+
+    **The ``sms_enabled`` toggle is honoured here too (issue #532).** It
+    used to be consulted on neither path — not by a scheduler, because
+    none existed, and not by this route, so a user who had explicitly
+    switched SMS summaries *off* could still be sent one. Whichever way
+    she set it, it changed nothing.
     """
     user_id = current_user["id"]
 
@@ -270,27 +416,8 @@ async def send_sms_summary(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
 
-    destination = registered_phone(user)
-    if not destination:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=(
-                "No phone number is saved on this account. "
-                "Save one in SMS settings before sending a summary."
-            ),
-        )
-
-    if not re.match(PHONE_PATTERN, destination):
-        # Reachable only for a document written before `POST /settings`
-        # validated the field. Better a clear 409 than handing Twilio a
-        # string it will reject with its own error.
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=(
-                "The phone number saved on this account is not in E.164 "
-                "format. Please save it again in SMS settings."
-            ),
-        )
+    destination = _resolve_destination(user)
+    _require_sms_enabled(user)
 
     if request.phone_number and request.phone_number != destination:
         raise HTTPException(
@@ -320,34 +447,139 @@ async def send_sms_summary(
     body_text = generate_cycle_sms_summary(user_id)
 
     try:
-        from twilio.rest import Client
-    except ImportError:
-        raise HTTPException(
-            status_code=status.HTTP_501_NOT_IMPLEMENTED,
-            detail="Twilio is not installed. Please install it with `pip install twilio`."
-        )
-
-    account_sid = os.getenv("TWILIO_ACCOUNT_SID")
-    auth_token = os.getenv("TWILIO_AUTH_TOKEN")
-    from_phone = os.getenv("TWILIO_PHONE_NUMBER")
-
-    if not account_sid or not auth_token or not from_phone:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Twilio credentials are not configured. Please set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and TWILIO_PHONE_NUMBER in .env."
-        )
-
-    try:
-        client = Client(account_sid, auth_token)
-        message = client.messages.create(
-            body=body_text,
-            from_=from_phone,
-            to=destination,
-        )
-        return {"message": "SMS sent successfully", "sid": message.sid}
-
+        sid = send_sms(destination, body_text)
+    except HTTPException:
+        # Already a considered status (501 no Twilio, 500 no credentials).
+        raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to send SMS: {str(e)}"
         )
+
+    # An on-demand send counts against the weekly cadence. Without this,
+    # a user who taps "Send now" on Monday is texted the same summary
+    # again by the scheduler on Tuesday, which reads as the app not
+    # knowing what it has already told her.
+    try:
+        sms_dispatch_service.mark_summary_sent(
+            user_id, datetime.now(timezone.utc)
+        )
+    except Exception as exc:  # pragma: no cover - defensive
+        # The message has gone out; failing the request now would tell her
+        # it did not. The only cost of a missing stamp is one extra
+        # scheduled summary.
+        logger.warning(
+            f"SMS sent for {user_id} but sms_last_sent_at was not written: {exc}"
+        )
+
+    return {"message": "SMS sent successfully", "sid": sid}
+
+
+@router.get(
+    "/preview",
+    response_model=SMSPreviewResponse,
+    summary="Preview the summary that would be sent",
+    description=(
+        "Returns the exact message body `POST /sms/send-summary` would "
+        "send right now, and the number it would go to.\n\n"
+        "Built by the same function that builds the real body, so a "
+        "preview cannot drift from what is actually sent. Reads only — it "
+        "sends nothing and is not rate-limited."
+    ),
+)
+async def preview_sms_summary(current_user: dict = Depends(get_current_user)):
+    """What is about to be texted about her body, before it is texted.
+
+    The web screen showed her own phone number in the element whose class
+    is `sms-preview`, so the destination occupied the space a preview
+    belongs in and the message itself was shown nowhere (issue #532).
+    """
+    user_id = current_user["id"]
+
+    user = UserService.get_user_by_id(user_id)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+
+    destination = _resolve_destination(user)
+    body = generate_cycle_sms_summary(user_id)
+
+    return {
+        "body": body,
+        "destination": destination,
+        "characters": len(body),
+        "enabled": bool(user.get("sms_enabled", False)),
+    }
+
+
+@router.post(
+    "/dispatch-due",
+    response_model=SMSDispatchResponse,
+    summary="Send one batch of scheduled summaries",
+    description=(
+        "Sends the recurring summary to every account that has SMS "
+        "summaries switched on, has a valid number saved, and has not "
+        "been sent one within the last "
+        f"{sms_dispatch_service.SMS_SUMMARY_INTERVAL_DAYS} days.\n\n"
+        "**Operational endpoint, not a user endpoint.** It is "
+        "authenticated by the `X-SMS-Dispatch-Token` header against the "
+        "`SMS_DISPATCH_TOKEN` environment variable, and returns `503` "
+        "when that variable is unset — a deployment that has not "
+        "configured a secret must not expose an unauthenticated way to "
+        "make the project send SMS.\n\n"
+        "Intended to be driven by whatever external scheduler the "
+        "deployment already has (a platform cron, a GitHub Action, a "
+        "systemd timer). Safe to call more often than the cadence: each "
+        "successful send stamps `sms_last_sent_at`, so a second call "
+        "finds nobody due.\n\n"
+        "Reports `sent`, `failed`, and `skipped` broken down by reason. "
+        "One user's failure never stops the batch."
+    ),
+)
+async def dispatch_due_summaries(
+    limit: int = Query(
+        sms_dispatch_service.DEFAULT_BATCH_LIMIT,
+        ge=1,
+        le=sms_dispatch_service.MAX_BATCH_LIMIT,
+        description="How many due accounts to send to in this batch.",
+    ),
+    x_sms_dispatch_token: Optional[str] = Header(
+        None, alias="X-SMS-Dispatch-Token"
+    ),
+):
+    """Run one batch.
+
+    Deliberately not behind ``get_current_user``: a cron job has no user
+    session, and giving it one would mean minting a long-lived token for
+    an account with the power to make the project text everybody. A shared
+    secret compared with ``secrets.compare_digest`` is the smaller thing
+    to hold.
+    """
+    expected = os.getenv("SMS_DISPATCH_TOKEN")
+    if not expected:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=(
+                "Scheduled SMS dispatch is not configured. Set "
+                "SMS_DISPATCH_TOKEN to enable it."
+            ),
+        )
+
+    # Constant-time, and the presence check is separate so a missing
+    # header is not compared against the secret at all.
+    if not x_sms_dispatch_token or not secrets.compare_digest(
+        x_sms_dispatch_token, expected
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid dispatch token",
+        )
+
+    report = sms_dispatch_service.dispatch_due(limit=limit)
+    logger.info(
+        f"Scheduled SMS batch: sent={report.sent} failed={report.failed} "
+        f"skipped={report.skipped}"
+    )
+    return report.to_dict()

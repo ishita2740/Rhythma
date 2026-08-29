@@ -32,6 +32,7 @@ import {
   sendSmsSummary,
   submitCycleLog,
   MAX_HISTORY_PAGE,
+  fetchSmsPreview,
 } from './endpoints';
 import { dashboardFixture, observationsFixture } from '../test/utils';
 
@@ -313,17 +314,36 @@ describe('sms', () => {
     expect(mockClient.post).toHaveBeenCalledWith('/sms/settings', settings);
   });
 
-  it('POSTs a summary with snake_case keys the backend expects', async () => {
-    // The SMSRequest model uses phone_number; sending phoneNumber here
-    // would 422 at runtime while type-checking cleanly.
+  it('POSTs a summary with an empty body — the server chooses both fields', async () => {
+    // Neither a destination nor a message is the client's to pick.
+    // `phone_number` used to be read from the live input field, so sending
+    // before saving produced a 403 telling the user her own number was not
+    // hers; `message` has been ignored server-side since #382 but was
+    // still built and sent, so this file described an SMS whose text
+    // nobody ever received (issue #532).
     mockClient.post.mockResolvedValue({ data: { message: 'ok', sid: 'SM1' } });
 
-    await sendSmsSummary('+919876543210', 'Your cycle summary');
+    await sendSmsSummary();
 
-    expect(mockClient.post).toHaveBeenCalledWith('/sms/send-summary', {
-      phone_number: '+919876543210',
-      message: 'Your cycle summary',
+    expect(mockClient.post).toHaveBeenCalledWith('/sms/send-summary', {});
+  });
+
+  it('GETs the preview the server generates', async () => {
+    // Not built client-side: a preview assembled from different data than
+    // the send path is a preview of a different message.
+    mockClient.get.mockResolvedValue({
+      data: {
+        body: 'Rhythma Summary: Cycle Day 12/28.',
+        destination: '+919876543210',
+        characters: 33,
+        enabled: true,
+      },
     });
+
+    const preview = await fetchSmsPreview();
+
+    expect(mockClient.get).toHaveBeenCalledWith('/sms/preview');
+    expect(preview.body).toContain('Rhythma Summary');
   });
 });
 
