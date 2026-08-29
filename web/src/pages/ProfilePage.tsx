@@ -8,6 +8,30 @@ import { useDocumentMeta } from '../lib/useDocumentMeta';
 
 const AVATAR_COLORS = ['#AA3BFF', '#E07AAD', '#52B3B0', '#E8946A', '#6A98E8', '#B3528A'];
 
+/**
+ * Why a save failed, in a sentence the user can act on.
+ *
+ * Three outcomes are worth telling apart. A 422 is the server rejecting a
+ * specific value and it says which — that detail is more useful than any
+ * generic sentence this file could write. Anything else with a response
+ * is a server-side problem she cannot fix by editing the form. No
+ * response at all means the request never left the device, which on a 2G
+ * handset is the common case and is the one where "try again" is genuine
+ * advice rather than a platitude.
+ */
+function friendlySaveError(error: unknown, t: (k: string) => string): string {
+  if (error && typeof error === 'object' && 'isAxiosError' in error) {
+    const axiosErr = error as {
+      response?: { status?: number; data?: { detail?: unknown } };
+    };
+    if (!axiosErr.response) return t('profile.saveOffline');
+    const detail = axiosErr.response.data?.detail;
+    if (axiosErr.response.status === 422 && typeof detail === 'string') return detail;
+    if (typeof detail === 'string' && detail) return detail;
+  }
+  return t('profile.saveFailed');
+}
+
 function phasePill(day: number | null, t: (k: string) => string): string {
   if (day == null) return '—';
   if (day <= 5) return t('profile.menstrual');
@@ -33,6 +57,7 @@ export function ProfilePage() {
   const [cycleLength, setCycleLength] = useState('');
   const [avatar, setAvatar] = useState(AVATAR_COLORS[0]);
   const [formErrors, setFormErrors] = useState<{ name?: string; age?: string; cycle?: string }>({});
+  const [saveError, setSaveError] = useState('');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -60,11 +85,13 @@ export function ProfilePage() {
     setCycleLength(profile?.cycle_length != null ? String(profile.cycle_length) : '');
     setAvatar(profile?.avatar || AVATAR_COLORS[0]);
     setFormErrors({});
+    setSaveError('');
     setEditing(true);
   };
 
   const submitEdit = async (e: FormEvent) => {
     e.preventDefault();
+    setSaveError('');
     const errors: typeof formErrors = {};
     if (!name.trim()) errors.name = t('profile.nameRequired');
     const ageNum = parseInt(age, 10);
@@ -76,6 +103,11 @@ export function ProfilePage() {
 
     setSaving(true);
     try {
+      // `null` means "remove this", and the server now honours it — it
+      // used to filter the payload with `if v is not None`, so an
+      // explicit null was indistinguishable from an omitted field and no
+      // value could be cleared at all (issue #533). Emptying the Age box
+      // and saving returned 200 and the old age.
       const updated = await patchProfile({
         full_name: name.trim() || null,
         age: age ? ageNum : null,
@@ -84,6 +116,15 @@ export function ProfilePage() {
       });
       setProfile(updated);
       setEditing(false);
+    } catch (err) {
+      // There was no catch here at all — `try`/`finally` only. A rejected
+      // save left the modal open with the button flipping back from
+      // "Saving…" to "Save changes" and nothing said anywhere, while the
+      // rejection propagated out of an async handler nothing awaited and
+      // landed in the console. Offline is the ordinary case for this
+      // app's users, and the screen it produced read as "your value was
+      // rejected".
+      setSaveError(friendlySaveError(err, t));
     } finally {
       setSaving(false);
     }
@@ -193,6 +234,12 @@ export function ProfilePage() {
               <input type="number" value={cycleLength} onChange={(e) => setCycleLength(e.target.value)} min={15} max={45} />
               {formErrors.cycle ? <span className="error-text">{formErrors.cycle}</span> : null}
             </label>
+
+            {saveError ? (
+              <p className="error-text" role="alert">
+                {saveError}
+              </p>
+            ) : null}
 
             <button type="submit" className="primary-btn full" disabled={saving}>
               {saving ? t('common.loading') : t('profile.saveChanges')}
