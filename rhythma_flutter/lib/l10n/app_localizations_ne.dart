@@ -220,6 +220,12 @@ class AppLocalizationsNe extends AppLocalizations {
   String get cyclePhaseLuteal => 'ल्युटियल';
 
   @override
+  String get cyclePhaseLate => 'Cycle running long';
+
+  @override
+  String get cyclePhaseUnknown => 'Not enough to say yet';
+
+  @override
   String get logFor => 'को लागि लग गर्नुहोस्';
 
   @override

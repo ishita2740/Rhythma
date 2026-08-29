@@ -95,6 +95,8 @@
   "cyclePhaseFollicular": "ᱯᱷᱳᱞᱤᱠᱩᱞᱟᱨ",
   "cyclePhaseOvulation": "ᱳᱵᱷᱭᱩᱞᱮᱥᱚᱱ",
   "cyclePhaseLuteal": "ᱞᱩᱴᱤᱭᱟᱞ",
+  "cyclePhaseLate": "Cycle running long",
+  "cyclePhaseUnknown": "Not enough to say yet",
   "logFor": "ᱞᱟᱹᱜᱤᱫ ᱞᱚᱜ ᱢᱮ",
   "logNone": "ᱪᱮᱫ ᱦᱚᱸ ᱵᱟᱝ",
   "logLight": "ᱦᱟᱞᱠᱟ",

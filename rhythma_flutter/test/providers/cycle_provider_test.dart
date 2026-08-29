@@ -109,13 +109,22 @@ void main() {
           provider.phaseColor(DateTime(2026, 2, 18)), RhythmaColors.coral);       // day 22 → luteal
     });
 
-    test('phase falls back to day-of-month when no last period is saved',
-        () async {
+    test('phase is unknown when there is no period to count from', () async {
+      // This used to fall back to `return date.day` — the calendar day of
+      // the month used as a day of cycle — so the 7th of any month was
+      // "Follicular" and the 20th "Luteal" for a user who had never logged
+      // or declared anything. That is the same confusion issue #92 was
+      // filed about; it was fixed for the anchored path and survived here
+      // as the no-anchor fallback.
+      //
+      // There is no cycle day without a period to count from, and saying
+      // so is the honest answer (#487).
       await Hive.box<Map>('user_profile').delete('profile');
       final provider = CycleProvider();
-      // 7th of the month -> day 7 -> Follicular.
-      expect(provider.phase(DateTime(2026, 3, 7), l10n), l10n.cyclePhaseFollicular);
-      expect(provider.phase(DateTime(2026, 3, 20), l10n), l10n.cyclePhaseLuteal);
+
+      expect(provider.phase(DateTime(2026, 3, 7), l10n), l10n.cyclePhaseUnknown);
+      expect(provider.phase(DateTime(2026, 3, 20), l10n), l10n.cyclePhaseUnknown);
+      expect(provider.cycleDayFor(DateTime(2026, 3, 7)), isNull);
     });
   });
 }

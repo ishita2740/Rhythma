@@ -90,6 +90,8 @@
   "cyclePhaseFollicular": "ફોલિક્યુલર",
   "cyclePhaseOvulation": "ઓવ્યુલેશન",
   "cyclePhaseLuteal": "લ્યુટિયલ",
+  "cyclePhaseLate": "ચક્ર લાંબું ચાલી રહ્યું છે",
+  "cyclePhaseUnknown": "હજુ કહેવા માટે પૂરતું નથી",
   "logFor": "માટે લૉગ",
   "logNone": "કોઈ નહીં",
   "logLight": "હળવું",

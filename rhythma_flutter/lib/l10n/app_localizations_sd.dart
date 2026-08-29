@@ -220,6 +220,12 @@ class AppLocalizationsSd extends AppLocalizations {
   String get cyclePhaseLuteal => 'ليويٽيل';
 
   @override
+  String get cyclePhaseLate => 'Cycle running long';
+
+  @override
+  String get cyclePhaseUnknown => 'Not enough to say yet';
+
+  @override
   String get logFor => 'لاءِ لاگ ڪريو';
 
   @override

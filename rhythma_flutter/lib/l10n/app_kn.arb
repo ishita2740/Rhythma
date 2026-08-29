@@ -63,6 +63,8 @@
   "cyclePhaseFollicular": "ಫಾಲಿಕುಲಾರ್",
   "cyclePhaseOvulation": "ಅಂಡೋತ್ಪತ್ತಿ",
   "cyclePhaseLuteal": "ಲ್ಯೂಟಿಯಲ್",
+  "cyclePhaseLate": "ಚಕ್ರ ದೀರ್ಘವಾಗಿ ಸಾಗುತ್ತಿದೆ",
+  "cyclePhaseUnknown": "ಹೇಳಲು ಇನ್ನೂ ಸಾಕಷ್ಟು ಮಾಹಿತಿ ಇಲ್ಲ",
   "logFor": "ದಾಖಲಿಸಿ:",
   "logNone": "ಇಲ್ಲ",
   "logLight": "ಹಗುರ",

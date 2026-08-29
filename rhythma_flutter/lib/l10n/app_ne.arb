@@ -95,6 +95,8 @@
   "cyclePhaseFollicular": "फोलिकुलर",
   "cyclePhaseOvulation": "ओभ्युलेसन",
   "cyclePhaseLuteal": "ल्युटियल",
+  "cyclePhaseLate": "Cycle running long",
+  "cyclePhaseUnknown": "Not enough to say yet",
   "logFor": "को लागि लग गर्नुहोस्",
   "logNone": "केहि छैन",
   "logLight": "हल्का",

@@ -227,6 +227,12 @@ class AppLocalizationsTa extends AppLocalizations {
   String get cyclePhaseLuteal => 'லூட்டியல்';
 
   @override
+  String get cyclePhaseLate => 'சுழற்சி நீண்டு செல்கிறது';
+
+  @override
+  String get cyclePhaseUnknown => 'இன்னும் சொல்ல முடியவில்லை';
+
+  @override
   String get logFor => 'பதிவு';
 
   @override

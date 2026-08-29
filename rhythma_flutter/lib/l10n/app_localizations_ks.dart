@@ -220,6 +220,12 @@ class AppLocalizationsKs extends AppLocalizations {
   String get cyclePhaseLuteal => 'ल्युटियल';
 
   @override
+  String get cyclePhaseLate => 'Cycle running long';
+
+  @override
+  String get cyclePhaseUnknown => 'Not enough to say yet';
+
+  @override
   String get logFor => 'खातरॖ लॉग करिव';
 
   @override

@@ -50,6 +50,8 @@
   "cyclePhaseFollicular": "ஃபோலிகுலர்",
   "cyclePhaseOvulation": "அண்டவிடுப்பு",
   "cyclePhaseLuteal": "லூட்டியல்",
+  "cyclePhaseLate": "சுழற்சி நீண்டு செல்கிறது",
+  "cyclePhaseUnknown": "இன்னும் சொல்ல முடியவில்லை",
   "logFor": "பதிவு",
   "logNone": "எதுவுமில்லை",
   "logLight": "லேசான",

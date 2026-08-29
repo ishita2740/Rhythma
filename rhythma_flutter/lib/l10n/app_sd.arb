@@ -95,6 +95,8 @@
   "cyclePhaseFollicular": "فوليڪيولر",
   "cyclePhaseOvulation": "اوويوليشن",
   "cyclePhaseLuteal": "ليويٽيل",
+  "cyclePhaseLate": "Cycle running long",
+  "cyclePhaseUnknown": "Not enough to say yet",
   "logFor": "لاءِ لاگ ڪريو",
   "logNone": "ڪجهه به نه",
   "logLight": "هلڪو",

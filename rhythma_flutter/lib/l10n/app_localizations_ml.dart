@@ -228,6 +228,12 @@ class AppLocalizationsMl extends AppLocalizations {
   String get cyclePhaseLuteal => 'ലൂട്ടിയൽ ഘട്ടം';
 
   @override
+  String get cyclePhaseLate => 'ചക്രം നീണ്ടുപോകുന്നു';
+
+  @override
+  String get cyclePhaseUnknown => 'പറയാൻ മാത്രം വിവരമില്ല';
+
+  @override
   String get logFor => 'രേഖപ്പെടുത്തുന്നത്:';
 
   @override

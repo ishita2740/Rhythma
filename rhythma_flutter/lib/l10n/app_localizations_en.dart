@@ -226,6 +226,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cyclePhaseLuteal => 'Luteal';
 
   @override
+  String get cyclePhaseLate => 'Cycle running long';
+
+  @override
+  String get cyclePhaseUnknown => 'Not enough to say yet';
+
+  @override
   String get logFor => 'Log for';
 
   @override

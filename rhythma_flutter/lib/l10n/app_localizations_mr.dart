@@ -228,6 +228,12 @@ class AppLocalizationsMr extends AppLocalizations {
   String get cyclePhaseLuteal => 'ल्युटियल';
 
   @override
+  String get cyclePhaseLate => 'चक्र लांबले आहे';
+
+  @override
+  String get cyclePhaseUnknown => 'अजून सांगण्याइतकी माहिती नाही';
+
+  @override
   String get logFor => 'साठी नोंदवा';
 
   @override

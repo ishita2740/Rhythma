@@ -228,6 +228,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get cyclePhaseLuteal => 'লুটেয়াল';
 
   @override
+  String get cyclePhaseLate => 'চক্র দীর্ঘ হচ্ছে';
+
+  @override
+  String get cyclePhaseUnknown => 'এখনও বলার মতো যথেষ্ট নয়';
+
+  @override
   String get logFor => 'এর জন্য লগ করুন';
 
   @override
