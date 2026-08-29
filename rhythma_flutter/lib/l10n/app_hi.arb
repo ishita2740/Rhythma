@@ -185,4 +185,9 @@
 "ayurvedaOvulationDescription": "कुछ आयुर्वेदिक परंपराएँ चक्र के मध्य को जीवन शक्ति और सामाजिक जुड़ाव से संबंधित समय के रूप में वर्णित करती हैं।",
 "ayurvedaLutealTitle": "स्थिरता और दिनचर्या",
 "ayurvedaLutealDescription": "आयुर्वेदिक स्वास्थ्य परंपराएँ चक्र के बाद के हिस्से में शांत दिनचर्या और जागरूक स्व-देखभाल पर जोर देती हैं।"
+
+  ,"logFlowVeryHeavy": "Very Heavy",
+  "logFlowSpotting": "Spotting",
+  "logSympSeverePain": "Severe Pain",
+  "logSympFainting": "Fainting"
 }

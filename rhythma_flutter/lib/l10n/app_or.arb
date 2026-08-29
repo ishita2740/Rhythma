@@ -322,5 +322,9 @@
   "deleteAccount": "ଆକାଉଣ୍ଟ୍ ଡିଲିଟ୍ କରନ୍ତୁ",
   "deleteAccountConfirmationTitle": "ଆକାଉଣ୍ଟ୍ ଡିଲିଟ୍ କରିବେ?",
   "deleteAccountConfirmationDesc": "ଏହି କାର୍ଯ୍ୟ ସ୍ଥାୟୀ ଅଟେ ଏବଂ ଏହାକୁ ଫେରାଇ ନିଆଯାଇପାରିବ ନାହିଁ। ଆପଣଙ୍କର ସମସ୍ତ ଡାଟା ପୋଛି ଦିଆଯିବ।",
-  "accountDeletedSuccess": "ଆକାଉଣ୍ଟ୍ ସଫଳତାର ସହ ଡିଲିଟ୍ ହୋଇଗଲା।"
+  "accountDeletedSuccess": "ଆକାଉଣ୍ଟ୍ ସଫଳତାର ସହ ଡିଲିଟ୍ ହୋଇଗଲା।",
+  "logFlowVeryHeavy": "ଅତ୍ୟଧିକ",
+  "logFlowSpotting": "ସ୍ପଟିଂ",
+  "logSympSeverePain": "ତୀବ୍ର ଯନ୍ତ୍ରଣା",
+  "logSympFainting": "ବେହୋସ ହେବା"
 }

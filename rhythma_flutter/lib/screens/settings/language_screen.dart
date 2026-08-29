@@ -5,39 +5,10 @@ import '../../config/theme.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/profile_provider.dart';
 import '../../components/shared.dart';
+import '../../config/supported_languages.dart';
 
 class LanguageScreen extends StatelessWidget {
   const LanguageScreen({super.key});
-
-  // Hardcoded names ki jagah sirf language codes rakhein
-  static const List<String> supportedLanguageCodes = [
-    'en',
-    'hi',
-    'ta',
-    'te',
-    'mr',
-    'gu',
-  ];
-
-  // l10n se localized language display name laane ke liye helper method
-  String _getLocalizedLanguageName(AppLocalizations l10n, String code) {
-    switch (code) {
-      case 'en':
-        return l10n.langEnglish;
-      case 'hi':
-        return l10n.langHindi;
-      case 'ta':
-        return l10n.langTamil;
-      case 'te':
-        return l10n.langTelugu;
-      case 'mr':
-        return l10n.langMarathi;
-      case 'gu':
-        return l10n.langGujarati;
-      default:
-        return code;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +30,11 @@ class LanguageScreen extends StatelessWidget {
         ),
         body: ListView.builder(
           padding: const EdgeInsets.all(20),
-          itemCount: supportedLanguageCodes.length,
+          itemCount: appSupportedLanguages.length,
           itemBuilder: (context, index) {
-            String langCode = supportedLanguageCodes[index];
-            String langName = _getLocalizedLanguageName(l10n, langCode);
+            final lang = appSupportedLanguages[index];
+            String langCode = lang.code;
+            String langName = lang.nativeName;
             bool isSelected = currentLocaleCode == langCode;
 
             return Padding(

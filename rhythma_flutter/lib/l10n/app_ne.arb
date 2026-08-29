@@ -322,5 +322,9 @@
   "deleteAccount": "खाता मेटाउनुहोस्",
   "deleteAccountConfirmationTitle": "खाता मेटाउने?",
   "deleteAccountConfirmationDesc": "यो कार्य स्थायी हो र पूर्ववत गर्न सकिँदैन। तपाईंको सबै डाटा मेटाइनेछ।",
-  "accountDeletedSuccess": "खाता सफलतापूर्वक मेटाइयो।"
+  "accountDeletedSuccess": "खाता सफलतापूर्वक मेटाइयो।",
+  "logFlowVeryHeavy": "Very Heavy",
+  "logFlowSpotting": "Spotting",
+  "logSympSeverePain": "Severe Pain",
+  "logSympFainting": "Fainting"
 }

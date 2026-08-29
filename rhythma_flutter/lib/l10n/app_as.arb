@@ -322,5 +322,9 @@
   "deleteAccount": "একাউণ্ট মচি পেলাওক",
   "deleteAccountConfirmationTitle": "একাউণ্ট মচি পেলাব নেকি?",
   "deleteAccountConfirmationDesc": "এই কাৰ্য স্থায়ী আৰু ইয়াক ঘূৰাই আনিব নোৱাৰি। আপোনাৰ সকলো তথ্য মচি পেলোৱা হ'ব।",
-  "accountDeletedSuccess": "একাউণ্ট সফলতাৰে মচি পেলোৱা হ'ল।"
+  "accountDeletedSuccess": "একাউণ্ট সফলতাৰে মচি পেলোৱা হ'ল।",
+  "logFlowVeryHeavy": "অতি বেছি",
+  "logFlowSpotting": "সামান্য ৰক্তপাত",
+  "logSympSeverePain": "তীব্ৰ বিষ",
+  "logSympFainting": "মূৰ্ছা যোৱা"
 }

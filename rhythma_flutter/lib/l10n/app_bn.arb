@@ -153,7 +153,7 @@
   "insightsRec1": "পিরিয়ড শুরু হওয়ার কাছাকাছি আয়রন সমৃদ্ধ খাবার যোগ করুন",
   "insightsRec2": "লুটেয়াল-ফেজ দিনগুলিতে 10 মিনিটের যোগব্যায়াম চেষ্টা করুন",
   "insightsRec3": "ডিম্বস্ফোটন সপ্তাহে 2.5L হাইড্রেট করুন",
-  "insightsDisclaimer": "এই তথ্যগুলি আপনার লগ করা ডেটার উপর ভিত্তি করে এবং শুধুমাত্র ব্যক্তিগত ট্র্যাকিংয়ের জন্য। এটি চিকিৎসা নির্ণয় নয় এবং যোগ্য স্বাস্থ্যসেবা পেশাদারের পরামর্শের বিকল্প নয়।",
+  "insightsDisclaimer": "These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional.",
   "profileTitle": "প্রোফাইল",
   "profileYearsOld": "বছর বয়সী",
   "profileCycleDay": "সাইকেল দিন",
@@ -325,5 +325,8 @@
   "deleteAccountConfirmationTitle": "অ্যাকাউন্ট মুছবেন?",
   "deleteAccountConfirmationDesc": "এই ক্রিয়াটি স্থায়ী এবং পূর্বাবস্থায় ফিরিয়ে আনা যাবে না। আপনার সমস্ত ডেটা মুছে ফেলা হবে।",
   "accountDeletedSuccess": "অ্যাকাউন্ট সফলভাবে মুছে ফেলা হয়েছে।",
-  "insightsDisclaimer": "These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional."
+  "logFlowVeryHeavy": "Very Heavy",
+  "logFlowSpotting": "Spotting",
+  "logSympSeverePain": "Severe Pain",
+  "logSympFainting": "Fainting"
 }

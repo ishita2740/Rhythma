@@ -30,7 +30,7 @@ DEFAULT_CYCLE_LENGTH = 28
 # recording no bleeding was fed to the model as an average period day.
 # Zero extends the existing ordinal scale in the only direction that makes
 # sense: none < light < medium < heavy.
-_FLOW_INTENSITY_TO_SCORE = {"none": 0, "light": 1, "medium": 2, "heavy": 3}
+_FLOW_INTENSITY_TO_SCORE = {"none": 0, "spotting": 1, "light": 1, "medium": 2, "heavy": 3, "very_heavy": 4}
 
 # What to assume when a log carries no flow intensity at all. Distinct from
 # `none`, which is a value the user chose: this is the absence of an answer,

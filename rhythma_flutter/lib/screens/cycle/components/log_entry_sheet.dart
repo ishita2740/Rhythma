@@ -270,6 +270,8 @@ class _LogEntrySheetState extends State<LogEntrySheet> {
                         _buildSymptomChip('Nausea', l10n.logSympNausea),
                         _buildSymptomChip('Acne', l10n.logSympAcne),
                         _buildSymptomChip('Back Pain', l10n.logSympBackPain),
+                        _buildSymptomChip('severe pain', l10n.logSympSeverePain ?? 'Severe Pain'),
+                        _buildSymptomChip('fainting', l10n.logSympFainting ?? 'Fainting'),
                       ],
                     ),
                     const SizedBox(height: 40),

@@ -51,7 +51,8 @@ class AppLocalizationsSat extends AppLocalizations {
   String get logOut => 'ᱞᱚᱜ ᱟᱣᱩᱴ';
 
   @override
-  String get logoutConfirmation => 'ᱪᱮᱫ ᱟᱢ ᱥᱟᱹᱨᱤ ᱜᱮ Rhythma ᱠᱷᱚᱱ ᱞᱚᱜ ᱟᱣᱩᱴ ᱥᱟᱱᱟᱭᱮᱫ ᱢᱮᱭᱟ?';
+  String get logoutConfirmation =>
+      'ᱪᱮᱫ ᱟᱢ ᱥᱟᱹᱨᱤ ᱜᱮ Rhythma ᱠᱷᱚᱱ ᱞᱚᱜ ᱟᱣᱩᱴ ᱥᱟᱱᱟᱭᱮᱫ ᱢᱮᱭᱟ?';
 
   @override
   String get cancel => 'ᱵᱟᱹᱛᱤᱞ';
@@ -103,7 +104,8 @@ class AppLocalizationsSat extends AppLocalizations {
   String get homeAiTitle => 'RHYTHMA AI';
 
   @override
-  String get homeAiSubtitle => 'ᱟᱢᱟᱜ ᱦᱚᱲᱢᱚ ᱵᱟᱵᱚᱫᱽ ᱛᱮ ᱡᱟᱦᱟᱸ ᱜᱮ ᱠᱩᱞᱤ ᱢᱮ,\nᱟᱢᱟᱜ ᱯᱟᱹᱨᱥᱤ ᱛᱮ᱾';
+  String get homeAiSubtitle =>
+      'ᱟᱢᱟᱜ ᱦᱚᱲᱢᱚ ᱵᱟᱵᱚᱫᱽ ᱛᱮ ᱡᱟᱦᱟᱸ ᱜᱮ ᱠᱩᱞᱤ ᱢᱮ,\nᱟᱢᱟᱜ ᱯᱟᱹᱨᱥᱤ ᱛᱮ᱾';
 
   @override
   String get homeAiPrompt => 'ᱤᱧᱟᱜ ᱯᱤᱨᱤᱭᱚᱰ ᱤᱨᱨᱮᱜᱩᱞᱟᱨ ᱪᱮᱫᱟᱜ ᱟ?';
@@ -130,10 +132,12 @@ class AppLocalizationsSat extends AppLocalizations {
   String get homeWeeklyInsightLabel => 'ᱣᱤᱠᱞᱤ ᱤᱱᱥᱟᱭᱤᱴ';
 
   @override
-  String get homeWeeklyInsightTitle => 'ᱱᱚᱣᱟ ᱦᱟᱯᱛᱟ ᱨᱮ ᱟᱢᱟᱜ ᱡᱟᱹᱯᱤᱫ 12% ᱵᱷᱟᱹᱜᱤ ᱟᱠᱟᱱᱟ — ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ ᱵᱷᱟᱹᱜᱤ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ᱾';
+  String get homeWeeklyInsightTitle =>
+      'ᱱᱚᱣᱟ ᱦᱟᱯᱛᱟ ᱨᱮ ᱟᱢᱟᱜ ᱡᱟᱹᱯᱤᱫ 12% ᱵᱷᱟᱹᱜᱤ ᱟᱠᱟᱱᱟ — ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ ᱵᱷᱟᱹᱜᱤ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ᱾';
 
   @override
-  String get homeWeeklyInsightDesc => 'ᱳᱵᱷᱭᱩᱞᱮᱥᱚᱱ ᱢᱟᱲᱟᱝ ᱨᱮ ᱞᱮᱛᱟᱲ ᱡᱤᱨᱟᱹᱣ ᱦᱚᱨᱢᱳᱱᱟᱞ ᱵᱮᱞᱮᱱᱥ ᱮ ᱥᱟᱯᱚᱨᱴᱟ᱾';
+  String get homeWeeklyInsightDesc =>
+      'ᱳᱵᱷᱭᱩᱞᱮᱥᱚᱱ ᱢᱟᱲᱟᱝ ᱨᱮ ᱞᱮᱛᱟᱲ ᱡᱤᱨᱟᱹᱣ ᱦᱚᱨᱢᱳᱱᱟᱞ ᱵᱮᱞᱮᱱᱥ ᱮ ᱥᱟᱯᱚᱨᱴᱟ᱾';
 
   @override
   String get homeLearnTitle => 'Rhythma ᱥᱟᱶ ᱪᱮᱫᱚᱜ ᱢᱮ';
@@ -166,29 +170,33 @@ class AppLocalizationsSat extends AppLocalizations {
 
   @override
   String homeUnderDevelopment(String topic) {
-    return '\$\\1 ᱫᱚ ᱱᱤᱛᱚᱜ ᱰᱮᱵᱷᱮᱞᱚᱯ ᱦᱩᱭᱩᱜ ᱠᱟᱱᱟ᱾';
+    return '$topic ᱫᱚ ᱱᱤᱛᱚᱜ ᱰᱮᱵᱷᱮᱞᱚᱯ ᱦᱩᱭᱩᱜ ᱠᱟᱱᱟ᱾';
   }
 
   @override
-  String get homeErrorNetwork => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱤᱱᱴᱟᱨᱱᱮᱴ ᱠᱟᱱᱮᱠᱥᱚᱱ ᱪᱮᱠ ᱢᱮ ᱟᱨ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
+  String get homeErrorNetwork =>
+      'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱤᱱᱴᱟᱨᱱᱮᱴ ᱠᱟᱱᱮᱠᱥᱚᱱ ᱪᱮᱠ ᱢᱮ ᱟᱨ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
-  String get homeErrorAuth => 'ᱟᱢᱟᱜ ᱥᱮᱥᱚᱱ ᱢᱩᱪᱟᱹᱫ ᱟᱠᱟᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱞᱚᱜ ᱤᱱ ᱢᱮ᱾';
+  String get homeErrorAuth =>
+      'ᱟᱢᱟᱜ ᱥᱮᱥᱚᱱ ᱢᱩᱪᱟᱹᱫ ᱟᱠᱟᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱞᱚᱜ ᱤᱱ ᱢᱮ᱾';
 
   @override
-  String get homeErrorServer => 'ᱟᱞᱮ ᱥᱮᱫ ᱠᱷᱚᱱ ᱡᱟᱦᱟᱸ ᱵᱟᱹᱲᱤᱡ ᱦᱩᱭᱮᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱛᱟᱭᱚᱢ ᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
+  String get homeErrorServer =>
+      'ᱟᱞᱮ ᱥᱮᱫ ᱠᱷᱚᱱ ᱡᱟᱦᱟᱸ ᱵᱟᱹᱲᱤᱡ ᱦᱩᱭᱮᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱛᱟᱭᱚᱢ ᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
-  String get homeErrorGeneric => 'ᱰᱟᱴᱟ ᱞᱳᱰ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
+  String get homeErrorGeneric =>
+      'ᱰᱟᱴᱟ ᱞᱳᱰ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
   String homeQuickLogTitle(String label) {
-    return 'ᱞᱚᱜ \$\\1';
+    return 'ᱞᱚᱜ $label';
   }
 
   @override
   String homeQuickLogSaved(String label, String value) {
-    return '\$\\1 ᱞᱚᱜ ᱮᱱᱟ: \$\\1';
+    return '$label ᱞᱚᱜ ᱮᱱᱟ: $value';
   }
 
   @override
@@ -310,7 +318,7 @@ class AppLocalizationsSat extends AppLocalizations {
 
   @override
   String assistantWelcome(String name) {
-    return 'ᱡᱚᱦᱟᱨ \$\\1 🌸 ᱤᱧ ᱫᱚ Rhythma ᱠᱟᱹᱱᱟᱹᱧ, ᱟᱢᱟᱜ ᱯᱨᱟᱭᱵᱷᱮᱴ ᱦᱮᱞᱛᱷ ᱜᱟᱛᱮ᱾ ᱤᱧ ᱴᱷᱮᱱ ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ, ᱞᱚᱠᱷᱚᱱ ᱥᱮ ᱦᱚᱲᱢᱚ ᱵᱟᱵᱚᱫᱽ ᱛᱮ ᱡᱟᱦᱟᱸ ᱜᱮ ᱠᱩᱞᱤ ᱢᱮ᱾';
+    return 'ᱡᱚᱦᱟᱨ $name 🌸 ᱤᱧ ᱫᱚ Rhythma ᱠᱟᱹᱱᱟᱹᱧ, ᱟᱢᱟᱜ ᱯᱨᱟᱭᱵᱷᱮᱴ ᱦᱮᱞᱛᱷ ᱜᱟᱛᱮ᱾ ᱤᱧ ᱴᱷᱮᱱ ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ, ᱞᱚᱠᱷᱚᱱ ᱥᱮ ᱦᱚᱲᱢᱚ ᱵᱟᱵᱚᱫᱽ ᱛᱮ ᱡᱟᱦᱟᱸ ᱜᱮ ᱠᱩᱞᱤ ᱢᱮ᱾';
   }
 
   @override
@@ -326,7 +334,8 @@ class AppLocalizationsSat extends AppLocalizations {
   String get assistantSug4 => 'PMS ᱨᱮ ᱜᱚᱲᱚᱭᱮᱢᱟᱜ ᱡᱚᱢᱟᱜᱠᱚ';
 
   @override
-  String get assistantSug5 => 'ᱤᱧᱟᱜ ᱯᱤᱨᱤᱭᱚᱰᱥ ᱤᱨᱨᱮᱜᱩᱞᱟᱨ ᱜᱮᱭᱟ — ᱪᱮᱫ ᱱᱚᱣᱟ ᱫᱚ ᱱᱚᱨᱢᱟᱞ ᱜᱮᱭᱟ?';
+  String get assistantSug5 =>
+      'ᱤᱧᱟᱜ ᱯᱤᱨᱤᱭᱚᱰᱥ ᱤᱨᱨᱮᱜᱩᱞᱟᱨ ᱜᱮᱭᱟ — ᱪᱮᱫ ᱱᱚᱣᱟ ᱫᱚ ᱱᱚᱨᱢᱟᱞ ᱜᱮᱭᱟ?';
 
   @override
   String get assistantDisclaimer =>
@@ -371,7 +380,8 @@ class AppLocalizationsSat extends AppLocalizations {
   String get insightsWellnessLabel => 'ᱣᱮᱞᱱᱮᱥ ᱨᱮᱠᱚᱢᱮᱱᱰᱮᱥᱚᱱ';
 
   @override
-  String get insightsRec1 => 'ᱯᱤᱨᱤᱭᱚᱰ ᱮᱦᱚᱵᱚᱜ ᱥᱩᱨ ᱨᱮ ᱟᱭᱨᱚᱱ ᱛᱮ ᱯᱮᱨᱮᱡ ᱡᱚᱢᱟᱜ ᱥᱮᱞᱮᱫ ᱢᱮ';
+  String get insightsRec1 =>
+      'ᱯᱤᱨᱤᱭᱚᱰ ᱮᱦᱚᱵᱚᱜ ᱥᱩᱨ ᱨᱮ ᱟᱭᱨᱚᱱ ᱛᱮ ᱯᱮᱨᱮᱡ ᱡᱚᱢᱟᱜ ᱥᱮᱞᱮᱫ ᱢᱮ';
 
   @override
   String get insightsRec2 => 'ᱞᱩᱴᱤᱭᱟᱞ-ᱯᱷᱮᱡ ᱫᱤᱱ ᱨᱮ 10-ᱢᱤᱱᱤᱴ ᱡᱳᱜᱟ ᱪᱮᱥᱴᱟᱭ ᱢᱮ';
@@ -456,16 +466,19 @@ class AppLocalizationsSat extends AppLocalizations {
   String get profileAddNew => 'ᱱᱟᱣᱟ ᱥᱮᱞᱮᱫ ᱢᱮ';
 
   @override
-  String get profileNoContacts => 'ᱱᱤᱛ ᱫᱷᱟᱹᱵᱤᱡ ᱡᱟᱦᱟᱸᱱᱟᱜ ᱤᱢᱟᱨᱡᱮᱱᱥᱤ ᱠᱚᱱᱴᱮᱠᱴ ᱵᱟᱝ ᱥᱮᱴ ᱟᱠᱟᱱᱟ᱾';
+  String get profileNoContacts =>
+      'ᱱᱤᱛ ᱫᱷᱟᱹᱵᱤᱡ ᱡᱟᱦᱟᱸᱱᱟᱜ ᱤᱢᱟᱨᱡᱮᱱᱥᱤ ᱠᱚᱱᱴᱮᱠᱴ ᱵᱟᱝ ᱥᱮᱴ ᱟᱠᱟᱱᱟ᱾';
 
   @override
   String get profileAgeInvalidError => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱩᱢᱮᱨ ᱮᱢ ᱢᱮ';
 
   @override
-  String get profileCycleInvalidError => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱥᱟᱭᱠᱮᱞ ᱡᱤᱞᱤᱧ ᱮᱢ ᱢᱮ';
+  String get profileCycleInvalidError =>
+      'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱥᱟᱭᱠᱮᱞ ᱡᱤᱞᱤᱧ ᱮᱢ ᱢᱮ';
 
   @override
-  String get profilePhoneInvalidError => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱮᱢ ᱢᱮ';
+  String get profilePhoneInvalidError =>
+      'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱮᱢ ᱢᱮ';
 
   @override
   String get contactNameRequiredError => 'ᱠᱚᱱᱴᱮᱠᱴ ᱧᱩᱛᱩᱢ ᱞᱟᱹᱠᱛᱤᱭᱟ';
@@ -504,7 +517,8 @@ class AppLocalizationsSat extends AppLocalizations {
   String get settingsContactDesc => 'ᱟᱞᱮᱭᱟᱜ ᱥᱟᱯᱚᱨᱴ ᱴᱤᱢ ᱴᱷᱮᱱ ᱤᱢᱮᱞ ᱵᱷᱮᱡᱟᱭ ᱢᱮ';
 
   @override
-  String get settingsEmailError => 'ᱤᱢᱮᱞ ᱮᱯ ᱵᱟᱝ ᱠᱷᱩᱞᱟᱹ ᱞᱮᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ support@rhythma.com ᱨᱮ ᱤᱢᱮᱞ ᱟᱞᱮ ᱢᱮ';
+  String get settingsEmailError =>
+      'ᱤᱢᱮᱞ ᱮᱯ ᱵᱟᱝ ᱠᱷᱩᱞᱟᱹ ᱞᱮᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ support@rhythma.com ᱨᱮ ᱤᱢᱮᱞ ᱟᱞᱮ ᱢᱮ';
 
   @override
   String get settingsData => 'ᱰᱟᱴᱟ';
@@ -513,13 +527,15 @@ class AppLocalizationsSat extends AppLocalizations {
   String get settingsExportData => 'ᱤᱧᱟᱜ ᱰᱟᱴᱟ ᱮᱠᱥᱯᱳᱨᱴ ᱢᱮ';
 
   @override
-  String get settingsExportDataDesc => 'ᱟᱢᱟᱜ ᱯᱨᱚᱯᱷᱟᱭᱤᱞ, ᱠᱚᱱᱴᱮᱠᱴᱥ ᱟᱨ ᱥᱟᱭᱠᱮᱞ ᱞᱚᱜᱥ JSON ᱞᱮᱠᱟᱛᱮ ᱰᱟᱣᱩᱱᱞᱳᱰ ᱢᱮ';
+  String get settingsExportDataDesc =>
+      'ᱟᱢᱟᱜ ᱯᱨᱚᱯᱷᱟᱭᱤᱞ, ᱠᱚᱱᱴᱮᱠᱴᱥ ᱟᱨ ᱥᱟᱭᱠᱮᱞ ᱞᱚᱜᱥ JSON ᱞᱮᱠᱟᱛᱮ ᱰᱟᱣᱩᱱᱞᱳᱰ ᱢᱮ';
 
   @override
   String get settingsExportSuccess => 'ᱰᱟᱴᱟ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱮᱠᱥᱯᱳᱨᱴ ᱮᱱᱟ';
 
   @override
-  String get onboardingPrivacyNote => 'ᱟᱢᱟᱜ ᱤᱱᱯᱷᱚᱨᱢᱮᱥᱚᱱ ᱟᱢᱟᱜ ᱰᱤᱵᱷᱟᱭᱤᱥ ᱨᱮᱜᱮ ᱛᱟᱦᱮᱸᱱᱟ᱾ ᱟᱞᱮ ᱟᱢᱟᱜ ᱯᱟᱨᱢᱤᱥᱚᱱ ᱵᱮᱜᱚᱨ ᱛᱤᱥ ᱦᱚᱸ ᱟᱢᱟᱜ ᱰᱟᱴᱟ ᱵᱟᱞᱮ ᱥᱮᱭᱟᱨᱟ᱾';
+  String get onboardingPrivacyNote =>
+      'ᱟᱢᱟᱜ ᱤᱱᱯᱷᱚᱨᱢᱮᱥᱚᱱ ᱟᱢᱟᱜ ᱰᱤᱵᱷᱟᱭᱤᱥ ᱨᱮᱜᱮ ᱛᱟᱦᱮᱸᱱᱟ᱾ ᱟᱞᱮ ᱟᱢᱟᱜ ᱯᱟᱨᱢᱤᱥᱚᱱ ᱵᱮᱜᱚᱨ ᱛᱤᱥ ᱦᱚᱸ ᱟᱢᱟᱜ ᱰᱟᱴᱟ ᱵᱟᱞᱮ ᱥᱮᱭᱟᱨᱟ᱾';
 
   @override
   String get onboardingNext => 'ᱛᱟᱭᱚᱢ';
@@ -537,13 +553,15 @@ class AppLocalizationsSat extends AppLocalizations {
   String get onboardingStep1Title => 'ᱟᱢᱟᱜ ᱯᱟᱹᱨᱥᱤ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
 
   @override
-  String get onboardingStep1Subtitle => 'ᱡᱟᱦᱟᱸ ᱯᱟᱹᱨᱥᱤ ᱛᱮ ᱟᱢ ᱡᱟᱹᱥᱛᱤ ᱠᱚᱢᱯᱷᱚᱨᱴᱮᱵᱚᱞ ᱢᱮᱱᱟᱢᱟ ᱚᱱᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
+  String get onboardingStep1Subtitle =>
+      'ᱡᱟᱦᱟᱸ ᱯᱟᱹᱨᱥᱤ ᱛᱮ ᱟᱢ ᱡᱟᱹᱥᱛᱤ ᱠᱚᱢᱯᱷᱚᱨᱴᱮᱵᱚᱞ ᱢᱮᱱᱟᱢᱟ ᱚᱱᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
 
   @override
   String get onboardingStep2Title => 'ᱟᱢ ᱵᱟᱵᱚᱫᱽ ᱛᱮ ᱞᱟᱹᱭ ᱟᱞᱮ ᱢᱮ';
 
   @override
-  String get onboardingStep2Subtitle => 'ᱱᱚᱣᱟ ᱫᱚ ᱟᱢᱟᱜ ᱮᱠᱥᱯᱤᱨᱤᱭᱮᱱᱥ ᱯᱟᱨᱥᱚᱱᱟᱞᱟᱭᱤᱡᱽ ᱨᱮ ᱜᱚᱲᱚᱭ ᱮᱢᱚᱜ-ᱟ';
+  String get onboardingStep2Subtitle =>
+      'ᱱᱚᱣᱟ ᱫᱚ ᱟᱢᱟᱜ ᱮᱠᱥᱯᱤᱨᱤᱭᱮᱱᱥ ᱯᱟᱨᱥᱚᱱᱟᱞᱟᱭᱤᱡᱽ ᱨᱮ ᱜᱚᱲᱚᱭ ᱮᱢᱚᱜ-ᱟ';
 
   @override
   String get onboardingNameHint => 'ᱟᱢᱟᱜ ᱧᱩᱛᱩᱢ ᱥᱮ ᱱᱤᱠᱱᱮᱢ';
@@ -567,7 +585,8 @@ class AppLocalizationsSat extends AppLocalizations {
   String get onboardingStep3Title => 'ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ';
 
   @override
-  String get onboardingStep3Subtitle => 'ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ ᱵᱩᱡᱷᱟᱹᱣ ᱨᱮ ᱟᱞᱮ ᱜᱚᱲᱚ ᱟᱞᱮ ᱢᱮ — ᱡᱩᱫᱤ ᱥᱤᱣᱚᱨ ᱵᱟᱹᱱᱩᱢᱟ ᱮᱱᱠᱷᱟᱱ ᱥᱠᱤᱯ ᱫᱟᱲᱮᱭᱟᱜ-ᱟᱢ';
+  String get onboardingStep3Subtitle =>
+      'ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ ᱵᱩᱡᱷᱟᱹᱣ ᱨᱮ ᱟᱞᱮ ᱜᱚᱲᱚ ᱟᱞᱮ ᱢᱮ — ᱡᱩᱫᱤ ᱥᱤᱣᱚᱨ ᱵᱟᱹᱱᱩᱢᱟ ᱮᱱᱠᱷᱟᱱ ᱥᱠᱤᱯ ᱫᱟᱲᱮᱭᱟᱜ-ᱟᱢ';
 
   @override
   String get onboardingLastPeriodLabel => 'ᱢᱩᱪᱟᱹᱫ ᱯᱤᱨᱤᱭᱚᱰ ᱮᱦᱚᱵᱚᱜ ᱢᱟᱹᱦᱤᱛ';
@@ -591,7 +610,8 @@ class AppLocalizationsSat extends AppLocalizations {
   String get onboardingStep4Title => 'ᱟᱨᱦᱚᱸ ᱠᱤᱪᱷᱩ (ᱚᱯᱥᱚᱱᱟᱞ)';
 
   @override
-  String get onboardingStep4Subtitle => 'ᱨᱤᱡᱤᱭᱚᱱ-ᱥᱯᱮᱥᱤᱯᱷᱤᱠ ᱣᱮᱞᱱᱮᱥ ᱴᱤᱯᱥ ᱨᱮᱠᱚᱢᱮᱱᱰ ᱨᱮ ᱜᱚᱲᱚᱭ ᱮᱢᱚᱜ-ᱟ';
+  String get onboardingStep4Subtitle =>
+      'ᱨᱤᱡᱤᱭᱚᱱ-ᱥᱯᱮᱥᱤᱯᱷᱤᱠ ᱣᱮᱞᱱᱮᱥ ᱴᱤᱯᱥ ᱨᱮᱠᱚᱢᱮᱱᱰ ᱨᱮ ᱜᱚᱲᱚᱭ ᱮᱢᱚᱜ-ᱟ';
 
   @override
   String get onboardingPhoneLabel => 'ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ (ᱚᱯᱥᱚᱱᱟᱞ)';
@@ -609,154 +629,95 @@ class AppLocalizationsSat extends AppLocalizations {
   String get onboardingStep5Title => 'ᱟᱯᱰᱮᱴ ᱛᱟᱦᱮᱸᱱ ᱢᱮ';
 
   @override
-  String get onboardingStep5Subtitle => 'ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱮᱱᱮᱵᱚᱞ ᱢᱮ ᱡᱟᱛᱮ Rhythma ᱥᱚᱴᱷᱤᱠ ᱚᱠᱛᱚ ᱨᱮ ᱩᱭᱦᱟᱹᱨ ᱮᱢᱟᱢᱟᱭ';
+  String get onboardingStep5Subtitle =>
+      'ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱮᱱᱮᱵᱚᱞ ᱢᱮ ᱡᱟᱛᱮ Rhythma ᱥᱚᱴᱷᱤᱠ ᱚᱠᱛᱚ ᱨᱮ ᱩᱭᱦᱟᱹᱨ ᱮᱢᱟᱢᱟᱭ';
 
   @override
   String get onboardingEnableNotifications => 'ᱥᱟᱭᱠᱮᱞ ᱨᱤᱢᱟᱭᱤᱱᱰᱟᱨ ᱮᱱᱮᱵᱚᱞ ᱢᱮ';
 
   @override
-  String get onboardingNotificationsDesc => 'ᱟᱢᱟᱜ ᱯᱤᱨᱤᱭᱚᱰ ᱟᱨ ᱳᱵᱷᱭᱩᱞᱮᱥᱚᱱ ᱣᱤᱱᱰᱳ ᱢᱟᱲᱟᱝ ᱨᱮ ᱦᱟᱞᱠᱟ ᱨᱤᱢᱟᱭᱤᱱᱰᱟᱨ ᱧᱟᱢ ᱢᱮ';
+  String get onboardingNotificationsDesc =>
+      'ᱟᱢᱟᱜ ᱯᱤᱨᱤᱭᱚᱰ ᱟᱨ ᱳᱵᱷᱭᱩᱞᱮᱥᱚᱱ ᱣᱤᱱᱰᱳ ᱢᱟᱲᱟᱝ ᱨᱮ ᱦᱟᱞᱠᱟ ᱨᱤᱢᱟᱭᱤᱱᱰᱟᱨ ᱧᱟᱢ ᱢᱮ';
 
   @override
-  String get onboardingDataConsentLabel => 'ᱤᱧ ᱱᱚᱣᱟ ᱰᱤᱵᱷᱟᱭᱤᱥ ᱨᱮ ᱤᱧᱟᱜ ᱦᱮᱞᱛᱷ ᱰᱟᱴᱟ ᱞᱳᱠᱟᱞᱤ ᱥᱴᱳᱨ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱦᱢᱚᱛᱤᱧ ᱮᱢᱮᱫᱟ';
+  String get onboardingDataConsentLabel =>
+      'ᱤᱧ ᱱᱚᱣᱟ ᱰᱤᱵᱷᱟᱭᱤᱥ ᱨᱮ ᱤᱧᱟᱜ ᱦᱮᱞᱛᱷ ᱰᱟᱴᱟ ᱞᱳᱠᱟᱞᱤ ᱥᱴᱳᱨ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱦᱢᱚᱛᱤᱧ ᱮᱢᱮᱫᱟ';
 
   @override
-  String get onboardingDataConsentRequired => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱞᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ ᱮᱠᱥᱮᱯᱴ ᱢᱮ';
+  String get onboardingDataConsentRequired =>
+      'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱞᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ ᱮᱠᱥᱮᱯᱴ ᱢᱮ';
 
   @override
   String get onboardingNameRequired => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱧᱩᱛᱩᱢ ᱮᱢ ᱢᱮ';
 
   @override
-  String get onboardingAgeInvalid => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱩᱢᱮᱨ ᱮᱢ ᱢᱮ (10–120)';
+  String get onboardingAgeInvalid =>
+      'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱩᱢᱮᱨ ᱮᱢ ᱢᱮ (10–120)';
 
   @override
-  String get onboardingHeightInvalid => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱩᱥᱩᱞ ᱮᱢ ᱢᱮ (50–250 cm)';
+  String get onboardingHeightInvalid =>
+      'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱩᱥᱩᱞ ᱮᱢ ᱢᱮ (50–250 cm)';
 
   @override
-  String get onboardingWeightInvalid => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱦᱟᱢᱟᱞ ᱮᱢ ᱢᱮ (20–300 kg)';
+  String get onboardingWeightInvalid =>
+      'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱦᱟᱢᱟᱞ ᱮᱢ ᱢᱮ (20–300 kg)';
 
   @override
-  String get onboardingPhoneInvalid => 'ᱤᱱᱴᱟᱨᱱᱮᱥᱱᱟᱞ ᱯᱷᱚᱨᱢᱮᱴ ᱵᱮᱵᱷᱟᱨ ᱢᱮ, ᱡᱮᱞᱮᱠᱟ +919876543210';
-
-  @override
-  String get onboardingAgeRequired => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱩᱢᱮᱨ ᱮᱢ ᱢᱮ ᱥᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱨᱮᱱᱡᱽ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
-
-  @override
-  String get onboardingHeightRequired => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱩᱥᱩᱞ ᱮᱢ ᱢᱮ ᱥᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱨᱮᱱᱡᱽ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
-
-  @override
-  String get onboardingWeightRequired => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱦᱟᱢᱟᱞ ᱮᱢ ᱢᱮ ᱥᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱨᱮᱱᱡᱽ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
-
-  @override
-  String get onboardingNotSure => 'ᱥᱤᱣᱚᱨ ᱵᱟᱹᱱᱩᱜ-ᱟ';
-
-  @override
-  String get onboardingApproximate => 'ᱟᱱᱩᱢᱟᱱᱤᱠ';
-
-  @override
-  String get onboardingAgeHint => 'ᱟᱢᱟᱜ ᱩᱢᱮᱨ ᱮᱢ ᱢᱮ';
-
-  @override
-  String get onboardingAgeUnit => 'ᱥᱮᱨᱢᱟ';
-
-  @override
-  String get onboardingHeightHint => 'ᱟᱢᱟᱜ ᱩᱥᱩᱞ ᱮᱢ ᱢᱮ';
-
-  @override
-  String get onboardingHeightUnit => 'cm';
-
-  @override
-  String get onboardingWeightHint => 'ᱟᱢᱟᱜ ᱦᱟᱢᱟᱞ ᱮᱢ ᱢᱮ';
-
-  @override
-  String get onboardingWeightUnit => 'kg';
-
-  @override
-  String get onboardingRangeUnder18 => '18 ᱠᱷᱚᱱ ᱠᱚᱢ';
-
-  @override
-  String get onboardingRange18to25 => '18–25';
-
-  @override
-  String get onboardingRange26to35 => '26–35';
-
-  @override
-  String get onboardingRange36to50 => '36–50';
-
-  @override
-  String get onboardingRange51to65 => '51–65';
-
-  @override
-  String get onboardingRangeOver65 => '65 ᱠᱷᱚᱱ ᱡᱟᱹᱥᱛᱤ';
-
-  @override
-  String get onboardingRangeUnder150 => '150 cm ᱠᱷᱚᱱ ᱠᱚᱢ';
-
-  @override
-  String get onboardingRange150to160 => '150–160 cm';
-
-  @override
-  String get onboardingRange161to170 => '161–170 cm';
-
-  @override
-  String get onboardingRange171to180 => '171–180 cm';
-
-  @override
-  String get onboardingRangeOver180 => '180 cm ᱠᱷᱚᱱ ᱡᱟᱹᱥᱛᱤ';
-
-  @override
-  String get onboardingRangeUnder50kg => '50 kg ᱠᱷᱚᱱ ᱠᱚᱢ';
-
-  @override
-  String get onboardingRange50to65kg => '50–65 kg';
-
-  @override
-  String get onboardingRange66to80kg => '66–80 kg';
-
-  @override
-  String get onboardingRange81to100kg => '81–100 kg';
-
-  @override
-  String get onboardingRangeOver100kg => '100 kg ᱠᱷᱚᱱ ᱡᱟᱹᱥᱛᱤ';
+  String get onboardingPhoneInvalid =>
+      'ᱤᱱᱴᱟᱨᱱᱮᱥᱱᱟᱞ ᱯᱷᱚᱨᱢᱮᱴ ᱵᱮᱵᱷᱟᱨ ᱢᱮ, ᱡᱮᱞᱮᱠᱟ +919876543210';
 
   @override
   String get onboardingTapToSelectDate => 'ᱢᱟᱹᱦᱤᱛ ᱵᱟᱪᱷᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱴᱮᱯ ᱢᱮ';
 
   @override
-  String get onboardingDays => 'ᱫᱤନ';
+  String get langGujarati => 'ગુજરાતી (Gujarati)';
 
   @override
-  String get onboardingApproximateLabel => 'ᱟᱢᱟᱜ ᱢᱩᱪᱟᱹᱫ ᱯᱤᱨᱤᱭᱚᱰ ᱛᱤᱥ ᱛᱟᱦᱮᱸ ᱠᱟᱱᱟ?';
+  String get deleteAccount => 'ᱮᱠᱟᱣᱩᱱᱴ ᱰᱤᱞᱤᱴ ᱢᱮ';
 
   @override
-  String get onboardingApproximateLessWeek => 'ᱢᱤᱫ ᱦᱟᱯᱛᱟ ᱠᱷᱚᱱ ᱠᱚᱢ ᱢᱟᱲᱟᱝ';
+  String get deleteAccountConfirmationDesc =>
+      'ᱱᱚᱣᱟ ᱠᱟᱹᱢᱤ ᱫᱚ ᱯᱟᱨᱢᱟᱱᱮᱱᱴ ᱠᱟᱱᱟ ᱟᱨ ᱱᱚᱣᱟ ᱫᱚ ᱟᱨᱦᱚᱸ ᱨᱩᱣᱟᱹᱲ ᱵᱟᱝ ᱜᱟᱱᱚᱜ-ᱟ᱾ ᱟᱢᱟᱜ ᱥᱟᱱᱟᱢ ᱰᱟᱴᱟ ᱢᱮᱴᱟᱣ ᱜᱤᱰᱤᱜ-ᱟ᱾';
 
   @override
-  String get onboardingApproximate1to2Weeks => '1–2 ᱦᱟᱯᱛᱟ ᱢᱟᱲᱟᱝ';
+  String get accountDeletedSuccess => 'ᱮᱠᱟᱣᱩᱱᱴ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱰᱤᱞᱤᱴ ᱮᱱᱟ᱾';
 
   @override
-  String get onboardingApproximate3to4Weeks => '3–4 ᱦᱟᱯᱛᱟ ᱢᱟᱲᱟᱝ';
+  String get smsErrorGeneric =>
+      'ᱡᱟᱦᱟᱸ ᱵᱟᱹᱲᱤᱡ ᱦᱩᱭᱮᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
-  String get onboardingApproximateMoreMonth => 'ᱢᱤᱫ ᱪᱟᱸᱫᱚ ᱠᱷᱚᱱ ᱡᱟᱹᱥᱛᱤ ᱢᱟᱲᱟᱝ';
+  String get smsErrorEnterPhone => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱮᱢ ᱢᱮ';
 
   @override
-  String get onboardingPickExactDate => 'ᱱᱚᱣᱟ ᱵᱚᱫᱚᱞ ᱛᱮ ᱥᱚᱴᱷᱤᱠ ᱢᱟᱹᱦᱤᱛ ᱵᱟᱪᱷᱟᱣ ᱢᱮ';
+  String get smsErrorInvalidPhone =>
+      'ᱤᱱᱴᱟᱨᱱᱮᱥᱱᱟᱞ ᱯᱷᱚᱨᱢᱮᱴ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱮᱢ ᱢᱮ, ᱡᱮᱞᱮᱠᱟ +919876543210';
 
   @override
-  String get onboardingLastPeriodRequired => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱡᱮ ᱟᱢᱟᱜ ᱢᱩᱪᱟᱹᱫ ᱯᱤᱨᱤᱭᱚᱰ ᱛᱤᱥ ᱮᱦᱚᱵ ᱞᱮᱱᱟ';
+  String get smsSuccessSaved => 'SMS ᱥᱮᱴᱤᱝᱥ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱥᱮᱵᱷ ᱮᱱᱟ!';
 
   @override
-  String get nudgeCompleteProfileTitle => 'ᱟᱨᱦᱚᱸ ᱥᱚᱴᱷᱤᱠ ᱯᱨᱮᱰᱤᱠᱥᱚᱱ ᱥᱟᱱᱟᱭᱮᱫ ᱢᱮᱭᱟ?';
+  String get smsErrorAddPhoneFirst =>
+      'ᱢᱟᱲᱟᱝ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱥᱮᱞᱮᱫ ᱢᱮ ᱟᱨ ᱥᱮᱵᱷ ᱢᱮ';
 
   @override
-  String get nudgeCompleteProfileBody => 'ᱥᱟᱭᱠᱮᱞ ᱯᱨᱮᱰᱤᱠᱥᱚᱱ ᱵᱷᱟᱹᱜᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱢᱟᱜ ᱢᱩᱪᱟᱹᱫ ᱯᱤᱨᱤᱭᱚᱰ ᱮᱦᱚᱵᱚᱜ ᱨᱮᱭᱟᱜ ᱥᱚᱴᱷᱤᱠ ᱢᱟᱹᱦᱤᱛ ᱥᱮᱞᱮᱫ ᱢᱮ᱾';
+  String get smsSummaryMessage =>
+      '🌸 Rhythma ᱦᱮᱞᱛᱷ ᱥᱟᱢᱟᱨᱤ\nᱱᱚᱣᱟ ᱫᱚ Rhythma ᱠᱷᱚᱱ ᱟᱢᱟᱜ ᱚᱱ-ᱰᱤᱢᱟᱱᱰ ᱥᱟᱢᱟᱨᱤ ᱠᱟᱱᱟ᱾\nᱟᱢᱟᱜ ᱞᱮᱴᱮᱥᱴ ᱥᱟᱭᱠᱮᱞ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱞᱟᱹᱜᱤᱫ ᱮᱯ ᱠᱷᱩᱞᱟᱹᱣ ᱢᱮ᱾\nᱟᱱᱥᱟᱵᱽᱥᱠᱨᱟᱭᱤᱵᱽ ᱞᱟᱹᱜᱤᱫ STOP ᱨᱤᱯᱞᱟᱭ ᱢᱮ᱾';
 
   @override
-  String get nudgeCompleteProfileAction => 'ᱟᱯᱰᱮᱴ';
+  String get smsSuccessSent => 'ᱟᱢᱟᱜ ᱯᱷᱳᱱ ᱨᱮ ᱥᱟᱢᱟᱨᱤ ᱵᱷᱮᱡᱟ ᱮᱱᱟ!';
 
   @override
-  String get nudgeCompleteProfileDismiss => 'ᱯᱟᱞᱮᱱ ᱛᱟᱭᱚᱢ ᱛᱮ';
+  String get smsErrorRateLimit =>
+      'ᱟᱢ ᱢᱤᱫ ᱢᱤᱱᱤᱴ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱢᱟᱨᱤᱢ ᱵᱷᱮᱡᱟ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ, ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱠᱤᱪᱷᱩ ᱚᱠᱛᱚ ᱛᱟᱺᱜᱤ ᱢᱮ ᱟᱨ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
+
+  @override
+  String get smsErrorSessionExpired =>
+      'ᱟᱢᱟᱜ ᱥᱮᱥᱚᱱ ᱢᱩᱪᱟᱹᱫ ᱟᱠᱟᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱞᱚᱜ ᱤᱱ ᱢᱮ᱾';
+
+  @override
+  String get smsErrorNetwork =>
+      'ᱥᱟᱨᱵᱷᱟᱨ ᱥᱟᱶ ᱠᱟᱱᱮᱠᱴ ᱵᱟᱝ ᱦᱩᱭ ᱞᱮᱱᱟ᱾ ᱟᱢᱟᱜ ᱠᱟᱱᱮᱠᱥᱚᱱ ᱪᱮᱠ ᱢᱮ ᱟᱨ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
   String get smsScreenTitle => 'SMS ᱥᱟᱢᱟᱨᱤᱠᱚ';
@@ -768,7 +729,8 @@ class AppLocalizationsSat extends AppLocalizations {
   String get smsInfoCardTitle => 'ᱣᱤᱠᱞᱤ ᱦᱮᱞᱛᱷ ᱥᱟᱢᱟᱨᱤ';
 
   @override
-  String get smsInfoCardBody => 'ᱦᱟᱯᱛᱟ ᱯᱤᱪᱷᱤ, Rhythma ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ ᱥᱴᱮᱴᱟᱥ, ᱦᱮᱞᱛᱷ ᱥᱠᱳᱨ ᱟᱨ ᱡᱟᱦᱟᱸᱱᱟᱜ ᱞᱟᱹᱠᱛᱤᱭᱟᱱ ᱯᱮᱴᱟᱨᱱ ᱨᱮᱭᱟᱜ ᱢᱤᱫᱴᱟᱹᱝ ᱠᱷᱟᱴᱚ ᱥᱟᱢᱟᱨᱤ SMS ᱛᱟᱞᱟ ᱛᱮ ᱥᱚᱡᱷᱮ ᱟᱢᱟᱜ ᱯᱷᱳᱱ ᱨᱮ ᱵᱷᱮᱡᱟᱭᱟᱭ᱾ ᱰᱟᱴᱟ ᱥᱮ ᱮᱯ ᱵᱮᱜᱚᱨ ᱠᱟᱹᱢᱤᱭᱟ᱾';
+  String get smsInfoCardBody =>
+      'ᱦᱟᱯᱛᱟ ᱯᱤᱪᱷᱤ, Rhythma ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ ᱥᱴᱮᱴᱟᱥ, ᱦᱮᱞᱛᱷ ᱥᱠᱳᱨ ᱟᱨ ᱡᱟᱦᱟᱸᱱᱟᱜ ᱞᱟᱹᱠᱛᱤᱭᱟᱱ ᱯᱮᱴᱟᱨᱱ ᱨᱮᱭᱟᱜ ᱢᱤᱫᱴᱟᱹᱝ ᱠᱷᱟᱴᱚ ᱥᱟᱢᱟᱨᱤ SMS ᱛᱟᱞᱟ ᱛᱮ ᱥᱚᱡᱷᱮ ᱟᱢᱟᱜ ᱯᱷᱳᱱ ᱨᱮ ᱵᱷᱮᱡᱟᱭᱟᱭ᱾ ᱰᱟᱴᱟ ᱥᱮ ᱮᱯ ᱵᱮᱜᱚᱨ ᱠᱟᱹᱢᱤᱭᱟ᱾';
 
   @override
   String get smsConfigTitle => 'ᱠᱚᱱᱯᱷᱤᱜᱟᱨᱮᱥᱚᱱ';
@@ -792,57 +754,28 @@ class AppLocalizationsSat extends AppLocalizations {
   String get smsSendRecipientPrefix => 'ᱞᱟᱛᱟᱨ ᱨᱮᱭᱟᱜ ᱢᱮᱥᱮᱡᱽ ᱵᱷᱮᱡᱟᱭᱮᱫᱟᱭ:';
 
   @override
-  String get smsSendNoPhone => 'ᱢᱟᱲᱟᱝ ᱪᱮᱛᱟᱱ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱥᱮᱞᱮᱫ ᱢᱮ ᱟᱨ ᱥᱮᱵᱷ ᱢᱮ᱾';
+  String get smsSendNoPhone =>
+      'ᱢᱟᱲᱟᱝ ᱪᱮᱛᱟᱱ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱥᱮᱞᱮᱫ ᱢᱮ ᱟᱨ ᱥᱮᱵᱷ ᱢᱮ᱾';
 
   @override
   String get smsSendButton => 'ᱱᱤᱛᱚᱜ ᱥᱟᱢᱟᱨᱤ ᱵᱷᱮᱡᱟᱭ ᱢᱮ';
 
   @override
-  String get smsErrorEnterPhone => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱮᱢ ᱢᱮ';
+  String get insightsNotEnoughData =>
+      'ᱟᱢᱟᱜ ᱯᱩᱨᱟᱹ ᱦᱮᱞᱛᱷ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱟᱱᱞᱚᱠ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱠᱮᱞ ᱴᱮᱵᱽ ᱨᱮ ᱟᱨᱦᱚᱸ ᱠᱤᱪᱷᱩ ᱥᱟᱭᱠᱮᱞ ᱞᱚᱜ ᱢᱮ᱾';
 
   @override
-  String get smsErrorInvalidPhone => 'ᱤᱱᱴᱟᱨᱱᱮᱥᱱᱟᱞ ᱯᱷᱚᱨᱢᱮᱴ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱮᱢ ᱢᱮ, ᱡᱮᱞᱮᱠᱟ +919876543210';
+  String get insightsNoSymptomsYet =>
+      'ᱱᱤᱛ ᱫᱷᱟᱹᱵᱤᱡ ᱡᱟᱦᱟᱸᱱᱟᱜ ᱞᱚᱠᱷᱚᱱ ᱵᱟᱝ ᱞᱚᱜ ᱟᱠᱟᱱᱟ — ᱱᱚᱸᱰᱮ ᱯᱮᱴᱟᱨᱱᱠᱚ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱠᱮᱞ ᱴᱮᱵᱽ ᱨᱮ ᱠᱤᱪᱷᱩ ᱞᱚᱜ ᱢᱮ᱾';
 
   @override
-  String get smsSuccessSaved => 'SMS ᱥᱮᱴᱤᱝᱥ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱥᱮᱵᱷ ᱮᱱᱟ!';
-
-  @override
-  String get smsErrorAddPhoneFirst => 'ᱢᱟᱲᱟᱝ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱥᱮᱞᱮᱫ ᱢᱮ ᱟᱨ ᱥᱮᱵᱷ ᱢᱮ';
-
-  @override
-  String get smsSuccessSent => 'ᱟᱢᱟᱜ ᱯᱷᱳᱱ ᱨᱮ ᱥᱟᱢᱟᱨᱤ ᱵᱷᱮᱡᱟ ᱮᱱᱟ!';
-
-  @override
-  String get smsErrorRateLimit => 'ᱟᱢ ᱢᱤᱫ ᱢᱤᱱᱤᱴ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱢᱟᱨᱤᱢ ᱵᱷᱮᱡᱟ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ, ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱠᱤᱪᱷᱩ ᱚᱠᱛᱚ ᱛᱟᱺᱜᱤ ᱢᱮ ᱟᱨ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
-
-  @override
-  String get smsErrorSessionExpired => 'ᱟᱢᱟᱜ ᱥᱮᱥᱚᱱ ᱢᱩᱪᱟᱹᱫ ᱟᱠᱟᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱞᱚᱜ ᱤᱱ ᱢᱮ᱾';
-
-  @override
-  String get smsErrorNetwork => 'ᱥᱟᱨᱵᱷᱟᱨ ᱥᱟᱶ ᱠᱟᱱᱮᱠᱴ ᱵᱟᱝ ᱦᱩᱭ ᱞᱮᱱᱟ᱾ ᱟᱢᱟᱜ ᱠᱟᱱᱮᱠᱥᱚᱱ ᱪᱮᱠ ᱢᱮ ᱟᱨ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
-
-  @override
-  String get smsErrorGeneric => 'ᱡᱟᱦᱟᱸ ᱵᱟᱹᱲᱤᱡ ᱦᱩᱭᱮᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
-
-  @override
-  String get smsLoadError => 'ᱟᱢᱟᱜ SMS ᱥᱮᱴᱤᱝᱥ ᱞᱳᱰ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ᱾ ᱨᱤᱯᱷᱨᱮᱥ ᱞᱟᱹᱜᱤᱫ ᱚᱨ ᱢᱮ ᱥᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
-
-  @override
-  String get smsSummaryMessage => '🌸 Rhythma ᱦᱮᱞᱛᱷ ᱥᱟᱢᱟᱨᱤ\nᱱᱚᱣᱟ ᱫᱚ Rhythma ᱠᱷᱚᱱ ᱟᱢᱟᱜ ᱚᱱ-ᱰᱤᱢᱟᱱᱰ ᱥᱟᱢᱟᱨᱤ ᱠᱟᱱᱟ᱾\nᱟᱢᱟᱜ ᱞᱮᱴᱮᱥᱴ ᱥᱟᱭᱠᱮᱞ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱞᱟᱹᱜᱤᱫ ᱮᱯ ᱠᱷᱩᱞᱟᱹᱣ ᱢᱮ᱾\nᱟᱱᱥᱟᱵᱽᱥᱠᱨᱟᱭᱤᱵᱽ ᱞᱟᱹᱜᱤᱫ STOP ᱨᱤᱯᱞᱟᱭ ᱢᱮ᱾';
+  String get insightsNotEnoughTrendData =>
+      'ᱱᱚᱸᱰᱮ ᱟᱢᱟᱜ ᱴᱨᱮᱱᱰ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱠᱚᱢ ᱠᱷᱚᱱ ᱠᱚᱢ ᱵᱟᱨᱭᱟ ᱥᱟᱭᱠᱮᱞ ᱞᱚᱜ ᱢᱮ᱾';
 
   @override
   String insightsLoadError(String error) {
-    return 'ᱟᱢᱟᱜ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱞᱳᱰ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ: \$\\1';
+    return 'ᱟᱢᱟᱜ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱞᱳᱰ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ: $error';
   }
-
-  @override
-  String get insightsNotEnoughData => 'ᱟᱢᱟᱜ ᱯᱩᱨᱟᱹ ᱦᱮᱞᱛᱷ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱟᱱᱞᱚᱠ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱠᱮᱞ ᱴᱮᱵᱽ ᱨᱮ ᱟᱨᱦᱚᱸ ᱠᱤᱪᱷᱩ ᱥᱟᱭᱠᱮᱞ ᱞᱚᱜ ᱢᱮ᱾';
-
-  @override
-  String get insightsNoSymptomsYet => 'ᱱᱤᱛ ᱫᱷᱟᱹᱵᱤᱡ ᱡᱟᱦᱟᱸᱱᱟᱜ ᱞᱚᱠᱷᱚᱱ ᱵᱟᱝ ᱞᱚᱜ ᱟᱠᱟᱱᱟ — ᱱᱚᱸᱰᱮ ᱯᱮᱴᱟᱨᱱᱠᱚ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱠᱮᱞ ᱴᱮᱵᱽ ᱨᱮ ᱠᱤᱪᱷᱩ ᱞᱚᱜ ᱢᱮ᱾';
-
-  @override
-  String get insightsNotEnoughTrendData => 'ᱱᱚᱸᱰᱮ ᱟᱢᱟᱜ ᱴᱨᱮᱱᱰ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱠᱚᱢ ᱠᱷᱚᱱ ᱠᱚᱢ ᱵᱟᱨᱭᱟ ᱥᱟᱭᱠᱮᱞ ᱞᱚᱜ ᱢᱮ᱾';
 
   @override
   String get assistantAccessibilitySuggestedPrompt => 'ᱥᱟᱡᱮᱥᱴᱮᱰ ᱯᱨᱚᱢᱯᱴ';
@@ -851,83 +784,173 @@ class AppLocalizationsSat extends AppLocalizations {
   String get assistantAccessibilityMessageInput => 'ᱢᱮᱥᱮᱡᱽ ᱤᱱᱯᱩᱴ';
 
   @override
-  String get assistantAccessibilityMessageInputHint => 'ᱟᱢᱟᱜ ᱠᱩᱠᱞᱤ ᱱᱚᱸᱰᱮ ᱴᱟᱭᱤᱯ ᱢᱮ';
+  String get assistantAccessibilityMessageInputHint =>
+      'ᱟᱢᱟᱜ ᱠᱩᱠᱞᱤ ᱱᱚᱸᱰᱮ ᱴᱟᱭᱤᱯ ᱢᱮ';
 
   @override
   String get assistantAccessibilitySendMessage => 'ᱢᱮᱥᱮᱡᱽ ᱵᱷᱮᱡᱟᱭ ᱢᱮ';
 
   @override
-  String get assistantAccessibilitySendMessageHint => 'ᱟᱢᱟᱜ ᱢᱮᱥᱮᱡᱽ ᱟᱥᱤᱥᱴᱮᱱᱴ ᱴᱷᱮᱱ ᱵᱷᱮᱡᱟᱭᱟᱭ';
+  String get assistantAccessibilitySendMessageHint =>
+      'ᱟᱢᱟᱜ ᱢᱮᱥᱮᱡᱽ ᱟᱥᱤᱥᱴᱮᱱᱴ ᱴᱷᱮᱱ ᱵᱷᱮᱡᱟᱭᱟᱭ';
 
   @override
   String get assistantAccessibilityTyping => 'ᱟᱥᱤᱥᱴᱮᱱᱴ ᱴᱟᱭᱤᱯᱮᱫᱟᱭ';
 
   @override
-  String get languageSelectionError => 'ᱯᱟᱹᱨᱥᱤ ᱥᱮᱵᱷ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
+  String get languageSelectionError =>
+      'ᱯᱟᱹᱨᱥᱤ ᱥᱮᱵᱷ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
 
   @override
-  String get deleteAccount => 'ᱮᱠᱟᱣᱩᱱᱴ ᱰᱤᱞᱤᱴ ᱢᱮ';
+  String get pleaseEnterPhoneNumber => 'Please enter phone number';
 
   @override
-  String get deleteAccountConfirmationTitle => 'ᱮᱠᱟᱣᱩᱱᱴ ᱰᱤᱞᱤᱴᱟᱢ?';
-
-  @override
-  String get deleteAccountConfirmationDesc => 'ᱱᱚᱣᱟ ᱠᱟᱹᱢᱤ ᱫᱚ ᱯᱟᱨᱢᱟᱱᱮᱱᱴ ᱠᱟᱱᱟ ᱟᱨ ᱱᱚᱣᱟ ᱫᱚ ᱟᱨᱦᱚᱸ ᱨᱩᱣᱟᱹᱲ ᱵᱟᱝ ᱜᱟᱱᱚᱜ-ᱟ᱾ ᱟᱢᱟᱜ ᱥᱟᱱᱟᱢ ᱰᱟᱴᱟ ᱢᱮᱴᱟᱣ ᱜᱤᱰᱤᱜ-ᱟ᱾';
-
-  @override
-  String get accountDeletedSuccess => 'ᱮᱠᱟᱣᱩᱱᱴ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱰᱤᱞᱤᱴ ᱮᱱᱟ᱾';
-
-  @override
-  String get langGujarati => 'ગુજરાતી (Gujarati)';
-
-  @override
-  String get welcomeToRhythma => 'Welcome to Rhythma';
-
-  @override
-  String get loginOrSignUpWithPhone => 'Log in or sign up with your phone number.';
-
-  @override
-  String get enterOtpSentToPhone => 'Enter the OTP sent to your phone';
-
-  @override
-  String get phoneNumber => 'Phone Number';
-
-  @override
-  String get getOtp => 'Get OTP';
-
-  @override
-  String get sendingOtp => 'Sending OTP...';
-
-  @override
-  String get otp => 'OTP';
-
-  @override
-  String get verifyOtp => 'Verify OTP';
-
-  @override
-  String get verifying => 'Verifying...';
-
-  @override
-  String get useDifferentPhoneNumber => 'Use a different phone number';
-
-  @override
-  String get pleaseEnterPhoneNumber => 'Please enter your phone number.';
-
-  @override
-  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number with country code (e.g., +91).';
+  String get pleaseEnterValidPhoneNumber => 'Please enter valid phone number';
 
   @override
   String get verificationFailed => 'Verification failed';
 
   @override
-  String otpSentTo(String phone) => 'OTP sent to $phone';
+  String otpSentTo(String phone) {
+    return 'OTP sent to $phone';
+  }
 
   @override
-  String get pleaseEnterOtp => 'Please enter the OTP.';
+  String get pleaseEnterOtp => 'Please enter OTP';
 
   @override
-  String get invalidOtp => 'Invalid OTP. Please try again.';
+  String get invalidOtp => 'Invalid OTP';
 
   @override
   String get failedToGetIdToken => 'Failed to get ID token';
+
+  @override
+  String get welcomeToRhythma => 'Welcome to Rhythma';
+
+  @override
+  String get enterOtpSentToPhone => 'Enter OTP sent to phone';
+
+  @override
+  String get loginOrSignUpWithPhone => 'Login or Sign up with phone';
+
+  @override
+  String get phoneNumber => 'Phone number';
+
+  @override
+  String get sendingOtp => 'Sending OTP...';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get otp => 'OTP';
+
+  @override
+  String get verifying => 'Verifying...';
+
+  @override
+  String get verifyOtp => 'Verify OTP';
+
+  @override
+  String get useDifferentPhoneNumber => 'Use different phone number';
+
+  @override
+  String get nudgeCompleteProfileTitle =>
+      'ᱟᱨᱦᱚᱸ ᱥᱚᱴᱷᱤᱠ ᱯᱨᱮᱰᱤᱠᱥᱚᱱ ᱥᱟᱱᱟᱭᱮᱫ ᱢᱮᱭᱟ?';
+
+  @override
+  String get nudgeCompleteProfileBody =>
+      'ᱥᱟᱭᱠᱮᱞ ᱯᱨᱮᱰᱤᱠᱥᱚᱱ ᱵᱷᱟᱹᱜᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱢᱟᱜ ᱢᱩᱪᱟᱹᱫ ᱯᱤᱨᱤᱭᱚᱰ ᱮᱦᱚᱵᱚᱜ ᱨᱮᱭᱟᱜ ᱥᱚᱴᱷᱤᱠ ᱢᱟᱹᱦᱤᱛ ᱥᱮᱞᱮᱫ ᱢᱮ᱾';
+
+  @override
+  String get nudgeCompleteProfileAction => 'ᱟᱯᱰᱮᱴ';
+
+  @override
+  String get nudgeCompleteProfileDismiss => 'ᱯᱟᱞᱮᱱ ᱛᱟᱭᱚᱢ ᱛᱮ';
+
+  @override
+  String get cycleHistory => 'Cycle History';
+
+  @override
+  String get noLogsYet => 'No logs yet';
+
+  @override
+  String get dayCycle => 'Day cycle';
+
+  @override
+  String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
+
+  @override
+  String get ayurvedaDisclaimer =>
+      'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.';
+
+  @override
+  String get ayurvedaMenstrualTitle => 'Rest and reflection';
+
+  @override
+  String get ayurvedaMenstrualDescription =>
+      'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.';
+
+  @override
+  String get ayurvedaFollicularTitle => 'Renewal and activity';
+
+  @override
+  String get ayurvedaFollicularDescription =>
+      'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.';
+
+  @override
+  String get ayurvedaOvulationTitle => 'Connection and balance';
+
+  @override
+  String get ayurvedaOvulationDescription =>
+      'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.';
+
+  @override
+  String get ayurvedaLutealTitle => 'Grounding and routine';
+
+  @override
+  String get ayurvedaLutealDescription =>
+      'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
+
+  @override
+  String get logFlowVeryHeavy => 'Very Heavy';
+
+  @override
+  String get logFlowSpotting => 'Spotting';
+
+  @override
+  String get logSympSeverePain => 'Severe Pain';
+
+  @override
+  String get logSympFainting => 'Fainting';
+
+  @override
+  String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
+
+  @override
+  String get ayurvedaDisclaimer => 'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.';
+
+  @override
+  String get ayurvedaMenstrualTitle => 'Rest and reflection';
+
+  @override
+  String get ayurvedaMenstrualDescription => 'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.';
+
+  @override
+  String get ayurvedaFollicularTitle => 'Renewal and activity';
+
+  @override
+  String get ayurvedaFollicularDescription => 'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.';
+
+  @override
+  String get ayurvedaOvulationTitle => 'Connection and balance';
+
+  @override
+  String get ayurvedaOvulationDescription => 'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.';
+
+  @override
+  String get ayurvedaLutealTitle => 'Grounding and routine';
+
+  @override
+  String get ayurvedaLutealDescription => 'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
 }

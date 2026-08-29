@@ -322,5 +322,9 @@
   "deleteAccount": "ᱮᱠᱟᱣᱩᱱᱴ ᱰᱤᱞᱤᱴ ᱢᱮ",
   "deleteAccountConfirmationTitle": "ᱮᱠᱟᱣᱩᱱᱴ ᱰᱤᱞᱤᱴᱟᱢ?",
   "deleteAccountConfirmationDesc": "ᱱᱚᱣᱟ ᱠᱟᱹᱢᱤ ᱫᱚ ᱯᱟᱨᱢᱟᱱᱮᱱᱴ ᱠᱟᱱᱟ ᱟᱨ ᱱᱚᱣᱟ ᱫᱚ ᱟᱨᱦᱚᱸ ᱨᱩᱣᱟᱹᱲ ᱵᱟᱝ ᱜᱟᱱᱚᱜ-ᱟ᱾ ᱟᱢᱟᱜ ᱥᱟᱱᱟᱢ ᱰᱟᱴᱟ ᱢᱮᱴᱟᱣ ᱜᱤᱰᱤᱜ-ᱟ᱾",
-  "accountDeletedSuccess": "ᱮᱠᱟᱣᱩᱱᱴ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱰᱤᱞᱤᱴ ᱮᱱᱟ᱾"
+  "accountDeletedSuccess": "ᱮᱠᱟᱣᱩᱱᱴ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱰᱤᱞᱤᱴ ᱮᱱᱟ᱾",
+  "logFlowVeryHeavy": "Very Heavy",
+  "logFlowSpotting": "Spotting",
+  "logSympSeverePain": "Severe Pain",
+  "logSympFainting": "Fainting"
 }

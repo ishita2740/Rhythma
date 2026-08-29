@@ -322,5 +322,9 @@
   "deleteAccount": "अकाउंट हटाव",
   "deleteAccountConfirmationTitle": "अकाउंट हटावुन?",
   "deleteAccountConfirmationDesc": "यि कारवऻयी छॖ पऺक तॖ यि यियि नॖ वापस करनॖ। तुहुंद सऺरीय डाटा यियि मिटावनॖ।",
-  "accountDeletedSuccess": "अकाउंट कामयाब पऺठ्य हटावनॖ आव।"
+  "accountDeletedSuccess": "अकाउंट कामयाब पऺठ्य हटावनॖ आव।",
+  "logFlowVeryHeavy": "Very Heavy",
+  "logFlowSpotting": "Spotting",
+  "logSympSeverePain": "Severe Pain",
+  "logSympFainting": "Fainting"
 }

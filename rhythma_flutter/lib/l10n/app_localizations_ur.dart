@@ -51,7 +51,8 @@ class AppLocalizationsUr extends AppLocalizations {
   String get logOut => 'لاگ آؤٹ';
 
   @override
-  String get logoutConfirmation => 'کیا آپ واقعی Rhythma سے لاگ آؤٹ کرنا چاہتے ہیں؟';
+  String get logoutConfirmation =>
+      'کیا آپ واقعی Rhythma سے لاگ آؤٹ کرنا چاہتے ہیں؟';
 
   @override
   String get cancel => 'منسوخ کریں';
@@ -103,7 +104,8 @@ class AppLocalizationsUr extends AppLocalizations {
   String get homeAiTitle => 'RHYTHMA AI';
 
   @override
-  String get homeAiSubtitle => 'اپنے جسم کے بارے میں کچھ بھی پوچھیں،\nاپنی زبان میں۔';
+  String get homeAiSubtitle =>
+      'اپنے جسم کے بارے میں کچھ بھی پوچھیں،\nاپنی زبان میں۔';
 
   @override
   String get homeAiPrompt => 'میری ماہواری بے قاعدہ کیوں ہے؟';
@@ -130,10 +132,12 @@ class AppLocalizationsUr extends AppLocalizations {
   String get homeWeeklyInsightLabel => 'ہفتہ وار بصیرت';
 
   @override
-  String get homeWeeklyInsightTitle => 'اس ہفتے آپ کی نیند میں 12% بہتری آئی — آپ کا سائیکل شکر گزار ہو سکتا ہے۔';
+  String get homeWeeklyInsightTitle =>
+      'اس ہفتے آپ کی نیند میں 12% بہتری آئی — آپ کا سائیکل شکر گزار ہو سکتا ہے۔';
 
   @override
-  String get homeWeeklyInsightDesc => 'اوولیشن سے پہلے مسلسل آرام ہارمونل توازن کی حمایت کرتا ہے۔';
+  String get homeWeeklyInsightDesc =>
+      'اوولیشن سے پہلے مسلسل آرام ہارمونل توازن کی حمایت کرتا ہے۔';
 
   @override
   String get homeLearnTitle => 'Rhythma کے ساتھ سیکھیں';
@@ -166,29 +170,33 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String homeUnderDevelopment(String topic) {
-    return '\$\\1 فی الحال زیر تکمیل ہے۔';
+    return '$topic فی الحال زیر تکمیل ہے۔';
   }
 
   @override
-  String get homeErrorNetwork => 'براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور دوبارہ کوشش کریں۔';
+  String get homeErrorNetwork =>
+      'براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور دوبارہ کوشش کریں۔';
 
   @override
-  String get homeErrorAuth => 'آپ کا سیشن ختم ہو گیا ہے۔ براہ کرم دوبارہ لاگ ان کریں۔';
+  String get homeErrorAuth =>
+      'آپ کا سیشن ختم ہو گیا ہے۔ براہ کرم دوبارہ لاگ ان کریں۔';
 
   @override
-  String get homeErrorServer => 'ہماری طرف کچھ غلط ہو گیا۔ براہ کرم بعد میں دوبارہ کوشش کریں۔';
+  String get homeErrorServer =>
+      'ہماری طرف کچھ غلط ہو گیا۔ براہ کرم بعد میں دوبارہ کوشش کریں۔';
 
   @override
-  String get homeErrorGeneric => 'ڈیٹا لوڈ کرنے سے قاصر۔ براہ کرم دوبارہ کوشش کریں۔';
+  String get homeErrorGeneric =>
+      'ڈیٹا لوڈ کرنے سے قاصر۔ براہ کرم دوبارہ کوشش کریں۔';
 
   @override
   String homeQuickLogTitle(String label) {
-    return 'لاگ کریں \$\\1';
+    return 'لاگ کریں $label';
   }
 
   @override
   String homeQuickLogSaved(String label, String value) {
-    return '\$\\1 لاگ ہو گیا: \$\\1';
+    return '$label لاگ ہو گیا: $value';
   }
 
   @override
@@ -310,7 +318,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String assistantWelcome(String name) {
-    return 'ہیلو \$\\1 🌸 میں Rhythma ہوں، آپ کا نجی صحت کا ساتھی۔ مجھ سے اپنے سائیکل، علامات یا صحت کے بارے میں کچھ بھی پوچھیں۔';
+    return 'ہیلو $name 🌸 میں Rhythma ہوں، آپ کا نجی صحت کا ساتھی۔ مجھ سے اپنے سائیکل، علامات یا صحت کے بارے میں کچھ بھی پوچھیں۔';
   }
 
   @override
@@ -371,7 +379,8 @@ class AppLocalizationsUr extends AppLocalizations {
   String get insightsWellnessLabel => 'صحت کی سفارشات';
 
   @override
-  String get insightsRec1 => 'ماہواری شروع ہونے کے قریب آئرن والی غذائیں شامل کریں';
+  String get insightsRec1 =>
+      'ماہواری شروع ہونے کے قریب آئرن والی غذائیں شامل کریں';
 
   @override
   String get insightsRec2 => 'لیوٹیل مرحلے کے دنوں میں 10 منٹ کا یوگا آزمائیں';
@@ -456,13 +465,15 @@ class AppLocalizationsUr extends AppLocalizations {
   String get profileAddNew => 'نیا شامل کریں';
 
   @override
-  String get profileNoContacts => 'ابھی تک کوئی ہنگامی رابطہ قائم نہیں کیا گیا۔';
+  String get profileNoContacts =>
+      'ابھی تک کوئی ہنگامی رابطہ قائم نہیں کیا گیا۔';
 
   @override
   String get profileAgeInvalidError => 'براہ کرم ایک درست عمر درج کریں';
 
   @override
-  String get profileCycleInvalidError => 'براہ کرم ایک درست سائیکل کی لمبائی درج کریں';
+  String get profileCycleInvalidError =>
+      'براہ کرم ایک درست سائیکل کی لمبائی درج کریں';
 
   @override
   String get profilePhoneInvalidError => 'براہ کرم ایک درست فون نمبر درج کریں';
@@ -504,7 +515,8 @@ class AppLocalizationsUr extends AppLocalizations {
   String get settingsContactDesc => 'ہماری سپورٹ ٹیم کو ای میل بھیجیں';
 
   @override
-  String get settingsEmailError => 'ای میل ایپ نہیں کھل سکی۔ براہ کرم support@rhythma.com پر ہمیں ای میل کریں۔';
+  String get settingsEmailError =>
+      'ای میل ایپ نہیں کھل سکی۔ براہ کرم support@rhythma.com پر ہمیں ای میل کریں۔';
 
   @override
   String get settingsData => 'ڈیٹا';
@@ -513,13 +525,15 @@ class AppLocalizationsUr extends AppLocalizations {
   String get settingsExportData => 'میرا ڈیٹا ایکسپورٹ کریں';
 
   @override
-  String get settingsExportDataDesc => 'اپنا پروفائل، رابطے اور سائیکل لاگز JSON کے طور پر ڈاؤن لوڈ کریں';
+  String get settingsExportDataDesc =>
+      'اپنا پروفائل، رابطے اور سائیکل لاگز JSON کے طور پر ڈاؤن لوڈ کریں';
 
   @override
   String get settingsExportSuccess => 'ڈیٹا کامیابی سے ایکسپورٹ ہو گیا';
 
   @override
-  String get onboardingPrivacyNote => 'آپ کی معلومات آپ کے آلے پر رہتی ہیں۔ ہم آپ کی اجازت کے بغیر کبھی آپ کا ڈیٹا شیئر نہیں کرتے۔';
+  String get onboardingPrivacyNote =>
+      'آپ کی معلومات آپ کے آلے پر رہتی ہیں۔ ہم آپ کی اجازت کے بغیر کبھی آپ کا ڈیٹا شیئر نہیں کرتے۔';
 
   @override
   String get onboardingNext => 'آگے';
@@ -537,13 +551,15 @@ class AppLocalizationsUr extends AppLocalizations {
   String get onboardingStep1Title => 'اپنی زبان منتخب کریں';
 
   @override
-  String get onboardingStep1Subtitle => 'وہ زبان منتخب کریں جس میں آپ سب سے زیادہ آرام دہ ہیں';
+  String get onboardingStep1Subtitle =>
+      'وہ زبان منتخب کریں جس میں آپ سب سے زیادہ آرام دہ ہیں';
 
   @override
   String get onboardingStep2Title => 'اپنے بارے میں بتائیں';
 
   @override
-  String get onboardingStep2Subtitle => 'اس سے ہمیں آپ کے تجربے کو ذاتی بنانے میں مدد ملتی ہے';
+  String get onboardingStep2Subtitle =>
+      'اس سے ہمیں آپ کے تجربے کو ذاتی بنانے میں مدد ملتی ہے';
 
   @override
   String get onboardingNameHint => 'آپ کا نام یا عرفی نام';
@@ -567,7 +583,8 @@ class AppLocalizationsUr extends AppLocalizations {
   String get onboardingStep3Title => 'آپ کا سائیکل';
 
   @override
-  String get onboardingStep3Subtitle => 'اپنے سائیکل کو سمجھنے میں ہماری مدد کریں — اگر یقین نہ ہو تو آپ چھوڑ سکتے ہیں';
+  String get onboardingStep3Subtitle =>
+      'اپنے سائیکل کو سمجھنے میں ہماری مدد کریں — اگر یقین نہ ہو تو آپ چھوڑ سکتے ہیں';
 
   @override
   String get onboardingLastPeriodLabel => 'آخری ماہواری شروع ہونے کی تاریخ';
@@ -591,7 +608,8 @@ class AppLocalizationsUr extends AppLocalizations {
   String get onboardingStep4Title => 'تھوڑا اور (اختیاری)';
 
   @override
-  String get onboardingStep4Subtitle => 'علاقے کے مخصوص صحت کے مشورے تجویز کرنے میں ہماری مدد کرتا ہے';
+  String get onboardingStep4Subtitle =>
+      'علاقے کے مخصوص صحت کے مشورے تجویز کرنے میں ہماری مدد کرتا ہے';
 
   @override
   String get onboardingPhoneLabel => 'فون نمبر (اختیاری)';
@@ -609,19 +627,23 @@ class AppLocalizationsUr extends AppLocalizations {
   String get onboardingStep5Title => 'باخبر رہیں';
 
   @override
-  String get onboardingStep5Subtitle => 'اطلاعات کو فعال کریں تاکہ Rhythma آپ کو صحیح وقت پر یاد دلائے';
+  String get onboardingStep5Subtitle =>
+      'اطلاعات کو فعال کریں تاکہ Rhythma آپ کو صحیح وقت پر یاد دلائے';
 
   @override
   String get onboardingEnableNotifications => 'سائیکل کی یاد دہانیاں فعال کریں';
 
   @override
-  String get onboardingNotificationsDesc => 'اپنی ماہواری اور اوولیشن ونڈو سے پہلے ہلکی یاد دہانیاں حاصل کریں';
+  String get onboardingNotificationsDesc =>
+      'اپنی ماہواری اور اوولیشن ونڈو سے پہلے ہلکی یاد دہانیاں حاصل کریں';
 
   @override
-  String get onboardingDataConsentLabel => 'میں اس آلے پر اپنا صحت کا ڈیٹا مقامی طور پر محفوظ کرنے کی رضامندی دیتا/دیتی ہوں';
+  String get onboardingDataConsentLabel =>
+      'میں اس آلے پر اپنا صحت کا ڈیٹا مقامی طور پر محفوظ کرنے کی رضامندی دیتا/دیتی ہوں';
 
   @override
-  String get onboardingDataConsentRequired => 'جاری رکھنے کے لیے براہ کرم قبول کریں';
+  String get onboardingDataConsentRequired =>
+      'جاری رکھنے کے لیے براہ کرم قبول کریں';
 
   @override
   String get onboardingNameRequired => 'براہ کرم اپنا نام درج کریں';
@@ -630,133 +652,67 @@ class AppLocalizationsUr extends AppLocalizations {
   String get onboardingAgeInvalid => 'براہ کرم ایک درست عمر درج کریں (10-120)';
 
   @override
-  String get onboardingHeightInvalid => 'براہ کرم ایک درست قد درج کریں (50-250 سینٹی میٹر)';
+  String get onboardingHeightInvalid =>
+      'براہ کرم ایک درست قد درج کریں (50-250 سینٹی میٹر)';
 
   @override
-  String get onboardingWeightInvalid => 'براہ کرم ایک درست وزن درج کریں (20-300 کلوگرام)';
+  String get onboardingWeightInvalid =>
+      'براہ کرم ایک درست وزن درج کریں (20-300 کلوگرام)';
 
   @override
-  String get onboardingPhoneInvalid => 'بین الاقوامی فارمیٹ استعمال کریں، مثلاً +919876543210';
-
-  @override
-  String get onboardingAgeRequired => 'براہ کرم اپنی عمر درج کریں یا حد منتخب کریں';
-
-  @override
-  String get onboardingHeightRequired => 'براہ کرم اپنا قد درج کریں یا حد منتخب کریں';
-
-  @override
-  String get onboardingWeightRequired => 'براہ کرم اپنا وزن درج کریں یا حد منتخب کریں';
-
-  @override
-  String get onboardingNotSure => 'یقین نہیں';
-
-  @override
-  String get onboardingApproximate => 'اندازاََ';
-
-  @override
-  String get onboardingAgeHint => 'اپنی عمر درج کریں';
-
-  @override
-  String get onboardingAgeUnit => 'سال';
-
-  @override
-  String get onboardingHeightHint => 'اپنا قد درج کریں';
-
-  @override
-  String get onboardingHeightUnit => 'سینٹی میٹر';
-
-  @override
-  String get onboardingWeightHint => 'اپنا وزن درج کریں';
-
-  @override
-  String get onboardingWeightUnit => 'کلوگرام';
-
-  @override
-  String get onboardingRangeUnder18 => '18 سے کم';
-
-  @override
-  String get onboardingRange18to25 => '18-25';
-
-  @override
-  String get onboardingRange26to35 => '26-35';
-
-  @override
-  String get onboardingRange36to50 => '36-50';
-
-  @override
-  String get onboardingRange51to65 => '51-65';
-
-  @override
-  String get onboardingRangeOver65 => '65 سے زیادہ';
-
-  @override
-  String get onboardingRangeUnder150 => '150 سینٹی میٹر سے کم';
-
-  @override
-  String get onboardingRange150to160 => '150-160 سینٹی میٹر';
-
-  @override
-  String get onboardingRange161to170 => '161-170 سینٹی میٹر';
-
-  @override
-  String get onboardingRange171to180 => '171-180 سینٹی میٹر';
-
-  @override
-  String get onboardingRangeOver180 => '180 سینٹی میٹر سے زیادہ';
-
-  @override
-  String get onboardingRangeUnder50kg => '50 کلوگرام سے کم';
-
-  @override
-  String get onboardingRange50to65kg => '50-65 کلوگرام';
-
-  @override
-  String get onboardingRange66to80kg => '66-80 کلوگرام';
-
-  @override
-  String get onboardingRange81to100kg => '81-100 کلوگرام';
-
-  @override
-  String get onboardingRangeOver100kg => '100 کلوگرام سے زیادہ';
+  String get onboardingPhoneInvalid =>
+      'بین الاقوامی فارمیٹ استعمال کریں، مثلاً +919876543210';
 
   @override
   String get onboardingTapToSelectDate => 'تاریخ منتخب کرنے کے لیے ٹیپ کریں';
 
   @override
-  String get onboardingDays => 'دن';
+  String get langGujarati => 'ગુજરાતી (Gujarati)';
 
   @override
-  String get onboardingApproximateLabel => 'آپ کی آخری ماہواری کب تھی؟';
+  String get deleteAccount => 'اکاؤنٹ حذف کریں';
 
   @override
-  String get onboardingApproximateLessWeek => 'ایک ہفتے سے کم پہلے';
+  String get deleteAccountConfirmationDesc =>
+      'یہ عمل مستقل ہے اور اسے کالعدم نہیں کیا جا سکتا۔ آپ کا سارا ڈیٹا مٹا دیا جائے گا۔';
 
   @override
-  String get onboardingApproximate1to2Weeks => '1-2 ہفتے پہلے';
+  String get accountDeletedSuccess => 'اکاؤنٹ کامیابی سے حذف ہو گیا۔';
 
   @override
-  String get onboardingApproximate3to4Weeks => '3-4 ہفتے پہلے';
+  String get smsErrorGeneric => 'کچھ غلط ہو گیا۔ براہ کرم دوبارہ کوشش کریں۔';
 
   @override
-  String get onboardingApproximateMoreMonth => 'ایک مہینے سے زیادہ پہلے';
+  String get smsErrorEnterPhone => 'براہ کرم ایک فون نمبر درج کریں';
 
   @override
-  String get onboardingPickExactDate => 'اس کے بجائے صحیح تاریخ منتخب کریں';
+  String get smsErrorInvalidPhone =>
+      'بین الاقوامی فارمیٹ میں ایک درست فون نمبر درج کریں، مثلاً +919876543210';
 
   @override
-  String get onboardingLastPeriodRequired => 'براہ کرم منتخب کریں کہ آپ کی آخری ماہواری کب شروع ہوئی';
+  String get smsSuccessSaved => 'SMS کی ترتیبات کامیابی سے محفوظ ہو گئیں!';
 
   @override
-  String get nudgeCompleteProfileTitle => 'مزید درست پیشین گوئیاں چاہتے ہیں؟';
+  String get smsErrorAddPhoneFirst => 'پہلے ایک فون نمبر شامل اور محفوظ کریں';
 
   @override
-  String get nudgeCompleteProfileBody => 'سائیکل کی پیشین گوئیوں کو بہتر بنانے کے لیے اپنی آخری ماہواری کے شروع ہونے کی صحیح تاریخ شامل کریں۔';
+  String get smsSummaryMessage =>
+      '🌸 Rhythma صحت کا خلاصہ\nیہ Rhythma کی طرف سے آپ کی مانگ پر خلاصہ ہے۔\nاپنے تازہ ترین سائیکل کی بصیرت کے لیے ایپ کھولیں۔\nرکنیت ختم کرنے کے لیے STOP کا جواب دیں۔';
 
   @override
-  String get nudgeCompleteProfileAction => 'اپ ڈیٹ کریں';
+  String get smsSuccessSent => 'خلاصہ آپ کے فون پر بھیج دیا گیا!';
 
   @override
-  String get nudgeCompleteProfileDismiss => 'شاید بعد میں';
+  String get smsErrorRateLimit =>
+      'آپ ایک منٹ میں ایک خلاصہ بھیج سکتے ہیں، براہ کرم تھوڑا انتظار کریں اور دوبارہ کوشش کریں۔';
+
+  @override
+  String get smsErrorSessionExpired =>
+      'آپ کا سیشن ختم ہو گیا ہے۔ براہ کرم دوبارہ لاگ ان کریں۔';
+
+  @override
+  String get smsErrorNetwork =>
+      'سرور تک رسائی حاصل نہیں کی جا سکی۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔';
 
   @override
   String get smsScreenTitle => 'SMS خلاصے';
@@ -768,7 +724,8 @@ class AppLocalizationsUr extends AppLocalizations {
   String get smsInfoCardTitle => 'ہفتہ وار صحت کا خلاصہ';
 
   @override
-  String get smsInfoCardBody => 'ہر ہفتے، Rhythma آپ کو آپ کے سائیکل کی صورتحال، صحت کے سکور اور اہم نمونوں کا ایک مختصر خلاصہ SMS کے ذریعے آپ کے فون پر بھیجے گا۔ یہ ڈیٹا یا ایپ کے بغیر کام کرتا ہے۔';
+  String get smsInfoCardBody =>
+      'ہر ہفتے، Rhythma آپ کو آپ کے سائیکل کی صورتحال، صحت کے سکور اور اہم نمونوں کا ایک مختصر خلاصہ SMS کے ذریعے آپ کے فون پر بھیجے گا۔ یہ ڈیٹا یا ایپ کے بغیر کام کرتا ہے۔';
 
   @override
   String get smsConfigTitle => 'کنفیگریشن';
@@ -798,51 +755,21 @@ class AppLocalizationsUr extends AppLocalizations {
   String get smsSendButton => 'ابھی خلاصہ بھیجیں';
 
   @override
-  String get smsErrorEnterPhone => 'براہ کرم ایک فون نمبر درج کریں';
+  String get insightsNotEnoughData =>
+      'اپنی صحت کی مکمل بصیرت کو غیر مقفل کرنے کے لیے سائیکل ٹیب پر مزید کچھ سائیکل لاگ کریں۔';
 
   @override
-  String get smsErrorInvalidPhone => 'بین الاقوامی فارمیٹ میں ایک درست فون نمبر درج کریں، مثلاً +919876543210';
+  String get insightsNoSymptomsYet =>
+      'ابھی تک کوئی علامات لاگ نہیں کی گئیں — یہاں نمونے دیکھنے کے لیے سائیکل ٹیب پر کچھ لاگ کریں۔';
 
   @override
-  String get smsSuccessSaved => 'SMS کی ترتیبات کامیابی سے محفوظ ہو گئیں!';
-
-  @override
-  String get smsErrorAddPhoneFirst => 'پہلے ایک فون نمبر شامل اور محفوظ کریں';
-
-  @override
-  String get smsSuccessSent => 'خلاصہ آپ کے فون پر بھیج دیا گیا!';
-
-  @override
-  String get smsErrorRateLimit => 'آپ ایک منٹ میں ایک خلاصہ بھیج سکتے ہیں، براہ کرم تھوڑا انتظار کریں اور دوبارہ کوشش کریں۔';
-
-  @override
-  String get smsErrorSessionExpired => 'آپ کا سیشن ختم ہو گیا ہے۔ براہ کرم دوبارہ لاگ ان کریں۔';
-
-  @override
-  String get smsErrorNetwork => 'سرور تک رسائی حاصل نہیں کی جا سکی۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔';
-
-  @override
-  String get smsErrorGeneric => 'کچھ غلط ہو گیا۔ براہ کرم دوبارہ کوشش کریں۔';
-
-  @override
-  String get smsLoadError => 'آپ کی SMS کی ترتیبات لوڈ نہیں ہو سکیں۔ ریفریش کرنے کے لیے کھینچیں یا دوبارہ کوشش کریں۔';
-
-  @override
-  String get smsSummaryMessage => '🌸 Rhythma صحت کا خلاصہ\nیہ Rhythma کی طرف سے آپ کی مانگ پر خلاصہ ہے۔\nاپنے تازہ ترین سائیکل کی بصیرت کے لیے ایپ کھولیں۔\nرکنیت ختم کرنے کے لیے STOP کا جواب دیں۔';
+  String get insightsNotEnoughTrendData =>
+      'یہاں اپنا رجحان دیکھنے کے لیے کم از کم دو سائیکل لاگ کریں۔';
 
   @override
   String insightsLoadError(String error) {
-    return 'آپ کی بصیرت لوڈ نہیں کی جا سکی: \$\\1';
+    return 'آپ کی بصیرت لوڈ نہیں کی جا سکی: $error';
   }
-
-  @override
-  String get insightsNotEnoughData => 'اپنی صحت کی مکمل بصیرت کو غیر مقفل کرنے کے لیے سائیکل ٹیب پر مزید کچھ سائیکل لاگ کریں۔';
-
-  @override
-  String get insightsNoSymptomsYet => 'ابھی تک کوئی علامات لاگ نہیں کی گئیں — یہاں نمونے دیکھنے کے لیے سائیکل ٹیب پر کچھ لاگ کریں۔';
-
-  @override
-  String get insightsNotEnoughTrendData => 'یہاں اپنا رجحان دیکھنے کے لیے کم از کم دو سائیکل لاگ کریں۔';
 
   @override
   String get assistantAccessibilitySuggestedPrompt => 'تجویز کردہ پرامپٹ';
@@ -851,83 +778,172 @@ class AppLocalizationsUr extends AppLocalizations {
   String get assistantAccessibilityMessageInput => 'پیغام کا ان پٹ';
 
   @override
-  String get assistantAccessibilityMessageInputHint => 'اپنا سوال یہاں ٹائپ کریں';
+  String get assistantAccessibilityMessageInputHint =>
+      'اپنا سوال یہاں ٹائپ کریں';
 
   @override
   String get assistantAccessibilitySendMessage => 'پیغام بھیجیں';
 
   @override
-  String get assistantAccessibilitySendMessageHint => 'آپ کا پیغام اسسٹنٹ کو بھیجتا ہے';
+  String get assistantAccessibilitySendMessageHint =>
+      'آپ کا پیغام اسسٹنٹ کو بھیجتا ہے';
 
   @override
   String get assistantAccessibilityTyping => 'اسسٹنٹ ٹائپ کر رہا ہے';
 
   @override
-  String get languageSelectionError => 'زبان محفوظ کرنے سے قاصر۔ براہ کرم دوبارہ کوشش کریں۔';
+  String get languageSelectionError =>
+      'زبان محفوظ کرنے سے قاصر۔ براہ کرم دوبارہ کوشش کریں۔';
 
   @override
-  String get deleteAccount => 'اکاؤنٹ حذف کریں';
+  String get pleaseEnterPhoneNumber => 'Please enter phone number';
 
   @override
-  String get deleteAccountConfirmationTitle => 'اکاؤنٹ حذف کریں؟';
-
-  @override
-  String get deleteAccountConfirmationDesc => 'یہ عمل مستقل ہے اور اسے کالعدم نہیں کیا جا سکتا۔ آپ کا سارا ڈیٹا مٹا دیا جائے گا۔';
-
-  @override
-  String get accountDeletedSuccess => 'اکاؤنٹ کامیابی سے حذف ہو گیا۔';
-
-  @override
-  String get langGujarati => 'ગુજરાતી (Gujarati)';
-
-  @override
-  String get welcomeToRhythma => 'Welcome to Rhythma';
-
-  @override
-  String get loginOrSignUpWithPhone => 'Log in or sign up with your phone number.';
-
-  @override
-  String get enterOtpSentToPhone => 'Enter the OTP sent to your phone';
-
-  @override
-  String get phoneNumber => 'Phone Number';
-
-  @override
-  String get getOtp => 'Get OTP';
-
-  @override
-  String get sendingOtp => 'Sending OTP...';
-
-  @override
-  String get otp => 'OTP';
-
-  @override
-  String get verifyOtp => 'Verify OTP';
-
-  @override
-  String get verifying => 'Verifying...';
-
-  @override
-  String get useDifferentPhoneNumber => 'Use a different phone number';
-
-  @override
-  String get pleaseEnterPhoneNumber => 'Please enter your phone number.';
-
-  @override
-  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number with country code (e.g., +91).';
+  String get pleaseEnterValidPhoneNumber => 'Please enter valid phone number';
 
   @override
   String get verificationFailed => 'Verification failed';
 
   @override
-  String otpSentTo(String phone) => 'OTP sent to $phone';
+  String otpSentTo(String phone) {
+    return 'OTP sent to $phone';
+  }
 
   @override
-  String get pleaseEnterOtp => 'Please enter the OTP.';
+  String get pleaseEnterOtp => 'Please enter OTP';
 
   @override
-  String get invalidOtp => 'Invalid OTP. Please try again.';
+  String get invalidOtp => 'Invalid OTP';
 
   @override
   String get failedToGetIdToken => 'Failed to get ID token';
+
+  @override
+  String get welcomeToRhythma => 'Welcome to Rhythma';
+
+  @override
+  String get enterOtpSentToPhone => 'Enter OTP sent to phone';
+
+  @override
+  String get loginOrSignUpWithPhone => 'Login or Sign up with phone';
+
+  @override
+  String get phoneNumber => 'Phone number';
+
+  @override
+  String get sendingOtp => 'Sending OTP...';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get otp => 'OTP';
+
+  @override
+  String get verifying => 'Verifying...';
+
+  @override
+  String get verifyOtp => 'Verify OTP';
+
+  @override
+  String get useDifferentPhoneNumber => 'Use different phone number';
+
+  @override
+  String get nudgeCompleteProfileTitle => 'مزید درست پیشین گوئیاں چاہتے ہیں؟';
+
+  @override
+  String get nudgeCompleteProfileBody =>
+      'سائیکل کی پیشین گوئیوں کو بہتر بنانے کے لیے اپنی آخری ماہواری کے شروع ہونے کی صحیح تاریخ شامل کریں۔';
+
+  @override
+  String get nudgeCompleteProfileAction => 'اپ ڈیٹ کریں';
+
+  @override
+  String get nudgeCompleteProfileDismiss => 'شاید بعد میں';
+
+  @override
+  String get cycleHistory => 'Cycle History';
+
+  @override
+  String get noLogsYet => 'No logs yet';
+
+  @override
+  String get dayCycle => 'Day cycle';
+
+  @override
+  String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
+
+  @override
+  String get ayurvedaDisclaimer =>
+      'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.';
+
+  @override
+  String get ayurvedaMenstrualTitle => 'Rest and reflection';
+
+  @override
+  String get ayurvedaMenstrualDescription =>
+      'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.';
+
+  @override
+  String get ayurvedaFollicularTitle => 'Renewal and activity';
+
+  @override
+  String get ayurvedaFollicularDescription =>
+      'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.';
+
+  @override
+  String get ayurvedaOvulationTitle => 'Connection and balance';
+
+  @override
+  String get ayurvedaOvulationDescription =>
+      'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.';
+
+  @override
+  String get ayurvedaLutealTitle => 'Grounding and routine';
+
+  @override
+  String get ayurvedaLutealDescription =>
+      'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
+
+  @override
+  String get logFlowVeryHeavy => 'Very Heavy';
+
+  @override
+  String get logFlowSpotting => 'Spotting';
+
+  @override
+  String get logSympSeverePain => 'Severe Pain';
+
+  @override
+  String get logSympFainting => 'Fainting';
+
+  @override
+  String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
+
+  @override
+  String get ayurvedaDisclaimer => 'Educational information only. Ayurveda-inspired content is not medical advice, diagnosis, or treatment.';
+
+  @override
+  String get ayurvedaMenstrualTitle => 'Rest and reflection';
+
+  @override
+  String get ayurvedaMenstrualDescription => 'Ayurvedic traditions describe menstruation as a time that may be associated with rest, reflection, and gentle self-care.';
+
+  @override
+  String get ayurvedaFollicularTitle => 'Renewal and activity';
+
+  @override
+  String get ayurvedaFollicularDescription => 'Ayurvedic wellness traditions associate the post-menstrual period with renewal and gradually increasing activity.';
+
+  @override
+  String get ayurvedaOvulationTitle => 'Connection and balance';
+
+  @override
+  String get ayurvedaOvulationDescription => 'Some Ayurvedic traditions describe the middle of the cycle as a time associated with vitality and social connection.';
+
+  @override
+  String get ayurvedaLutealTitle => 'Grounding and routine';
+
+  @override
+  String get ayurvedaLutealDescription => 'Ayurvedic wellness traditions emphasize maintaining a calm routine and mindful self-care during the later part of the cycle.';
 }

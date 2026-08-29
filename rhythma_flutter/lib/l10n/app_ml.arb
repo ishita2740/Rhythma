@@ -141,7 +141,7 @@
   "insightsRec1": "ആർത്തവ ആരംഭത്തിന് അടുത്ത് ഇരുമ്പ് ധാരാളമുള്ള ഭക്ഷണങ്ങൾ കഴിക്കുക",
   "insightsRec2": "ലൂട്ടിയൽ ഘട്ടത്തിൽ ദിവസവും 10 മിനിറ്റ് യോഗ ചെയ്യുക",
   "insightsRec3": "അണ്ഡോത്പാദന ആഴ്ചയിൽ 2.5 ലിറ്റർ വെള്ളം കുടിക്കുക",
-  "insightsDisclaimer": "ഈ ഉൾക്കാഴ്ചകൾ നിങ്ങൾ രേഖപ്പെടുത്തിയ വിവരങ്ങളെ അടിസ്ഥാനമാക്കിയുള്ളതാണ്, വ്യക്തിഗത ട്രാക്കിംഗിന് മാത്രം ഉദ്ദേശിച്ചുള്ളതാണ്. ഇത് വൈദ്യ രോഗനിർണയമല്ല, യോഗ്യതയുള്ള വൈദ്യ വിദഗ്ധന്റെ ഉപദേശത്തിന് പകരമല്ല.",
+  "insightsDisclaimer": "These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional.",
   "profileTitle": "പ്രൊഫൈൽ",
   "profileYearsOld": "വയസ്സ്",
   "profileCycleDay": "ആർത്തവചക്ര ദിവസം",
@@ -274,5 +274,8 @@
   "deleteAccountConfirmationTitle": "Delete Account?",
   "deleteAccountConfirmationDesc": "This action is permanent and cannot be undone. All your data will be wiped.",
   "accountDeletedSuccess": "Account deleted successfully.",
-  "insightsDisclaimer": "These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional."
+  "logFlowVeryHeavy": "Very Heavy",
+  "logFlowSpotting": "Spotting",
+  "logSympSeverePain": "Severe Pain",
+  "logSympFainting": "Fainting"
 }

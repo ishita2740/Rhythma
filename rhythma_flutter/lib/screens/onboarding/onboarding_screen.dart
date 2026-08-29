@@ -1,11 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../../config/supported_languages.dart';
 import '../../config/theme.dart';
 import '../../providers/locale_provider.dart';
 import '../../services/local_storage_service.dart';
@@ -53,8 +52,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   // Step 3 – Menstrual Profile
   DateTime? _lastPeriodDate;
+  // ignore: prefer_final_fields
   int _cycleLength = 28;
+  // ignore: prefer_final_fields
   int _periodDuration = 5;
+  // ignore: prefer_final_fields
   bool _isRegular = true;
 
   // Step 4 – Optional Info
@@ -63,7 +65,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   final _stateController = TextEditingController();
 
   // Step 5 – Permissions
+  // ignore: prefer_final_fields
   bool _notificationsEnabled = false;
+  // ignore: prefer_final_fields
   bool _dataConsent = false;
   // ignore: unused_field
   String? _consentError;
@@ -104,16 +108,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 
   // ── Data ──────────────────────────────────────────────────────────────────
-
-  static const List<Map<String, String>> _languages = [
-    {'code': 'en', 'label': 'English'},
-    {'code': 'hi', 'label': 'हिन्दी'},
-    {'code': 'ta', 'label': 'தமிழ்'},
-    {'code': 'te', 'label': 'తెలుగు'},
-    {'code': 'mr', 'label': 'मराठी'},
-  ];
-  
-  bool? get selected => null;
 
   // ── Navigation ────────────────────────────────────────────────────────────
 
@@ -298,8 +292,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       _buildStep1(l),
                       _buildStep2(l),
                       _buildStep3(l),
-                      _buildStep1(l),
-                      _buildStep1(l),
+                      _buildStep4(l),
+                      _buildStep5(l),
                     ],
                   ),
                 ),
@@ -400,25 +394,25 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         children: [
           _buildStepHeader(l.onboardingStep1Title, l.onboardingStep1Subtitle),
           const SizedBox(height: 32),
-          ...List.generate(_languages.length, (i) {
-            final lang = _languages[i];
-            final selected = lang['code'] == _selectedLanguage;
+          ...List.generate(appSupportedLanguages.length, (i) {
+            final lang = appSupportedLanguages[i];
+            final selected = lang.code == _selectedLanguage;
            return Semantics(
-             label: '${lang['label']} language',
+             label: '${lang.nativeName} language',
              selected: selected,
              button: true,
              hint: 'Double tap to select language',
              child: GestureDetector(
               onTap: () {
-               setState(() => _selectedLanguage = lang['code']!);
+               setState(() => _selectedLanguage = lang.code);
 
              SemanticsService.announce(
-              '${lang['label']} selected',
+              '${lang.nativeName} selected',
               Directionality.of(context),
             );
 
       context.read<LocaleProvider>()
-          .setLocale(Locale(lang['code']!));
+          .setLocale(Locale(lang.code));
     },
     child: AnimatedContainer(
                 duration: const Duration(milliseconds: 220),
@@ -439,7 +433,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 child: Row(
                   children: [
                     Text(
-                      lang['label']!,
+                      lang.nativeName,
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight:
@@ -673,6 +667,7 @@ Semantics(
       if (picked != null) {
         setState(() => _lastPeriodDate = picked);
 
+        if (!mounted) return;
         SemanticsService.announce(
           'Date selected',
           Directionality.of(context),
@@ -716,6 +711,118 @@ Semantics(
   ),
 ),
         ]
+      ),
+    );
+  }
+
+  // ── Step 4 ────────────────────────────────────────────────────────────────
+
+  Widget _buildStep4(AppLocalizations l) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildStepHeader(l.onboardingStep4Title, l.onboardingStep4Subtitle),
+          const SizedBox(height: 28),
+          _buildTextField(
+            controller: _phoneController,
+            label: l.onboardingPhoneLabel,
+            keyboardType: TextInputType.phone,
+            textInputAction: TextInputAction.next,
+          ),
+          const SizedBox(height: 14),
+          _buildTextField(
+            controller: _cityController,
+            label: l.onboardingCityLabel,
+            textInputAction: TextInputAction.next,
+          ),
+          const SizedBox(height: 14),
+          _buildTextField(
+            controller: _stateController,
+            label: l.onboardingStateLabel,
+            textInputAction: TextInputAction.done,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Step 5 ────────────────────────────────────────────────────────────────
+
+  Widget _buildStep5(AppLocalizations l) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildStepHeader(l.onboardingStep5Title, l.onboardingStep5Subtitle),
+          const SizedBox(height: 36),
+          // Notification toggle
+          _buildSwitchTile(
+            icon: '📅',
+            title: l.onboardingEnableNotifications,
+            subtitle: l.onboardingNotificationsDesc,
+            value: _notificationsEnabled,
+            onChanged: (v) => setState(() => _notificationsEnabled = v),
+          ),
+          const SizedBox(height: 32),
+          // Data consent checkbox
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _dataConsent = !_dataConsent;
+                if (_dataConsent) _consentError = null;
+              });
+            },
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: _dataConsent ? RhythmaColors.primary : Colors.transparent,
+                    border: Border.all(
+                      color: _consentError != null
+                          ? Colors.redAccent
+                          : RhythmaColors.primary,
+                      width: 2,
+                    ),
+                  ),
+                  child: _dataConsent
+                      ? const Icon(Icons.check, size: 16, color: Colors.white)
+                      : null,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l.onboardingDataConsentLabel,
+                        style: TextStyle(
+                          color: RhythmaColors.foreground,
+                          fontSize: 14,
+                          height: 1.4,
+                        ),
+                      ),
+                      if (_consentError != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          _consentError!,
+                          style: const TextStyle(color: Colors.redAccent, fontSize: 12),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

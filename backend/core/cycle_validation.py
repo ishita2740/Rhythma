@@ -55,7 +55,7 @@ from typing import Any, Iterable, List, Optional, Sequence
 #: Flutter quick-log sheet sends it (``LogOptions.flow``); omitting it would
 #: reject a value the shipped mobile app produces, turning a validation fix
 #: into a mobile outage. The web app offers the other three.
-FLOW_INTENSITIES: Sequence[str] = ("none", "light", "medium", "heavy")
+FLOW_INTENSITIES: Sequence[str] = ("none", "spotting", "light", "medium", "heavy", "very_heavy")
 
 #: The five moods behind the emoji in both clients.
 MOODS: Sequence[str] = ("happy", "neutral", "sad", "frustrated", "loved")
@@ -70,6 +70,8 @@ KNOWN_SYMPTOMS: Sequence[str] = (
     "nausea",
     "acne",
     "back pain",
+    "severe pain",
+    "fainting",
 )
 
 #: Spellings seen from clients that mean a known symptom. Kept small and
@@ -85,6 +87,10 @@ _SYMPTOM_ALIASES = {
     "tiredness": "fatigue",
     "tired": "fatigue",
     "nauseous": "nausea",
+    "faint": "fainting",
+    "passed out": "fainting",
+    "severe cramps": "severe pain",
+    "bad pain": "severe pain",
 }
 
 # ─── Bounds ───────────────────────────────────────────────────────────────

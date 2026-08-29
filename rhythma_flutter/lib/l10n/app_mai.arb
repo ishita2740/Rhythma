@@ -322,5 +322,9 @@
   "deleteAccount": "एकाउन्ट मेटाऊ",
   "deleteAccountConfirmationTitle": "एकाउन्ट मेटाएब?",
   "deleteAccountConfirmationDesc": "ई कार्य स्थायी अछि आ एकरा वापस नहि लेल जा सकैत अछि। अहाँक सभ डाटा मेटा देल जाएत।",
-  "accountDeletedSuccess": "एकाउन्ट सफलतापूर्वक मेटाएल गेल।"
+  "accountDeletedSuccess": "एकाउन्ट सफलतापूर्वक मेटाएल गेल।",
+  "logFlowVeryHeavy": "Very Heavy",
+  "logFlowSpotting": "Spotting",
+  "logSympSeverePain": "Severe Pain",
+  "logSympFainting": "Fainting"
 }

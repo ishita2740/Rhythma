@@ -322,5 +322,9 @@
   "deleteAccount": "اڪائونٽ ڊليٽ ڪريو",
   "deleteAccountConfirmationTitle": "اڪائونٽ ڊليٽ ڪجي؟",
   "deleteAccountConfirmationDesc": "هي عمل مستقل آهي ۽ ان کي واپس نٿو ڪري سگهجي. توهان جو سمورو ڊيٽا ختم ڪيو ويندو.",
-  "accountDeletedSuccess": "اڪائونٽ ڪاميابي سان ڊليٽ ڪيو ويو."
+  "accountDeletedSuccess": "اڪائونٽ ڪاميابي سان ڊليٽ ڪيو ويو.",
+  "logFlowVeryHeavy": "Very Heavy",
+  "logFlowSpotting": "Spotting",
+  "logSympSeverePain": "Severe Pain",
+  "logSympFainting": "Fainting"
 }

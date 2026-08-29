@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../auth/useAuth';
 import { fetchSupportedLanguages, patchProfile, type SupportedLanguage } from '../api/endpoints';
+import { useDocumentMeta } from '../lib/useDocumentMeta';
 
 const FALLBACK_LANGUAGES: SupportedLanguage[] = [
   { code: 'en', name: 'English' },
