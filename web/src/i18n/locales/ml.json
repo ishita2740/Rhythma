@@ -231,7 +231,10 @@
     "disclaimer": "Please consult a healthcare professional for medical advice.",
     "rateLimited": "You're sending messages too quickly. Please wait a moment.",
     "storedOnDevice": "ഈ സംഭാഷണം ഈ ഉപകരണത്തിൽ മാത്രം സൂക്ഷിക്കുന്നു, ലോഗ് ഔട്ട് ചെയ്യുമ്പോൾ മായ്ക്കും.",
-    "clearConversation": "സംഭാഷണം മായ്ക്കുക"
+    "clearConversation": "സംഭാഷണം മായ്ക്കുക",
+    "languageLabel": "സഹായിക്കുള്ള ഭാഷ തിരഞ്ഞെടുക്കുക",
+    "englishLanguageName": "ഇംഗ്ലീഷ്",
+    "languageFallback": "സഹായിക്ക് ഈ ഭാഷയിൽ ഇതുവരെ മറുപടി നൽകാനാവില്ല, അതിനാൽ {{language}} ഭാഷയിൽ മറുപടി നൽകും."
   },
   "insights": {
     "title": "Insights",

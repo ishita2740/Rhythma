@@ -231,7 +231,10 @@
     "disclaimer": "Please consult a healthcare professional for medical advice.",
     "rateLimited": "You're sending messages too quickly. Please wait a moment.",
     "storedOnDevice": "ಈ ಸಂಭಾಷಣೆ ಈ ಸಾಧನದಲ್ಲೇ ಇರಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ಲಾಗ್ ಔಟ್ ಮಾಡಿದಾಗ ಅಳಿಸಲಾಗುತ್ತದೆ.",
-    "clearConversation": "ಸಂಭಾಷಣೆಯನ್ನು ಅಳಿಸಿ"
+    "clearConversation": "ಸಂಭಾಷಣೆಯನ್ನು ಅಳಿಸಿ",
+    "languageLabel": "ಸಹಾಯಕರಿಗಾಗಿ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    "englishLanguageName": "ಇಂಗ್ಲಿಷ್",
+    "languageFallback": "ಸಹಾಯಕರು ಇನ್ನೂ ಈ ಭಾಷೆಯಲ್ಲಿ ಉತ್ತರಿಸಲಾಗುವುದಿಲ್ಲ, ಆದ್ದರಿಂದ {{language}} ನಲ್ಲಿ ಉತ್ತರಿಸುತ್ತಾರೆ."
   },
   "insights": {
     "title": "Insights",

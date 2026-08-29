@@ -231,7 +231,10 @@
     "disclaimer": "Please consult a healthcare professional for medical advice.",
     "rateLimited": "You're sending messages too quickly. Please wait a moment.",
     "storedOnDevice": "This conversation is kept on this device and cleared when you log out.",
-    "clearConversation": "Clear conversation"
+    "clearConversation": "Clear conversation",
+    "languageLabel": "Choose the language for the assistant",
+    "englishLanguageName": "English",
+    "languageFallback": "The assistant cannot answer in this language yet, so it will reply in {{language}}."
   },
   "insights": {
     "title": "Insights",

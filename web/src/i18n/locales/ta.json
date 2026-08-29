@@ -231,7 +231,10 @@
     "disclaimer": "Please consult a healthcare professional for medical advice.",
     "rateLimited": "You're sending messages too quickly. Please wait a moment.",
     "storedOnDevice": "இந்த உரையாடல் இந்தச் சாதனத்தில் மட்டுமே வைக்கப்படுகிறது, வெளியேறும்போது அழிக்கப்படும்.",
-    "clearConversation": "உரையாடலை அழி"
+    "clearConversation": "உரையாடலை அழி",
+    "languageLabel": "உதவியாளருக்கான மொழியைத் தேர்ந்தெடுக்கவும்",
+    "englishLanguageName": "ஆங்கிலம்",
+    "languageFallback": "உதவியாளர் இந்த மொழியில் இன்னும் பதிலளிக்க முடியாது, எனவே {{language}} மொழியில் பதிலளிப்பார்."
   },
   "insights": {
     "title": "Insights",

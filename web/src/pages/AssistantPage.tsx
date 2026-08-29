@@ -8,7 +8,8 @@ import {
   saveHistory,
   type StoredMessage,
 } from '../lib/chatHistory';
-import { toAssistantLanguage } from '../lib/language';
+import { isAssistantLanguageFallback, toAssistantLanguage } from '../lib/language';
+import { APP_LANGUAGES, baseLanguage } from '../lib/supportedLanguages';
 import { useDocumentMeta } from '../lib/useDocumentMeta';
 
 type UiMessage = StoredMessage;
@@ -136,6 +137,11 @@ export function AssistantPage() {
     setMessages([greeting()]);
   };
 
+  // True when the assistant cannot answer in the language the interface
+  // is currently in, so the screen can say so before she types rather
+  // than after she reads an English reply.
+  const assistantFallsBack = isAssistantLanguageFallback(i18n.language);
+
   const showSuggestions = messages.filter((m) => !m.isError).length <= 1;
   // Only offered once there is something to clear — a button that does
   // nothing is worse than no button.
@@ -148,23 +154,41 @@ export function AssistantPage() {
           <h1>{t('assistant.title')}</h1>
           <p className="card-sub">{t('assistant.subtitle')}</p>
         </div>
+        {/* Built from `APP_LANGUAGES`, not from a literal. The literal
+            listed nine options including Bengali, which is a complete
+            locale here and not a language `POST /assistant/chat` serves —
+            so choosing it switched the whole interface to Bengali and
+            then answered in English with no explanation (#512).
+
+            `.slice(0, 2)` was wrong for `mai`, `sat` and `sd` as well: it
+            truncated a three-letter code to two and matched no option, so
+            the select fell back to showing the first one. */}
         <select
           className="language-select"
-          value={i18n.language.slice(0, 2)}
+          value={baseLanguage(i18n.language)}
           onChange={(e) => void i18n.changeLanguage(e.target.value)}
-          aria-label="Select AI Assistant Language"
+          aria-label={t('assistant.languageLabel')}
         >
-          <option value="en">English (EN)</option>
-          <option value="hi">Hindi (हिन्दी)</option>
-          <option value="mr">Marathi (मराठी)</option>
-          <option value="ta">Tamil (தமிழ்)</option>
-          <option value="te">Telugu (తెలుగు)</option>
-          <option value="kn">Kannada (ಕನ್ನಡ)</option>
-          <option value="ml">Malayalam (മലയാളം)</option>
-          <option value="gu">Gujarati (ગુજરાતી)</option>
-          <option value="bn">Bengali (বাংলা)</option>
+          {APP_LANGUAGES.map((lang) => (
+            <option key={lang.code} value={lang.code} lang={lang.code}>
+              {lang.nativeName}
+            </option>
+          ))}
         </select>
       </header>
+
+      {/* `isAssistantLanguageFallback` was written for exactly this, with
+          a docstring explaining why the silent fallback "looks like the
+          app ignoring the language setting" — and then nothing ever
+          imported it. Nine of the seventeen shipped locales hit this
+          path, and every one of them was silent (#512). */}
+      {assistantFallsBack ? (
+        <p className="disclaimer assistant-language-notice" role="status">
+          {t('assistant.languageFallback', {
+            language: t('assistant.englishLanguageName'),
+          })}
+        </p>
+      ) : null}
 
       <div className="chat-list" ref={listRef}>
         {showSuggestions ? (

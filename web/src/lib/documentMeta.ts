@@ -21,8 +21,16 @@
  * outside the tree (an error boundary, say) can still set a title.
  */
 
-/** Locales the app ships, and the writing direction each one uses. */
-const RTL_LANGUAGES = new Set(['ar', 'fa', 'he', 'ur']);
+import { directionForLanguage } from './supportedLanguages';
+
+// Direction comes from `supportedLanguages.ts` now. The set that used to
+// live here was `['ar', 'fa', 'he', 'ur']` — a guess in both directions.
+// It carried three languages the app does not ship, and it was written
+// when the comment below was true ("none of the nine locales is RTL"),
+// so the three Perso-Arabic locales added since were only half covered:
+// `ur` made it in, `sd` (Sindhi) and `ks` (Kashmiri) did not. A user on
+// either got `dir="ltr"` — punctuation at the wrong end of every line and
+// the whole layout mirrored the wrong way (#512).
 
 /**
  * The `lang` value for a tag from i18next.
@@ -42,16 +50,15 @@ export function toDocumentLang(language: string | undefined): string {
 
 /** `rtl` for the scripts that need it, `ltr` otherwise. */
 export function directionFor(language: string | undefined): 'ltr' | 'rtl' {
-  const base = toDocumentLang(language).toLowerCase().split('-')[0];
-  return RTL_LANGUAGES.has(base) ? 'rtl' : 'ltr';
+  return directionForLanguage(language);
 }
 
 /**
  * Point `<html lang>` and `<html dir>` at the active locale.
  *
- * None of the nine locales is RTL today. `dir` is set anyway because it
- * costs one attribute now and is a rewrite later — #117 and #122 are both
- * about adding languages, and Urdu is a plausible one for this audience.
+ * Three of the shipped locales are RTL — Urdu, Sindhi and Kashmiri — so
+ * this is load-bearing rather than the forward-looking gesture the
+ * original comment described.
  */
 export function applyDocumentLanguage(language: string | undefined): void {
   if (typeof document === 'undefined') return;

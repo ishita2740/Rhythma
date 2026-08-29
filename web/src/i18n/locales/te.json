@@ -231,7 +231,10 @@
     "disclaimer": "Please consult a healthcare professional for medical advice.",
     "rateLimited": "You're sending messages too quickly. Please wait a moment.",
     "storedOnDevice": "ఈ సంభాషణ ఈ పరికరంలోనే ఉంచబడుతుంది, లాగ్ అవుట్ చేసినప్పుడు తొలగించబడుతుంది.",
-    "clearConversation": "సంభాషణను తొలగించు"
+    "clearConversation": "సంభాషణను తొలగించు",
+    "languageLabel": "సహాయకుడి కోసం భాషను ఎంచుకోండి",
+    "englishLanguageName": "ఇంగ్లీష్",
+    "languageFallback": "సహాయకుడు ఇంకా ఈ భాషలో సమాధానం ఇవ్వలేడు, కాబట్టి {{language}}లో సమాధానం ఇస్తారు."
   },
   "insights": {
     "title": "Insights",
