@@ -157,6 +157,35 @@ class AppLocalizationsNe extends AppLocalizations {
   String get homeRetry => 'फेरि प्रयास गर्नुहोस्';
 
   @override
+  String homeSavedDataNotice(String when) {
+    return 'Showing saved data from $when';
+  }
+
+  @override
+  String get homeCouldNotRefresh => 'Couldn\'t refresh — you may be offline';
+
+  @override
+  String get homeSavedDataTooOld => 'Your saved data is too old to show a reliable cycle day. Connect to the internet to refresh.';
+
+  @override
+  String get homeAgeJustNow => 'just now';
+
+  @override
+  String homeAgeMinutes(String count) {
+    return '$count minutes ago';
+  }
+
+  @override
+  String homeAgeHours(String count) {
+    return '$count hours ago';
+  }
+
+  @override
+  String homeAgeDays(String count) {
+    return '$count days ago';
+  }
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

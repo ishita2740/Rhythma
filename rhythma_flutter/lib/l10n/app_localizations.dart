@@ -423,6 +423,48 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get homeRetry;
 
+  /// No description provided for @homeSavedDataNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing saved data from {when}'**
+  String homeSavedDataNotice(String when);
+
+  /// No description provided for @homeCouldNotRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn't refresh — you may be offline'**
+  String get homeCouldNotRefresh;
+
+  /// No description provided for @homeSavedDataTooOld.
+  ///
+  /// In en, this message translates to:
+  /// **'Your saved data is too old to show a reliable cycle day. Connect to the internet to refresh.'**
+  String get homeSavedDataTooOld;
+
+  /// No description provided for @homeAgeJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'just now'**
+  String get homeAgeJustNow;
+
+  /// No description provided for @homeAgeMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} minutes ago'**
+  String homeAgeMinutes(String count);
+
+  /// No description provided for @homeAgeHours.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} hours ago'**
+  String homeAgeHours(String count);
+
+  /// No description provided for @homeAgeDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days ago'**
+  String homeAgeDays(String count);
+
   /// No description provided for @homeMhs.
   ///
   /// In en, this message translates to:

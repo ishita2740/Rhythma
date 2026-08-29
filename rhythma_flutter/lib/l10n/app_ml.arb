@@ -281,5 +281,40 @@
   "logFlowVeryHeavy": "Very Heavy",
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logSympFainting": "Fainting",
+  "homeSavedDataNotice": "{when} സൂക്ഷിച്ച വിവരം കാണിക്കുന്നു",
+  "@homeSavedDataNotice": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "homeCouldNotRefresh": "പുതുക്കാനായില്ല — നിങ്ങൾ ഓഫ്‌ലൈനിലായിരിക്കാം",
+  "homeSavedDataTooOld": "നിങ്ങളുടെ സൂക്ഷിച്ച വിവരം വളരെ പഴയതാണ്, വിശ്വസനീയമായ സൈക്കിൾ ദിവസം കാണിക്കാനാവില്ല. പുതുക്കാൻ ഇന്റർനെറ്റുമായി ബന്ധിപ്പിക്കുക.",
+  "homeAgeJustNow": "ഇപ്പോൾ",
+  "homeAgeMinutes": "{count} മിനിറ്റ് മുമ്പ്",
+  "@homeAgeMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "homeAgeHours": "{count} മണിക്കൂർ മുമ്പ്",
+  "@homeAgeHours": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "homeAgeDays": "{count} ദിവസം മുമ്പ്",
+  "@homeAgeDays": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  }
 }

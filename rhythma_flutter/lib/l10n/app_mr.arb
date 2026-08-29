@@ -183,5 +183,40 @@
   "logFlowVeryHeavy": "Very Heavy",
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logSympFainting": "Fainting",
+  "homeSavedDataNotice": "{when} चा जतन केलेला डेटा दाखवत आहे",
+  "@homeSavedDataNotice": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "homeCouldNotRefresh": "रिफ्रेश करता आले नाही — तुम्ही कदाचित ऑफलाइन आहात",
+  "homeSavedDataTooOld": "तुमचा जतन केलेला डेटा इतका जुना आहे की विश्वासार्ह चक्र दिवस दाखवता येत नाही. रिफ्रेश करण्यासाठी इंटरनेटशी जोडा.",
+  "homeAgeJustNow": "आत्ताच",
+  "homeAgeMinutes": "{count} मिनिटांपूर्वी",
+  "@homeAgeMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "homeAgeHours": "{count} तासांपूर्वी",
+  "@homeAgeHours": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "homeAgeDays": "{count} दिवसांपूर्वी",
+  "@homeAgeDays": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  }
 }

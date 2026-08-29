@@ -254,5 +254,40 @@
   "logFlowVeryHeavy": "Very Heavy",
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logSympFainting": "Fainting",
+  "homeSavedDataNotice": "{when} ಉಳಿಸಿದ ಮಾಹಿತಿ ತೋರಿಸಲಾಗುತ್ತಿದೆ",
+  "@homeSavedDataNotice": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "homeCouldNotRefresh": "ರಿಫ್ರೆಶ್ ಮಾಡಲಾಗಲಿಲ್ಲ — ನೀವು ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿರಬಹುದು",
+  "homeSavedDataTooOld": "ನಿಮ್ಮ ಉಳಿಸಿದ ಮಾಹಿತಿ ತುಂಬಾ ಹಳೆಯದು, ವಿಶ್ವಸನೀಯ ಚಕ್ರದ ದಿನವನ್ನು ತೋರಿಸಲಾಗದು. ರಿಫ್ರೆಶ್ ಮಾಡಲು ಇಂಟರ್ನೆಟ್‌ಗೆ ಸಂಪರ್ಕಿಸಿ.",
+  "homeAgeJustNow": "ಈಗಷ್ಟೇ",
+  "homeAgeMinutes": "{count} ನಿಮಿಷಗಳ ಹಿಂದೆ",
+  "@homeAgeMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "homeAgeHours": "{count} ಗಂಟೆಗಳ ಹಿಂದೆ",
+  "@homeAgeHours": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "homeAgeDays": "{count} ದಿನಗಳ ಹಿಂದೆ",
+  "@homeAgeDays": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  }
 }

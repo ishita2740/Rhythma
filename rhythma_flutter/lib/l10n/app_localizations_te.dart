@@ -161,6 +161,35 @@ class AppLocalizationsTe extends AppLocalizations {
   String get homeRetry => 'మళ్లీ ప్రయత్నించండి';
 
   @override
+  String homeSavedDataNotice(String when) {
+    return '$when నాటి సేవ్ చేసిన సమాచారం చూపబడుతోంది';
+  }
+
+  @override
+  String get homeCouldNotRefresh => 'రిఫ్రెష్ చేయలేకపోయాం — మీరు ఆఫ్‌లైన్‌లో ఉండవచ్చు';
+
+  @override
+  String get homeSavedDataTooOld => 'మీ సేవ్ చేసిన సమాచారం చాలా పాతది, నమ్మదగిన సైకిల్ రోజును చూపలేము. రిఫ్రెష్ చేయడానికి ఇంటర్నెట్‌కు కనెక్ట్ అవ్వండి.';
+
+  @override
+  String get homeAgeJustNow => 'ఇప్పుడే';
+
+  @override
+  String homeAgeMinutes(String count) {
+    return '$count నిమిషాల క్రితం';
+  }
+
+  @override
+  String homeAgeHours(String count) {
+    return '$count గంటల క్రితం';
+  }
+
+  @override
+  String homeAgeDays(String count) {
+    return '$count రోజుల క్రితం';
+  }
+
+  @override
   String get homeMhs => 'MHS';
 
   @override
