@@ -104,6 +104,85 @@ class LocalStorageService {
     return uid == null ? baseKey : '$uid::$baseKey';
   }
 
+  // ── Per-account settings ─────────────────────────────────────────────
+  //
+  // Cycle logs, the profile, chat history and `onboardingCompleted` all go
+  // through `_scoped()`. Six settings did not, and were read straight off
+  // the bare key — so on a shared phone they were not "kept for the
+  // previous account", they were inherited by the next one (#521).
+  //
+  // They split into two groups, and the difference matters more than the
+  // de-duplication does.
+
+  /// Settings that decide whether data leaves the device, or whether the
+  /// app unlocks at all.
+  ///
+  /// `cloud_sync` is the one that makes this a privacy bug rather than a
+  /// cosmetic one: `firestore_service` checks it before every write, so a
+  /// previous user leaving it on means the *next* account's cycle logs and
+  /// profile are uploaded to Firestore from her first entry, without her
+  /// ever being asked.
+  ///
+  /// These never fall back to a device-level value. An account that has
+  /// not answered the question is treated as not having consented, which
+  /// is the only safe reading of silence.
+  static const List<String> _consentKeys = <String>[
+    _Keys.cloudSync,
+    _Keys.smsEnabled,
+    _Keys.biometricEnabled,
+  ];
+
+  /// Settings that are a preference about this phone rather than a
+  /// decision about an account's data.
+  ///
+  /// These *do* fall back to the device-level value, because the language
+  /// picker runs before sign-in — `language_selection_screen` is reached
+  /// with no account to attribute the choice to — and a theme chosen on
+  /// the login screen should survive reaching the home screen. A
+  /// signed-in user's own choice still wins whenever she has made one.
+  static const List<String> _preferenceKeys = <String>[
+    _Keys.language,
+    _Keys.themeMode,
+    _Keys.primaryColor,
+  ];
+
+  /// This account's value for [baseKey], or `null` if she has none.
+  ///
+  /// A preference falls back to the device-level value; a consent flag
+  /// does not. Which it is comes from [_preferenceKeys] rather than from
+  /// an argument, so the classification is made once per setting instead
+  /// of being restated — correctly or otherwise — at each call site.
+  ///
+  /// With no account signed in, `_scoped` returns the bare key, so this
+  /// reads the device-level value, which is what the pre-login screens
+  /// want.
+  static T? _scopedSetting<T>(String baseKey) {
+    final scopedKey = _scoped(baseKey);
+    if (_settings.containsKey(scopedKey)) {
+      return _settings.get(scopedKey) as T?;
+    }
+    if (_preferenceKeys.contains(baseKey) && _settings.containsKey(baseKey)) {
+      return _settings.get(baseKey) as T?;
+    }
+    return null;
+  }
+
+  /// Writes [value] for this account.
+  ///
+  /// A preference is also mirrored to the device level, so the pre-login
+  /// screens follow the most recent choice instead of reverting to the
+  /// default on the login screen.
+  ///
+  /// A consent flag is never mirrored. Mirroring one would put it back
+  /// exactly where the next account would find it, which is the bug.
+  static Future<void> _putScopedSetting(String baseKey, Object? value) async {
+    final scopedKey = _scoped(baseKey);
+    await _settings.put(scopedKey, value);
+    if (_preferenceKeys.contains(baseKey) && scopedKey != baseKey) {
+      await _settings.put(baseKey, value);
+    }
+  }
+
   /// One-time migration: silently moves any pre-existing un-scoped entries
   /// into the first account that logs in after this update.
   static Future<void> _migrateLegacyDataIfNeeded(String uid) async {
@@ -134,6 +213,30 @@ class LocalStorageService {
       }
       await _cycleBox.delete(key);
     }
+
+    // Consent flags written before they were namespaced belong to whoever
+    // was using this phone, which is the account signing in now — the
+    // first to do so after the upgrade. Adopt them, so a user who had
+    // cloud sync or the biometric lock switched on does not silently lose
+    // it.
+    //
+    // Then delete the device-level copy unconditionally, which is what
+    // stops a *second* account inheriting the first one's answer: after
+    // this runs there is no bare `cloud_sync` key left for it to find. The
+    // delete is outside the adoption guard on purpose — an account that
+    // already has its own value must still clear the shared one.
+    for (final baseKey in _consentKeys) {
+      final scopedKey = '$uid::$baseKey';
+      if (_settings.containsKey(baseKey) && !_settings.containsKey(scopedKey)) {
+        await _settings.put(scopedKey, _settings.get(baseKey));
+      }
+      await _settings.delete(baseKey);
+    }
+
+    // Preferences are deliberately *not* adopted here. They keep their
+    // device-level value and `_scopedSetting` reads it back through
+    // `_preferenceKeys`, so the pre-login language and theme keep working;
+    // a scoped copy appears only once this account chooses for herself.
   }
 
   // ── Cycle Logs ──────────────────────────────────────────────────────────
@@ -173,11 +276,11 @@ class LocalStorageService {
   static Box<dynamic> get _settings => Hive.box<dynamic>(_Keys.settingsBox);
 
   static String get preferredLanguage {
-    return _settings.get(_Keys.language, defaultValue: 'en') as String;
+    return _scopedSetting<String>(_Keys.language) ?? 'en';
   }
 
   static Future<void> setPreferredLanguage(String code) async {
-    await _settings.put(_Keys.language, code);
+    await _putScopedSetting(_Keys.language, code);
   }
 
   static bool get languageSelectionCompleted {
@@ -189,44 +292,47 @@ class LocalStorageService {
     await _settings.put(_Keys.languageSelectionCompleted, value);
   }
 
+  /// Whether this account has agreed to her data being synced to
+  /// Firestore. Defaults to false with no device fallback — see
+  /// [_consentKeys].
   static bool get cloudSyncEnabled {
-    return _settings.get(_Keys.cloudSync, defaultValue: false) as bool;
+    return _scopedSetting<bool>(_Keys.cloudSync) ?? false;
   }
 
   static Future<void> setCloudSync(bool enabled) async {
-    await _settings.put(_Keys.cloudSync, enabled);
+    await _putScopedSetting(_Keys.cloudSync, enabled);
   }
 
   static bool get smsEnabled {
-    return _settings.get(_Keys.smsEnabled, defaultValue: false) as bool;
+    return _scopedSetting<bool>(_Keys.smsEnabled) ?? false;
   }
 
   static Future<void> setSmsEnabled(bool enabled) async {
-    await _settings.put(_Keys.smsEnabled, enabled);
+    await _putScopedSetting(_Keys.smsEnabled, enabled);
   }
 
   static bool get biometricEnabled {
-    return _settings.get(_Keys.biometricEnabled, defaultValue: false) as bool;
+    return _scopedSetting<bool>(_Keys.biometricEnabled) ?? false;
   }
 
   static Future<void> setBiometricEnabled(bool enabled) async {
-    await _settings.put(_Keys.biometricEnabled, enabled);
+    await _putScopedSetting(_Keys.biometricEnabled, enabled);
   }
 
   static String? getThemeMode() {
-    return _settings.get(_Keys.themeMode) as String?;
+    return _scopedSetting<String>(_Keys.themeMode);
   }
 
   static Future<void> setThemeMode(String mode) async {
-    await _settings.put(_Keys.themeMode, mode);
+    await _putScopedSetting(_Keys.themeMode, mode);
   }
 
   static int? getPrimaryColor() {
-    return _settings.get(_Keys.primaryColor) as int?;
+    return _scopedSetting<int>(_Keys.primaryColor);
   }
 
   static Future<void> setPrimaryColor(int colorValue) async {
-    await _settings.put(_Keys.primaryColor, colorValue);
+    await _putScopedSetting(_Keys.primaryColor, colorValue);
   }
 
   // ── Onboarding ──────────────────────────────────────────────────────────
@@ -387,6 +493,14 @@ class LocalStorageService {
     // Also remove unscoped legacy profile & dashboard cache keys
     await _settings.delete(_Keys.profile);
     await _settings.delete(_Keys.dashboardCache);
+
+    // And the device-level consent flags, for the case where this account
+    // never went through `_migrateLegacyDataIfNeeded` — deleting an
+    // account must not leave its cloud-sync or biometric answer sitting
+    // where the next person to use the phone would inherit it (#521).
+    for (final baseKey in _consentKeys) {
+      await _settings.delete(baseKey);
+    }
 
     // Also remove the current user id marker
     await _settings.delete(_kCurrentUserId);
