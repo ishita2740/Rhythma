@@ -235,7 +235,8 @@ class _CycleScreenState extends State<CycleScreen> {
     final currentPhaseKey = cycleProvider.phaseKey(selectedDate);
     final phaseContent = ayurvedaContent[currentPhaseKey] ?? [];
 
-    final selectedLog = LocalStorageService.getCycleLogForDate(selectedDate) ?? {};
+    final selectedLog =
+        LocalStorageService.getCycleLogForDate(selectedDate) ?? {};
     final hasSelections = selectedLog.isNotEmpty;
 
     return SingleChildScrollView(
