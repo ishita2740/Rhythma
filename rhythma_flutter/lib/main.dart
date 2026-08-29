@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:rhythma/l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'firebase_options.dart';
 
 import 'components/biometric_auth_gate.dart';
@@ -43,6 +44,19 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Initialize Firebase App Check to protect backend resources from abuse.
+  // This ensures only traffic from the genuine Rhythma app is accepted.
+  try {
+    await FirebaseAppCheck.instance.activate(
+      androidProvider: AndroidProvider.playIntegrity,
+      appleProvider: AppleProvider.deviceCheck,
+      // Web isn't officially supported in Rhythma right now, but if it was we would use ReCaptchaV3Provider here.
+    );
+  } catch (e) {
+    debugPrint('Firebase App Check initialization failed (e.g. offline): $e');
+  }
+
   await LocalStorageService.init();
 
   // Migration: existing users who completed onboarding already chose a language.
