@@ -77,6 +77,12 @@ class UserProfileResponse(BaseModel):
     phone: Optional[str] = None
     username: Optional[str] = None
     email: Optional[str] = None
+    #: Whether the address above has been proven. Served here because
+    #: `PATCH /auth/profile` can now change the address, and changing it
+    #: resets this flag (issue #531) — a client that edits the field and
+    #: is not told the account has become unverified would go on showing a
+    #: verified badge for an address nobody has confirmed.
+    email_verified: Optional[bool] = None
     full_name: Optional[str] = None
     age: Optional[int] = None
     height_cm: Optional[float] = None
