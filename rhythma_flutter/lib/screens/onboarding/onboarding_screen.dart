@@ -1,7 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -54,8 +52,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   // Step 3 – Menstrual Profile
   DateTime? _lastPeriodDate;
+  // ignore: prefer_final_fields
   int _cycleLength = 28;
+  // ignore: prefer_final_fields
   int _periodDuration = 5;
+  // ignore: prefer_final_fields
   bool _isRegular = true;
 
   // Step 4 – Optional Info
@@ -64,7 +65,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   final _stateController = TextEditingController();
 
   // Step 5 – Permissions
+  // ignore: prefer_final_fields
   bool _notificationsEnabled = false;
+  // ignore: prefer_final_fields
   bool _dataConsent = false;
   // ignore: unused_field
   String? _consentError;
@@ -664,6 +667,7 @@ Semantics(
       if (picked != null) {
         setState(() => _lastPeriodDate = picked);
 
+        if (!mounted) return;
         SemanticsService.announce(
           'Date selected',
           Directionality.of(context),

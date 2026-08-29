@@ -141,6 +141,7 @@ class CycleHistoryEntry(BaseModel):
     sleep_hours: Optional[float] = None
     stress_level: Optional[int] = None
     notes: Optional[str] = None
+    cycle_length: Optional[int] = Field(None, description="Days from this log's start_date to the next log's start_date, or null if this is the newest log.")
 
 
 class CycleHistoryPage(BaseModel):
@@ -149,6 +150,7 @@ class CycleHistoryPage(BaseModel):
     limit: int = Field(..., description="How many entries were requested.")
     offset: int = Field(..., description="How many entries were skipped.")
     count: int = Field(..., description="How many entries this page holds.")
+    total_count: int = Field(..., description="Total number of entries in the history matching the filter.")
     hasMore: bool = Field(
         ...,
         description=(
@@ -438,7 +440,7 @@ async def get_cycle_history(
             detail="start_date must not be after end_date",
         )
 
-    entries, has_more = CycleService.get_logs_page(
+    entries, has_more, total_count = CycleService.get_logs_page(
         user_id,
         limit=limit,
         offset=offset,
@@ -453,6 +455,7 @@ async def get_cycle_history(
             "limit": limit,
             "offset": offset,
             "count": len(entries),
+            "total_count": total_count,
             "hasMore": has_more,
             "nextOffset": offset + len(entries) if has_more else None,
         },
