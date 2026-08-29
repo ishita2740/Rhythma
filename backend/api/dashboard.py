@@ -128,13 +128,13 @@ class DashboardPrediction(BaseModel):
 
 
 class DashboardResponse(BaseModel):
-    user: DashboardUser
-    cycle: DashboardCycle
-    insights: DashboardInsights
-    hasEnoughDataForInsights: bool
-    loggedCycleCount: int
-    cycleHistory: list[CycleHistoryEntry]
-    symptomFrequency: dict[str, float]
+    user: Optional[DashboardUser] = None
+    cycle: Optional[DashboardCycle] = None
+    insights: Optional[DashboardInsights] = None
+    hasEnoughDataForInsights: Optional[bool] = None
+    loggedCycleCount: Optional[int] = None
+    cycleHistory: Optional[list[CycleHistoryEntry]] = None
+    symptomFrequency: Optional[dict[str, float]] = None
     recentStressLevel: Optional[int] = None
     #: Highest-severity factual observation about the user's logged data,
     #: computed from the logs already fetched above — so the Home screen
@@ -144,11 +144,11 @@ class DashboardResponse(BaseModel):
     #: Descriptive consistency label (consistent / slightly_variable /
     #: variable / unknown), per menstrual_insights_guidelines.md's summary
     #: card guidance — a word, not a score.
-    cycleConsistency: str = "unknown"
+    cycleConsistency: Optional[str] = None
     #: Plain-language description of cycle consistency derived from actual
     #: variability data.  References cycle lengths and spread, not a
     #: numeric score or risk label.
-    cycleConsistencyDescription: str = ""
+    cycleConsistencyDescription: Optional[str] = None
     #: "When is my next period?" — the overdue-aware prediction summary.
     #: Additive and nullable so clients written before this field existed
     #: keep working.
@@ -168,10 +168,14 @@ class TrendsResponse(BaseModel):
 @router.get(
     "/dashboard",
     response_model=DashboardResponse,
+    response_model_exclude_none=True,
     summary="Get dashboard data",
     description="Returns the user's current cycle summary, factual cycle statistics (average/shortest/longest cycle length, average bleeding duration), sleep average, cycle history, symptom frequencies, and recent stress level. All insight data is computed server-side directly from CycleLog history.",
 )
-async def get_dashboard(current_user: dict = Depends(get_current_user)):
+async def get_dashboard(
+    fields: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
     user_id = current_user["id"]
 
     score_data = get_user_scores(user_id)
@@ -228,53 +232,78 @@ async def get_dashboard(current_user: dict = Depends(get_current_user)):
 
     recent_stress_level = logs[0].get("stress_level") if logs else None
 
-    # Observations reuse the logs already fetched above rather than
-    # re-querying Firestore, so the Home screen still costs one round trip
-    # and one read path. `build_analysis` is called separately from
-    # `evaluate` only because the consistency label needs the analysis
-    # object; both are pure functions over the same list.
-    observations = evaluate(logs)
-    highest = top_observation(observations)
-    analysis = build_analysis(logs)
-    consistency = describe_consistency(analysis)
-    consistency_text = describe_consistency_text(analysis)
+    requested_fields = fields.split(",") if fields else None
+    
+    # Optional heavy computations
+    highest = None
+    consistency = None
+    consistency_text = None
+    if requested_fields is None or any(f in requested_fields for f in ["topObservation", "cycleConsistency", "cycleConsistencyDescription"]):
+        observations = evaluate(logs)
+        highest = top_observation(observations)
+        analysis = build_analysis(logs)
+        consistency = describe_consistency(analysis)
+        consistency_text = describe_consistency_text(analysis)
 
-    # The prediction summary reuses the same logs (and the profile already
-    # fetched for scoring) so the Home screen needs no extra read. It is the
-    # overdue-aware "when is my next period?" answer; the legacy clamped
-    # `cycle.nextPeriodDays` above is kept untouched for existing clients.
-    prediction = dashboard_summary(
-        predict(logs, profile=score_data.get("profile"), today=date.today())
-    )
+    prediction = None
+    if requested_fields is None or "prediction" in requested_fields:
+        prediction = dashboard_summary(
+            predict(logs, profile=score_data.get("profile"), today=date.today())
+        )
 
-    cycle_stats = compute_cycle_stats(logs)
+    cycle_stats = None
+    if requested_fields is None or "insights" in requested_fields:
+        cycle_stats = compute_cycle_stats(logs)
 
-    return {
-        "user": {
-            "name": current_user.get("username") or "User"
-        },
-        "cycle": {
+    response = {}
+
+    if requested_fields is None or "user" in requested_fields:
+        response["user"] = {"name": current_user.get("username") or "User"}
+        
+    if requested_fields is None or "cycle" in requested_fields:
+        response["cycle"] = {
             "day": cycle_day,
             "total": avg_cycle_length,
             "nextPeriodDays": next_period_days,
-        },
-        "insights": {
+        }
+        
+    if requested_fields is None or "insights" in requested_fields:
+        response["insights"] = {
             "averageCycleLength": cycle_stats["average_cycle_length"],
             "shortestCycleLength": cycle_stats["shortest_cycle_length"],
             "longestCycleLength": cycle_stats["longest_cycle_length"],
             "averageBleedingDuration": cycle_stats["average_bleeding_duration"],
             "sleepHours": f"{avg_sleep}h" if avg_sleep is not None else None,
-        },
-        "hasEnoughDataForInsights": score_data["has_enough_data_for_insights"],
-        "loggedCycleCount": score_data["logged_cycle_count"],
-        "cycleHistory": cycle_history,
-        "symptomFrequency": symptom_frequency,
-        "recentStressLevel": recent_stress_level,
-        "topObservation": highest.to_dict() if highest else None,
-        "cycleConsistency": consistency,
-        "cycleConsistencyDescription": consistency_text,
-        "prediction": prediction,
-    }
+        }
+        
+    if requested_fields is None or "hasEnoughDataForInsights" in requested_fields:
+        response["hasEnoughDataForInsights"] = score_data["has_enough_data_for_insights"]
+        
+    if requested_fields is None or "loggedCycleCount" in requested_fields:
+        response["loggedCycleCount"] = score_data["logged_cycle_count"]
+        
+    if requested_fields is None or "cycleHistory" in requested_fields:
+        response["cycleHistory"] = cycle_history
+        
+    if requested_fields is None or "symptomFrequency" in requested_fields:
+        response["symptomFrequency"] = symptom_frequency
+        
+    if requested_fields is None or "recentStressLevel" in requested_fields:
+        response["recentStressLevel"] = recent_stress_level
+        
+    if requested_fields is None or "topObservation" in requested_fields:
+        response["topObservation"] = highest.to_dict() if highest else None
+        
+    if requested_fields is None or "cycleConsistency" in requested_fields:
+        response["cycleConsistency"] = consistency
+        
+    if requested_fields is None or "cycleConsistencyDescription" in requested_fields:
+        response["cycleConsistencyDescription"] = consistency_text
+        
+    if requested_fields is None or "prediction" in requested_fields:
+        response["prediction"] = prediction
+
+    return response
 
 
 @router.get(
