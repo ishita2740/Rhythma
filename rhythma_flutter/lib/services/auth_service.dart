@@ -4,6 +4,7 @@ import '../utils/secure_storage.dart';
 import 'api_client.dart';
 import 'firestore_service.dart';
 import 'local_storage_service.dart';
+import 'profile_service.dart';
 
 class AuthService {
   final Dio _dio = ApiClient.dio;
@@ -51,55 +52,83 @@ class AuthService {
     }
   }
 
+  /// The server fields that map onto a local profile key.
+  ///
+  /// `full_name` is stored locally as `name`; everything else keeps its
+  /// name. Listed rather than copied wholesale so a field the backend
+  /// adds does not silently land in local storage under a key no screen
+  /// reads.
+  static const Map<String, String> _serverToLocalProfileKeys = {
+    'full_name': 'name',
+    'avatar': 'avatar',
+    'language': 'language',
+    'age': 'age',
+    'height_cm': 'height_cm',
+    'weight_kg': 'weight_kg',
+    'last_period': 'last_period',
+    'last_period_is_approximate': 'last_period_is_approximate',
+    'cycle_length': 'cycle_length',
+    'period_duration': 'period_duration',
+    'cycle_regular': 'cycle_regular',
+    'phone': 'phone',
+    'city': 'city',
+    'state': 'state',
+    'notifications_enabled': 'notifications_enabled',
+  };
+
+  /// Reconcile the account's profile between this device and the server.
+  ///
+  /// Push first, then pull. The device is the source of truth for
+  /// anything it has that the server has not accepted yet — which, until
+  /// issue #551, was *everything a user entered during onboarding*,
+  /// because that screen wrote Hive and never called the API. Pulling
+  /// before pushing would let a near-empty server document decide what
+  /// the handset knows.
+  ///
+  /// The pull **merges**. It used to rebuild the local profile from a
+  /// whitelist and `saveProfile` it, which replaces — so any local-only
+  /// field was dropped on every cold start, and a server document with no
+  /// `full_name` renamed the user to the literal string `User` and reset
+  /// her avatar to `avatar_1`. Every launch.
+  ///
+  /// The whole thing used to be gated on `profile['cycle_length'] != null`,
+  /// so an account whose server copy had no cycle length — which is every
+  /// account, given the missing push — synced nothing at all. Only
+  /// `setOnboardingCompleted` still depends on it, which is the one thing
+  /// it genuinely means: this account finished onboarding somewhere.
   Future<void> _syncProfile(String uid) async {
     try {
+      if (LocalStorageService.profileNeedsPush) {
+        final local = LocalStorageService.getProfile();
+        if (local != null && local.isNotEmpty) {
+          if (await ProfileService.patchProfile(local)) {
+            await LocalStorageService.setProfileNeedsPush(false);
+          }
+        } else {
+          // Nothing to send: the flag outlived the data it referred to.
+          await LocalStorageService.setProfileNeedsPush(false);
+        }
+      }
+
       final profileResponse = await _dio.get('/auth/profile');
       if (profileResponse.statusCode == 200 && profileResponse.data is Map) {
         final profile = Map<String, dynamic>.from(profileResponse.data as Map);
+
         if (profile['cycle_length'] != null) {
           await LocalStorageService.setOnboardingCompleted(true);
-          final localProfile = <String, dynamic>{
-            'name': profile['full_name'] ?? 'User',
-            'avatar': profile['avatar'] ?? 'assets/avatars/avatar_1.png',
-            'language': profile['language'] ?? 'en',
-          };
-          if (profile['age'] != null) localProfile['age'] = profile['age'];
-          if (profile['height_cm'] != null) {
-            localProfile['height_cm'] = profile['height_cm'];
-          }
-          if (profile['weight_kg'] != null) {
-            localProfile['weight_kg'] = profile['weight_kg'];
-          }
-          if (profile['last_period'] != null) {
-            localProfile['last_period'] = profile['last_period'];
-          }
-          if (profile['last_period_is_approximate'] != null) {
-            localProfile['last_period_is_approximate'] =
-                profile['last_period_is_approximate'];
-          }
-          if (profile['cycle_length'] != null) {
-            localProfile['cycle_length'] = profile['cycle_length'];
-          }
-          if (profile['period_duration'] != null) {
-            localProfile['period_duration'] = profile['period_duration'];
-          }
-          if (profile['cycle_regular'] != null) {
-            localProfile['cycle_regular'] = profile['cycle_regular'];
-          }
-          if (profile['phone'] != null) {
-            localProfile['phone'] = profile['phone'];
-          }
-          if (profile['city'] != null) {
-            localProfile['city'] = profile['city'];
-          }
-          if (profile['state'] != null) {
-            localProfile['state'] = profile['state'];
-          }
-          if (profile['notifications_enabled'] != null) {
-            localProfile['notifications_enabled'] =
-                profile['notifications_enabled'];
-          }
-          await LocalStorageService.saveProfile(localProfile);
+        }
+
+        final fromServer = <String, dynamic>{};
+        _serverToLocalProfileKeys.forEach((serverKey, localKey) {
+          final value = profile[serverKey];
+          // A null is "the server does not hold this", not "clear it".
+          // Treating the two the same is what let an empty server
+          // document overwrite a name and an avatar the user had chosen.
+          if (value != null) fromServer[localKey] = value;
+        });
+
+        if (fromServer.isNotEmpty) {
+          await LocalStorageService.mergeProfile(fromServer);
         }
       }
     } catch (_) {

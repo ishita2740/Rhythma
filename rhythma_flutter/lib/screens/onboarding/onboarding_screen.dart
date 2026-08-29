@@ -246,17 +246,46 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     if (state.isNotEmpty) profile['state'] = state;
     profile['notifications_enabled'] = _notificationsEnabled;
 
-    // 1. Persist locally first — data is never lost even if backend is down.
-    await context.read<ProfileProvider>().saveProfile(profile);
+    // 1. Persist locally first — data is never lost even if backend is
+    // down — and then push it to the backend in the same call.
+    //
+    // The push used to be missing entirely: this wrote Hive and stopped,
+    // with a comment saying a background sync could be added later. There
+    // was no later. So the server's user document had no `last_period`,
+    // no `cycle_length`, no age and no name, and every server-side
+    // prediction — /cycle/predictions, /dashboard, the observations, the
+    // SMS summary — fell back to a 28-day population default while the
+    // cycle length the user had just declared sat unread on the handset.
+    // A reinstall or a second device lost all of it (issue #551).
+    final synced =
+        await context.read<ProfileProvider>().saveProfileWithSync(profile);
 
-    // 2. Sync to backend is optional for now. The app uses local storage as
-    // the source of truth. A background sync can be added later.
-    // (Previously this called ProfileService.patchProfile, which was removed.)
-
-    // 3. Mark onboarding done for this user account.
+    // 2. Mark onboarding done for this user account.
     await LocalStorageService.setOnboardingCompleted(true);
 
     if (!mounted) return;
+
+    // A failed push is reported but never blocks. She has finished
+    // onboarding, the data is on the device, and `validateSession()` will
+    // send it on the next launch that has a connection — telling her to
+    // wait for a network she may not have today would be worse than
+    // telling her it will catch up.
+    //
+    // The string is a literal rather than an l10n key, matching the other
+    // status SnackBars in this app (see insights_screen.dart). Adding a
+    // key means a new abstract getter on `AppLocalizations` and an
+    // implementation in all twenty locale files, which is a change worth
+    // making for the whole set of them at once rather than for this one
+    // sentence.
+    if (!synced) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Saved on this device. It will sync when you are back online.',
+          ),
+        ),
+      );
+    }
 
     SemanticsService.announce(
   'Onboarding complete',
