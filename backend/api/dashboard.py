@@ -17,7 +17,13 @@ from services.health_observations_service import (
     top_observation,
 )
 from services.prediction_service import dashboard_summary, predict
-from services.scoring_service import get_user_scores, compute_cycle_stats, as_date, DEFAULT_CYCLE_LENGTH
+from services.scoring_service import (
+    get_user_scores,
+    compute_cycle_stats,
+    compute_symptom_frequency,
+    as_date,
+    DEFAULT_CYCLE_LENGTH,
+)
 
 
 class DashboardUser(BaseModel):
@@ -134,7 +140,15 @@ class DashboardResponse(BaseModel):
     hasEnoughDataForInsights: bool
     loggedCycleCount: int
     cycleHistory: list[CycleHistoryEntry]
+    #: Share of the logged days in the window on which each symptom
+    #: occurred, keyed by the canonical symptom value. Every symptom the
+    #: user actually logged appears here, not a fixed four — see
+    #: ``scoring_service.compute_symptom_frequency``.
     symptomFrequency: dict[str, float]
+    #: How many logged days the fractions above are computed over. Without
+    #: it "20%" is unreadable: 20% of ten logged days and 20% of two are
+    #: not the same statement, and a client had no way to tell them apart.
+    symptomSampleSize: int = 0
     recentStressLevel: Optional[int] = None
     #: Highest-severity factual observation about the user's logged data,
     #: computed from the logs already fetched above — so the Home screen
@@ -216,15 +230,12 @@ async def get_dashboard(current_user: dict = Depends(get_current_user)):
                 "cycle_length": (newer - older).days,
             })
 
-    canonical_symptoms = ["cramps", "headache", "bloating", "acne"]
-    logs_with_symptoms = [l for l in logs if l.get("symptoms")]
-    symptom_frequency = {
-        s: round(
-            sum(1 for l in logs_with_symptoms if s in (l.get("symptoms") or [])) / len(logs_with_symptoms),
-            2,
-        )
-        for s in canonical_symptoms
-    } if logs_with_symptoms else {}
+    # Every symptom in the logs, over every logged day (issue #537). This
+    # used to divide by `len(logs_with_symptoms)` — the days that already
+    # had a symptom — over a hardcoded list of four, so a symptom-free day
+    # could not lower any percentage and five of the nine chips
+    # `core/cycle_validation` accepts were never counted at all.
+    symptom_stats = compute_symptom_frequency(logs)
 
     recent_stress_level = logs[0].get("stress_level") if logs else None
 
@@ -268,7 +279,8 @@ async def get_dashboard(current_user: dict = Depends(get_current_user)):
         "hasEnoughDataForInsights": score_data["has_enough_data_for_insights"],
         "loggedCycleCount": score_data["logged_cycle_count"],
         "cycleHistory": cycle_history,
-        "symptomFrequency": symptom_frequency,
+        "symptomFrequency": symptom_stats["frequencies"],
+        "symptomSampleSize": symptom_stats["sample_size"],
         "recentStressLevel": recent_stress_level,
         "topObservation": highest.to_dict() if highest else None,
         "cycleConsistency": consistency,

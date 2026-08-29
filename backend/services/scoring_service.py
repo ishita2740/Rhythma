@@ -16,6 +16,7 @@ This module provides two categories of output:
 from datetime import date, datetime
 from typing import Any, Dict, List, Optional
 
+from core.cycle_validation import KNOWN_SYMPTOMS, canonical_symptom
 from services.firestore_service import CycleService, UserService
 from models.cvi_model import predict_cvi, risk_level
 from models.mhs_model import predict_mhs
@@ -95,6 +96,101 @@ def compute_cycle_stats(logs: List[Dict[str, Any]]) -> Dict[str, Any]:
         "shortest_cycle_length": min_cycle,
         "longest_cycle_length": max_cycle,
         "average_bleeding_duration": avg_bleed,
+    }
+
+
+def compute_symptom_frequency(logs: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """How often each symptom occurs across the logs, and out of how many.
+
+    Returns ``{"frequencies": {symptom: fraction}, "sample_size": int}``.
+
+    Two things about this were wrong where it used to live, inline in
+    ``api/dashboard.py``, and both pushed the same way — they made the
+    handful of symptoms the card drew look more dominant than the record
+    supports.
+
+    **The denominator was the wrong set.** It was ``len(logs_with_symptoms)``:
+
+        logs_with_symptoms = [l for l in logs if l.get("symptoms")]
+        symptom_frequency = {
+            s: round(sum(1 for l in logs_with_symptoms if s in ...) / len(logs_with_symptoms), 2)
+            ...
+        }
+
+    Days the user logged sleep, mood or flow and no symptom were removed
+    from the sample *before* the division, so they could not pull any
+    percentage down and the figure could only ever be inflated. Two cramp
+    days out of ten logged days reported 67% instead of 20%, and the
+    overstatement grew the more diligently a user logged, because every
+    symptom-free day she recorded was discarded rather than counted. The
+    degenerate case is the common one: log symptoms exactly once and
+    everything in that entry reads 100%.
+
+    Here the denominator is every log in the window. A logged day without
+    cramps is a day without cramps.
+
+    **The vocabulary was four fixed strings** — ``cramps``, ``headache``,
+    ``bloating``, ``acne`` — while ``core/cycle_validation`` offers nine
+    chips and is explicit that the list is open-ended:
+
+        *Choices are rejected; symptoms are not. [...] Unknown symptoms are
+        therefore normalised and kept, bounded in count and length, rather
+        than refused.*
+
+    So ``fatigue``, ``nausea``, ``back pain``, ``severe pain`` and
+    ``fainting`` were accepted at the door and then silently uncounted,
+    along with anything a future free-text entry produces. Every symptom
+    present in the logs is reported now.
+
+    The nine known chips are always included when there is anything to
+    report, at ``0.0`` if they never occurred. That is deliberate: a client
+    drawing a fixed row of bars keeps drawing them, and "you did not report
+    this" is a real answer rather than a missing key.
+
+    ``{}`` with a non-zero ``sample_size`` is the "no symptoms logged at
+    all" case, kept distinct from ``sample_size == 0`` ("nothing logged at
+    all"). Both render as an empty state; only one of them means the user
+    has told us something.
+
+    Stored values are run back through :func:`canonical_symptom` before
+    counting. Documents written before the write path normalised — or by a
+    client that sent ``"Cramps"`` — otherwise fail an exact-match test
+    against ``"cramps"`` and vanish from their own summary.
+    """
+    sample_size = len(logs)
+    if sample_size == 0:
+        return {"frequencies": {}, "sample_size": 0}
+
+    counts: Dict[str, int] = {}
+    for log in logs:
+        # A symptom listed twice on one day is still one day with that
+        # symptom; `seen` keeps a duplicated entry from counting twice and
+        # producing a fraction above 1.0.
+        seen = set()
+        for raw in log.get("symptoms") or []:
+            if not isinstance(raw, str):
+                continue
+            symptom = canonical_symptom(raw)
+            if not symptom or symptom in seen:
+                continue
+            seen.add(symptom)
+            counts[symptom] = counts.get(symptom, 0) + 1
+
+    if not counts:
+        return {"frequencies": {}, "sample_size": sample_size}
+
+    # Known chips first, in the order `cycle_validation` declares them, then
+    # anything else the user logged, alphabetically. A stable order keeps
+    # the response diffable and stops a client that iterates the map from
+    # reshuffling its bars between refreshes.
+    ordered = list(KNOWN_SYMPTOMS) + sorted(set(counts) - set(KNOWN_SYMPTOMS))
+
+    return {
+        "frequencies": {
+            symptom: round(counts.get(symptom, 0) / sample_size, 2)
+            for symptom in ordered
+        },
+        "sample_size": sample_size,
     }
 
 

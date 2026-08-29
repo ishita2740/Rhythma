@@ -167,6 +167,28 @@ def normalize_choice(
     return cleaned
 
 
+def canonical_symptom(value: str) -> Optional[str]:
+    """One symptom string, in the form the rest of the system compares on.
+
+    Casefolds, collapses internal whitespace so ``"back   pain"`` matches
+    ``"back pain"``, and maps a known alternate spelling onto its chip
+    value. Returns ``None`` for a blank, which is not a symptom.
+
+    Split out of :func:`normalize_symptoms` because the *write* path is no
+    longer the only caller. Anything that counts symptoms after the fact
+    has to reduce a stored value to the same key, and a second copy of
+    "lowercase it and check the alias table" is exactly how ``"Cramps"``
+    logged by one client stops matching ``"cramps"`` counted by another.
+    Length and list-size limits stay with the writer: they are rules about
+    what may be *stored*, and a reader given a document that predates them
+    should still be able to read it.
+    """
+    normalized = " ".join(value.split()).lower()
+    if not normalized:
+        return None
+    return _SYMPTOM_ALIASES.get(normalized, normalized)
+
+
 def normalize_symptoms(value: Optional[Any]) -> Optional[List[str]]:
     """Clean a symptom list without refusing symptoms we don't know about.
 
@@ -193,11 +215,9 @@ def normalize_symptoms(value: Optional[Any]) -> Optional[List[str]]:
     for item in value:
         if not isinstance(item, str):
             raise ValueError("every symptom must be text")
-        # Collapse runs of whitespace so "back   pain" matches "back pain".
-        normalized = " ".join(item.split()).lower()
+        normalized = canonical_symptom(item)
         if not normalized:
             continue
-        normalized = _SYMPTOM_ALIASES.get(normalized, normalized)
         if len(normalized) > MAX_SYMPTOM_CHARS:
             raise ValueError(
                 f"each symptom must be at most {MAX_SYMPTOM_CHARS} characters "
