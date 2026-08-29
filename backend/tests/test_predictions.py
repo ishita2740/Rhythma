@@ -31,6 +31,7 @@ from services.prediction_service import (
     observed_gaps,
     phase_for,
     predict,
+    project_upcoming_periods,
     range_half_width,
     reject_outliers,
     spread_of,
@@ -421,6 +422,9 @@ def test_upcoming_periods_are_evenly_spaced_by_the_estimate():
     first, second, third = prediction.upcoming_periods
     assert (second - first).days == 30
     assert (third - second).days == 30
+    # Even spacing was the only thing this asserted, which is why nothing
+    # caught #519: a list of past dates is evenly spaced too.
+    assert all(day >= TODAY for day in prediction.upcoming_periods)
 
 
 def test_horizon_of_zero_returns_no_forecast():
@@ -601,3 +605,175 @@ def test_dashboard_keeps_all_of_its_original_fields(auth_headers):
         "recentStressLevel",
     ):
         assert key in body
+
+
+# ─── The forecast series looks forward (issue #519) ───────────────────────
+#
+# `next_period_date` is deliberately un-clamped so `days_until_next_period`
+# can go negative — being late is the most useful thing this module says.
+# The forecast loop inherited that anchor and never asked whether the date
+# it was appending had already happened, so an overdue user's Cycle page
+# read "Upcoming: Aug 6" on 25 August.
+#
+# Every assertion here also checks that the overdue fields are untouched.
+# Clamping the anchor to fix the list would trade one bug for a worse one.
+
+
+def overdue_prediction(days_late, cycle_length=28, horizon=3):
+    """A regular user whose last logged period was `days_late` days overdue."""
+    last_start = TODAY - timedelta(days=cycle_length + days_late)
+    starts = [last_start - timedelta(days=cycle_length * i) for i in range(4)]
+    return predict(logs_from_starts(starts), today=TODAY, horizon=horizon)
+
+
+def test_an_overdue_user_gets_no_past_dates_in_her_forecast():
+    prediction = overdue_prediction(days_late=19)
+
+    assert prediction.upcoming_periods
+    assert all(day >= TODAY for day in prediction.upcoming_periods)
+
+
+def test_the_overdue_signal_survives_the_fix():
+    prediction = overdue_prediction(days_late=19)
+
+    # The whole point of not clamping. If these regress, the module has
+    # lost the one answer it exists to give.
+    assert prediction.is_overdue is True
+    assert prediction.days_overdue == 19
+    assert prediction.days_until_next_period == -19
+    assert prediction.next_period_date == TODAY - timedelta(days=19)
+
+
+def test_the_forecast_still_returns_a_full_horizon_when_overdue():
+    # The old behaviour silently spent entries of the horizon on dates that
+    # had already passed, so a client asking for three future dates got one.
+    prediction = overdue_prediction(days_late=19, horizon=3)
+    assert len(prediction.upcoming_periods) == 3
+
+
+def test_the_forecast_stays_evenly_spaced_after_rolling_forward():
+    prediction = overdue_prediction(days_late=19, cycle_length=28, horizon=3)
+    first, second, third = prediction.upcoming_periods
+    assert (second - first).days == 28
+    assert (third - second).days == 28
+
+
+def test_a_period_due_today_counts_as_upcoming():
+    # "Expected today" is a real answer, and the rest of the payload gives
+    # it: days_until is 0 and is_overdue is false. Yesterday is not.
+    starts = [TODAY - timedelta(days=28 * (i + 1)) for i in range(4)]
+    prediction = predict(logs_from_starts(starts), today=TODAY)
+
+    assert prediction.days_until_next_period == 0
+    assert prediction.is_overdue is False
+    assert prediction.upcoming_periods[0] == TODAY
+
+
+def test_a_period_due_yesterday_does_not():
+    prediction = overdue_prediction(days_late=1)
+    assert prediction.upcoming_periods[0] > TODAY
+
+
+def test_a_forecast_is_withheld_once_the_anchor_is_too_stale():
+    # Four missed cycles. Rolling forward would emit three confident dates
+    # built on an anchor whose own prediction failed four times over.
+    prediction = overdue_prediction(days_late=28 * 4)
+
+    assert prediction.upcoming_periods == []
+    # Withheld, not hidden: the payload still says what is going on.
+    assert prediction.is_overdue is True
+    assert prediction.phase == PHASE_LATE
+
+
+def test_a_forecast_survives_a_few_missed_cycles():
+    # The other side of the ceiling. Two missed cycles is exactly the user
+    # a forecast is still useful to.
+    prediction = overdue_prediction(days_late=28 * 2)
+
+    assert len(prediction.upcoming_periods) == 3
+    assert all(day >= TODAY for day in prediction.upcoming_periods)
+
+
+def test_a_user_who_is_not_overdue_is_completely_unaffected():
+    on_time = predict(
+        logs_from_starts(evenly_spaced(6, 28, TODAY - timedelta(days=10))),
+        today=TODAY,
+        horizon=3,
+    )
+    assert on_time.upcoming_periods[0] == on_time.next_period_date
+    assert len(on_time.upcoming_periods) == 3
+
+
+# ─── project_upcoming_periods, directly ───────────────────────────────────
+
+
+def test_projection_leaves_a_future_anchor_alone():
+    dates = project_upcoming_periods(
+        date(2026, 6, 10), cycle_length=28, today=TODAY, horizon=3
+    )
+    assert dates == [date(2026, 6, 10), date(2026, 7, 8), date(2026, 8, 5)]
+
+
+def test_projection_advances_a_past_anchor_by_whole_cycles():
+    # 2026-05-20 + 28 = 2026-06-17, the first date on or after TODAY.
+    dates = project_upcoming_periods(
+        date(2026, 5, 20), cycle_length=28, today=TODAY, horizon=2
+    )
+    assert dates == [date(2026, 6, 17), date(2026, 7, 15)]
+
+
+def test_projection_gives_up_past_the_ceiling():
+    assert (
+        project_upcoming_periods(
+            date(2026, 1, 1), cycle_length=28, today=TODAY, horizon=3
+        )
+        == []
+    )
+
+
+def test_projection_ceiling_is_configurable():
+    dates = project_upcoming_periods(
+        date(2026, 1, 1),
+        cycle_length=28,
+        today=TODAY,
+        horizon=1,
+        max_projection_cycles=12,
+    )
+    # 2026-01-01 plus six whole cycles of 28 days is 2026-06-18, the first
+    # projected date on or after TODAY.
+    assert dates == [date(2026, 6, 18)]
+
+
+def test_projection_of_a_zero_horizon_is_empty():
+    assert (
+        project_upcoming_periods(date(2026, 6, 10), cycle_length=28, today=TODAY, horizon=0)
+        == []
+    )
+
+
+def test_projection_refuses_a_non_positive_cycle_length():
+    # Guards the `while cursor < today` loop, which would not terminate.
+    assert (
+        project_upcoming_periods(date(2026, 5, 1), cycle_length=0, today=TODAY, horizon=3)
+        == []
+    )
+
+
+# ─── Through the endpoint ─────────────────────────────────────────────────
+
+
+def test_predictions_endpoint_returns_no_past_dates_for_an_overdue_user(
+    auth_headers, mock_cycle_service
+):
+    today = date.today()
+    last_start = today - timedelta(days=47)
+    mock_cycle_service.get_logs_for_user.return_value = logs_from_starts(
+        [last_start - timedelta(days=28 * i) for i in range(4)]
+    )
+
+    body = client.get("/api/v1/cycle/predictions", headers=auth_headers).json()
+
+    assert body["isOverdue"] is True
+    assert body["daysUntilNextPeriod"] < 0
+    assert body["upcomingPeriods"]
+    assert all(iso >= today.isoformat() for iso in body["upcomingPeriods"])
