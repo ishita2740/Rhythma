@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 // The Sharing screen is where a patient learns what sharing actually
 // means. Before #350 it could only say who *had* permission; it now says
@@ -148,6 +149,183 @@ describe('consent rows carry usage', () => {
     renderWithProviders(<SharingPage />);
 
     expect(await screen.findByText(/Viewed 2 times/i)).toBeInTheDocument();
+  });
+});
+
+describe('access log paging (#540)', () => {
+  // The list stopped at the first twenty rows with nothing on screen to
+  // say so. It is newest-first, so what fell off the end was the *oldest*
+  // history — and "has anyone been looking at my records, and since when"
+  // is the question this screen exists to answer. An unmarked window reads
+  // as a complete one.
+  //
+  // The consent list directly above it already walks its pages to the end,
+  // and the provider dashboard already renders a "Load more". Only this
+  // list stopped silently.
+
+  function page(entries: ReturnType<typeof accessEntry>[], overrides = {}) {
+    return {
+      entries,
+      page: {
+        limit: 20,
+        offset: 0,
+        count: entries.length,
+        hasMore: false,
+        nextOffset: null,
+        ...overrides,
+      },
+    };
+  }
+
+  function entries(from: number, to: number) {
+    return Array.from({ length: to - from }, (_, i) =>
+      accessEntry({ id: `access-${from + i}` }),
+    );
+  }
+
+  it('offers to load more when the server says there is more', async () => {
+    mockAccessLog.mockResolvedValue(
+      page(entries(0, 20), { hasMore: true, nextOffset: 20 }),
+    );
+
+    renderWithProviders(<SharingPage />);
+
+    expect(
+      await screen.findByRole('button', { name: /Show earlier views/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('does not offer to load more when the history fits on one page', async () => {
+    mockAccessLog.mockResolvedValue(page(entries(0, 3)));
+
+    renderWithProviders(<SharingPage />);
+
+    await screen.findAllByText(/Opened your full record/i);
+    expect(screen.queryByRole('button', { name: /Show earlier views/i })).toBeNull();
+  });
+
+  it("asks for the server's nextOffset, not its own row count", async () => {
+    // The two differ whenever a page comes back short. Computing the
+    // offset from `entries.length` is the client-side version of the bug
+    // this fixes on the server in #538.
+    mockAccessLog.mockResolvedValueOnce(
+      page(entries(0, 20), { hasMore: true, nextOffset: 26 }),
+    );
+    mockAccessLog.mockResolvedValueOnce(page(entries(20, 24)));
+
+    renderWithProviders(<SharingPage />);
+
+    const button = await screen.findByRole('button', { name: /Show earlier views/i });
+    await userEvent.click(button);
+
+    await waitFor(() => {
+      expect(mockAccessLog).toHaveBeenLastCalledWith(20, 26);
+    });
+  });
+
+  it('appends the next page rather than replacing what is shown', async () => {
+    mockAccessLog.mockResolvedValueOnce(
+      page(entries(0, 20), { hasMore: true, nextOffset: 20 }),
+    );
+    mockAccessLog.mockResolvedValueOnce(page(entries(20, 25)));
+
+    renderWithProviders(<SharingPage />);
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: /Show earlier views/i }),
+    );
+
+    await waitFor(() => {
+      expect(screen.getAllByText(/Opened your full record/i)).toHaveLength(25);
+    });
+  });
+
+  it('drops the button once the last page has arrived', async () => {
+    mockAccessLog.mockResolvedValueOnce(
+      page(entries(0, 20), { hasMore: true, nextOffset: 20 }),
+    );
+    mockAccessLog.mockResolvedValueOnce(page(entries(20, 22)));
+
+    renderWithProviders(<SharingPage />);
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: /Show earlier views/i }),
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: /Show earlier views/i })).toBeNull();
+    });
+  });
+
+  it('says how many are shown while more remain, and stops once they do not', async () => {
+    mockAccessLog.mockResolvedValueOnce(
+      page(entries(0, 20), { hasMore: true, nextOffset: 20 }),
+    );
+    mockAccessLog.mockResolvedValueOnce(page(entries(20, 22)));
+
+    renderWithProviders(<SharingPage />);
+
+    expect(await screen.findByText(/Showing the 20 most recent views/i)).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: /Show earlier views/i }));
+
+    await waitFor(() => {
+      expect(screen.queryByText(/most recent views/i)).toBeNull();
+    });
+  });
+
+  it('keeps the entries already loaded when loading more fails', async () => {
+    // A patient who can see twenty rows and cannot fetch the twenty-first
+    // should keep her twenty. Clearing the list on a failed "load more"
+    // would take away history she was already reading.
+    mockAccessLog.mockResolvedValueOnce(
+      page(entries(0, 20), { hasMore: true, nextOffset: 20 }),
+    );
+    mockAccessLog.mockRejectedValueOnce(new Error('500'));
+
+    renderWithProviders(<SharingPage />);
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: /Show earlier views/i }),
+    );
+
+    expect(await screen.findByText(/Couldn't load earlier views/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Opened your full record/i)).toHaveLength(20);
+  });
+
+  it('leaves the consent list alone when loading more fails', async () => {
+    // The existing guarantee, re-asserted against the new code path:
+    // revoking is the more urgent of the two actions and must survive any
+    // access-log failure.
+    mockConsents.mockResolvedValue([consentFixture()]);
+    mockAccessLog.mockResolvedValueOnce(
+      page(entries(0, 20), { hasMore: true, nextOffset: 20 }),
+    );
+    mockAccessLog.mockRejectedValueOnce(new Error('500'));
+
+    renderWithProviders(<SharingPage />);
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: /Show earlier views/i }),
+    );
+
+    await screen.findByText(/Couldn't load earlier views/i);
+    // The provider's email is unique to the consent row; her name also
+    // appears on every access-log entry below it.
+    expect(screen.getByText('dr.rao@clinic.in')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Revoke access/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('asks for the first page explicitly rather than relying on a default', async () => {
+    mockAccessLog.mockResolvedValue(page(entries(0, 2)));
+
+    renderWithProviders(<SharingPage />);
+
+    await waitFor(() => {
+      expect(mockAccessLog).toHaveBeenCalledWith(20, 0);
+    });
   });
 });
 
