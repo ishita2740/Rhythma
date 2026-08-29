@@ -332,5 +332,19 @@
   "logFlowVeryHeavy": "Very Heavy",
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logSympFainting": "Fainting",
+  "notificationPeriodTitle": "শীঘ্রই পিরিয়ড আসতে পারে",
+  "notificationPeriodBody": "আপনার পিরিয়ড প্রায় {days} দিনের মধ্যে আসতে পারে। প্রয়োজনীয় জিনিস প্রস্তুত রাখার ভালো সময়।",
+  "@notificationPeriodBody": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationLogPeriodTitle": "আপনার চক্র আবার ঠিক পথে আনি",
+  "notificationLogPeriodBody": "আপনি অনেকদিন কোনো পিরিয়ড লিখে রাখেননি, তাই পরেরটি অনুমান করা যাচ্ছে না। Rhythma খুলে আপনার শেষ পিরিয়ড লিখুন।",
+  "notificationLogReminderTitle": "আপনার দিন লিখে রাখার সময়",
+  "notificationLogReminderBody": "আপনি আজ কিছু লিখে রাখেননি। এখন একটু সময় দিলে আপনার পূর্বাভাস আরও ভালো হবে।",
+  "notificationChannelReminders": "Rhythma রিমাইন্ডার"
 }

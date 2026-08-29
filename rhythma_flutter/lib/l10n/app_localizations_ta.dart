@@ -160,6 +160,29 @@ class AppLocalizationsTa extends AppLocalizations {
   String get homeRetry => 'Retry';
 
   @override
+  String get notificationPeriodTitle => 'மாதவிடாய் விரைவில் வரலாம்';
+
+  @override
+  String notificationPeriodBody(String days) {
+    return 'உங்கள் மாதவிடாய் சுமார் $days நாட்களில் வரலாம். தேவையானவற்றைத் தயார் செய்ய நல்ல நேரம்.';
+  }
+
+  @override
+  String get notificationLogPeriodTitle => 'உங்கள் சுழற்சியை மீண்டும் சரிசெய்வோம்';
+
+  @override
+  String get notificationLogPeriodBody => 'நீங்கள் நீண்ட நாட்களாக மாதவிடாயைப் பதிவு செய்யவில்லை, எனவே அடுத்ததை கணிக்க முடியாது. Rhythma திறந்து உங்கள் கடைசி மாதவிடாயைப் பதிவு செய்யுங்கள்.';
+
+  @override
+  String get notificationLogReminderTitle => 'உங்கள் நாளைப் பதிவு செய்யும் நேரம்';
+
+  @override
+  String get notificationLogReminderBody => 'நீங்கள் இன்று எதுவும் பதிவு செய்யவில்லை. இப்போது ஒரு நிமிடம் ஒதுக்கினால் உங்கள் கணிப்புகள் மேம்படும்.';
+
+  @override
+  String get notificationChannelReminders => 'Rhythma நினைவூட்டல்கள்';
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

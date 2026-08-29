@@ -423,6 +423,48 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get homeRetry;
 
+  /// No description provided for @notificationPeriodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Period expected soon'**
+  String get notificationPeriodTitle;
+
+  /// No description provided for @notificationPeriodBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your period is expected in about {days} days. A good time to get what you need ready.'**
+  String notificationPeriodBody(String days);
+
+  /// No description provided for @notificationLogPeriodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Let's get your cycle back on track'**
+  String get notificationLogPeriodTitle;
+
+  /// No description provided for @notificationLogPeriodBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It's been a while since you logged a period, so we can't predict the next one. Open Rhythma and log your last period.'**
+  String get notificationLogPeriodBody;
+
+  /// No description provided for @notificationLogReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to log your day'**
+  String get notificationLogReminderTitle;
+
+  /// No description provided for @notificationLogReminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven't logged anything today. A moment now makes your predictions better.'**
+  String get notificationLogReminderBody;
+
+  /// No description provided for @notificationChannelReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Rhythma reminders'**
+  String get notificationChannelReminders;
+
   /// No description provided for @homeMhs.
   ///
   /// In en, this message translates to:

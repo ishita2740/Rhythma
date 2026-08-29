@@ -161,6 +161,29 @@ class AppLocalizationsTe extends AppLocalizations {
   String get homeRetry => 'మళ్లీ ప్రయత్నించండి';
 
   @override
+  String get notificationPeriodTitle => 'త్వరలో పీరియడ్ రావచ్చు';
+
+  @override
+  String notificationPeriodBody(String days) {
+    return 'మీ పీరియడ్ సుమారు $days రోజుల్లో రావచ్చు. అవసరమైనవి సిద్ధం చేసుకోవడానికి మంచి సమయం.';
+  }
+
+  @override
+  String get notificationLogPeriodTitle => 'మీ సైకిల్‌ను మళ్లీ సరైన దారిలో పెడదాం';
+
+  @override
+  String get notificationLogPeriodBody => 'మీరు చాలా కాలంగా పీరియడ్ నమోదు చేయలేదు, అందుకే తదుపరిది అంచనా వేయలేము. Rhythma తెరిచి మీ చివరి పీరియడ్‌ను నమోదు చేయండి.';
+
+  @override
+  String get notificationLogReminderTitle => 'మీ రోజును నమోదు చేసే సమయం';
+
+  @override
+  String get notificationLogReminderBody => 'మీరు ఈరోజు ఏమీ నమోదు చేయలేదు. ఇప్పుడు కొద్ది సమయం ఇస్తే మీ అంచనాలు మెరుగవుతాయి.';
+
+  @override
+  String get notificationChannelReminders => 'Rhythma రిమైండర్‌లు';
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

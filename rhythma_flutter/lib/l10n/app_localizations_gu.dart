@@ -160,6 +160,29 @@ class AppLocalizationsGu extends AppLocalizations {
   String get homeRetry => 'ફરી પ્રયાસ કરો';
 
   @override
+  String get notificationPeriodTitle => 'પિરિયડ જલદી આવવાની શક્યતા';
+
+  @override
+  String notificationPeriodBody(String days) {
+    return 'તમારો પિરિયડ આશરે $days દિવસમાં આવવાની શક્યતા છે. જરૂરી વસ્તુઓ તૈયાર રાખવાનો સારો સમય છે.';
+  }
+
+  @override
+  String get notificationLogPeriodTitle => 'તમારું ચક્ર ફરી પાટા પર લાવીએ';
+
+  @override
+  String get notificationLogPeriodBody => 'તમે ઘણા સમયથી પિરિયડ નોંધ્યો નથી, તેથી અમે આગળનો અંદાજ લગાવી શકતા નથી. Rhythma ખોલીને તમારો છેલ્લો પિરિયડ નોંધો.';
+
+  @override
+  String get notificationLogReminderTitle => 'તમારો દિવસ નોંધવાનો સમય';
+
+  @override
+  String get notificationLogReminderBody => 'તમે આજે કંઈ નોંધ્યું નથી. હમણાં થોડી ક્ષણ આપવાથી તમારા અંદાજ વધુ સારા થશે.';
+
+  @override
+  String get notificationChannelReminders => 'Rhythma રિમાઇન્ડર';
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

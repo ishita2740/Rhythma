@@ -255,5 +255,19 @@
   "logFlowVeryHeavy": "Very Heavy",
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logSympFainting": "Fainting",
+  "notificationPeriodTitle": "Period expected soon",
+  "notificationPeriodBody": "Your period is expected in about {days} days. A good time to get what you need ready.",
+  "@notificationPeriodBody": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationLogPeriodTitle": "Let's get your cycle back on track",
+  "notificationLogPeriodBody": "It's been a while since you logged a period, so we can't predict the next one. Open Rhythma and log your last period.",
+  "notificationLogReminderTitle": "Time to log your day",
+  "notificationLogReminderBody": "You haven't logged anything today. A moment now makes your predictions better.",
+  "notificationChannelReminders": "Rhythma reminders"
 }

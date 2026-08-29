@@ -161,6 +161,29 @@ class AppLocalizationsBn extends AppLocalizations {
   String get homeRetry => 'পুনরায় চেষ্টা করুন';
 
   @override
+  String get notificationPeriodTitle => 'শীঘ্রই পিরিয়ড আসতে পারে';
+
+  @override
+  String notificationPeriodBody(String days) {
+    return 'আপনার পিরিয়ড প্রায় $days দিনের মধ্যে আসতে পারে। প্রয়োজনীয় জিনিস প্রস্তুত রাখার ভালো সময়।';
+  }
+
+  @override
+  String get notificationLogPeriodTitle => 'আপনার চক্র আবার ঠিক পথে আনি';
+
+  @override
+  String get notificationLogPeriodBody => 'আপনি অনেকদিন কোনো পিরিয়ড লিখে রাখেননি, তাই পরেরটি অনুমান করা যাচ্ছে না। Rhythma খুলে আপনার শেষ পিরিয়ড লিখুন।';
+
+  @override
+  String get notificationLogReminderTitle => 'আপনার দিন লিখে রাখার সময়';
+
+  @override
+  String get notificationLogReminderBody => 'আপনি আজ কিছু লিখে রাখেননি। এখন একটু সময় দিলে আপনার পূর্বাভাস আরও ভালো হবে।';
+
+  @override
+  String get notificationChannelReminders => 'Rhythma রিমাইন্ডার';
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

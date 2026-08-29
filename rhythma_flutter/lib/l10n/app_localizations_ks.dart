@@ -157,6 +157,29 @@ class AppLocalizationsKs extends AppLocalizations {
   String get homeRetry => 'बेयि कोशिश करिव';
 
   @override
+  String get notificationPeriodTitle => 'Period expected soon';
+
+  @override
+  String notificationPeriodBody(String days) {
+    return 'Your period is expected in about $days days. A good time to get what you need ready.';
+  }
+
+  @override
+  String get notificationLogPeriodTitle => 'Let\'s get your cycle back on track';
+
+  @override
+  String get notificationLogPeriodBody => 'It\'s been a while since you logged a period, so we can\'t predict the next one. Open Rhythma and log your last period.';
+
+  @override
+  String get notificationLogReminderTitle => 'Time to log your day';
+
+  @override
+  String get notificationLogReminderBody => 'You haven\'t logged anything today. A moment now makes your predictions better.';
+
+  @override
+  String get notificationChannelReminders => 'Rhythma reminders';
+
+  @override
   String get homeMhs => 'MHS';
 
   @override

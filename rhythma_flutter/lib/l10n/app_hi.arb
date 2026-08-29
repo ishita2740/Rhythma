@@ -178,18 +178,31 @@
   "onboardingHeightInvalid": "कृपया वैध ऊंचाई दर्ज करें (50–250 सेमी)",
   "onboardingWeightInvalid": "कृपया वैध वज़न दर्ज करें (20–300 किग्रा)",
   "ayurvedaWellnessTitle": "आयुर्वेद-प्रेरित स्वास्थ्य जानकारी",
-"ayurvedaDisclaimer": "केवल शैक्षिक जानकारी। आयुर्वेद-प्रेरित सामग्री चिकित्सा सलाह, निदान या उपचार नहीं है।",
-"ayurvedaMenstrualTitle": "आराम और आत्मचिंतन",
-"ayurvedaMenstrualDescription": "आयुर्वेदिक परंपराएँ मासिक धर्म के समय आराम, आत्मचिंतन और हल्की स्व-देखभाल पर ध्यान देने का वर्णन करती हैं।",
-"ayurvedaFollicularTitle": "नवीनीकरण और गतिविधि",
-"ayurvedaFollicularDescription": "आयुर्वेदिक स्वास्थ्य परंपराएँ मासिक धर्म के बाद की अवधि को नवीनीकरण और धीरे-धीरे गतिविधि बढ़ाने से जोड़ती हैं।",
-"ayurvedaOvulationTitle": "संतुलन और जुड़ाव",
-"ayurvedaOvulationDescription": "कुछ आयुर्वेदिक परंपराएँ चक्र के मध्य को जीवन शक्ति और सामाजिक जुड़ाव से संबंधित समय के रूप में वर्णित करती हैं।",
-"ayurvedaLutealTitle": "स्थिरता और दिनचर्या",
-"ayurvedaLutealDescription": "आयुर्वेदिक स्वास्थ्य परंपराएँ चक्र के बाद के हिस्से में शांत दिनचर्या और जागरूक स्व-देखभाल पर जोर देती हैं।"
-
-  ,"logFlowVeryHeavy": "Very Heavy",
+  "ayurvedaDisclaimer": "केवल शैक्षिक जानकारी। आयुर्वेद-प्रेरित सामग्री चिकित्सा सलाह, निदान या उपचार नहीं है।",
+  "ayurvedaMenstrualTitle": "आराम और आत्मचिंतन",
+  "ayurvedaMenstrualDescription": "आयुर्वेदिक परंपराएँ मासिक धर्म के समय आराम, आत्मचिंतन और हल्की स्व-देखभाल पर ध्यान देने का वर्णन करती हैं।",
+  "ayurvedaFollicularTitle": "नवीनीकरण और गतिविधि",
+  "ayurvedaFollicularDescription": "आयुर्वेदिक स्वास्थ्य परंपराएँ मासिक धर्म के बाद की अवधि को नवीनीकरण और धीरे-धीरे गतिविधि बढ़ाने से जोड़ती हैं।",
+  "ayurvedaOvulationTitle": "संतुलन और जुड़ाव",
+  "ayurvedaOvulationDescription": "कुछ आयुर्वेदिक परंपराएँ चक्र के मध्य को जीवन शक्ति और सामाजिक जुड़ाव से संबंधित समय के रूप में वर्णित करती हैं।",
+  "ayurvedaLutealTitle": "स्थिरता और दिनचर्या",
+  "ayurvedaLutealDescription": "आयुर्वेदिक स्वास्थ्य परंपराएँ चक्र के बाद के हिस्से में शांत दिनचर्या और जागरूक स्व-देखभाल पर जोर देती हैं।",
+  "logFlowVeryHeavy": "Very Heavy",
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logSympFainting": "Fainting",
+  "notificationPeriodTitle": "पीरियड जल्द आने की संभावना",
+  "notificationPeriodBody": "आपका पीरियड लगभग {days} दिन में आने की संभावना है। ज़रूरी चीज़ें तैयार रखने का अच्छा समय है।",
+  "@notificationPeriodBody": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationLogPeriodTitle": "आपके चक्र को फिर से पटरी पर लाएँ",
+  "notificationLogPeriodBody": "आपने काफ़ी समय से कोई पीरियड दर्ज नहीं किया, इसलिए हम अगला अनुमान नहीं लगा सकते। Rhythma खोलकर अपना पिछला पीरियड दर्ज करें।",
+  "notificationLogReminderTitle": "अपना दिन दर्ज करने का समय",
+  "notificationLogReminderBody": "आपने आज कुछ दर्ज नहीं किया। अभी एक पल देने से आपके अनुमान बेहतर होंगे।",
+  "notificationChannelReminders": "Rhythma अनुस्मारक"
 }
