@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { fetchSmsSettings, saveSmsSettings, sendSmsSummary } from '../api/endpoints';
+import { useDocumentMeta } from '../lib/useDocumentMeta';
 
 const PHONE_PATTERN = /^\+[1-9]\d{1,14}$/;
 
@@ -16,6 +17,7 @@ function friendlyError(error: unknown, fallback: string): string {
 }
 
 export function SmsPage() {
+  useDocumentMeta('meta.sms.title', 'meta.sms.description');
   const { t } = useTranslation();
 
   const [phone, setPhone] = useState('');

@@ -27,6 +27,10 @@ class _Keys {
 class LocalStorageService {
   static bool _initialised = false;
 
+  static void testReset() {
+    _initialised = false;
+  }
+
   /// Call once at app startup (after WidgetsFlutterBinding.ensureInitialized)
   static Future<void> init({String? testPath}) async {
     if (_initialised) return;
@@ -384,6 +388,10 @@ class LocalStorageService {
       await _settings.delete(k);
     }
     
+    // Also remove unscoped legacy profile & dashboard cache keys
+    await _settings.delete(_Keys.profile);
+    await _settings.delete(_Keys.dashboardCache);
+
     // Also remove the current user id marker
     await _settings.delete(_kCurrentUserId);
   }

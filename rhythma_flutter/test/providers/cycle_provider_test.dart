@@ -97,13 +97,16 @@ void main() {
     test('phaseColor returns the phase color for each day range', () {
       final provider = CycleProvider();
       // last_period is seeded as 2026-01-28 in setUp.
-      expect(provider.phaseColor(DateTime(2026, 1, 28)), RhythmaColors.rose); // day 1
+      // Defaults: periodDuration=5, cycleLength=28
+      //   follicularEnd = (28/2).floor() - 2 = 12
+      //   ovulationEnd  = (28/2).floor() + 1 = 15
+      expect(provider.phaseColor(DateTime(2026, 1, 28)), RhythmaColors.rose);     // day 1  → period
       expect(
-          provider.phaseColor(DateTime(2026, 2, 9)), RhythmaColors.primary); // day 13
+          provider.phaseColor(DateTime(2026, 2, 6)), RhythmaColors.primary);      // day 10 → follicular
       expect(
-          provider.phaseColor(DateTime(2026, 2, 12)), RhythmaColors.teal); // day 16
+          provider.phaseColor(DateTime(2026, 2, 10)), RhythmaColors.teal);        // day 14 → ovulation
       expect(
-          provider.phaseColor(DateTime(2026, 2, 18)), RhythmaColors.coral); // day 22
+          provider.phaseColor(DateTime(2026, 2, 18)), RhythmaColors.coral);       // day 22 → luteal
     });
 
     test('phase falls back to day-of-month when no last period is saved',

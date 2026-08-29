@@ -16,7 +16,8 @@ import '../providers/sync_status_provider.dart';
 /// - Last-write-wins conflict resolution (server timestamp wins)
 class FirestoreService {
   static FirebaseFirestore? _db;
-  static StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
+  static StreamSubscription<List<ConnectivityResult>>?
+      _connectivitySubscription;
   static final Connectivity _connectivity = Connectivity();
   static bool _initialized = false;
   static bool _isSyncing = false;
@@ -47,7 +48,7 @@ class FirestoreService {
   /// Initialize Firestore and start connectivity listener
   static Future<void> init() async {
     if (_initialized) return;
-    
+
     _db = FirebaseFirestore.instance;
     _db!.settings = const Settings(
       persistenceEnabled: true,
@@ -69,7 +70,7 @@ class FirestoreService {
 
   static void _onConnectivityChanged(List<ConnectivityResult> results) {
     final isOnline = results.any((r) => r != ConnectivityResult.none);
-    
+
     if (isOnline) {
       _setOnline();
       // Trigger sync for current user
@@ -112,7 +113,8 @@ class FirestoreService {
       final userRef = _db!.collection('client_sync').doc(userId);
 
       for (final log in logs) {
-        final docRef = userRef.collection('cycle_logs').doc(log['start_date'] as String);
+        final docRef =
+            userRef.collection('cycle_logs').doc(log['start_date'] as String);
         final data = Map<String, dynamic>.from(log);
         // Add server timestamp for conflict resolution
         data['synced_at'] = FieldValue.serverTimestamp();
@@ -121,11 +123,13 @@ class FirestoreService {
       }
 
       await batch.commit();
-      debugPrint('FirestoreService: synced ${logs.length} cycle logs for $userId');
+      debugPrint(
+          'FirestoreService: synced ${logs.length} cycle logs for $userId');
 
       // Read back resolved server timestamps and update Hive
       for (final log in logs) {
-        final docRef = userRef.collection('cycle_logs').doc(log['start_date'] as String);
+        final docRef =
+            userRef.collection('cycle_logs').doc(log['start_date'] as String);
         final doc = await docRef.get();
         if (doc.exists) {
           final resolvedData = doc.data()!;
@@ -146,12 +150,14 @@ class FirestoreService {
   }
 
   /// Fetch cycle logs from Firestore and merge into local Hive (last-write-wins)
-  static Future<void> pullCycleLogs({required String userId, int limit = 50}) async {
+  static Future<void> pullCycleLogs(
+      {required String userId, int limit = 50}) async {
     if (!LocalStorageService.cloudSyncEnabled) return;
     if (_db == null) return;
 
     try {
-      final snapshot = await _db!.collection('client_sync')
+      final snapshot = await _db!
+          .collection('client_sync')
           .doc(userId)
           .collection('cycle_logs')
           .orderBy('start_date', descending: true)
@@ -160,19 +166,22 @@ class FirestoreService {
 
       for (final doc in snapshot.docs) {
         final data = doc.data();
-        final localLog = LocalStorageService.getCycleLogForDate(DateTime.parse(doc.id));
-        
+        final localLog =
+            LocalStorageService.getCycleLogForDate(DateTime.parse(doc.id));
+
         // Last-write-wins: compare server timestamp
         final serverTime = data['synced_at'] as Timestamp?;
         final localTime = localLog?['synced_at'] as Timestamp?;
-        
-        if (serverTime != null && (localTime == null || serverTime.compareTo(localTime) >= 0)) {
+
+        if (serverTime != null &&
+            (localTime == null || serverTime.compareTo(localTime) >= 0)) {
           // Server version is newer or equal - overwrite local
           data['start_date'] = doc.id; // Ensure start_date is present
           await LocalStorageService.saveCycleLog(data);
         }
       }
-      debugPrint('FirestoreService: pulled ${snapshot.docs.length} cycle logs for $userId');
+      debugPrint(
+          'FirestoreService: pulled ${snapshot.docs.length} cycle logs for $userId');
       _updateStatus(SyncStatus.synced, 'cycle');
     } catch (e) {
       debugPrint('FirestoreService: pull cycle logs failed: $e');
@@ -181,10 +190,11 @@ class FirestoreService {
   }
 
   /// Queue cycle logs for retry when offline
-  static Future<void> _queuePendingCycleLogs(String userId, List<Map<String, dynamic>> logs) async {
+  static Future<void> _queuePendingCycleLogs(
+      String userId, List<Map<String, dynamic>> logs) async {
     final pendingBox = await Hive.openBox<Map>('pending_cycle_sync');
     for (final log in logs) {
-      final key = 'cycle::${userId}::${log['start_date']}';
+      final key = 'cycle::$userId::${log['start_date']}';
       await pendingBox.put(key, {
         ...log,
         'type': 'cycle',
@@ -196,9 +206,10 @@ class FirestoreService {
   }
 
   /// Queue a failed profile sync for retry when connectivity is restored
-  static Future<void> _queuePendingProfile(String userId, Map<String, dynamic> profile) async {
+  static Future<void> _queuePendingProfile(
+      String userId, Map<String, dynamic> profile) async {
     final pendingBox = await Hive.openBox<Map>('pending_cycle_sync');
-    final key = 'profile::${userId}';
+    final key = 'profile::$userId';
     await pendingBox.put(key, {
       ...profile,
       'type': 'profile',
@@ -215,12 +226,13 @@ class FirestoreService {
 
     final pendingBox = await Hive.openBox<Map>('pending_cycle_sync');
     final keys = pendingBox.keys
-        .where((k) => k.toString().contains('::${userId}'))
+        .where((k) => k.toString().contains('::$userId'))
         .toList();
 
     if (keys.isEmpty) return;
 
-    debugPrint('FirestoreService: flushing ${keys.length} pending items for $userId');
+    debugPrint(
+        'FirestoreService: flushing ${keys.length} pending items for $userId');
 
     // Process cycle log entries (new keys start with 'cycle::',
     // old keys from before generalization have no prefix)
@@ -234,7 +246,8 @@ class FirestoreService {
         for (final key in cycleKeys) {
           final log = pendingBox.get(key)!;
           if (log['type'] != 'cycle') continue;
-          final docRef = userRef.collection('cycle_logs').doc(log['start_date'] as String);
+          final docRef =
+              userRef.collection('cycle_logs').doc(log['start_date'] as String);
           final data = Map<String, dynamic>.from(log);
           data.remove('type');
           data.remove('user_id');
@@ -250,7 +263,8 @@ class FirestoreService {
           await pendingBox.delete(key);
         }
 
-        debugPrint('FirestoreService: flushed ${cycleKeys.length} pending cycle logs for $userId');
+        debugPrint(
+            'FirestoreService: flushed ${cycleKeys.length} pending cycle logs for $userId');
         _updateStatus(SyncStatus.synced, 'cycle');
       } catch (e) {
         debugPrint('FirestoreService: flush cycle queue failed: $e');
@@ -259,7 +273,7 @@ class FirestoreService {
     }
 
     // Process profile entry
-    final profileKey = 'profile::${userId}';
+    final profileKey = 'profile::$userId';
     if (keys.contains(profileKey)) {
       _updateStatus(SyncStatus.syncing, 'profile');
       try {
@@ -304,7 +318,7 @@ class FirestoreService {
       final data = Map<String, dynamic>.from(profile);
       data['synced_at'] = FieldValue.serverTimestamp();
       data['device_id'] = LocalStorageService.currentUserId;
-      
+
       await userRef.set(data, SetOptions(merge: true));
       debugPrint('FirestoreService: synced profile for $userId');
 
@@ -335,17 +349,18 @@ class FirestoreService {
 
       final data = doc.data()!;
       final localProfile = LocalStorageService.getProfile() ?? {};
-      
+
       // Last-write-wins based on synced_at timestamp
       final serverTime = data['synced_at'] as Timestamp?;
       final localTime = localProfile['synced_at'] as Timestamp?;
-      
-      if (serverTime != null && (localTime == null || serverTime.compareTo(localTime) >= 0)) {
+
+      if (serverTime != null &&
+          (localTime == null || serverTime.compareTo(localTime) >= 0)) {
         // Server is newer - merge server data into local (preserve local-only fields)
         final merged = {...localProfile, ...data};
         await LocalStorageService.saveProfile(merged);
       }
-      
+
       debugPrint('FirestoreService: pulled profile for $userId');
       _updateStatus(SyncStatus.synced, 'profile');
     } catch (e) {
@@ -359,9 +374,11 @@ class FirestoreService {
   // ────────────────────────────────────────────────────────────────────────────
 
   /// Stream of cycle logs from Firestore for real-time updates
-  static Stream<QuerySnapshot<Map<String, dynamic>>> cycleLogsStream(String userId) {
+  static Stream<QuerySnapshot<Map<String, dynamic>>> cycleLogsStream(
+      String userId) {
     if (_db == null) return Stream.empty();
-    return _db!.collection('client_sync')
+    return _db!
+        .collection('client_sync')
         .doc(userId)
         .collection('cycle_logs')
         .orderBy('start_date', descending: true)
@@ -370,7 +387,8 @@ class FirestoreService {
   }
 
   /// Stream of profile from Firestore
-  static Stream<DocumentSnapshot<Map<String, dynamic>>> profileStream(String userId) {
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> profileStream(
+      String userId) {
     if (_db == null) return Stream.empty();
     return _db!.collection('client_sync').doc(userId).snapshots();
   }

@@ -1,0 +1,222 @@
+{
+  "schema": 1,
+  "language": "en",
+  "updated": "2026-08-02",
+  "disclaimer": "This reference material is educational and not a medical diagnosis. Always consult a qualified healthcare professional.",
+  "references": [
+    {
+      "id": "pcos-overview",
+      "topic": "Polycystic ovary syndrome (PCOS)",
+      "summary": "PCOS is a common hormonal disorder linked to higher androgen levels; it affects periods, ovulation and fertility, and can have wider health effects.",
+      "facts": [
+        "PCOS is a common hormonal disorder in which higher than normal androgen levels can lead to irregular menstrual periods, abnormal ovulation, infertility, excess facial or body hair, and acne.",
+        "PCOS is estimated to affect 10-13% of women of reproductive age, and up to 70% of women with PCOS worldwide are not aware they have it.",
+        "PCOS is the most common cause of anovulation (when the ovary does not release an egg) worldwide and a leading cause of infertility.",
+        "Irregular or infrequent menstrual periods in women with PCOS may raise their risk for endometrial hyperplasia and/or endometrial cancer.",
+        "Women with PCOS have a higher risk of insulin resistance, type 2 diabetes and obesity compared with women without PCOS.",
+        "There is no cure for PCOS, but lifestyle changes, medications and fertility treatments can reduce symptoms and protect longer-term health."
+      ],
+      "keywords": [
+        "pcos",
+        "polycystic ovary",
+        "polycystic ovarian",
+        "androgen",
+        "ovulation",
+        "infertility",
+        "irregular periods",
+        "hormonal disorder"
+      ],
+      "symptomTags": [
+        "irregular periods",
+        "missed periods",
+        "heavy periods",
+        "excess hair",
+        "acne",
+        "oily skin",
+        "hair loss",
+        "difficulty getting pregnant"
+      ],
+      "source": "World Health Organization (WHO)",
+      "sourceTitle": "Polycystic ovary syndrome",
+      "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/polycystic-ovary-syndrome",
+      "reviewedOn": "2026-01-22",
+      "accessedOn": "2026-08-02",
+      "language": "en"
+    },
+    {
+      "id": "pmos-overview",
+      "topic": "PCOS (now called PMOS) - symptoms and medical care",
+      "summary": "PMOS, previously called PCOS, is a hormone condition that can affect hair growth, periods, fertility and mood.",
+      "facts": [
+        "Polyendocrine metabolic ovarian syndrome (PMOS), previously called polycystic ovary syndrome (PCOS), is a hormone condition that can affect hair growth, periods, fertility and mood.",
+        "PMOS symptoms usually start in girls and young women under the age of 18, at puberty, and continue until menopause; after menopause some symptoms may stop or change.",
+        "Main symptoms can include irregular periods or long gaps between periods, excess hair growth or hair loss, weight gain or difficulty losing weight, difficulty getting pregnant, depression or anxiety, oily skin and acne, tiredness, and thick dark patches of skin.",
+        "There is no cure for PMOS, but treatments and lifestyle changes can help symptoms.",
+        "It is important to get symptoms checked by a GP, especially if they affect everyday life, work or relationships."
+      ],
+      "keywords": [
+        "pcos",
+        "pmos",
+        "polycystic",
+        "polyendocrine",
+        "hormone condition",
+        "hirsutism",
+        "hair growth"
+      ],
+      "symptomTags": [
+        "irregular periods",
+        "long gaps between periods",
+        "excess hair",
+        "hair loss",
+        "weight gain",
+        "difficulty getting pregnant",
+        "depression",
+        "anxiety",
+        "acne",
+        "oily skin",
+        "tiredness"
+      ],
+      "source": "NHS",
+      "sourceTitle": "Polyendocrine metabolic ovarian syndrome (PMOS)",
+      "sourceUrl": "https://www.nhs.uk/conditions/polyendocrine-metabolic-ovarian-syndrome-pmos/",
+      "reviewedOn": "2026-06-30",
+      "accessedOn": "2026-08-02",
+      "language": "en"
+    },
+    {
+      "id": "menstrual-health-overview",
+      "topic": "Menstrual health",
+      "summary": "Menstruation is a natural process; the cycle averages 21-35 days, and many people experience pain or heavy bleeding that can be worth discussing with a clinician.",
+      "facts": [
+        "An estimated 2.1 billion women and adolescent girls worldwide menstruate.",
+        "The menstrual cycle is regulated by hormones and lasts on average between 21 and 35 days.",
+        "More than 2 out of 3 people who menstruate have pain with menstrual bleeding; for a smaller number of people, menstrual pain can be very severe.",
+        "Many people who menstruate experience heavy menstrual bleeding, which can lead to iron deficiency anaemia.",
+        "Unpredictable, infrequent, very painful or heavy bleeding, or symptoms that disrupt normal activities, are valid reasons to be evaluated by a health worker."
+      ],
+      "keywords": [
+        "menstrual health",
+        "menstruation",
+        "menstrual cycle",
+        "cycle length",
+        "period",
+        "menstruation pain"
+      ],
+      "symptomTags": [
+        "period pain",
+        "cramps",
+        "heavy bleeding",
+        "heavy periods",
+        "missed periods",
+        "irregular periods"
+      ],
+      "source": "World Health Organization (WHO)",
+      "sourceTitle": "Menstrual health",
+      "sourceUrl": "https://www.who.int/news-room/fact-sheets/detail/menstrual-health",
+      "reviewedOn": "2026-06-18",
+      "accessedOn": "2026-08-02",
+      "language": "en"
+    },
+    {
+      "id": "irregular-periods",
+      "topic": "Irregular periods",
+      "summary": "Periods are considered irregular when the gap between them is under 21 or over 35 days; there are common everyday causes and reasons to see a GP.",
+      "facts": [
+        "The average gap between periods starting (the menstrual cycle) is around 28 days; it can sometimes be a bit shorter or longer.",
+        "Periods are considered irregular if the gap between them is less than 21 days or more than 35 days.",
+        "Periods are more likely to be irregular when they first start during puberty and when nearing menopause.",
+        "Common causes include puberty, the start of menopause, pregnancy, hormonal contraception, significant weight change, stress and anxiety, and exercising too much.",
+        "See a GP if your periods last longer than 7 days, you have bleeding between periods, or you have irregular periods with other symptoms such as weight gain, tiredness or facial hair growth."
+      ],
+      "keywords": [
+        "irregular periods",
+        "cycle",
+        "missed period",
+        "late period",
+        "cycle length",
+        "period gap",
+        "pcos"
+      ],
+      "symptomTags": [
+        "irregular periods",
+        "long cycles",
+        "short cycles",
+        "missed periods",
+        "bleeding between periods",
+        "periods longer than 7 days"
+      ],
+      "source": "NHS",
+      "sourceTitle": "Irregular periods",
+      "sourceUrl": "https://www.nhs.uk/symptoms/irregular-periods/",
+      "reviewedOn": "2026-06-26",
+      "accessedOn": "2026-08-02",
+      "language": "en"
+    },
+    {
+      "id": "heavy-periods",
+      "topic": "Heavy periods",
+      "summary": "Heavy periods can be normal for some people, but there are clear signs and times when seeing a GP is recommended.",
+      "facts": [
+        "Signs of heavy periods include needing to change a pad or tampon every 1-2 hours, using two types of period product together, periods lasting more than 7 days, passing blood clots larger than about 2.5cm, or bleeding through to clothes or bedding.",
+        "Heavy periods can sometimes be caused by conditions affecting the womb or ovaries such as fibroids, endometriosis, adenomyosis, pelvic inflammatory disease or PMOS, or by conditions that make bleeding easier, such as Von Willebrand disease.",
+        "Heavy periods can lead to feeling tired or short of breath a lot, and treatment can help if they are affecting daily life.",
+        "See a GP if heavy periods are affecting your life, you have had them for some time, you have severe period pain, or you bleed between periods or after sex."
+      ],
+      "keywords": [
+        "heavy periods",
+        "menorrhagia",
+        "heavy bleeding",
+        "blood clots",
+        "bleeding"
+      ],
+      "symptomTags": [
+        "heavy periods",
+        "heavy bleeding",
+        "soaking through",
+        "clots",
+        "periods longer than 7 days",
+        "tiredness",
+        "short of breath"
+      ],
+      "source": "NHS",
+      "sourceTitle": "Heavy periods",
+      "sourceUrl": "https://www.nhs.uk/conditions/heavy-periods/",
+      "reviewedOn": "2024-09-19",
+      "accessedOn": "2026-08-02",
+      "language": "en"
+    },
+    {
+      "id": "period-pain",
+      "topic": "Period pain",
+      "summary": "Period pain is common and usually lasts up to 3 days; severe or worsening pain warrants urgent medical advice.",
+      "facts": [
+        "Period pain usually happens around the start of a period and can include painful cramps in the tummy that spread to the back and thighs.",
+        "Period pain usually lasts for up to 3 days and can affect daily activities.",
+        "Period pain happens when the womb tightens during a period and is often a normal part of the menstrual cycle; sometimes it can be caused by conditions such as endometriosis, adenomyosis, fibroids or pelvic inflammatory disease.",
+        "Get urgent help from a GP or NHS 111 if period or pelvic pain is severe or worse than usual and painkillers have not helped.",
+        "See a GP if your periods become more painful, heavier or irregular, if pain stops you doing usual activities, or if you have pain during sex or when peeing or pooing."
+      ],
+      "keywords": [
+        "period pain",
+        "cramps",
+        "painful periods",
+        "dysmenorrhea",
+        "pelvic pain"
+      ],
+      "symptomTags": [
+        "cramps",
+        "pain in tummy",
+        "back pain",
+        "thigh pain",
+        "severe pain",
+        "painful periods"
+      ],
+      "source": "NHS",
+      "sourceTitle": "Period pain",
+      "sourceUrl": "https://www.nhs.uk/symptoms/period-pain/",
+      "reviewedOn": "2026-03-18",
+      "accessedOn": "2026-08-02",
+      "language": "en"
+    }
+  ]
+}

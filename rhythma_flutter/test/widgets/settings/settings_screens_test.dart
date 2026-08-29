@@ -9,6 +9,7 @@ import 'package:rhythma/providers/theme_provider.dart';
 import 'package:rhythma/providers/profile_provider.dart';
 import 'package:rhythma/screens/settings/language_screen.dart';
 import 'package:rhythma/screens/settings/theme_screen.dart';
+import 'package:rhythma/config/supported_languages.dart';
 import '../../test_helpers/local_storage_fixture.dart';
 
 void main() {
@@ -60,19 +61,8 @@ void main() {
 
       expect(find.text('Select Language'), findsOneWidget);
 
-      final l10n = AppLocalizations.of(
-        tester.element(find.byType(LanguageScreen)),
-      )!;
-      final expectedNames = <String, String>{
-        'en': l10n.langEnglish,
-        'hi': l10n.langHindi,
-        'ta': l10n.langTamil,
-        'te': l10n.langTelugu,
-        'mr': l10n.langMarathi,
-        'gu': l10n.langGujarati,
-      };
-      for (final code in LanguageScreen.supportedLanguageCodes) {
-        expect(find.text(expectedNames[code]!), findsOneWidget);
+      for (final lang in appSupportedLanguages) {
+        expect(find.text(lang.nativeName), findsOneWidget);
       }
 
       expect(
@@ -92,7 +82,7 @@ void main() {
 
       // Tap inside runAsync so mergeProfileWithSync (which calls Dio) completes
       await tester.runAsync(() async {
-        await tester.tap(find.text('हिन्दी (Hindi)'));
+        await tester.tap(find.text('हिन्दी'));
         await Future.delayed(const Duration(seconds: 1));
       });
       await tester.pumpAndSettle();
@@ -100,7 +90,7 @@ void main() {
       expect(localeProvider.locale.languageCode, 'hi');
       expect(
         find.descendant(
-          of: find.widgetWithText(ListTile, 'हिन्दी (Hindi)'),
+          of: find.widgetWithText(ListTile, 'हिन्दी'),
           matching: find.byIcon(Icons.check_circle_rounded),
         ),
         findsOneWidget,

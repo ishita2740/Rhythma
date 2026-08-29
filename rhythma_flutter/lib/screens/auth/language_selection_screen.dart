@@ -5,6 +5,7 @@ import '../../l10n/app_localizations.dart';
 import '../../config/theme.dart';
 import '../../providers/locale_provider.dart';
 import '../../services/local_storage_service.dart';
+import '../../config/supported_languages.dart';
 import 'login_screen.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
@@ -17,16 +18,6 @@ class LanguageSelectionScreen extends StatefulWidget {
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   String _selectedLanguage = 'en';
-
-  static const List<Map<String, String>> _languages = [
-    {'code': 'en', 'label': 'English'},
-    {'code': 'hi', 'label': 'हिन्दी'},
-    {'code': 'mr', 'label': 'मराठी'},
-    {'code': 'ta', 'label': 'தமிழ்'},
-    {'code': 'te', 'label': 'తెలుగు'},
-    {'code': 'kn', 'label': 'ಕನ್ನಡ'},
-    {'code': 'ml', 'label': 'മലയാളം'},
-  ];
 
   @override
   void initState() {
@@ -52,7 +43,6 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
       );
     }
   }
-
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
@@ -90,18 +80,18 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                ...List.generate(_languages.length, (i) {
-                  final lang = _languages[i];
-                  final selected = lang['code'] == _selectedLanguage;
+                ...List.generate(appSupportedLanguages.length, (i) {
+                  final lang = appSupportedLanguages[i];
+                  final selected = lang.code == _selectedLanguage;
                   return Semantics(
                     selected: selected,
-                    label: lang['label'],
+                    label: lang.nativeName,
                     child: GestureDetector(
                       onTap: () {
-                        setState(() => _selectedLanguage = lang['code']!);
+                        setState(() => _selectedLanguage = lang.code);
                         context
                             .read<LocaleProvider>()
-                            .setLocale(Locale(lang['code']!));
+                            .setLocale(Locale(lang.code));
                       },
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 220),
@@ -123,7 +113,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                         child: Row(
                           children: [
                             Text(
-                              lang['label']!,
+                              lang.nativeName,
                               style: TextStyle(
                                 fontSize: 17,
                                 fontWeight:

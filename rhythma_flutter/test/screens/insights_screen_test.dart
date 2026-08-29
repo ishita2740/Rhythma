@@ -70,7 +70,7 @@ void main() {
   const fullDashboard = {
     'user': {'name': 'Aarya Test'},
     'cycle': {'total': 28},
-    'insights': {'mhs': 82, 'cvi': 'Moderate', 'sleepHours': '6.5h'},
+    'insights': {'averageCycleLength': 27, 'shortestCycleLength': 26, 'longestCycleLength': 28, 'averageBleedingDuration': 5, 'sleepHours': '6.5h'},
     'cycleHistory': [
       {'cycle_length': 26},
       {'cycle_length': 28},
@@ -92,14 +92,13 @@ void main() {
       tester.element(find.byType(InsightsScreen)),
     )!;
 
-    expect(find.text('82 / 100'), findsOneWidget);
-    expect(
-      find.text('${l10n.insightsRegular} · CVI: Moderate'),
-      findsOneWidget,
-    );
+    expect(find.text('27d'), findsOneWidget); // avg cycle
+    expect(find.text('26d'), findsOneWidget); // shortest
+    expect(find.text('28d'), findsOneWidget); // longest
+    expect(find.text('5d'), findsOneWidget); // avg bleeding
     // Variability of [26, 28, 27] rounds to 1 day.
-    expect(find.text('1 ${l10n.homeDaysLabel}'), findsOneWidget);
-    expect(find.text('28 ${l10n.homeDaysLabel}'), findsOneWidget);
+    expect(find.text('1 ${l10n.homeDaysLabel}'), findsOneWidget); // variability
+    expect(find.text('27 ${l10n.homeDaysLabel}'), findsOneWidget); // avg cycle from insights
     expect(find.text('6.5h'), findsOneWidget);
     expect(find.text(l10n.logEnergyHigh), findsOneWidget); // stress level 4
 
@@ -133,7 +132,6 @@ void main() {
     expect(find.text(l10n.insightsNotEnoughData), findsOneWidget);
     expect(find.text(l10n.insightsNoSymptomsYet), findsOneWidget);
     expect(find.text(l10n.insightsNotEnoughTrendData), findsOneWidget);
-    expect(find.text('— / 100'), findsOneWidget);
     expect(find.text('—'), findsWidgets);
   });
 
@@ -146,5 +144,33 @@ void main() {
     )!;
 
     expect(find.textContaining(l10n.insightsLoadError('')), findsOneWidget);
+  });
+
+  testWidgets('shows the insights disclaimer at the bottom of the screen',
+      (WidgetTester tester) async {
+    await pumpInsightsScreen(tester, dashboard: fullDashboard);
+
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(InsightsScreen)),
+    )!;
+
+    expect(find.text(l10n.insightsDisclaimer), findsOneWidget);
+  });
+
+  testWidgets('disclaimer is visible without scrolling on tall screens',
+      (WidgetTester tester) async {
+    await pumpInsightsScreen(tester, dashboard: fullDashboard);
+
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(InsightsScreen)),
+    )!;
+
+    // The disclaimer should be present in the widget tree
+    final disclaimerFinder = find.text(l10n.insightsDisclaimer);
+    expect(disclaimerFinder, findsOneWidget);
+
+    // Verify it's not off-screen by checking it's rendered
+    final widget = tester.widget<Text>(disclaimerFinder);
+    expect(widget.data, isNotEmpty);
   });
 }

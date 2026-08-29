@@ -153,13 +153,17 @@ def test_log_cycle_invalid_payload(mock_cycle_service):
 # ─── GET /cycle/{user_id}/history ──────────────────────────────────────────
 
 def test_get_cycle_history_success(mock_cycle_service):
-    mock_cycle_service.get_logs_for_user.return_value = [
-        {"start_date": "2026-05-01", "flow_intensity": "medium"}
-    ]
+    mock_cycle_service.get_logs_page.return_value = (
+        [{"id": "log-1", "start_date": "2026-05-01", "flow_intensity": "medium"}],
+        False,
+        1,
+    )
     response = client.get(f"/api/v1/cycle/{TEST_USER_ID}/history")
     assert response.status_code == 200
     assert len(response.json()["entries"]) == 1
-    mock_cycle_service.get_logs_for_user.assert_called_once_with(TEST_USER_ID, limit=10)
+    mock_cycle_service.get_logs_page.assert_called_once_with(
+        TEST_USER_ID, limit=20, offset=0, start_date=None, end_date=None
+    )
 
 def test_get_cycle_history_unauthorized(mock_cycle_service):
     response = client.get(f"/api/v1/cycle/{OTHER_USER_ID}/history")
@@ -167,7 +171,7 @@ def test_get_cycle_history_unauthorized(mock_cycle_service):
     assert response.json()["detail"] == "Not authorized to view this user's data"
 
 def test_get_cycle_history_empty_history(mock_cycle_service):
-    mock_cycle_service.get_logs_for_user.return_value = []
+    mock_cycle_service.get_logs_page.return_value = ([], False, 0)
     response = client.get(f"/api/v1/cycle/{TEST_USER_ID}/history")
     assert response.status_code == 200
     assert len(response.json()["entries"]) == 0

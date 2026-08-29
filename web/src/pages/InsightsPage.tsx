@@ -1,39 +1,51 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { fetchDashboard, type DashboardData } from '../api/endpoints';
-import { ScoreRing, Sparkline } from '../components/charts';
+import { useAuth } from '../auth/useAuth';
+import {
+  fetchObservations,
+  type CycleConsistency,
+  type Observation,
+  type ObservationsResponse,
+} from '../api/endpoints';
+import { useDocumentMeta } from '../lib/useDocumentMeta';
 
-const SYMPTOM_COLORS: Record<string, string> = {
-  cramps: '#E07AAD',
-  headache: '#E8946A',
-  bloating: '#AA3BFF',
-  acne: '#52B3B0',
+// No MHS/CVI score here — this page is built entirely against the factual
+// /insights/{user_id}/observations endpoint (issue #320). Every number and
+// sentence below comes straight from the user's own logged data.
+
+const SEVERITY_ICON: Record<Observation['severity'], string> = {
+  info: 'ℹ️',
+  attention: '💡',
+  seek_care: '💗',
 };
 
-function stressLabel(level: number | null, t: (k: string) => string): string {
-  if (level == null) return '—';
-  if (level <= 2) return t('insights.low');
-  if (level <= 3) return t('insights.moderate');
-  return t('insights.high');
-}
+const CONSISTENCY_STYLE: Record<CycleConsistency, string> = {
+  unknown: 'neutral',
+  consistent: 'healthy',
+  slightly_variable: 'moderate',
+  variable: 'attention',
+};
 
 export function InsightsPage() {
+  useDocumentMeta('meta.insights.title', 'meta.insights.description');
   const { t } = useTranslation();
-  const [data, setData] = useState<DashboardData | null>(null);
+  const { user } = useAuth();
+  const [data, setData] = useState<ObservationsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   const load = useCallback(async () => {
+    if (!user) return;
     setLoading(true);
     setError('');
     try {
-      setData(await fetchDashboard());
+      setData(await fetchObservations(user.id));
     } catch {
       setError(t('insights.loadError'));
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [t, user]);
 
   useEffect(() => {
     void load();
@@ -43,25 +55,32 @@ export function InsightsPage() {
     return <div className="centered-loader">{t('common.loading')}</div>;
   }
 
-  const lengths = data?.cycleHistory.map((p) => p.cycle_length) ?? [];
-  const variability =
-    lengths.length >= 2
-      ? Math.round(
-          lengths.reduce((acc, l) => acc + (l - (data?.cycle.total ?? 0)) ** 2, 0) / lengths.length,
-        )
-      : null;
-  const isHealthy = variability != null && variability <= 3;
-  const mhs = data?.insights.mhs ?? null;
-  const cvi = data?.insights.cvi ?? null;
-  const sleep = data?.insights.sleepHours ?? null;
-  const stress = stressLabel(data?.recentStressLevel ?? null, t);
-  const symptoms = data?.symptomFrequency ?? {};
-  const hasSymptoms = Object.keys(symptoms).length > 0;
-  const hasEnough = data?.hasEnoughDataForInsights ?? false;
+  // Everything the page renders comes straight off the observations
+  // response. There is no derived score here on purpose (#320): the block
+  // that used to sit in this spot computed MHS, CVI and a cycle
+  // "variability" figure from fields this endpoint does not return, and
+  // rendered none of them.
+  const observations = data?.observations ?? [];
 
-  const recs: { key: string; color: string }[] = [{ key: 'insights.rec1', color: '#E07AAD' }];
-  if (sleep && parseFloat(sleep) < 7) recs.push({ key: 'insights.rec2', color: '#AA3BFF' });
-  if ((data?.recentStressLevel ?? 0) >= 4) recs.push({ key: 'insights.rec3', color: '#52B3B0' });
+  // `insufficient_data` is a signal, not a card. When the backend emits it
+  // the user has too few logged cycles for any pattern to mean anything,
+  // so the page shows one "keep logging" note instead of an observation
+  // list — showing both would be telling her there is nothing to say and
+  // then saying something.
+  const isInsufficient = observations.some(
+    (observation) => observation.code === 'insufficient_data',
+  );
+  const displayObservations = observations.filter(
+    (observation) => observation.code !== 'insufficient_data',
+  );
+
+  const avgCycleLength = data?.averageCycleLength ?? null;
+  const analyzedCount = data?.analyzedCycleCount ?? 0;
+  const consistency: CycleConsistency = data?.cycleConsistency ?? 'unknown';
+  // #306 requires the disclaimer on every insights surface, so it falls
+  // back to the generic key rather than rendering nothing when the
+  // response omits one.
+  const disclaimerKey = data?.disclaimerKey ?? 'insights.disclaimer';
 
   return (
     <div className="page">
@@ -77,106 +96,72 @@ export function InsightsPage() {
             {t('common.retry')}
           </button>
         </div>
-      ) : !hasEnough ? (
+      ) : isInsufficient ? (
         <div className="warning-card">⏳ {t('insights.notEnoughData')}</div>
       ) : null}
 
-      <section className="glass-card mhs-card">
-        <ScoreRing value={mhs} size={120} />
-        <div className="mhs-info">
-          <p className="card-label">{t('insights.mhsLabel')}</p>
-          <p className="mhs-value">
-            {mhs == null ? '—' : Math.round(mhs)} <span className="mhs-total">/ 100</span>
-          </p>
-          <p className="card-sub">
-            {cvi ? `${t('insights.regular')} · ${t('insights.cviLabel')}: ${cvi}` : t('insights.mhsDelta')}
-          </p>
+      <section className="glass-card">
+        <p className="card-label">{t('insights.cycleStatsLabel')}</p>
+        <div className="mini-stats">
+          <div className="glass-card mini-stat">
+            <span className="mini-stat-icon" style={{ background: '#AA3BFF22', color: '#AA3BFF' }}>
+              ♥
+            </span>
+            <p className="mini-stat-label">{t('insights.avgCycleLength')}</p>
+            <p className="mini-stat-value">{avgCycleLength != null ? `${avgCycleLength}d` : '—'}</p>
+          </div>
+          <div className="glass-card mini-stat">
+            <span className="mini-stat-icon" style={{ background: '#52B3B022', color: '#52B3B0' }}>
+              #
+            </span>
+            <p className="mini-stat-label">{t('insights.cyclesAnalyzed')}</p>
+            <p className="mini-stat-value">{analyzedCount}</p>
+          </div>
         </div>
       </section>
 
-      <section className="mini-stats">
-        <MiniStat label={t('insights.variability')} value={variability == null ? '—' : String(variability)} delta={variability == null ? null : variability <= 3 ? t('insights.low') : t('insights.moderate')} color="#52B3B0" arrow={variability == null ? '—' : variability <= 3 ? '↘' : '↗'} />
-        <MiniStat label={t('insights.avgCycle')} value={data?.cycle.total != null ? `${data.cycle.total}d` : '—'} delta={t('insights.regular')} color="#AA3BFF" arrow="♥" />
-        <MiniStat label={t('insights.sleep')} value={sleep ?? '—'} delta={null} color="#9B72CF" arrow="🌙" />
-        <MiniStat label={t('insights.stress')} value={stress} delta={null} color="#E8946A" arrow="📈" />
-      </section>
-
-      <section className="glass-card trend-card">
+      <section className="glass-card">
         <div className="trend-heading">
-          <div>
-            <p className="card-label">{t('insights.trendLabel')}</p>
-            <p className="trend-title">{isHealthy ? t('insights.stabilizing') : t('insights.moderateTrend')}</p>
-          </div>
-          {variability != null ? (
-            <span className={`status-pill ${isHealthy ? 'healthy' : 'moderate'}`}>
-              {isHealthy ? t('insights.healthy') : t('insights.moderate')}
-            </span>
-          ) : null}
+          <p className="card-label">{t('insights.consistencyLabel')}</p>
+          <span className={`status-pill ${CONSISTENCY_STYLE[consistency]}`}>
+            {t(`insights.consistency.${consistency}.pill`)}
+          </span>
         </div>
-        {lengths.length < 2 ? (
-          <p className="empty-note">{t('insights.notEnoughTrendData')}</p>
-        ) : (
-          <Sparkline points={lengths} color="#AA3BFF" height={80} />
-        )}
+        <p className="card-sub">{t(`insights.consistency.${consistency}.description`)}</p>
       </section>
 
-      <section className="glass-card symptom-card">
-        <p className="card-label">{t('insights.symptomsLabel')}</p>
-        {!hasSymptoms ? (
-          <p className="empty-note">{t('insights.noSymptomsYet')}</p>
-        ) : (
-          <div className="symptom-bars">
-            {Object.entries(symptoms).map(([key, fraction]) => (
-              <div key={key} className="symptom-bar">
-                <span className="symptom-label">{t(`cycle.${key}`)}</span>
-                <div className="symptom-track">
-                  <div
-                    className="symptom-fill"
-                    style={{
-                      width: `${Math.round((fraction as number) * 100)}%`,
-                      background: SYMPTOM_COLORS[key] ?? '#AA3BFF',
-                    }}
-                  />
-                </div>
-                <span className="symptom-pct">{Math.round((fraction as number) * 100)}%</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+      {!isInsufficient ? (
+        <section>
+          <h2 className="section-title">{t('insights.observationsLabel')}</h2>
+          {displayObservations.length === 0 ? (
+            <div className="glass-card empty-note">{t('insights.noObservations')}</div>
+          ) : (
+            displayObservations.map((observation) => (
+              <ObservationCard key={observation.code} observation={observation} />
+            ))
+          )}
+        </section>
+      ) : null}
 
-      <section>
-        <h2 className="section-title">{t('insights.wellness')}</h2>
-        {recs.map((rec, i) => (
-          <div key={i} className="glass-card rec-card">
-            <span className="rec-icon" style={{ background: rec.color }}>
-              💗
-            </span>
-            <p>{t(rec.key)}</p>
-          </div>
-        ))}
-      </section>
+      <p className="disclaimer">{t(disclaimerKey)}</p>
     </div>
   );
 }
 
-interface MiniStatProps {
-  label: string;
-  value: string;
-  delta: string | null;
-  color: string;
-  arrow: string;
-}
-
-function MiniStat({ label, value, delta, color, arrow }: MiniStatProps) {
+function ObservationCard({ observation }: { observation: Observation }) {
+  const { t } = useTranslation();
   return (
-    <div className="glass-card mini-stat">
-      <span className="mini-stat-icon" style={{ background: `${color}22`, color }}>
-        {arrow}
-      </span>
-      <p className="mini-stat-label">{label}</p>
-      <p className="mini-stat-value">{value}</p>
-      {delta ? <p className="mini-stat-delta">{delta}</p> : null}
+    <div className={`glass-card observation-card severity-${observation.severity}`}>
+      <div className="observation-heading">
+        <span className="observation-icon" aria-hidden="true">
+          {SEVERITY_ICON[observation.severity] ?? 'ℹ️'}
+        </span>
+        <div>
+          <p className="observation-severity-label">{t(`insights.severity.${observation.severity}`)}</p>
+          <p className="observation-title">{observation.title}</p>
+        </div>
+      </div>
+      <p className="observation-body">{observation.body}</p>
     </div>
   );
 }

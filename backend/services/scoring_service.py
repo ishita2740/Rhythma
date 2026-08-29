@@ -1,17 +1,16 @@
 """
 Shared score-computation service.
 
-This module is the single source of truth for turning a user's raw
-CycleLog history into the CVI (Cycle Variability Index) and MHS
-(Menstrual Health Score) numbers that get surfaced to clients.
+This module provides two categories of output:
 
-Both `GET /dashboard` (api/dashboard.py) and
-`GET /insights/{user_id}/scores` (api/insights.py) call
-`get_user_scores()` below instead of independently fetching logs and
-calling the CVI/MHS models themselves. This guarantees the two
-endpoints can never return different scores for the same user (see
-issue #86) and keeps route handlers free of business logic, per the
-contribution guide.
+1. **Factual cycle statistics** (average / shortest / longest cycle length,
+   average bleeding duration) computed directly from CycleLog history with
+   no model inference.  These are the primary stats surfaced to clients
+   since Issue #300.
+
+2. Legacy CVI/MHS scores (kept internally for the provider dashboard which
+   still depends on them).  They are *not* exposed through /dashboard or
+   /scores any longer.
 """
 
 from datetime import date, datetime
@@ -25,7 +24,18 @@ from models.mhs_model import predict_mhs
 # to compute a real average.
 DEFAULT_CYCLE_LENGTH = 28
 
-_FLOW_INTENSITY_TO_SCORE = {"light": 1, "medium": 2, "heavy": 3}
+# `none` is included because the Flutter quick-log sheet sends it
+# (`LogOptions.flow`). Without an entry it fell through to the "no value
+# logged" default below and scored as *medium* — so a user explicitly
+# recording no bleeding was fed to the model as an average period day.
+# Zero extends the existing ordinal scale in the only direction that makes
+# sense: none < light < medium < heavy.
+_FLOW_INTENSITY_TO_SCORE = {"none": 0, "spotting": 1, "light": 1, "medium": 2, "heavy": 3, "very_heavy": 4}
+
+# What to assume when a log carries no flow intensity at all. Distinct from
+# `none`, which is a value the user chose: this is the absence of an answer,
+# and the midpoint is the least-assuming stand-in for it.
+_FLOW_INTENSITY_WHEN_ABSENT = 2
 
 # Number of most-recent cycle logs fetched for scoring. Matches the
 # previous behavior of api/dashboard.py.
@@ -45,6 +55,49 @@ def as_date(value: Any) -> Optional[date]:
     return None
 
 
+def compute_cycle_stats(logs: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Compute factual cycle statistics directly from raw CycleLog history.
+
+    Returns a dict with:
+        average_cycle_length: mean days between consecutive period start dates.
+        shortest_cycle_length: minimum cycle length observed.
+        longest_cycle_length: maximum cycle length observed.
+        average_bleeding_duration: mean number of bleeding days (from
+            start_date to end_date, inclusive).
+
+    All values are ``None`` when there is insufficient data (fewer than
+    2 logs for cycle lengths, fewer than 1 log with an end_date for
+    bleeding duration).  Values are rounded to one decimal place.
+    """
+    # logs are newest-first
+    cycle_lengths: List[int] = []
+    bleeding_days: List[int] = []
+
+    for i in range(len(logs) - 1):
+        newer = as_date(logs[i].get("start_date"))
+        older = as_date(logs[i + 1].get("start_date"))
+        if newer and older and (newer - older).days > 0:
+            cycle_lengths.append((newer - older).days)
+
+    for log in logs:
+        start = as_date(log.get("start_date"))
+        end = as_date(log.get("end_date"))
+        if start and end and end >= start:
+            bleeding_days.append(max(1, (end - start).days + 1))
+
+    avg_cycle = round(sum(cycle_lengths) / len(cycle_lengths), 1) if cycle_lengths else None
+    min_cycle = min(cycle_lengths) if cycle_lengths else None
+    max_cycle = max(cycle_lengths) if cycle_lengths else None
+    avg_bleed = round(sum(bleeding_days) / len(bleeding_days), 1) if bleeding_days else None
+
+    return {
+        "average_cycle_length": avg_cycle,
+        "shortest_cycle_length": min_cycle,
+        "longest_cycle_length": max_cycle,
+        "average_bleeding_duration": avg_bleed,
+    }
+
+
 def build_model_features(logs_newest_first: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Convert raw CycleLog documents into the feature shape the CVI/MHS
     models expect (see models/cvi_model.py and models/mhs_model.py)."""
@@ -56,12 +109,15 @@ def build_model_features(logs_newest_first: List[Dict[str, Any]]) -> List[Dict[s
         cycle_length = None
         if i + 1 < len(logs_newest_first):
             older_start = as_date(logs_newest_first[i + 1].get("start_date"))
-            if start and older_start:
+            if start and older_start and (start - older_start).days > 0:
                 cycle_length = (start - older_start).days
 
-        flow_duration = (end - start).days + 1 if start and end else 5
+        if start and end and end >= start:
+            flow_duration = max(1, (end - start).days + 1)
+        else:
+            flow_duration = 5
         flow_intensity = _FLOW_INTENSITY_TO_SCORE.get(
-            (log.get("flow_intensity") or "").lower(), 2
+            (log.get("flow_intensity") or "").lower(), _FLOW_INTENSITY_WHEN_ABSENT
         )
 
         stress = log.get("stress_level")
@@ -102,6 +158,10 @@ def get_user_scores(user_id: str) -> Dict[str, Any]:
                 (>=3) for a meaningful CVI; lets clients distinguish
                 "no data yet" from "computed a low score".
             logged_cycle_count: total number of logs fetched.
+            profile: the user's profile dict (or None), so callers that
+                need it for features beyond the two scores — e.g. the
+                dashboard's cycle prediction — don't fetch it a second
+                time.
     """
     logs = CycleService.get_logs_for_user(user_id, limit=_LOGS_LIMIT)
     features = build_model_features(logs)
@@ -113,6 +173,7 @@ def get_user_scores(user_id: str) -> Dict[str, Any]:
 
     return {
         "logs": logs,
+        "profile": profile,
         "mhs": mhs,
         "cvi": cvi,
         "cvi_risk": cvi_risk,

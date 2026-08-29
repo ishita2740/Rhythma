@@ -1,25 +1,30 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../auth/useAuth';
 import {
   deleteCycleLog,
-  fetchCycleHistory,
+  fetchCycleHistoryRange,
+  fetchPredictions,
   fetchProfile,
   submitCycleLog,
   type CycleLogEntry,
   type CycleLogInput,
+  type PredictionResponse,
 } from '../api/endpoints';
 import {
   addMonths,
   formatDayMonth,
   formatMonthYear,
   isSameDay,
+  monthWindow,
+  parseISODate,
   PHASE_COLORS,
   phaseFor,
   startOfMonth,
   toISODate,
   type CyclePhase,
 } from '../lib/dates';
+import { useDocumentMeta } from '../lib/useDocumentMeta';
 
 interface OptionDef {
   value: string;
@@ -27,6 +32,7 @@ interface OptionDef {
 }
 
 const FLOW_OPTIONS: OptionDef[] = [
+  { value: 'none', labelKey: 'quickLog.none' },
   { value: 'light', labelKey: 'quickLog.light' },
   { value: 'medium', labelKey: 'quickLog.medium' },
   { value: 'heavy', labelKey: 'quickLog.heavy' },
@@ -65,6 +71,17 @@ const SYMPTOM_OPTIONS: OptionDef[] = [
 
 const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
+/**
+ * The single-value fields this screen renders.
+ *
+ * `notes` and `end_date` are deliberately absent. Both exist on a log and
+ * neither has a control here, so including them would let a screen that
+ * cannot show a note delete one — and a note is in the provider view, the
+ * PDF report and the privacy export. `symptoms` is handled separately
+ * because comparing and clearing a list is not the same operation.
+ */
+const EDITABLE_FIELDS = ['flow_intensity', 'mood', 'sleep_hours', 'stress_level'] as const;
+
 function phaseLabel(t: (k: string) => string, phase: CyclePhase): string {
   switch (phase) {
     case 'period':
@@ -79,6 +96,7 @@ function phaseLabel(t: (k: string) => string, phase: CyclePhase): string {
 }
 
 export function CyclePage() {
+  useDocumentMeta('meta.cycle.title', 'meta.cycle.description');
   const { t } = useTranslation();
   const { user } = useAuth();
 
@@ -87,7 +105,9 @@ export function CyclePage() {
   const [displayedMonth, setDisplayedMonth] = useState<Date>(startOfMonth(today));
   const [logs, setLogs] = useState<Map<string, CycleLogEntry>>(new Map());
   const [lastPeriod, setLastPeriod] = useState<string | null>(null);
+  const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState('');
@@ -96,28 +116,58 @@ export function CyclePage() {
   // selected date (or the fetched history) changes.
   const [draft, setDraft] = useState<CycleLogInput | null>(null);
 
+  // The window of history currently loaded. Keyed off the displayed month
+  // rather than a fixed count: the calendar renders one month at a time,
+  // and this page used to ask for `limit=365`, which the endpoint refuses
+  // outright (its ceiling is 100). The 422 was caught below and turned
+  // into an empty Map, so the calendar rendered as if the user had never
+  // logged anything (#349).
+  const loadedWindow = useMemo(() => monthWindow(displayedMonth), [displayedMonth]);
+
+  // Depended on by `load`, and deliberately the id rather than the whole
+  // `user` object. A context that hands back a fresh object on each render
+  // would otherwise make `load` a new function every render, so the effect
+  // below would re-fire, set state, and render again — an unbounded fetch
+  // loop that only shows up under a re-rendering provider.
+  const userId = user?.id;
+
   const load = useCallback(async () => {
-    if (!user) return;
+    if (!userId) return;
     setLoading(true);
     try {
-      const [history, profile] = await Promise.all([
-        fetchCycleHistory(user.id, 365),
+      // Predictions are fetched alongside the history and allowed to fail
+      // on their own. The calendar is this page's job; the outlook card is
+      // an addition to it, and losing the addition must not blank the
+      // month (#419).
+      const [history, profile, forecast] = await Promise.all([
+        fetchCycleHistoryRange(userId, loadedWindow.start, loadedWindow.end),
         fetchProfile().catch(() => null),
+        fetchPredictions().catch(() => null),
       ]);
+      setPrediction(forecast);
       const map = new Map<string, CycleLogEntry>();
       for (const entry of history) {
+        if (!entry.start_date) continue;
         const key = entry.start_date.slice(0, 10);
         map.set(key, { ...entry, start_date: key });
       }
       setLogs(map);
       setLastPeriod(profile?.last_period ?? null);
+      setLoadError(false);
     } catch {
+      // Distinguished from "no logs yet". Clearing to an empty Map without
+      // saying so is what made the original bug invisible — an empty
+      // calendar looks exactly like a new account.
       setLogs(new Map());
+      setLoadError(true);
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [userId, loadedWindow.start, loadedWindow.end]);
 
+  // Re-runs when the displayed month changes, because `loadedWindow`
+  // changes with it. Before this the whole history was fetched once and
+  // any month outside it would have been blank regardless.
   useEffect(() => {
     void load();
   }, [load]);
@@ -157,15 +207,52 @@ export function CyclePage() {
     setSaveError('');
   };
 
-  const hasSelections = (d: CycleLogInput | null): boolean => {
+  /**
+   * What the day looks like now, as this screen would send it.
+   *
+   * Every field the screen renders is included, `null` where the user has
+   * cleared it, because the chips are toggles and a deselection is an
+   * answer. The previous version added a key only when it was truthy, so a
+   * cleared field vanished from the payload and the request became
+   * indistinguishable from one where nothing was touched — the screen said
+   * "Saved to your account", reloaded, and lit the chip back up (#549).
+   */
+  const buildPayload = (d: CycleLogInput): CycleLogInput => ({
+    start_date: selectedIso,
+    flow_intensity: d.flow_intensity ?? null,
+    mood: d.mood ?? null,
+    sleep_hours: d.sleep_hours ?? null,
+    stress_level: d.stress_level ?? null,
+    // `[]` rather than `null`: unticking every symptom is an empty list, and
+    // the server stores it as one.
+    symptoms: d.symptoms ?? [],
+  });
+
+  /**
+   * Whether saving would change anything on the server.
+   *
+   * This replaces a "has the user selected anything?" check, which had the
+   * same shape as the payload bug: clearing the last chip left nothing
+   * selected, so the Save button went *disabled* and the user could not
+   * send the correction she had just made.
+   */
+  const isDirty = (d: CycleLogInput | null): boolean => {
     if (!d) return false;
-    return Boolean(
-      d.flow_intensity ||
-        d.mood ||
-        d.sleep_hours != null ||
-        d.stress_level != null ||
-        (d.symptoms && d.symptoms.length > 0),
-    );
+    const stored = logs.get(selectedIso);
+    if (!stored) {
+      // Nothing saved for this day: there is something to send only if she
+      // has chosen something.
+      return (
+        EDITABLE_FIELDS.some((field) => d[field] != null) ||
+        (d.symptoms?.length ?? 0) > 0
+      );
+    }
+    if (EDITABLE_FIELDS.some((field) => (d[field] ?? null) !== (stored[field] ?? null))) {
+      return true;
+    }
+    const before = stored.symptoms ?? [];
+    const after = d.symptoms ?? [];
+    return before.length !== after.length || before.some((s, i) => s !== after[i]);
   };
 
   const save = async () => {
@@ -173,13 +260,7 @@ export function CyclePage() {
     setSaving(true);
     setSaveError('');
     try {
-      const payload: CycleLogInput = { start_date: selectedIso };
-      if (draft.flow_intensity) payload.flow_intensity = draft.flow_intensity;
-      if (draft.mood) payload.mood = draft.mood;
-      if (draft.sleep_hours != null) payload.sleep_hours = draft.sleep_hours;
-      if (draft.stress_level != null) payload.stress_level = draft.stress_level;
-      if (draft.symptoms && draft.symptoms.length > 0) payload.symptoms = draft.symptoms;
-      await submitCycleLog(payload);
+      await submitCycleLog(buildPayload(draft));
       setSaved(true);
       void load();
     } catch {
@@ -202,11 +283,22 @@ export function CyclePage() {
     next.delete(selectedIso);
     setLogs(next);
     setSaved(false);
+    void load();
   };
 
   const shiftMonth = (delta: number) => setDisplayedMonth((m) => addMonths(m, delta));
 
-  const selectedPhase = phaseFor(selectedDate, lastPeriod);
+  // The server's estimate, not a hardcoded 28. Falls through to the
+  // library default when there is no prediction, which is what the
+  // calendar did unconditionally before.
+  const estimatedCycleLength = prediction?.cycleLength?.days;
+
+  // `lastPeriodStart` from the prediction beats `last_period` from the
+  // profile: the profile field is what the user typed at onboarding and
+  // is never updated again, so once she has logged a period it is stale.
+  const anchorPeriod = prediction?.lastPeriodStart ?? lastPeriod;
+
+  const selectedPhase = phaseFor(selectedDate, anchorPeriod, estimatedCycleLength);
 
   const cells = useMemo(() => {
     const first = startOfMonth(displayedMonth);
@@ -229,6 +321,85 @@ export function CyclePage() {
       <header className="page-header">
         <h1>{t('cycle.title')}</h1>
       </header>
+
+      {loadError ? (
+        <p className="error-text" role="alert">
+          {t('cycle.loadFailed')}{' '}
+          <button type="button" className="ghost-btn" onClick={() => void load()}>
+            {t('cycle.retry')}
+          </button>
+        </p>
+      ) : null}
+
+      {/* The outlook, from `GET /cycle/predictions` — an endpoint no
+          client had ever called (#419). Everything in it is computed
+          server-side from the same logs the calendar below renders. */}
+      {prediction ? (
+        <section className="glass-card outlook-card">
+          <div className="trend-heading">
+            <p className="card-label">{t('prediction.outlookLabel')}</p>
+            <span className={`status-pill phase-${prediction.phase}`}>
+              {t(`prediction.phase.${prediction.phase}`)}
+            </span>
+          </div>
+
+          <div className="stat-row">
+            <div className="stat-cell">
+              <span className="stat-label">{t('prediction.cycleDay')}</span>
+              <span className="stat-value">{prediction.currentCycleDay ?? '—'}</span>
+            </div>
+            <div className="stat-cell">
+              <span className="stat-label">
+                {prediction.isOverdue ? t('prediction.overdueLabel') : t('home.nextPeriod')}
+              </span>
+              <span className={`stat-value${prediction.isOverdue ? ' is-overdue' : ''}`}>
+                {prediction.isOverdue
+                  ? t('prediction.daysLate', { count: prediction.daysOverdue })
+                  : (prediction.daysUntilNextPeriod ?? '—')}
+              </span>
+            </div>
+            <div className="stat-cell">
+              <span className="stat-label">{t('prediction.estimatedLength')}</span>
+              <span className="stat-value">{prediction.cycleLength.days}</span>
+            </div>
+          </div>
+
+          <p className="prediction-source">
+            {t(`prediction.source.${prediction.cycleLength.source}`)} ·{' '}
+            {t(`prediction.confidence.${prediction.cycleLength.confidence}`)}
+          </p>
+
+          {prediction.ovulation?.date ? (
+            <p className="card-sub">
+              {t('prediction.ovulation', {
+                date: formatDayMonth(parseISODate(prediction.ovulation.date)),
+              })}
+            </p>
+          ) : null}
+
+          {prediction.fertileWindow?.start && prediction.fertileWindow?.end ? (
+            <p className="fertile-window">
+              {t('prediction.fertileWindow', {
+                from: formatDayMonth(parseISODate(prediction.fertileWindow.start)),
+                to: formatDayMonth(parseISODate(prediction.fertileWindow.end)),
+              })}
+            </p>
+          ) : null}
+
+          {prediction.upcomingPeriods?.length > 0 ? (
+            <p className="card-sub">
+              {t('prediction.upcoming')}:{' '}
+              {prediction.upcomingPeriods
+                .map((iso) => formatDayMonth(parseISODate(iso)))
+                .join(' · ')}
+            </p>
+          ) : null}
+
+          {/* The server's own wording. It is the sentence that has to be
+              right, so it is not paraphrased here. */}
+          <p className="fertile-window-disclaimer">{prediction.disclaimer}</p>
+        </section>
+      ) : null}
 
       <section className="glass-card calendar-card">
         <div className="calendar-toolbar">
@@ -258,7 +429,7 @@ export function CyclePage() {
           {cells.map((date, i) => {
             if (!date) return <span key={i} className="day-cell empty" />;
             const iso = toISODate(date);
-            const phase = phaseFor(date, lastPeriod);
+            const phase = phaseFor(date, anchorPeriod, estimatedCycleLength);
             const isFuture = date > today;
             const isSelected = isSameDay(date, selectedDate);
             const isToday = isSameDay(date, today);
@@ -310,7 +481,7 @@ export function CyclePage() {
         {saved ? <p className="success-text">✓ {t('cycle.savedToAccount')}</p> : null}
         {saveError ? <p className="error-text">{saveError}</p> : null}
 
-        <button type="button" className="primary-btn full" disabled={saving || !hasSelections(draft)} onClick={() => void save()}>
+        <button type="button" className="primary-btn full" disabled={saving || !isDirty(draft)} onClick={() => void save()}>
           {saving ? t('common.loading') : t('cycle.saveLog')}
         </button>
 

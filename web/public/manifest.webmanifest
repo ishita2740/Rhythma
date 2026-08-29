@@ -1,0 +1,49 @@
+{
+  "name": "Rhythma — menstrual health tracking and guidance",
+  "short_name": "Rhythma",
+  "description": "Track your cycle, understand your own patterns, and get guidance grounded in your logged data. Available in nine Indian languages.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "lang": "en",
+  "dir": "ltr",
+  "theme_color": "#aa3bff",
+  "background_color": "#ffffff",
+  "categories": ["health", "medical", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Log today",
+      "short_name": "Log",
+      "url": "/cycle",
+      "description": "Record today's cycle entry"
+    },
+    {
+      "name": "Insights",
+      "short_name": "Insights",
+      "url": "/insights",
+      "description": "See what your logged data shows"
+    }
+  ]
+}

@@ -353,7 +353,7 @@ If you added an endpoint, manually exercise it via the interactive docs at `http
 - [ ] Confirm the PR is scoped to one logical change (see [Maximum Recommended PR Size](#maximum-recommended-pr-size))
 - [ ] For UI changes, capture before/after screenshots or a short screen recording
 - [ ] For anything that changes or introduces API behavior, update or add the relevant API documentation
-
+- [ ] Add a changelog entry to `CHANGELOG.md` for your PR
 ---
 
 ## PR Workflow

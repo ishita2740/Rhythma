@@ -75,7 +75,7 @@ void main() {
         return const MockDioResponse(200, {
           'user': {'name': 'Aarya Test'},
           'cycle': {'nextPeriodDays': 12, 'day': 3, 'total': 28},
-          'insights': {'mhs': 99, 'cvi': 'High', 'sleepHours': '8.1h'},
+          'insights': {'averageCycleLength': 28, 'averageBleedingDuration': 5, 'sleepHours': '8.1h'},
         });
       }
       return const MockDioResponse(200, {});
@@ -89,8 +89,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('${l10n.homeGreeting}, Aarya Test'), findsOneWidget);
-    expect(find.text('99'), findsOneWidget); // MHS
-    expect(find.text('High'), findsOneWidget); // CVI
+    expect(find.text('28d'), findsOneWidget); // Avg Cycle
+    expect(find.text('5d'), findsOneWidget); // Bleeding
     expect(find.text('8.1h'), findsOneWidget); // Sleep
     expect(find.text('12'), findsOneWidget); // Next period in N days
     expect(find.text(l10n.homeWeeklyInsightLabel), findsOneWidget);
@@ -104,7 +104,7 @@ void main() {
       () => LocalStorageService.saveCachedDashboard({
         'user': {'name': 'Cached User'},
         'cycle': {'nextPeriodDays': 3, 'day': 5, 'total': 30},
-        'insights': {'mhs': 77, 'cvi': 'Low', 'sleepHours': '6.5h'},
+        'insights': {'averageCycleLength': 28, 'averageBleedingDuration': 5, 'sleepHours': '6.5h'},
       }),
     );
     installMockDioAdapter((options) => const MockDioResponse(500, {
@@ -117,8 +117,8 @@ void main() {
       tester.element(find.byType(HomeScreen)),
     )!;
 
-    expect(find.text('77'), findsOneWidget);
-    expect(find.text('Low'), findsOneWidget);
+    expect(find.text('28d'), findsOneWidget); // avg cycle
+    expect(find.text('5d'), findsOneWidget); // avg bleeding
     expect(find.text('6.5h'), findsOneWidget);
   });
 
@@ -143,7 +143,7 @@ void main() {
       () => LocalStorageService.saveCachedDashboard({
         'user': {'name': 'Aarya Test'},
         'cycle': {'nextPeriodDays': 12, 'day': 3, 'total': 28},
-        'insights': {'mhs': 99, 'cvi': 'High', 'sleepHours': '8.1h'},
+        'insights': {'averageCycleLength': 28, 'averageBleedingDuration': 5, 'sleepHours': '8.1h'},
       }),
     );
     installMockDioAdapter((options) {
@@ -191,7 +191,7 @@ void main() {
       () => LocalStorageService.saveCachedDashboard({
         'user': {'name': 'Aarya Test'},
         'cycle': {'nextPeriodDays': 12, 'day': 3, 'total': 28},
-        'insights': {'mhs': 99, 'cvi': 'High', 'sleepHours': '8.1h'},
+        'insights': {'averageCycleLength': 28, 'averageBleedingDuration': 5, 'sleepHours': '8.1h'},
       }),
     );
     installMockDioAdapter((options) => const MockDioResponse(500, {

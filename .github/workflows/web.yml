@@ -18,7 +18,7 @@ defaults:
 
 jobs:
   web-checks:
-    name: Lint and build
+    name: Lint, test and build
     runs-on: ubuntu-latest
 
     steps:
@@ -37,6 +37,13 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      # Lint and build are type/syntax checks — neither executes a line of
+      # application logic, which is why a runtime bug like #259 (a call to an
+      # endpoint the backend does not serve) stayed green through both all
+      # the way onto main. This step is the one that runs the code.
+      - name: Test
+        run: npm run test:run
 
       - name: Build
         run: npm run build

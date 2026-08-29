@@ -18,9 +18,11 @@ class LogOption {
 class LogOptions {
   static List<LogOption> flow(AppLocalizations l10n) => [
         LogOption(l10n.logNone, 'none'),
+        LogOption(l10n.logFlowSpotting, 'spotting'),
         LogOption(l10n.logLight, 'light'),
         LogOption(l10n.logMedium, 'medium'),
         LogOption(l10n.logHeavy, 'heavy'),
+        LogOption(l10n.logFlowVeryHeavy, 'very_heavy'),
       ];
 
   static const List<LogOption> mood = [
@@ -53,6 +55,11 @@ class LogOptions {
         LogOption(l10n.logSympCramps, 'cramps'),
         LogOption(l10n.logSympHeadache, 'headache'),
         LogOption(l10n.logSympBloating, 'bloating'),
+        LogOption(l10n.logSympFatigue, 'fatigue'),
+        LogOption(l10n.logSympNausea, 'nausea'),
         LogOption(l10n.logSympAcne, 'acne'),
+        LogOption(l10n.logSympBackPain, 'back pain'),
+        LogOption(l10n.logSympSeverePain, 'severe pain'),
+        LogOption(l10n.logSympFainting, 'fainting'),
       ];
 }

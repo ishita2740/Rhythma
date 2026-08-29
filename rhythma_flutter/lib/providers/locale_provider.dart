@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../config/supported_languages.dart';
 import '../services/local_storage_service.dart';
 
 class LocaleProvider extends ChangeNotifier {
@@ -9,7 +10,7 @@ class LocaleProvider extends ChangeNotifier {
   Locale get locale => _locale;
 
   void setLocale(Locale locale) {
-    if (!['en', 'hi', 'ta', 'te', 'mr', 'gu', 'kn', 'ml'].contains(locale.languageCode)) return;
+    if (!appSupportedLanguages.any((l) => l.code == locale.languageCode)) return;
     _locale = locale;
     LocalStorageService.setPreferredLanguage(locale.languageCode);
     notifyListeners();

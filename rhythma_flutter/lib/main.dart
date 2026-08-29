@@ -11,6 +11,7 @@ import 'components/bottom_nav.dart';
 import 'components/debug_data_indicator.dart';
 import 'components/shared.dart';
 import 'config/theme.dart';
+import 'config/supported_languages.dart';
 
 import 'providers/data_mode_provider.dart';
 import 'providers/locale_provider.dart';
@@ -119,17 +120,7 @@ class _RhythmaAppState extends State<RhythmaApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('en'),
-        Locale('hi'),
-        Locale('ta'),
-        Locale('te'),
-        Locale('mr'),
-        Locale('gu'),
-        Locale('kn'),
-        Locale('ml'),
-        Locale('bn'),
-      ],
+      supportedLocales: appSupportedLanguages.map((l) => l.locale).toList(),
       home: FutureBuilder<String?>(
         // Confirms the stored token is still genuinely valid (not merely
         // present) via a lightweight /auth/me check, and scopes local

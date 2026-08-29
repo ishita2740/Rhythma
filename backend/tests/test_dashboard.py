@@ -119,7 +119,11 @@ def test_dashboard_api_success(auth_headers, mock_cycle_service, mock_cvi, mock_
     data = response.json()
     assert data["cycle"]["day"] == 10
     assert data["cycle"]["total"] == 30
-    assert data["insights"]["mhs"] == 8.0
+    # Factual cycle stats computed from the 3 logs
+    assert data["insights"]["averageCycleLength"] == 30.5
+    assert data["insights"]["shortestCycleLength"] == 30
+    assert data["insights"]["longestCycleLength"] == 31
+    assert data["insights"]["averageBleedingDuration"] == 5.0
     assert data["insights"]["sleepHours"] == "7.0h"
     assert data["hasEnoughDataForInsights"] is True
     assert data["loggedCycleCount"] == 3

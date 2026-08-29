@@ -81,7 +81,7 @@ class NotificationService {
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await _notificationsPlugin.zonedSchedule(
-      id: id,
+      id: id.abs() % 0x7FFFFFFF,
       title: title,
       body: body,
       scheduledDate: tzDate,

@@ -8,13 +8,15 @@ from datetime import date
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 class MockGemini:
+    last_prompt = None
     def __getattr__(self, name):
         return self
     def configure(self, *args, **kwargs):
         pass
     def GenerativeModel(self, *args, **kwargs):
         class MockModel:
-            def generate_content(self, *args, **kwargs):
+            def generate_content(self, prompt, *args, **kwargs):
+                MockGemini.last_prompt = prompt
                 class MockResponse:
                     text = "Mock Gemini response"
                 return MockResponse()
@@ -58,6 +60,7 @@ def setup_db():
     fs.db._collections = {}
     yield
     fs.db._collections = {}
+    MockGemini.last_prompt = None
 
 
 def test_chat_success():
@@ -80,10 +83,13 @@ def test_chat_with_language():
 
 
 def test_chat_empty_message():
+    # 422, not the old ad-hoc 400: emptiness is now decided by the request
+    # model alongside every other input rule, so all bad input on this
+    # route is shaped the same way (issue #332).
     payload = {"message": "   "}
     response = client.post("/api/v1/assistant/chat", json=payload)
-    assert response.status_code == 400
-    assert "empty" in response.json()["detail"].lower()
+    assert response.status_code == 422
+    assert "empty" in str(response.json()["detail"]).lower()
 
 
 def test_chat_unauthorized():
@@ -138,3 +144,41 @@ def test_chat_persists_conversation():
     assert data["messages"][0]["content"] == "What is a normal cycle length?"
     assert data["messages"][1]["role"] == "model"
     assert data["messages"][1]["content"] == "Mock Gemini response"
+
+
+def test_chat_grounds_with_sourced_medical_references():
+    payload = {"message": "Tell me about PCOS"}
+    response = client.post("/api/v1/assistant/chat", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+
+    prompt = MockGemini.last_prompt
+    assert prompt is not None
+    assert "Trusted Medical Reference" in prompt
+    assert "who.int/news-room/fact-sheets/detail/polycystic-ovary-syndrome" in prompt
+    assert "Topic:" in prompt
+    assert "Source:" in prompt
+
+    # The response carries the same sources structurally, so the client can
+    # render "verify it yourself" links.
+    sources = data["sources"]
+    assert sources, "expected grounded sources in the response"
+    assert any(
+        source["url"] == "https://www.who.int/news-room/fact-sheets/detail/polycystic-ovary-syndrome"
+        for source in sources
+    )
+    for source in sources:
+        assert set(source) == {"name", "title", "url", "accessedOn"}
+        assert source["url"].startswith("https://")
+
+
+def test_chat_without_medical_topic_has_no_grounding():
+    payload = {"message": "Hello, how are you today?"}
+    response = client.post("/api/v1/assistant/chat", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+
+    prompt = MockGemini.last_prompt
+    assert prompt is not None
+    assert "Trusted Medical Reference" not in prompt
+    assert data["sources"] == []

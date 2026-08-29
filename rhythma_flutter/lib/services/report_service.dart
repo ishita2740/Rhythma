@@ -107,16 +107,23 @@ class ReportService {
           ),
           pw.SizedBox(height: 10),
           pw.Text(
-            'MHS: ${dashboard['insights']?['mhs'] ?? 'N/A'}',
+            'Avg Cycle Length: ${dashboard['insights']?['averageCycleLength'] ?? 'N/A'} days',
           ),
           pw.Text(
-            'CVI: ${dashboard['insights']?['cvi'] ?? 'N/A'}',
+            'Avg Bleeding Duration: ${dashboard['insights']?['averageBleedingDuration'] ?? 'N/A'} days',
           ),
           pw.Text(
             'Sleep Hours: ${dashboard['insights']?['sleepHours'] ?? 'N/A'}',
           ),
           pw.Text(
             'Recent Stress Level: ${dashboard['recentStressLevel'] ?? 'N/A'}',
+          ),
+          pw.SizedBox(height: 24),
+          pw.Divider(),
+          pw.SizedBox(height: 8),
+          pw.Text(
+            'This report is an estimate based on self-logged data and is not a medical diagnosis. Please consult a qualified healthcare professional for medical advice.',
+            style: pw.TextStyle(fontSize: 9, color: PdfColors.grey700),
           ),
         ],
       ),

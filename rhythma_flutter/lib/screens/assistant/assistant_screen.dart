@@ -230,6 +230,13 @@ class _AssistantScreenState extends State<AssistantScreen> {
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 6, 20, 0),
+            child: Text(
+              l10n.assistantDisclaimer,
+              style: TextStyle(fontSize: 11, color: RhythmaColors.mutedFg),
+            ),
+          ),
           const SizedBox(height: 8),
 
           // Chat list

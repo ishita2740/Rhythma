@@ -47,9 +47,11 @@ def test_get_scores_success(auth_headers, mock_cycle_service, mock_cvi, mock_mhs
     response = client.get("/api/v1/insights/test-user-id-123/scores", headers=auth_headers)
     assert response.status_code == 200
     data = response.json()
-    assert data["mhs"] == 77.5
-    # risk_level(42.0) == "medium" (30 <= cvi < 65) -> capitalized to "Medium"
-    assert data["cvi"] == "Medium"
+    # Factual cycle stats computed from the 3 logs
+    assert data["averageCycleLength"] == 30.5
+    assert data["shortestCycleLength"] == 30
+    assert data["longestCycleLength"] == 31
+    assert data["averageBleedingDuration"] == 5.0
     assert data["hasEnoughDataForInsights"] is True
     assert data["loggedCycleCount"] == 3
 
@@ -79,13 +81,15 @@ def test_get_scores_empty_history(auth_headers, mock_cycle_service, mock_cvi, mo
     response = client.get("/api/v1/insights/test-user-id-123/scores", headers=auth_headers)
     assert response.status_code == 200
     data = response.json()
-    assert data["mhs"] is None
-    assert data["cvi"] is None
+    assert data["averageCycleLength"] is None
+    assert data["shortestCycleLength"] is None
+    assert data["longestCycleLength"] is None
+    assert data["averageBleedingDuration"] is None
     assert data["hasEnoughDataForInsights"] is False
     assert data["loggedCycleCount"] == 0
 
 
-def test_dashboard_and_insights_return_identical_scores(auth_headers, mock_cycle_service, mock_cvi, mock_mhs):
+def test_dashboard_and_insights_return_identical_stats(auth_headers, mock_cycle_service, mock_cvi, mock_mhs):
     """Regression test for issue #86: /dashboard and
     /insights/{user_id}/scores must reuse the same computation and
     therefore always agree for the same user."""
@@ -100,7 +104,9 @@ def test_dashboard_and_insights_return_identical_scores(auth_headers, mock_cycle
     dashboard_data = dashboard_response.json()
     insights_data = insights_response.json()
 
-    assert dashboard_data["insights"]["mhs"] == insights_data["mhs"] == 77.5
-    assert dashboard_data["insights"]["cvi"] == insights_data["cvi"] == "Medium"
+    assert dashboard_data["insights"]["averageCycleLength"] == insights_data["averageCycleLength"] == 30.5
+    assert dashboard_data["insights"]["shortestCycleLength"] == insights_data["shortestCycleLength"] == 30
+    assert dashboard_data["insights"]["longestCycleLength"] == insights_data["longestCycleLength"] == 31
+    assert dashboard_data["insights"]["averageBleedingDuration"] == insights_data["averageBleedingDuration"] == 5.0
     assert dashboard_data["hasEnoughDataForInsights"] == insights_data["hasEnoughDataForInsights"] is True
     assert dashboard_data["loggedCycleCount"] == insights_data["loggedCycleCount"] == 3
