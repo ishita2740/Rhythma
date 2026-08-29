@@ -22,7 +22,8 @@ class CycleScreen extends StatefulWidget {
   State<CycleScreen> createState() => _CycleScreenState();
 }
 
-class _CycleScreenState extends State<CycleScreen> {
+class _CycleScreenState extends State<CycleScreen>
+    with WidgetsBindingObserver {
   static const int _initialPageOffset = 12000;
   late final PageController _pageController;
 
@@ -38,12 +39,36 @@ class _CycleScreenState extends State<CycleScreen> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _initialPageOffset);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _pageController.dispose();
     super.dispose();
+  }
+
+  /// Repaint the calendar when the app comes back after the date changed.
+  ///
+  /// `CycleProvider` resolves "today" on every read now, so its *answers*
+  /// are never stale (issue #539). But a screen already on top when
+  /// midnight passes does not rebuild on its own, so the today ring would
+  /// sit on yesterday until the user touched something. Resuming is the
+  /// moment we can observe, and the common one: this app is opened last
+  /// thing at night and first thing in the morning, and it is the same
+  /// process in between.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state != AppLifecycleState.resumed || !mounted) return;
+
+    final rolledOver = context.read<CycleProvider>().refreshIfDayChanged();
+    if (rolledOver && _pageController.hasClients) {
+      // The month axis is derived from today, so a rollover into a new
+      // month leaves the PageView pointing at the previous one.
+      _pageController.jumpToPage(_initialPageOffset);
+    }
   }
 
   void _goToPreviousMonth() {
