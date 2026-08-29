@@ -401,6 +401,7 @@
     "summary": "Health summary",
     "sleep": "Avg sleep",
     "cycleLogs": "Cycle history",
+    "showingRecent": "Showing the most recent {{shown}} of {{total}} logged entries.",
     "date": "Date",
     "flow": "Flow",
     "mood": "Mood",

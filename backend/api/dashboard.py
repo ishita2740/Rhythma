@@ -132,7 +132,14 @@ class DashboardResponse(BaseModel):
     cycle: DashboardCycle
     insights: DashboardInsights
     hasEnoughDataForInsights: bool
+    #: How many cycle logs this user has, in total.
     loggedCycleCount: int
+    #: How many of them the figures in `insights` were computed from.
+    #: Additive and defaulted, so a client written before #557 is
+    #: unaffected — but a client that wants to say "based on your last 10
+    #: cycles" now has the number to say it with, rather than reading
+    #: `loggedCycleCount` and being quietly wrong past ten.
+    analyzedCycleCount: int = 0
     cycleHistory: list[CycleHistoryEntry]
     symptomFrequency: dict[str, float]
     recentStressLevel: Optional[int] = None
@@ -267,6 +274,7 @@ async def get_dashboard(current_user: dict = Depends(get_current_user)):
         },
         "hasEnoughDataForInsights": score_data["has_enough_data_for_insights"],
         "loggedCycleCount": score_data["logged_cycle_count"],
+        "analyzedCycleCount": score_data["analyzed_cycle_count"],
         "cycleHistory": cycle_history,
         "symptomFrequency": symptom_frequency,
         "recentStressLevel": recent_stress_level,

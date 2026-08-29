@@ -116,6 +116,24 @@ export function ProviderPatientDetailPage() {
 
       <section className="glass-card list-card detail-section">
         <h2>{t('providerPatient.cycleLogs')}</h2>
+        {/* The table below is the server's analysis window, not the
+            patient's whole history. It always was — `get_user_scores`
+            fetches ten logs — but the stat above it said
+            `loggedCycleCount`, which until #557 was also ten, so the two
+            agreed and nothing suggested anything was missing. Now that
+            the count is a real total, the difference is visible and has
+            to be stated: a clinician reading twelve rows under a card
+            saying "300 cycles" must not be left to guess which one is
+            wrong. */}
+        {summary.analyzedCycleCount > 0 &&
+        summary.loggedCycleCount > summary.analyzedCycleCount ? (
+          <p className="card-sub">
+            {t('providerPatient.showingRecent', {
+              shown: summary.analyzedCycleCount,
+              total: summary.loggedCycleCount,
+            })}
+          </p>
+        ) : null}
         {cycleLogs.length === 0 ? (
           <p className="empty-note">{t('providerPatient.noLogs')}</p>
         ) : (

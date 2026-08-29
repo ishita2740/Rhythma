@@ -179,6 +179,37 @@ _MOCK_OPERATORS = {
 }
 
 
+class MockAggregationResult:
+    """One aggregation output, shaped like the real client's.
+
+    ``google.cloud.firestore_v1.base_aggregation.AggregationResult`` carries
+    an ``alias`` and a ``value``, and a caller reads ``.value``. Naming the
+    attribute anything else here would let a test pass against a shape
+    production never returns.
+    """
+
+    def __init__(self, value, alias="field_1"):
+        self.alias = alias
+        self.value = value
+
+
+class MockAggregationQuery:
+    """What ``count()`` returns, deferred until ``get()`` as Firestore defers it.
+
+    The real ``AggregationQuery.get()`` returns a *list of lists* of
+    results — one inner list per response chunk — so a caller reaches the
+    number as ``result[0][0].value``. That nesting is easy to get wrong
+    and impossible to notice if the double flattens it, so it is
+    reproduced exactly.
+    """
+
+    def __init__(self, source):
+        self._source = source
+
+    def get(self, *args, **kwargs):
+        return [[MockAggregationResult(sum(1 for _ in self._source.stream()))]]
+
+
 class MockQuery:
     """One step of a query chain.
 
@@ -244,6 +275,23 @@ class MockQuery:
             doc for doc in self._documents if compare((doc.data or {}).get(field), value)
         ]
         return self._derive(filtered)
+
+    def count(self, alias=None):
+        """The number of documents this query matches, without fetching them.
+
+        Firestore bills an aggregation at a fraction of the reads a
+        ``stream()`` of the same query would cost, and returns a number
+        rather than every document. The mock has to offer it or the
+        production path would be untested — the rule for this double is
+        that it may be narrower than Firestore but never looser, and
+        "this method does not exist" would push every caller onto a
+        fallback that production never takes.
+
+        ``offset`` and ``limit`` are honoured, because Firestore honours
+        them: counting a limited query answers "how many of the first N",
+        which is a different question from "how many in total".
+        """
+        return MockAggregationQuery(self)
 
     def stream(self):
         # Start with the filtered documents
@@ -354,6 +402,15 @@ class MockCollectionReference:
 
     def offset(self, count):
         return MockQuery(self._all_documents()).offset(count)
+
+    def count(self, alias=None):
+        """Every document in the collection, counted.
+
+        Present for the same reason ``stream()`` is: a chain that starts
+        with an aggregation rather than a filter must behave the same way
+        whether or not a ``where`` came first.
+        """
+        return MockQuery(self._all_documents()).count(alias)
 
 class MockFirestoreClient:
     def __init__(self):
@@ -703,6 +760,58 @@ class CycleService:
         except Exception as e:
             # Other Firestore errors
             raise upstream_error("Loading your cycle history", e)
+
+    @staticmethod
+    def count_logs_for_user(user_id: str) -> int:
+        """How many cycle logs this user has. All of them, not a page.
+
+        ``get_logs_for_user`` exists to fetch *recent* history and caps
+        itself at ten documents, so ``len()`` of its result is the size of
+        that window and saturates the moment a user passes it. Reporting
+        that number as a total is issue #557; this is the number that
+        question actually has an answer to.
+
+        Uses Firestore's ``count()`` aggregation rather than streaming and
+        counting. The difference is not stylistic — an aggregation is
+        billed at a fraction of the reads the equivalent ``stream()``
+        costs and transfers a single number instead of every document, and
+        this runs on ``GET /dashboard``, which is the app's home screen.
+        Counting by streaming would make the cheapest field in the
+        response the most expensive one to produce, and would grow without
+        bound for exactly the long-term users the field exists to
+        describe.
+
+        The fallback is for a client too old to offer the aggregation API.
+        It is deliberately not a silent ``return 0``: a wrong count is
+        worse than a slow one, and this is the number a clinician reads.
+        A missing composite index is not a concern here — an equality
+        filter with no ordering is served by the single-field index
+        Firestore maintains automatically.
+        """
+        try:
+            query = db.collection("cycle_logs").where("user_id", "==", user_id)
+
+            aggregate = getattr(query, "count", None)
+            if callable(aggregate):
+                result = aggregate().get()
+                # ``AggregationQuery.get()`` returns a list of lists — one
+                # inner list per response chunk. Unwrapped defensively:
+                # an empty result means no chunks, which means no rows.
+                for chunk in result or []:
+                    for entry in chunk or []:
+                        return int(entry.value)
+                return 0
+
+            return sum(1 for _ in query.stream())
+        except FailedPrecondition as e:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=str(e)
+            )
+        except HTTPException:
+            raise
+        except Exception as e:
+            raise upstream_error("Counting your cycle logs", e)
 
     @staticmethod
     def _log_doc_id(user_id: str, log_date: date) -> str:

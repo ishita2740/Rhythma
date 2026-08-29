@@ -115,4 +115,19 @@ class ScoresResponse(BaseModel):
         None, description="Mean bleeding duration in days (start_date to end_date, inclusive)."
     )
     hasEnoughDataForInsights: bool = False
-    loggedCycleCount: int = 0
+    loggedCycleCount: int = Field(
+        0,
+        description=(
+            "How many cycle logs this user has, in total. Not the number "
+            "the statistics above were computed from — see "
+            "analyzedCycleCount for that."
+        ),
+    )
+    analyzedCycleCount: int = Field(
+        0,
+        description=(
+            "How many of those logs the statistics above were computed "
+            "from. Bounded by the server's analysis window, so it stops "
+            "rising once a user has more history than the window holds."
+        ),
+    )

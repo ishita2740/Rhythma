@@ -126,7 +126,17 @@ export interface DashboardData {
   cycle: DashboardCycle;
   insights: DashboardInsights;
   hasEnoughDataForInsights: boolean;
+  /**
+   * How many cycle logs this user has, in total.
+   *
+   * This used to be the size of the server's ten-log analysis window, so
+   * it stopped rising at 10 and a patient with 500 logs was reported the
+   * same as one with 10 (#557). It is a count now; `analyzedCycleCount`
+   * is the window.
+   */
   loggedCycleCount: number;
+  /** How many of those logs the figures alongside were computed from. */
+  analyzedCycleCount: number;
   cycleHistory: CycleHistoryPoint[];
   symptomFrequency: SymptomFrequency | Record<string, never>;
   recentStressLevel: number | null;
@@ -672,7 +682,17 @@ export interface ProviderPatientSummary {
   city?: string | null;
   state?: string | null;
   sharedSince?: string | null;
+  /**
+   * How many cycle logs this user has, in total.
+   *
+   * This used to be the size of the server's ten-log analysis window, so
+   * it stopped rising at 10 and a patient with 500 logs was reported the
+   * same as one with 10 (#557). It is a count now; `analyzedCycleCount`
+   * is the window.
+   */
   loggedCycleCount: number;
+  /** How many of those logs the figures alongside were computed from. */
+  analyzedCycleCount: number;
   mhs?: number | null;
   cvi?: string | null;
   hasEnoughDataForInsights: boolean;
@@ -695,6 +715,11 @@ export interface ProviderPatientDetail {
     cvi?: string | null;
     cvi_raw?: number | null;
     loggedCycleCount: number;
+    /**
+     * How many of those logs this summary and the table below it were
+     * built from — the server's analysis window, not the total (#557).
+     */
+    analyzedCycleCount: number;
     hasEnoughDataForInsights: boolean;
     avgSleepHours?: number | null;
   };

@@ -401,6 +401,7 @@
     "summary": "Health summary",
     "sleep": "Avg sleep",
     "cycleLogs": "Cycle history",
+    "showingRecent": "மொத்தம் {{total}} பதிவுகளில் சமீபத்திய {{shown}} காட்டப்படுகின்றன.",
     "date": "Date",
     "flow": "Flow",
     "mood": "Mood",

@@ -39,6 +39,17 @@ _FLOW_INTENSITY_WHEN_ABSENT = 2
 
 # Number of most-recent cycle logs fetched for scoring. Matches the
 # previous behavior of api/dashboard.py.
+#
+# This is an *analysis window*, not a cap on what the user has. Every
+# consumer here is deliberately built on recent history — predictions
+# weight recent cycles, the observation rules describe "lately" — and
+# this is what bounds the Firestore read that feeds them.
+#
+# It is emphatically not a count of anything. Publishing `len(logs)` as
+# `loggedCycleCount` is issue #557: the value saturates at ten, so a
+# patient with ten logs and a patient with five hundred were reported
+# identically to a clinician. The window size is now returned under its
+# own name, and the total is counted separately.
 _LOGS_LIMIT = 10
 
 
@@ -157,7 +168,13 @@ def get_user_scores(user_id: str) -> Dict[str, Any]:
             has_enough_data_for_insights: whether there are enough logs
                 (>=3) for a meaningful CVI; lets clients distinguish
                 "no data yet" from "computed a low score".
-            logged_cycle_count: total number of logs fetched.
+            logged_cycle_count: how many cycle logs this user has, in
+                total. Counted, not inferred from `logs` — see #557.
+            analyzed_cycle_count: how many of them the numbers above were
+                computed from, i.e. `len(logs)`, at most `_LOGS_LIMIT`.
+                Kept as a separate field rather than left to be derived,
+                because "we looked at 10 of your 63 cycles" is a sentence
+                a client can only write if it is given both numbers.
             profile: the user's profile dict (or None), so callers that
                 need it for features beyond the two scores — e.g. the
                 dashboard's cycle prediction — don't fetch it a second
@@ -166,6 +183,17 @@ def get_user_scores(user_id: str) -> Dict[str, Any]:
     logs = CycleService.get_logs_for_user(user_id, limit=_LOGS_LIMIT)
     features = build_model_features(logs)
     profile = UserService.get_user_by_id(user_id)
+
+    # Only worth a second query when the window came back full. A short
+    # window *is* the total — there was nothing left for the limit to cut
+    # — so counting again would be a Firestore round trip to learn a
+    # number already in hand. This is the common case: most users have
+    # fewer than ten logs, and they pay nothing for the fix.
+    analyzed_cycle_count = len(logs)
+    if analyzed_cycle_count < _LOGS_LIMIT:
+        logged_cycle_count = analyzed_cycle_count
+    else:
+        logged_cycle_count = CycleService.count_logs_for_user(user_id)
 
     mhs = predict_mhs(features, profile=profile)
     cvi = predict_cvi(features)
@@ -177,6 +205,10 @@ def get_user_scores(user_id: str) -> Dict[str, Any]:
         "mhs": mhs,
         "cvi": cvi,
         "cvi_risk": cvi_risk,
+        # Asked of the window, deliberately. The question is whether
+        # there is enough history *in front of the rules* to say
+        # anything, and the rules only ever see the window.
         "has_enough_data_for_insights": len(logs) >= 3,
-        "logged_cycle_count": len(logs),
+        "logged_cycle_count": logged_cycle_count,
+        "analyzed_cycle_count": analyzed_cycle_count,
     }

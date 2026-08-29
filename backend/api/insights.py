@@ -87,6 +87,7 @@ async def get_scores(
         averageBleedingDuration=cycle_stats["average_bleeding_duration"],
         hasEnoughDataForInsights=score_data["has_enough_data_for_insights"],
         loggedCycleCount=score_data["logged_cycle_count"],
+        analyzedCycleCount=score_data["analyzed_cycle_count"],
     )
 
 
