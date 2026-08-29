@@ -25,6 +25,39 @@ no longer sent. That is a stronger guarantee than length-bounding one
 would be — there is no text to bound — and it costs nothing real: the
 only thing this endpoint is for is the cycle summary, and the summary is
 built from data the server already holds.
+
+A third rule joins them here (issue #547): **saving SMS settings does
+not touch the account's identity.** ``POST /settings`` used to write the
+number it was given into ``phone`` as well as ``sms_phone_number``:
+
+    UserService.update_user(current_user["id"], {
+        "phone": phone or "",
+        "sms_phone_number": phone or "",
+        "sms_enabled": settings.enabled,
+    })
+
+``phone`` is not an SMS field. It is what ``firebase_login`` resolves an
+account by, through ``UserService.get_user_by_phone``. Three things
+followed from writing it here, and all three are closed below.
+
+*Turning summaries off erased the credential.* ``phone or ""`` wrote an
+empty string over the login number, so a user who cleared the box and
+unticked the toggle could no longer sign in: the next Firebase login
+matched nothing, took the create-a-new-account branch, and dropped her
+into onboarding with her cycle history stranded under an id nothing
+reaches.
+
+*A second handset's number moved the account.* Wanting summaries on a
+different phone silently changed which number signs in.
+
+*And nothing checked the number was not already someone else's*, so one
+account could write another's login number over its own — the shape
+issue #531 describes for ``email``, on the other identity field. Not
+guarded against here so much as removed: this route no longer writes the
+field at all, so there is nothing left to collide.
+
+The two fields now mean exactly one thing each. ``phone`` is who the
+account is. ``sms_phone_number`` is where its summaries go.
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -74,16 +107,29 @@ class SMSRequest(BaseModel):
 
 
 def registered_phone(user: Optional[Dict[str, Any]]) -> Optional[str]:
-    """The number this account has on file, or ``None``.
+    """Where this account's summaries go, or ``None``.
 
-    Reads the same two fields, in the same order, as ``GET /settings`` —
-    ``phone`` is written by the Firebase phone-login flow, and
-    ``sms_phone_number`` by ``POST /settings``. A user must not be shown
-    one number on the settings screen and have a summary sent to another.
+    Read by ``GET /settings`` and by ``POST /send-summary``, so a user is
+    never shown one number on the settings screen and has a summary sent
+    to another.
+
+    ``sms_phone_number`` comes first and ``phone`` is the fallback. The
+    order used to be the other way round, which was right only while
+    ``POST /settings`` wrote both fields to the same value. Now that it
+    writes just the first (issue #547), preferring ``phone`` would make
+    saving a number a no-op for every account that has a login number:
+    the screen would keep showing, and the summary keep going to, the
+    number she did not choose.
+
+    The fallback is what keeps the accounts that have never opened this
+    screen working exactly as before — no ``sms_phone_number`` is stored
+    for them, so the account number is still the destination.
     """
     if not user:
         return None
-    candidate = (user.get("phone") or user.get("sms_phone_number") or "").strip()
+    candidate = (
+        user.get("sms_phone_number") or user.get("phone") or ""
+    ).strip()
     return candidate or None
 
 
@@ -152,12 +198,35 @@ def generate_cycle_sms_summary(user_id: str) -> str:
 
 
 class SMSSettings(BaseModel):
+    """The SMS destination and whether summaries are on.
+
+    Deliberately does not carry the account's ``phone``. There is no
+    field here that can change who the account is.
+    """
+
     phoneNumber: Optional[str] = ""
     enabled: bool = False
 
     @property
     def normalized_phone(self) -> Optional[str]:
         return self.phoneNumber.strip() if self.phoneNumber else None
+
+    @property
+    def phone_was_submitted(self) -> bool:
+        """Whether the caller said anything about the number at all.
+
+        ``{"enabled": false}`` and ``{"phoneNumber": "", "enabled": false}``
+        are different requests: the first turns summaries off, the second
+        also forgets the number. Both arrive as ``normalized_phone is
+        None``, so the difference has to be read from which keys the JSON
+        actually carried.
+
+        Without this, a client that sends only the toggle — which is a
+        reasonable thing for a client to send — discards a number the
+        user never asked to discard, and she has to type it again the
+        month she turns summaries back on.
+        """
+        return "phoneNumber" in self.model_fields_set
 
 
 class SMSSettingsResponse(BaseModel):
@@ -198,12 +267,39 @@ async def get_sms_settings(current_user: dict = Depends(get_current_user)):
     "/settings",
     response_model=SMSSettingsResponse,
     summary="Save SMS notification settings",
-    description="Updates the user's SMS notification preferences. A phone number is required when enabling SMS summaries, and must be in E.164 format.",
+    description=(
+        "Updates the user's SMS notification preferences. A phone number "
+        "is required when enabling SMS summaries, and must be in E.164 "
+        "format.\n\n"
+        "Writes only where summaries go. The number the account **signs "
+        "in** with is not a setting on this screen and is never changed "
+        "here — see issue #547; use `PATCH /auth/profile` to change it.\n\n"
+        "Omitting `phoneNumber` leaves the saved number alone, so a "
+        "client can toggle summaries off without discarding it. Sending "
+        "it empty forgets it."
+    ),
 )
 async def save_sms_settings(
     settings: SMSSettings,
     current_user: dict = Depends(get_current_user),
 ):
+    """Save where summaries go, and whether they are on.
+
+    Three things this deliberately does not do.
+
+    It does not write ``phone``. That field is the account's identity —
+    ``firebase_login`` resolves an account by it — and an SMS preferences
+    screen has no business editing the credential. Writing it here is
+    what let "untick the weekly summary" sign a user out of her own
+    account permanently (issue #547).
+
+    It does not discard a saved number just because the toggle went off.
+    Turning summaries off and forgetting the number are different
+    intentions, and only one of them costs the user retyping.
+
+    And it does not need a uniqueness check on the number, because it no
+    longer writes the field a uniqueness check would be protecting.
+    """
     phone = settings.normalized_phone
     if settings.enabled and not phone:
         raise HTTPException(
@@ -216,15 +312,22 @@ async def save_sms_settings(
             detail="Phone number must be in E.164 format, e.g. +919876543210.",
         )
 
-    UserService.update_user(
-        current_user["id"],
-        {
-            "phone": phone or "",
-            "sms_phone_number": phone or "",
-            "sms_enabled": settings.enabled,
-        },
-    )
-    return {"phoneNumber": phone or "", "enabled": settings.enabled}
+    updates: Dict[str, Any] = {"sms_enabled": settings.enabled}
+    if settings.phone_was_submitted:
+        updates["sms_phone_number"] = phone or ""
+
+    UserService.update_user(current_user["id"], updates)
+
+    # Re-read rather than echoing the request. What comes back has to be
+    # the number a summary would actually be sent to, and after a request
+    # that cleared `sms_phone_number` that is the account number the
+    # fallback in `registered_phone` resolves to — not the empty string
+    # the caller submitted.
+    user = UserService.get_user_by_id(current_user["id"]) or {}
+    return {
+        "phoneNumber": registered_phone(user) or "",
+        "enabled": settings.enabled,
+    }
 
 
 @router.post(
