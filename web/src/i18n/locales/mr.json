@@ -230,7 +230,9 @@
     "errorPrefix": "Error",
     "disclaimer": "Please consult a healthcare professional for medical advice.",
     "rateLimited": "You're sending messages too quickly. Please wait a moment.",
-    "storedOnDevice": "हे संभाषण याच डिव्हाइसवर ठेवले जाते आणि लॉग आउट केल्यावर काढून टाकले जाते.",
+    "conversationStorage": "हे संभाषण तुमच्या खात्यात आणि या डिव्हाइसवर जतन केले जाते. ते साफ केल्यास दोन्ही ठिकाणांहून काढून टाकले जाते.",
+    "clearing": "साफ करत आहे…",
+    "clearFailed": "सर्व्हरवर जतन केलेले संभाषण साफ करता आले नाही — ते अजूनही जतन आहे. कृपया पुन्हा प्रयत्न करा.",
     "clearConversation": "संभाषण काढा"
   },
   "insights": {

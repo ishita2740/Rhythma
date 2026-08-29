@@ -188,6 +188,21 @@ class AssistantResponse(BaseModel):
     sources: List[AssistantSource] = Field(default_factory=list)
 
 
+class ClearConversationResponse(BaseModel):
+    """What the clear actually did.
+
+    ``messagesRemoved`` is not decoration. The screen used to say
+    "cleared" on the strength of having emptied its own state, while the
+    stored conversation the model is given carried on unchanged (issue
+    #509). A client that renders this count is saying something it was
+    told, and "there was nothing stored" is a different sentence from
+    "removed 12 messages".
+    """
+
+    cleared: bool
+    messagesRemoved: int = 0
+
+
 SYSTEM_PROMPT = """
 You are Rhythma, a compassionate and knowledgeable AI menstrual health companion designed specifically for women in India. Your purpose is to provide supportive, culturally sensitive, and medically responsible guidance on menstrual health, reproductive health, emotional well-being, and overall women's health.
 
@@ -352,3 +367,41 @@ async def chat(
 )
 async def supported_languages(current_user: dict = Depends(get_current_user)):
     return SUPPORTED_LANGUAGES
+
+@router.delete(
+    "/conversation",
+    response_model=ClearConversationResponse,
+    summary="Delete the stored assistant conversation",
+    description=(
+        "Removes the conversation this account has with the assistant, "
+        "server-side. Until this route existed, both clients' \"clear "
+        "conversation\" control removed a key on the device and reset the "
+        "screen while the stored transcript stayed in place — and "
+        "`POST /assistant/chat` loads that transcript into the prompt on "
+        "every turn, so the cleared conversation kept shaping answers "
+        "(issue #509).\n\n"
+        "Idempotent: clearing an account with nothing stored is a 200 "
+        "with `messagesRemoved: 0`, not a 404. There is nothing useful a "
+        "client could do differently, and \"already clear\" is the "
+        "outcome it asked for."
+    ),
+)
+async def clear_conversation(current_user: dict = Depends(get_current_user)):
+    """Delete the caller's own conversation, and only ever her own.
+
+    The id comes from the session, never from a path or a body. There is
+    no user id a caller can name here, which is what makes this route
+    unable to become the thing `chat_link_service`'s docstring warns
+    about — an identity a caller can type is not an identity.
+    """
+    user_id = current_user.get("id")
+
+    removed = AssistantConversationService.clear_conversation(user_id)
+
+    logger.info(
+        "Cleared the stored assistant conversation (%s messages)",
+        removed,
+        extra={"assistant_messages_removed": removed},
+    )
+
+    return ClearConversationResponse(cleared=True, messagesRemoved=removed)

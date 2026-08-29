@@ -230,7 +230,9 @@
     "errorPrefix": "Error",
     "disclaimer": "Please consult a healthcare professional for medical advice.",
     "rateLimited": "You're sending messages too quickly. Please wait a moment.",
-    "storedOnDevice": "இந்த உரையாடல் இந்தச் சாதனத்தில் மட்டுமே வைக்கப்படுகிறது, வெளியேறும்போது அழிக்கப்படும்.",
+    "conversationStorage": "இந்த உரையாடல் உங்கள் கணக்கிலும் இந்தச் சாதனத்திலும் சேமிக்கப்படுகிறது. அழிக்கும்போது இரண்டிலிருந்தும் நீக்கப்படும்.",
+    "clearing": "அழிக்கப்படுகிறது…",
+    "clearFailed": "சேவையகத்தில் சேமிக்கப்பட்ட உரையாடலை அழிக்க முடியவில்லை — அது இன்னும் சேமிக்கப்பட்டுள்ளது. மீண்டும் முயற்சிக்கவும்.",
     "clearConversation": "உரையாடலை அழி"
   },
   "insights": {

@@ -230,7 +230,9 @@
     "errorPrefix": "Error",
     "disclaimer": "Please consult a healthcare professional for medical advice.",
     "rateLimited": "You're sending messages too quickly. Please wait a moment.",
-    "storedOnDevice": "This conversation is kept on this device and cleared when you log out.",
+    "conversationStorage": "This conversation is saved to your account and kept on this device. Clearing it removes both.",
+    "clearing": "Clearing…",
+    "clearFailed": "Couldn't clear the conversation on the server — it is still saved. Please try again.",
     "clearConversation": "Clear conversation"
   },
   "insights": {

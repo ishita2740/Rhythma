@@ -230,7 +230,9 @@
     "errorPrefix": "Error",
     "disclaimer": "Please consult a healthcare professional for medical advice.",
     "rateLimited": "You're sending messages too quickly. Please wait a moment.",
-    "storedOnDevice": "ഈ സംഭാഷണം ഈ ഉപകരണത്തിൽ മാത്രം സൂക്ഷിക്കുന്നു, ലോഗ് ഔട്ട് ചെയ്യുമ്പോൾ മായ്ക്കും.",
+    "conversationStorage": "ഈ സംഭാഷണം നിങ്ങളുടെ അക്കൗണ്ടിലും ഈ ഉപകരണത്തിലും സൂക്ഷിക്കുന്നു. മായ്ക്കുമ്പോൾ രണ്ടിടത്തുനിന്നും നീക്കം ചെയ്യപ്പെടും.",
+    "clearing": "മായ്ക്കുന്നു…",
+    "clearFailed": "സെർവറിൽ സൂക്ഷിച്ച സംഭാഷണം മായ്ക്കാനായില്ല — അത് ഇപ്പോഴും സൂക്ഷിച്ചിരിക്കുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക.",
     "clearConversation": "സംഭാഷണം മായ്ക്കുക"
   },
   "insights": {

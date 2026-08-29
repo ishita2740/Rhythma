@@ -230,7 +230,9 @@
     "errorPrefix": "Error",
     "disclaimer": "Please consult a healthcare professional for medical advice.",
     "rateLimited": "You're sending messages too quickly. Please wait a moment.",
-    "storedOnDevice": "ఈ సంభాషణ ఈ పరికరంలోనే ఉంచబడుతుంది, లాగ్ అవుట్ చేసినప్పుడు తొలగించబడుతుంది.",
+    "conversationStorage": "ఈ సంభాషణ మీ ఖాతాలోనూ ఈ పరికరంలోనూ సేవ్ చేయబడుతుంది. దీన్ని తొలగిస్తే రెండు చోట్ల నుండీ తీసివేయబడుతుంది.",
+    "clearing": "తొలగిస్తోంది…",
+    "clearFailed": "సర్వర్‌లో సేవ్ చేసిన సంభాషణను తొలగించలేకపోయాం — అది ఇంకా సేవ్ చేయబడే ఉంది. దయచేసి మళ్లీ ప్రయత్నించండి.",
     "clearConversation": "సంభాషణను తొలగించు"
   },
   "insights": {
