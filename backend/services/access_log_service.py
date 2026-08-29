@@ -26,6 +26,14 @@ implementation is a second copy of the health data has not helped anyone,
 and an access log is exactly the kind of collection that quietly grows
 into one.
 
+**Reads are filtered in the query, not after it.** Issue #541: this
+module streamed the whole collection and dropped the rows that did not
+match, while its own docstrings said the filter ran in the query. Every
+Sharing screen open therefore read every access record belonging to every
+other user in the database — and this is the fastest-growing collection
+in the schema, one row per patient per provider-dashboard render. Nothing
+ever leaked: the filter ran before anything was returned. It was cost.
+
 **It is written in the service, not the route.** Any future endpoint that
 reads patient data through ``ProviderService`` is recorded by
 construction. A decorator on the two current routes would be quietly
@@ -82,30 +90,51 @@ def _serialize(value: Any) -> Any:
     return value
 
 
-def _stream_all() -> List[Any]:
-    """Every document in the collection, mock-client compatible.
+def _query_by(field: str, value: Any) -> List[Any]:
+    """Documents whose ``field`` equals ``value``, filtered in the query.
 
-    The in-memory mock's ``MockCollectionReference`` implements ``where``
-    but not a bare ``stream()``, so a plain ``collection.stream()`` raises
-    ``AttributeError`` under the local mock-mode setup
-    ``firestore_service.initialize_firebase()`` falls back to. Same
-    fallback as ``data_privacy_service._stream_collection``, and the same
-    reason: this feature has to work in mock mode or it cannot be
-    developed against.
+    Issue #541: this module used to stream the *entire* collection and
+    filter in Python:
+
+        for doc in _stream_all():
+            if data.get("patient_id") != patient_id:
+                continue
+
+    while the docstring above it claimed the opposite — "The collection is
+    filtered by ``patient_id`` first, so this sorts one patient's own
+    records — tens, not thousands". There was no ``where``. So every
+    Sharing screen open read, deserialised and discarded every access
+    record belonging to every other user in the database, and
+    ``access_log`` is the fastest-growing collection in the schema:
+    ``provider_service.patient_summaries_page`` writes one row per patient
+    per dashboard render.
+
+    Filtering in the query is what ``provider_service`` already does
+    against ``consents``, and the mock supports it — ``where`` returns a
+    ``MockQuery`` and ``MockQuery.stream()`` applies the predicate.
+
+    The private-``store`` fallback below survives only for a stand-in that
+    implements neither ``where`` nor ``stream``; it filters in Python
+    because it has nothing else to filter with. It is the dead path its
+    own comment in ``firestore_service`` describes, not the normal one.
     """
     collection = _db().collection(ACCESS_LOG_COLLECTION)
 
-    stream = getattr(collection, "stream", None)
-    if callable(stream):
+    where = getattr(collection, "where", None)
+    if callable(where):
         try:
-            return list(stream())
+            return list(where(field, "==", value).stream())
         except (AttributeError, NotImplementedError, TypeError):
             pass
 
     store = getattr(collection, "store", None)
     if store is None:
         return []
-    return [collection.document(doc_id) for doc_id in list(store.keys())]
+    return [
+        doc
+        for doc in (collection.document(doc_id) for doc_id in list(store.keys()))
+        if (doc.to_dict() or {}).get(field) == value
+    ]
 
 
 def record(
@@ -154,17 +183,20 @@ def record(
 def _entries_for_patient(patient_id: str) -> List[Dict[str, Any]]:
     """Every access record for one patient, newest first.
 
-    Sorted in Python rather than with ``order_by`` on the query. The
-    collection is filtered by ``patient_id`` first, so this sorts one
-    patient's own records — tens, not thousands — and it avoids requiring
-    a composite index for a feature whose whole point is that it works
-    from the moment it ships.
+    The filter runs in the query (``where("patient_id", "==", ...)``), so
+    the read is proportional to this patient's own history rather than to
+    the size of the collection.
+
+    The *sort* is still done in Python, and that is a deliberate trade
+    rather than an oversight: ordering in the query alongside an equality
+    filter needs a composite index, and this feature has to work from the
+    moment it ships. It is defensible now in a way it was not before —
+    what is being sorted really is one patient's records, tens rather than
+    thousands, because the filter above really runs (issue #541).
     """
     entries: List[Dict[str, Any]] = []
-    for doc in _stream_all():
+    for doc in _query_by("patient_id", patient_id):
         data = doc.to_dict() or {}
-        if data.get("patient_id") != patient_id:
-            continue
         data["id"] = doc.id
         entries.append(data)
 
@@ -243,10 +275,20 @@ def doc_ids_for_user(user_id: str) -> List[str]:
     Used by the deletion cascade. Both sides matter: a patient's records
     are hers, and a *provider* closing her account should not leave rows
     naming her in other people's access histories.
+
+    Two filtered queries rather than one scan of everything (issue #541).
+    Firestore has no ``OR`` across two fields, so the union is assembled
+    here — but each half is bounded by one user's own rows instead of by
+    the collection. De-duplicated because a row can in principle match
+    both halves, and returning an id twice would make the cascade delete
+    a document that is already gone.
     """
     ids: List[str] = []
-    for doc in _stream_all():
-        data = doc.to_dict() or {}
-        if data.get("patient_id") == user_id or data.get("provider_id") == user_id:
+    seen = set()
+    for field in ("patient_id", "provider_id"):
+        for doc in _query_by(field, user_id):
+            if doc.id in seen:
+                continue
+            seen.add(doc.id)
             ids.append(doc.id)
     return ids

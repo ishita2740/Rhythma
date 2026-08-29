@@ -62,7 +62,13 @@ def _all_user_docs() -> List[Any]:
 
     ``MockCollectionReference`` has no bare ``stream()``, so mock-mode —
     which is how most contributors run this project — would otherwise
-    raise. Same fallback as ``access_log_service._stream_all``.
+    raise. Same fallback shape as ``access_log_service._query_by`` and
+    ``data_privacy_service._stream_collection``.
+
+    Unlike those, this one genuinely wants every document: a backfill over
+    the whole ``users`` collection is the job. There is no field to filter
+    on here, which is what makes the unbounded read correct rather than
+    the oversight #541 describes.
     """
     collection = _users_collection()
 
