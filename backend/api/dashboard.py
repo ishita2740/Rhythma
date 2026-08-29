@@ -17,6 +17,8 @@ from services.health_observations_service import (
     top_observation,
 )
 from services.prediction_service import dashboard_summary, predict
+from services.cycle_periods import cycle_gaps
+from services.cycle_periods import cycle_history as build_cycle_history
 from services.scoring_service import get_user_scores, compute_cycle_stats, as_date, DEFAULT_CYCLE_LENGTH
 
 
@@ -36,6 +38,18 @@ class DashboardInsights(BaseModel):
     longestCycleLength: Optional[int] = None
     averageBleedingDuration: Optional[float] = None
     sleepHours: Optional[str] = None
+    #: How many cycles the three cycle-length figures above are based on,
+    #: and how many day-gaps were discarded as not being cycles at all
+    #: (#518). Additive and defaulted, so clients written before these
+    #: existed are unaffected.
+    #:
+    #: Worth exposing rather than keeping internal: without it a user with
+    #: thirty logs is shown an average "based on" two cycles with nothing
+    #: to explain where the other twenty-eight went, and the screen cannot
+    #: tell "you have not logged enough yet" from "most of what you logged
+    #: was not a period start".
+    analyzedCycleCount: int = 0
+    excludedGapCount: int = 0
 
 
 class CycleHistoryEntry(BaseModel):
@@ -187,15 +201,16 @@ async def get_dashboard(current_user: dict = Depends(get_current_user)):
             raw_day = (date.today() - most_recent_start).days + 1
             cycle_day = max(1, raw_day)
 
-        if len(logs) >= 2:
-            deltas = []
-            for i in range(len(logs) - 1):
-                newer = as_date(logs[i].get("start_date"))
-                older = as_date(logs[i + 1].get("start_date"))
-                if newer and older and (newer - older).days > 0:
-                    deltas.append((newer - older).days)
-            if deltas:
-                avg_cycle_length = round(sum(deltas) / len(deltas))
+        # The second of the three copies of this loop (#518), and the one
+        # that fed `cycle.total` — the ring on the Flutter Home screen. It
+        # had the same `> 0` non-filter, so a fortnight of quick-logs
+        # dragged the ring's total from 28 down to single digits. The
+        # legacy clamped `nextPeriodDays` below is computed from it, so
+        # leaving it unfiltered would have kept the visible symptom while
+        # only the insights block was corrected.
+        gaps = cycle_gaps(logs)
+        if gaps:
+            avg_cycle_length = round(sum(gaps) / len(gaps))
 
         if cycle_day is not None:
             next_period_days = max(avg_cycle_length - cycle_day, 0)
@@ -205,16 +220,12 @@ async def get_dashboard(current_user: dict = Depends(get_current_user)):
     if sleep_values:
         avg_sleep = round(sum(sleep_values) / len(sleep_values), 1)
 
-    cycle_history = []
-    ordered = list(reversed(logs))
-    for i in range(1, len(ordered)):
-        newer = as_date(ordered[i].get("start_date"))
-        older = as_date(ordered[i - 1].get("start_date"))
-        if newer and older and (newer - older).days > 0:
-            cycle_history.append({
-                "start_date": newer.isoformat(),
-                "cycle_length": (newer - older).days,
-            })
+    # One entry per cycle, oldest first — the order the trend charts on both
+    # clients draw. Built by `cycle_periods` rather than by an inline
+    # subtraction over adjacent logs, which is the third copy of that loop
+    # this file used to hold and the only one with no plausibility bound
+    # (#518): every run of consecutive quick-logs plotted as a row of 1s.
+    cycle_history = build_cycle_history(logs)
 
     canonical_symptoms = ["cramps", "headache", "bloating", "acne"]
     logs_with_symptoms = [l for l in logs if l.get("symptoms")]
@@ -264,6 +275,8 @@ async def get_dashboard(current_user: dict = Depends(get_current_user)):
             "longestCycleLength": cycle_stats["longest_cycle_length"],
             "averageBleedingDuration": cycle_stats["average_bleeding_duration"],
             "sleepHours": f"{avg_sleep}h" if avg_sleep is not None else None,
+            "analyzedCycleCount": cycle_stats["analyzed_cycle_count"],
+            "excludedGapCount": cycle_stats["excluded_gap_count"],
         },
         "hasEnoughDataForInsights": score_data["has_enough_data_for_insights"],
         "loggedCycleCount": score_data["logged_cycle_count"],

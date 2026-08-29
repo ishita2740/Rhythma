@@ -13,9 +13,9 @@ This module provides two categories of output:
    /scores any longer.
 """
 
-from datetime import date, datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
+from services.cycle_periods import as_date, bleed_durations, partition_gaps
 from services.firestore_service import CycleService, UserService
 from models.cvi_model import predict_cvi, risk_level
 from models.mhs_model import predict_mhs
@@ -42,59 +42,61 @@ _FLOW_INTENSITY_WHEN_ABSENT = 2
 _LOGS_LIMIT = 10
 
 
-def as_date(value: Any) -> Optional[date]:
-    """Firestore returns date/datetime fields as datetime (or its own
-    DatetimeWithNanoseconds subclass); normalize everything to a plain
-    `date` for day-math."""
-    if value is None:
-        return None
-    if isinstance(value, datetime):
-        return value.date()
-    if isinstance(value, date):
-        return value
-    return None
+# `as_date` is re-exported rather than defined here. It moved to
+# `services.cycle_periods` alongside the rest of the log-date handling, and
+# five modules already import it from this one — keeping the name importable
+# here avoids churning all of them for a move.
 
 
 def compute_cycle_stats(logs: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Compute factual cycle statistics directly from raw CycleLog history.
+    """Factual cycle statistics from raw CycleLog history.
 
     Returns a dict with:
-        average_cycle_length: mean days between consecutive period start dates.
+        average_cycle_length: mean days between consecutive period starts.
         shortest_cycle_length: minimum cycle length observed.
         longest_cycle_length: maximum cycle length observed.
         average_bleeding_duration: mean number of bleeding days (from
             start_date to end_date, inclusive).
+        analyzed_cycle_count: how many cycles the three figures above are
+            based on.
+        excluded_gap_count: how many day-gaps were discarded as not being
+            cycles at all.
 
-    All values are ``None`` when there is insufficient data (fewer than
-    2 logs for cycle lengths, fewer than 1 log with an end_date for
-    bleeding duration).  Values are rounded to one decimal place.
+    All values are ``None`` when there is not enough data to support them —
+    fewer than two distinct logged dates a plausible cycle apart, or no log
+    carrying both a start and an end date. ``None`` rather than a default,
+    so a client can distinguish "we don't know yet" from a measurement.
+
+    The gaps come from :func:`services.cycle_periods.partition_gaps` rather
+    than from an inline subtraction over adjacent logs (#518). The inline
+    version's only filter was ``(newer - older).days > 0``, and
+    ``start_date`` is stamped on every logged *day*, not only on period
+    starts — so two quick-logs on consecutive days were counted as a
+    one-day cycle. That is how this function came to report a 4.2-day
+    average and a 1-day shortest cycle for a user whose real cycles were 22
+    and 28 days, in the same ``/dashboard`` response whose
+    ``cycleConsistencyDescription`` — built from the filtered gaps — said
+    25.
+
+    The two figures now come from one extraction, so they cannot disagree.
     """
-    # logs are newest-first
-    cycle_lengths: List[int] = []
-    bleeding_days: List[int] = []
+    kept, discarded = partition_gaps(logs)
+    bleeding_days = bleed_durations(logs)
 
-    for i in range(len(logs) - 1):
-        newer = as_date(logs[i].get("start_date"))
-        older = as_date(logs[i + 1].get("start_date"))
-        if newer and older and (newer - older).days > 0:
-            cycle_lengths.append((newer - older).days)
-
-    for log in logs:
-        start = as_date(log.get("start_date"))
-        end = as_date(log.get("end_date"))
-        if start and end and end >= start:
-            bleeding_days.append(max(1, (end - start).days + 1))
-
-    avg_cycle = round(sum(cycle_lengths) / len(cycle_lengths), 1) if cycle_lengths else None
-    min_cycle = min(cycle_lengths) if cycle_lengths else None
-    max_cycle = max(cycle_lengths) if cycle_lengths else None
-    avg_bleed = round(sum(bleeding_days) / len(bleeding_days), 1) if bleeding_days else None
+    avg_cycle = round(sum(kept) / len(kept), 1) if kept else None
+    min_cycle = min(kept) if kept else None
+    max_cycle = max(kept) if kept else None
+    avg_bleed = (
+        round(sum(bleeding_days) / len(bleeding_days), 1) if bleeding_days else None
+    )
 
     return {
         "average_cycle_length": avg_cycle,
         "shortest_cycle_length": min_cycle,
         "longest_cycle_length": max_cycle,
         "average_bleeding_duration": avg_bleed,
+        "analyzed_cycle_count": len(kept),
+        "excluded_gap_count": len(discarded),
     }
 
 

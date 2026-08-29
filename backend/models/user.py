@@ -114,5 +114,22 @@ class ScoresResponse(BaseModel):
     averageBleedingDuration: Optional[float] = Field(
         None, description="Mean bleeding duration in days (start_date to end_date, inclusive)."
     )
+    analyzedCycleCount: int = Field(
+        0,
+        description=(
+            "How many cycles the three cycle-length figures above are based "
+            "on. A day-gap is only counted as a cycle when it falls in the "
+            "plausible band, so this can be far smaller than the number of "
+            "logs."
+        ),
+    )
+    excludedGapCount: int = Field(
+        0,
+        description=(
+            "How many gaps between logged dates were discarded as not being "
+            "cycles — most often consecutive days from the quick-log tiles, "
+            "which stamp a start_date on every logged day."
+        ),
+    )
     hasEnoughDataForInsights: bool = False
     loggedCycleCount: int = 0
