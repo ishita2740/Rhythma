@@ -2,10 +2,16 @@ import firebase_admin
 from firebase_admin import firestore, credentials
 import os
 import json
+import logging
 from datetime import date, datetime, timezone
 from typing import Optional, Dict, Any
+
 from fastapi import HTTPException, status
-from google.api_core.exceptions import FailedPrecondition  # for missing index detection
+from google.api_core.exceptions import FailedPrecondition
+
+
+logger = logging.getLogger(__name__)
+
 
 # Firestore's "remove this key" sentinel. Imported from the Google client
 # rather than through `firebase_admin.firestore` because the test suite
@@ -131,6 +137,7 @@ class MockDocumentReference:
     def delete(self):
         if self.id in self.collection.store:
             del self.collection.store[self.id]
+
         self.data = None
         self.exists = False
 
@@ -147,6 +154,7 @@ def _copy_document(data):
     anything in this codebase uses.
     """
     return dict(data) if data is not None else None
+
 
 def _mock_order_key(value):
     """Sort key for ``order_by`` in the mock query.
@@ -196,7 +204,6 @@ class MockQuery:
     """
 
     def __init__(self, documents):
-        # documents is a list of MockDocumentReference
         self._documents = documents
         self._order_by_field = None
         self._order_by_direction = None
@@ -249,6 +256,7 @@ class MockQuery:
         class _CountAggregation:
             def __init__(self, count_val):
                 self.val = count_val
+
             def get(self):
                 # google-cloud-firestore format: list of list of namedtuples/objects with .value
                 class ResultObj:
@@ -258,12 +266,14 @@ class MockQuery:
         return _CountAggregation(len(self._documents))
 
     def stream(self):
-        # Start with the filtered documents
         docs = self._documents[:]
 
-        # Apply sorting if requested
         if self._order_by_field:
-            reverse = (self._order_by_direction == firestore.Query.DESCENDING)
+            reverse = (
+                self._order_by_direction
+                == firestore.Query.DESCENDING
+            )
+
             docs.sort(
                 key=lambda doc: _mock_order_key((doc.data or {}).get(self._order_by_field)),
                 reverse=reverse
@@ -281,36 +291,21 @@ class MockQuery:
         for doc in docs:
             yield doc
 
+
 class MockCollectionReference:
     def __init__(self, name, db):
         self.name = name
         self.db = db
+
         if name not in db._collections:
             db._collections[name] = {}
+
         self.store = db._collections[name]
 
     def add(self, document_data):
-        # Per-collection auto-ID counter.
-        #
-        # Previously this counter was a class-level attribute
-        # (`MockCollectionReference._next_id`), which meant every mock
-        # collection — `users`, `cycle_logs`, `conversations`, etc. —
-        # drew IDs from one shared incrementing sequence, so creating a
-        # user then a cycle log produced `mock-doc-id-1` and
-        # `mock-doc-id-2` instead of `mock-doc-id-1` in each collection.
-        #
-        # The counter cannot live on the instance either, because
-        # `MockFirestoreClient.collection(name)` builds a *fresh*
-        # `MockCollectionReference` on every call — an instance-level
-        # counter would reset to 1 each time and collide immediately.
-        #
-        # Persisting it on the shared `db._counters` dict, keyed by
-        # collection name, gives each collection its own independent
-        # sequence that survives across `db.collection(name)` calls —
-        # matching how real Firestore auto-IDs are namespaced
-        # per-collection.
         next_id = self.db._counters.get(self.name, 0) + 1
         self.db._counters[self.name] = next_id
+
         doc_id = f"mock-doc-id-{next_id}"
         # Stored as a copy, for the same reason `set` copies: what is
         # written must not stay tied to the caller's dict.
@@ -320,7 +315,12 @@ class MockCollectionReference:
 
     def document(self, doc_id):
         data = self.store.get(doc_id)
-        return MockDocumentReference(doc_id, data, self)
+
+        return MockDocumentReference(
+            doc_id,
+            data,
+            self,
+        )
 
     def _all_documents(self):
         """Every document in this collection, as references."""
@@ -370,36 +370,46 @@ class MockCollectionReference:
     def offset(self, count):
         return MockQuery(self._all_documents()).offset(count)
 
+
 class MockFirestoreClient:
     def __init__(self):
         self._collections = {}
-        # Per-collection auto-ID counters for MockCollectionReference.add().
-        # Keyed by collection name so each collection has its own
-        # independent sequence (see MockCollectionReference.add).
         self._counters = {}
 
     def collection(self, name):
         return MockCollectionReference(name, self)
 
+
 # ─── Initialize Firebase (only once) ──────────────────────────────────────
+
 db = None
+
 
 def initialize_firebase():
     global db
+
     if firebase_admin._apps:
         db = firestore.client()
         return
 
     # Option 1: JSON string from environment
-    cred_json = os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON")
+    cred_json = os.getenv(
+        "FIREBASE_SERVICE_ACCOUNT_JSON"
+    )
+
     if cred_json:
-        cred = credentials.Certificate(json.loads(cred_json))
+        cred = credentials.Certificate(
+            json.loads(cred_json)
+        )
         firebase_admin.initialize_app(cred)
         db = firestore.client()
         return
 
     # Option 2: Path to JSON file
-    cred_path = os.getenv("FIREBASE_SERVICE_ACCOUNT_PATH")
+    cred_path = os.getenv(
+        "FIREBASE_SERVICE_ACCOUNT_PATH"
+    )
+
     if cred_path and os.path.exists(cred_path):
         cred = credentials.Certificate(cred_path)
         firebase_admin.initialize_app(cred)
@@ -408,13 +418,23 @@ def initialize_firebase():
 
     # Fallback to in-memory Firestore mock
     import sys
-    print("WARNING: Firebase credentials not found. Falling back to an in-memory mock Firestore database.", file=sys.stderr)
+
+    print(
+        "WARNING: Firebase credentials not found. "
+        "Falling back to an in-memory mock Firestore database.",
+        file=sys.stderr,
+    )
+
     db = MockFirestoreClient()
+
 
 initialize_firebase()
 
 
+# ─── User Service ─────────────────────────────────────────────────────────
+
 class UserService:
+
     @staticmethod
     def create_user(user_data: Dict[str, Any]) -> str:
         """Create a new user document in Firestore.
@@ -433,21 +453,36 @@ class UserService:
                 user_data["email"] = normalize_email(user_data["email"])
             user_data["created_at"] = now
             user_data["updated_at"] = now
-            doc_ref = db.collection("users").add(user_data)
+
+            doc_ref = db.collection(
+                "users"
+            ).add(user_data)
+
             return doc_ref[1].id
+
         except Exception as e:
             raise upstream_error("Creating your account", e)
 
     @staticmethod
-    def get_user_by_username(username: str) -> Optional[Dict[str, Any]]:
+    def get_user_by_username(
+        username: str,
+    ) -> Optional[Dict[str, Any]]:
         """Fetch a user by username."""
         try:
-            users = db.collection("users").where("username", "==", username).limit(1).stream()
+            users = (
+                db.collection("users")
+                .where("username", "==", username)
+                .limit(1)
+                .stream()
+            )
+
             for user in users:
                 data = user.to_dict()
                 data["id"] = user.id
                 return data
+
             return None
+
         except Exception as e:
             raise upstream_error("Loading your profile", e)
 
@@ -493,32 +528,52 @@ class UserService:
             if raw and raw != normalized:
                 return UserService._first_user_where("email", raw)
             return None
+
         except Exception as e:
             raise upstream_error("Loading your profile", e)
 
     @staticmethod
-    def get_user_by_phone(phone: str) -> Optional[Dict[str, Any]]:
+    def get_user_by_phone(
+        phone: str,
+    ) -> Optional[Dict[str, Any]]:
         """Fetch a user by phone number."""
         try:
-            users = db.collection("users").where("phone", "==", phone).limit(1).stream()
+            users = (
+                db.collection("users")
+                .where("phone", "==", phone)
+                .limit(1)
+                .stream()
+            )
+
             for user in users:
                 data = user.to_dict()
                 data["id"] = user.id
                 return data
+
             return None
+
         except Exception as e:
             raise upstream_error("Loading your profile", e)
 
     @staticmethod
-    def get_user_by_id(user_id: str) -> Optional[Dict[str, Any]]:
+    def get_user_by_id(
+        user_id: str,
+    ) -> Optional[Dict[str, Any]]:
         """Fetch a user by Firestore document ID."""
         try:
-            doc = db.collection("users").document(user_id).get()
+            doc = (
+                db.collection("users")
+                .document(user_id)
+                .get()
+            )
+
             if doc.exists:
                 data = doc.to_dict()
                 data["id"] = doc.id
                 return data
+
             return None
+
         except Exception as e:
             raise upstream_error("Loading your profile", e)
 
@@ -537,7 +592,9 @@ class UserService:
             update_data["updated_at"] = datetime.now(timezone.utc)
             doc_ref = db.collection("users").document(user_id)
             doc_ref.update(update_data)
+
             return True
+
         except Exception as e:
             raise upstream_error("Saving your profile", e)
 
@@ -570,35 +627,43 @@ class UserService:
             raise upstream_error("Deleting your account", e)
 
 
+# ─── Cycle Service ────────────────────────────────────────────────────────
+
 class CycleService:
     """Persists and retrieves per-user cycle logs in Firestore."""
 
     @staticmethod
-    def create_log(user_id: str, log_data: Dict[str, Any]) -> str:
-        """Create a new cycle log document for a user, always as a new
-        document (no day-based upsert).
-
-        Not currently called by `POST /cycle/log` — that endpoint now uses
-        `upsert_log` so repeated logs on the same day merge into one
-        document instead of creating duplicates. Kept here in case a
-        future feature genuinely wants multiple entries per day (e.g. an
-        explicit "add another entry" action) rather than day-level upsert
-        semantics.
-        """
+    def create_log(
+        user_id: str,
+        log_data: Dict[str, Any],
+    ) -> str:
+        """Create a new cycle log document for a user."""
         try:
             data = dict(log_data)
-            # Firestore's client stores Python `date` values fine, but to
-            # keep this consistent and avoid surprises with the query below,
-            # normalize any bare `date` values to UTC `datetime`s.
-            from datetime import date as date_type
+
             for key, value in list(data.items()):
-                if isinstance(value, date_type) and not isinstance(value, datetime):
-                    data[key] = datetime.combine(value, datetime.min.time(), tzinfo=timezone.utc)
+                if (
+                    isinstance(value, date)
+                    and not isinstance(value, datetime)
+                ):
+                    data[key] = datetime.combine(
+                        value,
+                        datetime.min.time(),
+                        tzinfo=timezone.utc,
+                    )
 
             data["user_id"] = user_id
-            data["created_at"] = datetime.now(timezone.utc)
-            doc_ref = db.collection("cycle_logs").add(data)
+            data["created_at"] = datetime.now(
+                timezone.utc
+            )
+
+            doc_ref = (
+                db.collection("cycle_logs")
+                .add(data)
+            )
+
             return doc_ref[1].id
+
         except Exception as e:
             raise upstream_error("Saving your cycle log", e)
 
@@ -664,7 +729,7 @@ class CycleService:
             # Fetch one older log (offset - 1) if possible to compute cycle_length for the newest log on this page
             fetch_offset = max(0, offset - 1) if offset > 0 else 0
             extra_fetch = 1 if offset > 0 else 0
-            
+
             if offset:
                 query = query.offset(fetch_offset)
 
@@ -679,10 +744,10 @@ class CycleService:
 
             # If we fetched an extra newer log, use it to compute cycle_length for results[1], then remove it
             has_more = len(results) > limit + extra_fetch
-            
+
             # Slice down to just what we fetched + extra
             results = results[:limit + extra_fetch]
-            
+
             # Compute cycle_length: days to next log (which is before it in the list)
             # E.g., results = [Oct 10, Oct 5, Oct 1] -> Oct 5 cycle length = (10 - 5) = 5 days.
             for i in range(len(results) - 1, -1, -1):
@@ -693,7 +758,7 @@ class CycleService:
                 else:
                     # Newest log returned from query has no "next" log in this set
                     results[i]["cycle_length"] = None
-                    
+
             if extra_fetch and results:
                 # Remove the extra newer log we fetched just for length computation
                 results.pop(0)
@@ -730,29 +795,38 @@ class CycleService:
             query = (
                 db.collection("cycle_logs")
                 .where("user_id", "==", user_id)
-                .order_by("start_date", direction=firestore.Query.DESCENDING)
+                .order_by(
+                    "start_date",
+                    direction=firestore.Query.DESCENDING,
+                )
                 .limit(limit)
             )
+
             docs = query.stream()
             results = []
+
             for doc in docs:
                 data = doc.to_dict()
                 data["id"] = doc.id
                 results.append(data)
+
             return results
+
         except FailedPrecondition as e:
-            # Missing composite index – treat as a configuration issue
-            # and preserve the original error message (includes the link)
             raise HTTPException(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                detail=str(e)
+                detail=str(e),
             )
+
         except Exception as e:
             # Other Firestore errors
             raise upstream_error("Loading your cycle history", e)
 
     @staticmethod
-    def _log_doc_id(user_id: str, log_date: date) -> str:
+    def _log_doc_id(
+        user_id: str,
+        log_date: date,
+    ) -> str:
         return f"{user_id}_{log_date.isoformat()}"
 
     @staticmethod
@@ -813,11 +887,24 @@ class CycleService:
         on is drawn there, where the request body is still visible.
         """
         try:
-            doc_id = CycleService._log_doc_id(user_id, log_date)
-            doc_ref = db.collection("cycle_logs").document(doc_id)
+            doc_id = CycleService._log_doc_id(
+                user_id,
+                log_date,
+            )
+
+            doc_ref = (
+                db.collection("cycle_logs")
+                .document(doc_id)
+            )
+
             existing = doc_ref.get()
 
-            day_start = datetime.combine(log_date, datetime.min.time(), tzinfo=timezone.utc)
+            day_start = datetime.combine(
+                log_date,
+                datetime.min.time(),
+                tzinfo=timezone.utc,
+            )
+
             now = datetime.now(timezone.utc)
 
             if existing.exists:
@@ -826,6 +913,7 @@ class CycleService:
                 )
                 update_fields["updated_at"] = now
                 doc_ref.update(update_fields)
+
                 return doc_id
 
             new_data = {
@@ -835,7 +923,9 @@ class CycleService:
                 "created_at": now,
             }
             doc_ref.set(new_data)
+
             return doc_id
+
         except Exception as e:
             raise upstream_error("Saving your cycle log", e)
 
@@ -884,105 +974,149 @@ class CycleService:
         :meth:`upsert_log` — see ``_prepare_write`` (issue #549).
         """
         try:
-            doc_ref = db.collection("cycle_logs").document(log_id)
+            doc_ref = (
+                db.collection("cycle_logs")
+                .document(log_id)
+            )
+
             doc = doc_ref.get()
-            
+
             if not doc.exists:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Cycle log not found"
+                    detail="Cycle log not found",
                 )
-                
+
             if doc.to_dict().get("user_id") != user_id:
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
-                    detail="Not authorized to update this log"
+                    detail=(
+                        "Not authorized to update this log"
+                    ),
                 )
-                
+
             update_fields = CycleService._prepare_write(
                 fields, for_new_document=False
             )
             update_fields["updated_at"] = datetime.now(timezone.utc)
             doc_ref.update(update_fields)
+
             return log_id
+
         except HTTPException:
             raise
+
         except Exception as e:
             raise upstream_error("Updating your cycle log", e)
 
     @staticmethod
-    def delete_log(user_id: str, log_id: str) -> None:
+    def delete_log(
+        user_id: str,
+        log_id: str,
+    ) -> None:
         """Delete a specific cycle log by ID."""
         try:
-            doc_ref = db.collection("cycle_logs").document(log_id)
+            doc_ref = (
+                db.collection("cycle_logs")
+                .document(log_id)
+            )
+
             doc = doc_ref.get()
-            
+
             if not doc.exists:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Cycle log not found"
+                    detail="Cycle log not found",
                 )
-                
+
             if doc.to_dict().get("user_id") != user_id:
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
-                    detail="Not authorized to delete this log"
+                    detail=(
+                        "Not authorized to delete this log"
+                    ),
                 )
-                
+
             doc_ref.delete()
+
         except HTTPException:
             raise
+
         except Exception as e:
             raise upstream_error("Deleting your cycle log", e)
 
 
 # ─── Maximum number of messages kept per conversation ────────────────────
+
 MAX_CONVERSATION_MESSAGES = 50
 
 
+# ─── Assistant Conversation Service ──────────────────────────────────────
+
 class AssistantConversationService:
-    """Persists assistant chat messages per user in Firestore.
-
-    Each user has a single document in the ``conversations`` collection,
-    keyed by ``user_id``, with a capped ``messages`` array.  When the
-    array reaches ``MAX_CONVERSATION_MESSAGES`` (50) the oldest messages
-    are trimmed so new ones always fit — effectively a rolling window of
-    the most recent exchanges.
-
-    This guarantees the document never grows large enough to hit
-    Firestore's 1 MiB per-document limit (each message is ~200 bytes,
-    so 50 messages is ~10 KiB) and keeps retrieval of the most recent N
-    messages a single document read.
-    """
+    """Persists assistant chat messages per user in Firestore."""
 
     COLLECTION = "conversations"
 
     @staticmethod
     def get_or_create(user_id: str) -> dict:
         now = datetime.now(timezone.utc)
-        doc_ref = db.collection(AssistantConversationService.COLLECTION).document(user_id)
+
+        doc_ref = (
+            db.collection(
+                AssistantConversationService.COLLECTION
+            )
+            .document(user_id)
+        )
+
         doc = doc_ref.get()
+
         if doc.exists:
             return doc.to_dict()
+
         conversation = {
             "user_id": user_id,
             "messages": [],
             "created_at": now,
             "updated_at": now,
         }
+
         doc_ref.set(conversation)
+
         return conversation
 
     @staticmethod
-    def get_recent_messages(user_id: str, limit: int = 10) -> list:
-        conversation = AssistantConversationService.get_or_create(user_id)
-        return conversation.get("messages", [])[-limit:]
+    def get_recent_messages(
+        user_id: str,
+        limit: int = 10,
+    ) -> list:
+        conversation = (
+            AssistantConversationService.get_or_create(
+                user_id
+            )
+        )
+
+        return conversation.get(
+            "messages",
+            [],
+        )[-limit:]
 
     @staticmethod
-    def add_messages(user_id: str, new_messages: list) -> None:
+    def add_messages(
+        user_id: str,
+        new_messages: list,
+    ) -> None:
         now = datetime.now(timezone.utc)
-        doc_ref = db.collection(AssistantConversationService.COLLECTION).document(user_id)
+
+        doc_ref = (
+            db.collection(
+                AssistantConversationService.COLLECTION
+            )
+            .document(user_id)
+        )
+
         doc = doc_ref.get()
+
         if not doc.exists:
             conversation = {
                 "user_id": user_id,
@@ -990,13 +1124,25 @@ class AssistantConversationService:
                 "created_at": now,
                 "updated_at": now,
             }
+
             doc_ref.set(conversation)
             doc = doc_ref.get()
-        current = doc.to_dict().get("messages", [])
+
+        current = doc.to_dict().get(
+            "messages",
+            [],
+        )
+
         current.extend(new_messages)
+
         if len(current) > MAX_CONVERSATION_MESSAGES:
-            current = current[-MAX_CONVERSATION_MESSAGES:]
-        doc_ref.update({
-            "messages": current,
-            "updated_at": now,
-        })
+            current = current[
+                -MAX_CONVERSATION_MESSAGES:
+            ]
+
+        doc_ref.update(
+            {
+                "messages": current,
+                "updated_at": now,
+            }
+        )
