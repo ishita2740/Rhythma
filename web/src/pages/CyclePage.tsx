@@ -72,6 +72,33 @@ const SYMPTOM_OPTIONS: OptionDef[] = [
 const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 /**
+ * The user-facing name of a phase.
+ *
+ * Keyed off `prediction.phase.*` rather than the four `cycle.*` strings
+ * this used to switch on. Those covered only the four classic phases, and
+ * the `default:` arm meant every other phase rendered as "Luteal" — so
+ * `late`, which exists precisely to stop the calendar claiming a phase it
+ * cannot support, was displayed as one anyway. `unknown` (#520) would have
+ * inherited the same fate.
+ *
+ * `prediction.phase.*` is a strict superset with identical English values,
+ * already used a few lines below for the server's own phase, and already
+ * present in every locale held to translation parity. So this removes a
+ * label bug and a duplicate namespace without adding a key.
+ *
+ * Indexed rather than switched, and typed as a total map, so adding a
+ * seventh phase is a compile error here instead of a silent "Luteal".
+ */
+const PHASE_LABEL_KEYS: Record<CyclePhase, string> = {
+  period: 'prediction.phase.period',
+  follicular: 'prediction.phase.follicular',
+  ovulation: 'prediction.phase.ovulation',
+  luteal: 'prediction.phase.luteal',
+  late: 'prediction.phase.late',
+  unknown: 'prediction.phase.unknown',
+};
+
+/**
  * The single-value fields this screen renders.
  *
  * `notes` and `end_date` are deliberately absent. Both exist on a log and
@@ -83,16 +110,7 @@ const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const EDITABLE_FIELDS = ['flow_intensity', 'mood', 'sleep_hours', 'stress_level'] as const;
 
 function phaseLabel(t: (k: string) => string, phase: CyclePhase): string {
-  switch (phase) {
-    case 'period':
-      return t('cycle.period');
-    case 'follicular':
-      return t('cycle.follicular');
-    case 'ovulation':
-      return t('cycle.ovulation');
-    default:
-      return t('cycle.luteal');
-  }
+  return t(PHASE_LABEL_KEYS[phase]);
 }
 
 export function CyclePage() {
