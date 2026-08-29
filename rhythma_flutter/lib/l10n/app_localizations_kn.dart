@@ -160,11 +160,7 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get homeRetry => 'ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ';
 
-  @override
-  String get homeMhs => 'MHS';
 
-  @override
-  String get homeCvi => 'CVI';
 
   @override
   String get homeSleep => 'Sleep';
@@ -348,11 +344,7 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get insightsSubtitle => 'ಕಳೆದ 90 ದಿನಗಳು';
 
-  @override
-  String get insightsMhsLabel => 'ಋತುಚಕ್ರ ಆರೋಗ್ಯ ಸ್ಕೋರ್';
 
-  @override
-  String get insightsMhsDelta => 'ಕಳೆದ ಚಕ್ರಕ್ಕಿಂತ +6';
 
   @override
   String get insightsVar => 'ಋತುಚಕ್ರದ ಏರಿಳಿತ';

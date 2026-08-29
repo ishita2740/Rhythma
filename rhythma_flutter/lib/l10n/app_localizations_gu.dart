@@ -159,11 +159,7 @@ class AppLocalizationsGu extends AppLocalizations {
   @override
   String get homeRetry => 'ફરી પ્રયાસ કરો';
 
-  @override
-  String get homeMhs => 'MHS';
 
-  @override
-  String get homeCvi => 'CVI';
 
   @override
   String get homeSleep => 'ઊંઘ';
@@ -349,11 +345,7 @@ class AppLocalizationsGu extends AppLocalizations {
   @override
   String get insightsSubtitle => 'છેલ્લા 90 દિવસ';
 
-  @override
-  String get insightsMhsLabel => 'માસિક ધર્મ સ્વાસ્થ્ય સ્કોર';
 
-  @override
-  String get insightsMhsDelta => 'છેલ્લા ચક્ર કરતાં +6';
 
   @override
   String get insightsVar => 'ચક્ર પરિવર્તનશીલતા';

@@ -159,11 +159,7 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get homeRetry => 'Retry';
 
-  @override
-  String get homeMhs => 'MHS';
 
-  @override
-  String get homeCvi => 'CVI';
 
   @override
   String get homeSleep => 'தூக்கம்';
@@ -349,11 +345,7 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get insightsSubtitle => 'கடந்த 90 நாட்கள்';
 
-  @override
-  String get insightsMhsLabel => 'மாதவிடாய் சுகாதார மதிப்பெண்';
 
-  @override
-  String get insightsMhsDelta => 'முந்தைய சுழற்சியை விட +6';
 
   @override
   String get insightsVar => 'சுழற்சி மாறுபாடு';
