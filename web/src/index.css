@@ -1147,6 +1147,20 @@ p {
   font-weight: 600;
 }
 
+/* `late` and `unknown` are the two phases the old day-5/13/16 ladder could
+   never reach (#486). Both mean "we cannot tell you where you are in your
+   cycle" — a statement about our confidence, not about her health — so
+   they read as muted rather than as a warning. A red pill on a cycle that
+   is running long would be exactly the risk framing
+   menstrual_insights_guidelines.md rules out.
+
+   The inline borderColor/color set from the avatar still win; this only
+   changes the fill behind them. */
+.phase-pill.phase-neutral {
+  background: rgba(120, 120, 135, 0.12);
+  opacity: 0.85;
+}
+
 .menu-list {
   display: flex;
   flex-direction: column;
