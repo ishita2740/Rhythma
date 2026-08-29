@@ -477,3 +477,161 @@ describe('calendar phases before the anchor (issue #520)', () => {
     expect(screen.getByRole('heading', { name: /not enough data/i })).toBeInTheDocument();
   });
 });
+
+// ─── Taking a logged value back (issue #549) ────────────────────────────
+//
+// The chips are toggles: `toggleSingle` deselects to `null` and the chip
+// visibly un-highlights. But `save()` built its payload with a truthiness
+// check per field, so a cleared field was never added to the request —
+// which made it indistinguishable from a request where the user touched
+// nothing. The page then said "Saved to your account", reloaded the month,
+// re-seeded the draft from the unchanged server copy, and lit the chip
+// back up.
+//
+// These tests assert on **the payload**, not on what the page renders
+// afterwards. What the page renders after a save is whatever the mocked
+// reload returns, so a render assertion would pass against the broken
+// version too. The request is where the bug was.
+
+const TODAY_ISO = (() => {
+  const now = new Date();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  return `${now.getFullYear()}-${m}-${d}`;
+})();
+
+/** A log already stored for today, as `fetchCycleHistoryRange` returns it. */
+function storedLog(overrides: Record<string, unknown> = {}) {
+  return [{ id: 'log-1', start_date: TODAY_ISO, flow_intensity: 'heavy', ...overrides }];
+}
+
+describe('CyclePage clearing a logged value', () => {
+  it('sends null for a chip the user has deselected', async () => {
+    fetchCycleHistoryRange.mockResolvedValue(storedLog());
+    submitCycleLog.mockResolvedValue({ id: 'log-1', message: 'ok' });
+
+    renderWithProviders(<CyclePage />);
+    await waitFor(() => expect(fetchCycleHistoryRange).toHaveBeenCalled());
+
+    // The stored value, tapped a second time to clear it.
+    await userEvent.click(screen.getByRole('button', { name: /heavy/i }));
+    await userEvent.click(screen.getByRole('button', { name: /save log/i }));
+
+    await waitFor(() => expect(submitCycleLog).toHaveBeenCalledTimes(1));
+    expect(submitCycleLog.mock.calls[0][0].flow_intensity).toBeNull();
+  });
+
+  it('keeps save enabled after clearing the only logged field', async () => {
+    fetchCycleHistoryRange.mockResolvedValue(storedLog());
+
+    renderWithProviders(<CyclePage />);
+    await waitFor(() => expect(fetchCycleHistoryRange).toHaveBeenCalled());
+
+    await userEvent.click(screen.getByRole('button', { name: /heavy/i }));
+
+    // The old `hasSelections` check disabled the button here, so the
+    // correction could not be sent at all.
+    expect(screen.getByRole('button', { name: /save log/i })).not.toBeDisabled();
+  });
+
+  it('leaves save disabled on a day nothing has changed on', async () => {
+    fetchCycleHistoryRange.mockResolvedValue(storedLog());
+
+    renderWithProviders(<CyclePage />);
+    // The stored value reaching the chip is what says the draft has been
+    // seeded from it; asserting on the button before that would be reading
+    // the frame between the history arriving and the draft catching up.
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: /heavy/i })).toHaveClass('active'),
+    );
+
+    expect(screen.getByRole('button', { name: /save log/i })).toBeDisabled();
+  });
+
+  it('re-enables save when a selection is changed rather than cleared', async () => {
+    fetchCycleHistoryRange.mockResolvedValue(storedLog());
+
+    renderWithProviders(<CyclePage />);
+    await waitFor(() => expect(fetchCycleHistoryRange).toHaveBeenCalled());
+
+    await userEvent.click(screen.getByRole('button', { name: /light/i }));
+
+    expect(screen.getByRole('button', { name: /save log/i })).not.toBeDisabled();
+  });
+
+  it('sends an empty list when every symptom is unticked', async () => {
+    fetchCycleHistoryRange.mockResolvedValue(
+      storedLog({ flow_intensity: null, symptoms: ['cramps'] }),
+    );
+    submitCycleLog.mockResolvedValue({ id: 'log-1', message: 'ok' });
+
+    renderWithProviders(<CyclePage />);
+    await waitFor(() => expect(fetchCycleHistoryRange).toHaveBeenCalled());
+
+    await userEvent.click(screen.getByRole('button', { name: /cramps/i }));
+    await userEvent.click(screen.getByRole('button', { name: /save log/i }));
+
+    await waitFor(() => expect(submitCycleLog).toHaveBeenCalled());
+    expect(submitCycleLog.mock.calls[0][0].symptoms).toEqual([]);
+  });
+
+  it('sends every field the screen renders, so the day is described in full', async () => {
+    fetchCycleHistoryRange.mockResolvedValue(storedLog());
+    submitCycleLog.mockResolvedValue({ id: 'log-1', message: 'ok' });
+
+    renderWithProviders(<CyclePage />);
+    await waitFor(() => expect(fetchCycleHistoryRange).toHaveBeenCalled());
+
+    await userEvent.click(screen.getByRole('button', { name: /sad/i }));
+    await userEvent.click(screen.getByRole('button', { name: /save log/i }));
+
+    await waitFor(() => expect(submitCycleLog).toHaveBeenCalled());
+    const payload = submitCycleLog.mock.calls[0][0];
+    expect(Object.keys(payload).sort()).toEqual([
+      'flow_intensity',
+      'mood',
+      'sleep_hours',
+      'start_date',
+      'stress_level',
+      'symptoms',
+    ]);
+  });
+
+  it('never sends notes, which this screen cannot show', async () => {
+    // A note is on the log, in the provider view, in the PDF report and in
+    // the privacy export. A screen with no notes control must not be able
+    // to delete one by describing the day without it.
+    fetchCycleHistoryRange.mockResolvedValue(
+      storedLog({ notes: 'mentioned it to Dr Rao' }),
+    );
+    submitCycleLog.mockResolvedValue({ id: 'log-1', message: 'ok' });
+
+    renderWithProviders(<CyclePage />);
+    await waitFor(() => expect(fetchCycleHistoryRange).toHaveBeenCalled());
+
+    await userEvent.click(screen.getByRole('button', { name: /sad/i }));
+    await userEvent.click(screen.getByRole('button', { name: /save log/i }));
+
+    await waitFor(() => expect(submitCycleLog).toHaveBeenCalled());
+    expect(submitCycleLog.mock.calls[0][0]).not.toHaveProperty('notes');
+  });
+
+  it('preserves the untouched fields of a stored log when clearing one', async () => {
+    fetchCycleHistoryRange.mockResolvedValue(
+      storedLog({ mood: 'sad', sleep_hours: 8 }),
+    );
+    submitCycleLog.mockResolvedValue({ id: 'log-1', message: 'ok' });
+
+    renderWithProviders(<CyclePage />);
+    await waitFor(() => expect(fetchCycleHistoryRange).toHaveBeenCalled());
+
+    await userEvent.click(screen.getByRole('button', { name: /heavy/i }));
+    await userEvent.click(screen.getByRole('button', { name: /save log/i }));
+
+    await waitFor(() => expect(submitCycleLog).toHaveBeenCalled());
+    const payload = submitCycleLog.mock.calls[0][0];
+    expect(payload.flow_intensity).toBeNull();
+    expect(payload.mood).toBe('sad');
+    expect(payload.sleep_hours).toBe(8);
+  });
+});
