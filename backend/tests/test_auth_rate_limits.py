@@ -51,6 +51,15 @@ os.environ["DATABASE_URL"] = "sqlite:///:memory:"
 os.environ["GEMINI_API_KEY"] = "mock-key"
 os.environ["COOKIE_SECURE"] = "false"
 
+# The route tests below drive each endpoint from a different address by
+# sending `X-Forwarded-For`, which only means anything to a deployment that
+# has declared it sits behind a proxy (#498). `*` accepts the TestClient's
+# own peer as one, so these tests go on exercising the per-IP buckets they
+# were written for. The spoofing cases further down clear it deliberately —
+# what happens *without* this line is the security property, and it has its
+# own tests rather than being the ambient default here.
+os.environ["TRUSTED_PROXY_IPS"] = "*"
+
 # ─── Mock firebase_admin ──────────────────────────────────────────────────
 _existing = sys.modules.get("firebase_admin")
 if isinstance(_existing, MagicMock):
@@ -64,6 +73,10 @@ else:
 
 from main import app  # noqa: E402
 from core import rate_limits  # noqa: E402
+from core.client_address import (  # noqa: E402
+    TRUSTED_PROXY_HOPS_ENV,
+    TRUSTED_PROXY_IPS_ENV,
+)
 from core.rate_limits import (  # noqa: E402
     LOGIN_ACCOUNT,
     LOGIN_IP,
@@ -253,9 +266,21 @@ class _FakeRequest:
         self.client = MagicMock(host=host) if host is not None else None
 
 
-def test_client_ip_prefers_the_first_forwarded_address():
+def test_client_ip_takes_the_last_forwarded_address_not_the_first():
+    """Right to left, because that is the end a proxy writes.
+
+    This used to assert the first entry, which is the one the *client*
+    supplies: a proxy appends its view of its peer to the right, so
+    everything left of that is unverified (#498). With `TRUSTED_PROXY_IPS`
+    set to `*` at the top of this module, all three entries look like
+    candidates and the right-most is the only one nobody downstream could
+    have written.
+
+    `core/tests/test_client_address.py` covers the resolution itself; what
+    matters here is that `client_ip` is wired to it.
+    """
     request = _FakeRequest({"X-Forwarded-For": "203.0.113.5, 70.41.3.18, 150.172.238.178"})
-    assert client_ip(request) == "203.0.113.5"
+    assert client_ip(request) == "150.172.238.178"
 
 
 def test_client_ip_falls_back_to_the_socket_address():
@@ -271,6 +296,101 @@ def test_client_ip_is_unknown_when_there_is_nothing_to_read():
 def test_an_empty_forwarded_header_falls_through_to_the_socket():
     request = _FakeRequest({"X-Forwarded-For": "  "}, host="198.51.100.7")
     assert client_ip(request) == "198.51.100.7"
+
+
+def test_client_ip_ignores_the_header_when_no_proxy_is_declared(monkeypatch):
+    """The default deployment: nothing in front, so the header is a claim."""
+    monkeypatch.delenv(TRUSTED_PROXY_IPS_ENV, raising=False)
+
+    request = _FakeRequest({"X-Forwarded-For": "203.0.113.5"}, host="198.51.100.7")
+    assert client_ip(request) == "198.51.100.7"
+
+
+def test_client_ip_honours_a_declared_hop_count(monkeypatch):
+    """A platform balancer that appends exactly one entry of its own."""
+    monkeypatch.setenv(TRUSTED_PROXY_IPS_ENV, "*")
+    monkeypatch.setenv(TRUSTED_PROXY_HOPS_ENV, "1")
+
+    request = _FakeRequest(
+        {"X-Forwarded-For": "1.1.1.1, 203.0.113.5, 169.254.8.8"},
+        host="169.254.1.1",
+    )
+    assert client_ip(request) == "203.0.113.5"
+
+
+# ─── Spoofing the bucket key ──────────────────────────────────────────────
+
+
+def test_a_direct_caller_cannot_reset_a_limit_by_changing_the_header(monkeypatch):
+    """The attack #498 is about, driven through a real route.
+
+    No trusted proxy is declared, so the reset-token endpoint — which has
+    no second, account-keyed bucket — must count all of these against the
+    one address the requests actually came from, however many different
+    ones they claim.
+    """
+    monkeypatch.delenv(TRUSTED_PROXY_IPS_ENV, raising=False)
+    monkeypatch.setenv("RATE_LIMIT_PASSWORD_RESET_CONFIRM_IP_MAX", "2")
+
+    payload = {
+        "email": KNOWN_EMAIL,
+        "token": "not-a-real-token",
+        "new_password": "AnotherPass456",
+    }
+
+    statuses = [
+        client.post(
+            "/api/v1/auth/reset-password",
+            json=payload,
+            headers={"X-Forwarded-For": f"203.0.113.{n}"},
+        ).status_code
+        for n in range(1, 6)
+    ]
+
+    # Two guesses land, the rest are refused — the header bought nothing.
+    assert statuses[:2] == [400, 400]
+    assert statuses[2:] == [429, 429, 429]
+
+
+def test_registration_cannot_be_sprayed_from_one_address(monkeypatch):
+    """`REGISTER_IP` has no second key either, so the same property holds."""
+    monkeypatch.delenv(TRUSTED_PROXY_IPS_ENV, raising=False)
+    monkeypatch.setenv("RATE_LIMIT_REGISTER_IP_MAX", "2")
+
+    statuses = [
+        client.post(
+            "/api/v1/auth/register",
+            json={"email": f"spray{n}@example.com", "password": PASSWORD},
+            headers={"X-Forwarded-For": f"198.51.100.{n}"},
+        ).status_code
+        for n in range(1, 5)
+    ]
+
+    assert statuses == [200, 200, 429, 429]
+
+
+def test_a_caller_behind_a_declared_proxy_cannot_prepend_entries(monkeypatch):
+    """Half-way case: the header *is* read, and still is not the caller's to choose.
+
+    Every request claims a different address on the left. The TestClient's
+    own peer is the only proxy, so the right-most entry is what each
+    request is bucketed on — and it is the same one every time.
+    """
+    monkeypatch.setenv(TRUSTED_PROXY_IPS_ENV, "*")
+    monkeypatch.setenv("RATE_LIMIT_EMAIL_VERIFY_IP_MAX", "2")
+
+    payload = {"email": KNOWN_EMAIL, "token": "not-a-real-token"}
+
+    statuses = [
+        client.post(
+            "/api/v1/auth/verify-email",
+            json=payload,
+            headers={"X-Forwarded-For": f"10.9.9.{n}, 203.0.113.200"},
+        ).status_code
+        for n in range(1, 5)
+    ]
+
+    assert statuses == [400, 400, 429, 429]
 
 
 # ─── Login ────────────────────────────────────────────────────────────────

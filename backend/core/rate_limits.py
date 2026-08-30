@@ -26,6 +26,11 @@ Identifiers are hashed before they reach Firestore. A key like
 document id, in a collection nothing else treats as personal data, retained
 for as long as the document lives. The hash is as usable as a bucket key and
 carries none of that.
+
+Which address a request counts against is decided in ``core.client_address``
+rather than here. That used to be four lines at the bottom of this module
+reading ``X-Forwarded-For``, which made the bucket key something the caller
+could choose — see #498 and the docstring there.
 """
 
 from __future__ import annotations
@@ -37,6 +42,7 @@ from typing import Optional
 
 from fastapi import HTTPException, Request, status
 
+from core.client_address import client_address
 from services.rate_limit_service import RateLimitService
 
 
@@ -229,23 +235,28 @@ TOKEN_REFRESH_IP = RateLimitPolicy(
 # ─── Operations ───────────────────────────────────────────────────────────
 
 def client_ip(request: Optional[Request]) -> str:
-    """Best-effort client address, honouring ``X-Forwarded-For``.
+    """The address to bucket this request under.
 
-    Returns ``"unknown"`` when there is no address to read — which buckets
-    every such caller together. That is the safe direction: an attacker who
-    manages to hide their address gets a *shared*, quickly-exhausted budget
-    rather than an exemption.
+    A thin wrapper over :mod:`core.client_address`, kept under this name
+    because every route already imports it and none of them should have to
+    know how the address is established.
+
+    This used to read ``X-Forwarded-For`` itself and take the left-most
+    entry unconditionally, which made the bucket key a value the caller
+    chose: incrementing a header handed out a fresh budget, and the
+    policies below that have no second key — reset-token confirmation,
+    email verification, registration, provider registration, the webhooks
+    — were not rate limited at all against anyone who sent one (#498). The
+    header is now honoured only when the request arrived from a peer the
+    deployment declares as its own proxy, and the entry taken is the
+    right-most one that is not ours.
+
+    Returns :data:`~core.client_address.UNKNOWN_ADDRESS` when there is no
+    address to read at all, which buckets every such caller together. That
+    is the safe direction: a caller who manages to hide their address gets
+    a *shared*, quickly-exhausted budget rather than an exemption.
     """
-    if request is None:
-        return "unknown"
-    forwarded = request.headers.get("X-Forwarded-For")
-    if forwarded:
-        first = forwarded.split(",")[0].strip()
-        if first:
-            return first
-    if request.client and request.client.host:
-        return request.client.host
-    return "unknown"
+    return client_address(request)
 
 
 def enforce(policy: RateLimitPolicy, identifier: str) -> None:
