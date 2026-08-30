@@ -27,6 +27,10 @@ class _Keys {
 class LocalStorageService {
   static bool _initialised = false;
 
+  static void testReset() {
+    _initialised = false;
+  }
+
   /// Call once at app startup (after WidgetsFlutterBinding.ensureInitialized)
   static Future<void> init({String? testPath}) async {
     if (_initialised) return;

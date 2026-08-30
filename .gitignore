@@ -101,6 +101,109 @@ temp/
 *.tmp
 coverage/
 .coverage
+# =========================
+# FLUTTER CORE
+# =========================
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# =========================
+# ANDROID
+# =========================
+android/.gradle/
+android/app/debug/
+android/app/profile/
+android/app/release/
+android/local.properties
+
+# =========================
+# IOS
+# =========================
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/App.framework
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+
+# =========================
+# WEB
+# =========================
+.web/
+
+# =========================
+# WINDOWS / LINUX / MACOS
+# =========================
+windows/flutter/ephemeral/
+linux/flutter/ephemeral/
+macos/Flutter/ephemeral/
+
+# =========================
+# PYTHON / FASTAPI
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+venv/
+.venv/
+dist/
+*.egg
+
+# =========================
+# ENVIRONMENT & SECRETS
+# =========================
+.env
+.env.local
+.env.production
+.env.development
+
+# Firebase / Google credentials — NEVER commit these
+google-services.json
+GoogleService-Info.plist
+credentials.json
+firebase.json
+secrets.json
+service-account*.json
+firebase-credentials.json
+firebase-key.json
+
+# =========================
+# IDE / EDITORS
+# =========================
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+
+# =========================
+# OS FILES
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# LOGS
+# =========================
+*.log
+logs/
+
+# =========================
+# TEMP / CACHE
+# =========================
+tmp/
+temp/
+*.tmp
+coverage/
+.coverage
 htmlcov/
 
 # =========================
@@ -108,3 +211,4 @@ htmlcov/
 # =========================
 *.hive
 *.lock
+*fbsvc*.json  

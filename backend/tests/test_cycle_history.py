@@ -454,6 +454,7 @@ def test_the_page_metadata_describes_the_request():
         "limit": 3,
         "offset": 2,
         "count": 3,
+        "total_count": 10,
         "hasMore": True,
         "nextOffset": 5,
     }
@@ -493,10 +494,11 @@ def test_a_partial_log_is_returned_as_stored():
 def test_get_logs_page_returns_entries_and_a_has_more_flag():
     seed_logs(5)
 
-    entries, has_more = CycleService.get_logs_page(USER_ID, limit=2)
+    entries, has_more, total_count = CycleService.get_logs_page(USER_ID, limit=2)
 
     assert len(entries) == 2
     assert has_more is True
+    assert total_count == 5
 
 
 def test_get_logs_for_user_still_works_for_its_existing_callers():
