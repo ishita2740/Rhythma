@@ -20,24 +20,19 @@ const LOCALES = { bn, gu, hi, kn, ml, mr, ta, te } as const;
 // Locales that currently carry a full translation of en.json. These are
 // held to strict parity: a new English key that isn't translated here
 // fails the build.
-const COMPLETE_LOCALES = ['bn', 'hi', 'mr', 'ta', 'te'] as const;
+const COMPLETE_LOCALES = [
+  'bn',
+  'gu',
+  'hi',
+  'kn',
+  'ml',
+  'mr',
+  'ta',
+  'te',
+] as const;
 
-// Locales that are genuinely incomplete today. Writing this test turned up
-// that `bn` and `gu` each define only 18 of the 182 keys in en.json — so
-// roughly 90% of the Bengali and Gujarati UI silently renders raw key
-// strings like "home.flow" to the user.
-//
-// They are not held to parity, because the fix is real translation work
-// and filling them with English strings would be worse than the gap: it
-// would look translated, and the parity test above would then have nothing
-// left to catch. Instead they are ratcheted — the counts below are a floor,
-// so these locales can only improve. Lower the floor and the test fails;
-// raise a locale to 182 and move it into COMPLETE_LOCALES.
-const KNOWN_INCOMPLETE: Record<string, number> = {
-  gu: 18,
-  kn: 18,
-  ml: 18,
-};
+// All currently supported locales are expected to have complete translations.
+const KNOWN_INCOMPLETE: Record<string, number> = {};
 
 type Json = Record<string, unknown>;
 
