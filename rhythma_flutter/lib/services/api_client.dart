@@ -199,7 +199,6 @@ class ApiClient {
           } on DioException catch (retryError) {
             return handler.next(retryError);
           }
-          }
         },
       ),
     );

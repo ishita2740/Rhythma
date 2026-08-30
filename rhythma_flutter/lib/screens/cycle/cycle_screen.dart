@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../data/ayurveda_content.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:rhythma/l10n/app_localizations.dart';
@@ -14,7 +13,6 @@ import '../../services/local_storage_service.dart';
 import '../../utils/date_utils.dart';
 import '../../utils/log_options.dart';
 import 'components/calendar_grid.dart';
-import 'history_screen.dart';
 
 class CycleScreen extends StatefulWidget {
   const CycleScreen({super.key});
@@ -28,7 +26,7 @@ class _CycleScreenState extends State<CycleScreen> {
   late final PageController _pageController;
 
   // Save-button state for the backend sync. Local (Hive) saves on every
-  // log-row tap regardless of this — this only tracks the explicit "Save"
+  // log-row tap regardless of this ΓÇö this only tracks the explicit "Save"
   // submission of the full day's log to the backend.
   bool _saving = false;
   bool _savedSuccessfully = false;
@@ -104,13 +102,15 @@ class _CycleScreenState extends State<CycleScreen> {
     await LocalStorageService.saveQuickLogField(date, field, newValue);
     _clearSaveStatus();
     // Local-only state (the calendar's "logged" dot, the log rows below)
-    // lives in Hive, not this provider — notify so watchers rebuild with
+    // lives in Hive, not this provider ΓÇö notify so watchers rebuild with
     // the freshly-saved value.
     if (mounted) context.read<CycleProvider>().refresh();
   }
 
   /// Builds a CycleLog from everything currently saved for [date] and
-  /// submits it to the backend via `POST /cycle/log`.
+  /// submits it to the backend via `POST /cycle/log`. If the network is
+  /// unreachable the mutation is queued in [OfflineSyncService] for
+  /// automatic retry on connectivity restore.
   Future<void> _saveToBackend(DateTime date) async {
     final log = LocalStorageService.getCycleLogForDate(date) ?? {};
     setState(() {
@@ -120,7 +120,7 @@ class _CycleScreenState extends State<CycleScreen> {
     });
 
     try {
-      await CycleService().submitLog(CycleLog(
+      final synced = await CycleService().submitLog(CycleLog(
         startDate: date,
         flowIntensity: log['flow_intensity'] as String?,
         mood: log['mood'] as String?,
@@ -131,37 +131,36 @@ class _CycleScreenState extends State<CycleScreen> {
       if (!mounted) return;
       setState(() {
         _saving = false;
-        _savedSuccessfully = true;
+        if (synced) {
+          _savedSuccessfully = true;
+          _saveError = null;
+          _saveErrorWasOffline = false;
+        } else {
+          _saveError = 'offline_queued';
+          _saveErrorWasOffline = true;
+          _savedSuccessfully = false;
+        }
       });
     } catch (e) {
       if (!mounted) return;
 
-      bool offline = false;
       String errorMessage =
           "Saved on this device, but the server rejected the save.";
 
-      if (e is DioException) {
-        offline = e.type == DioExceptionType.connectionError ||
-            e.type == DioExceptionType.connectionTimeout ||
-            e.type == DioExceptionType.receiveTimeout ||
-            e.type == DioExceptionType.sendTimeout ||
-            e.type == DioExceptionType.unknown;
+      if (e is DioException && e.response?.statusCode == 422) {
+        final detail = e.response?.data['detail'];
 
-        if (!offline && e.response?.statusCode == 422) {
-          final detail = e.response?.data['detail'];
-
-          if (detail is List && detail.isNotEmpty) {
-            errorMessage = detail.first['msg'] ?? errorMessage;
-          } else if (detail is String) {
-            errorMessage = detail;
-          }
+        if (detail is List && detail.isNotEmpty) {
+          errorMessage = detail.first['msg'] ?? errorMessage;
+        } else if (detail is String) {
+          errorMessage = detail;
         }
       }
 
       setState(() {
         _saving = false;
         _saveError = errorMessage;
-        _saveErrorWasOffline = offline;
+        _saveErrorWasOffline = false;
       });
     }
   }
@@ -176,7 +175,7 @@ class _CycleScreenState extends State<CycleScreen> {
 
   /// LogOptions.sleep uses canonical strings like '4' and '9.5'. A value
   /// round-tripped through Hive as a double (e.g. 6.0) wouldn't otherwise
-  /// match the option's value ("6") — this reformats so a previously-saved
+  /// match the option's value ("6") ΓÇö this reformats so a previously-saved
   /// chip still shows as selected.
   String? _formatStoredValue(dynamic raw) {
     if (raw == null) return null;
@@ -232,9 +231,6 @@ class _CycleScreenState extends State<CycleScreen> {
 
     final displayedMonth = cycleProvider.displayedMonth;
     final selectedDate = cycleProvider.selectedDate;
-    final currentPhaseKey = cycleProvider.phaseKey(selectedDate);
-    final phaseContent = ayurvedaContent[currentPhaseKey] ?? [];
-
     final selectedLog =
         LocalStorageService.getCycleLogForDate(selectedDate) ?? {};
     final hasSelections = selectedLog.isNotEmpty;
@@ -252,18 +248,6 @@ class _CycleScreenState extends State<CycleScreen> {
                 child: _ScreenHeader(
                   title: l10n.cycleTrackerTitle,
                   subtitle: DateFormat('MMMM yyyy').format(displayedMonth),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: IconButton(
-                  icon: const Icon(Icons.history_rounded),
-                  color: RhythmaColors.primary,
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const HistoryScreen()),
-                    );
-                  },
                 ),
               ),
               Padding(
@@ -360,7 +344,7 @@ class _CycleScreenState extends State<CycleScreen> {
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: Text(
-              '${l10n.logFor} ${DateFormat('MMM').format(selectedDate)} ${selectedDate.day} · ${cycleProvider.phase(selectedDate, l10n)}',
+              '${l10n.logFor} ${DateFormat('MMM').format(selectedDate)} ${selectedDate.day} ┬╖ ${cycleProvider.phase(selectedDate, l10n)}',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -404,12 +388,6 @@ class _CycleScreenState extends State<CycleScreen> {
             selectedValue: _formatStoredValue(selectedLog['sleep_hours']),
             onSelect: (opt) => _onLogSelect(selectedDate, 'sleep_hours', opt),
           ),
-          const SizedBox(height: 18),
-
-          if (phaseContent.isNotEmpty)
-            _AyurvedaSection(
-              phaseContent: phaseContent,
-              ),
           const SizedBox(height: 10),
           _LogRow(
             icon: Icons.psychology_outlined,
@@ -487,7 +465,7 @@ class _CycleScreenState extends State<CycleScreen> {
                 Expanded(
                   child: Text(
                     _saveErrorWasOffline
-                        ? "Saved on this device, but couldn't reach the server yet. Try again once you're back online."
+                        ? "Saved on this device. Will sync automatically when you're back online."
                         : _saveError!,
                     style:
                         TextStyle(fontSize: 12, color: RhythmaColors.mutedFg),
@@ -660,103 +638,6 @@ class _ScreenHeader extends StatelessWidget {
           ],
         ],
       ),
-    );
-  }
-}
-
-class _AyurvedaSection extends StatelessWidget {
-  final List<AyurvedaContent> phaseContent;
-
-  const _AyurvedaSection({
-    required this.phaseContent,
-  });
-
-  String _title(AppLocalizations l10n, String key) {
-    switch (key) {
-      case 'ayurvedaMenstrualTitle':
-        return l10n.ayurvedaMenstrualTitle;
-      case 'ayurvedaFollicularTitle':
-        return l10n.ayurvedaFollicularTitle;
-      case 'ayurvedaOvulationTitle':
-        return l10n.ayurvedaOvulationTitle;
-      case 'ayurvedaLutealTitle':
-        return l10n.ayurvedaLutealTitle;
-      default:
-        return '';
-    }
-  }
-
-  String _description(AppLocalizations l10n, String key) {
-    switch (key) {
-      case 'ayurvedaMenstrualDescription':
-        return l10n.ayurvedaMenstrualDescription;
-      case 'ayurvedaFollicularDescription':
-        return l10n.ayurvedaFollicularDescription;
-      case 'ayurvedaOvulationDescription':
-        return l10n.ayurvedaOvulationDescription;
-      case 'ayurvedaLutealDescription':
-        return l10n.ayurvedaLutealDescription;
-      default:
-        return '';
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.ayurvedaWellnessTitle,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            color: RhythmaColors.foreground,
-          ),
-        ),
-        const SizedBox(height: 10),
-        ...phaseContent.map(
-          (content) => Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: GlassCard(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _title(l10n, content.titleKey),
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: RhythmaColors.foreground,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    _description(l10n, content.descriptionKey),
-                    style: TextStyle(
-                      fontSize: 13,
-                      height: 1.4,
-                      color: RhythmaColors.mutedFg,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    l10n.ayurvedaDisclaimer,
-                    style: TextStyle(
-                      fontSize: 11,
-                      height: 1.3,
-                      color: RhythmaColors.mutedFg,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

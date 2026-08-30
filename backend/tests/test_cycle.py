@@ -43,7 +43,7 @@ mock_firebase_auth = getattr(mock_firebase_admin, "auth", None)
 if not isinstance(mock_firebase_auth, MagicMock):
     mock_firebase_auth = MagicMock()
     mock_firebase_admin.auth = mock_firebase_auth
-    sys.modules["firebase_admin.auth"] = mock_firebase_auth
+sys.modules["firebase_admin.auth"] = mock_firebase_auth
 
 sys.modules["firebase_admin.credentials"] = MagicMock()
 sys.modules["firebase_admin.firestore"] = MagicMock()

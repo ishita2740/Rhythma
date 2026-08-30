@@ -91,9 +91,26 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 def _hash_token(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
 
+def _parse_dt(value):
+    """Parse a datetime value that may be a datetime object or ISO string."""
+    if isinstance(value, datetime):
+        return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+    if isinstance(value, str):
+        try:
+            parsed = datetime.fromisoformat(value)
+        except ValueError:
+            return None
+        return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
+    return None
+
+
 def cleanup_expired_refresh_tokens():
     now = datetime.now(timezone.utc)
-    expired = [k for k, v in refresh_token_store.items() if now > v.get("expires_at", now)]
+    expired = []
+    for k, v in refresh_token_store.items():
+        expires_at = _parse_dt(v.get("expires_at"))
+        if expires_at is not None and now > expires_at:
+            expired.append(k)
     for k in expired:
         refresh_token_store.pop(k, None)
 
