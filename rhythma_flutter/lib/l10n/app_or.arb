@@ -52,8 +52,6 @@
   "homeArticle": "ପ୍ରବନ୍ଧ",
   "homeFailedLoad": "ଡ୍ୟାସବୋର୍ଡ ଲୋଡ୍ କରିବାରେ ବିଫଳ",
   "homeRetry": "ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ",
-  "homeMhs": "MHS",
-  "homeCvi": "CVI",
   "homeSleep": "ନିଦ",
   "homeComingSoon": "ଶୀଘ୍ର ଆସୁଛି",
   "homeUnderDevelopment": "{topic} ବର୍ତ୍ତମାନ ବିକାଶାଧୀନ ଅଛି।",
@@ -141,8 +139,6 @@
   "assistantSug5": "ମୋର ଋତୁସ୍ରାବ ଅନିୟମିତ — ଏହା ସାଧାରଣ କି?",
   "insightsTitle": "ସ୍ୱାସ୍ଥ୍ୟ ଇନସାଇଟ୍",
   "insightsSubtitle": "ଗତ 90 ଦିନ",
-  "insightsMhsLabel": "ଋତୁସ୍ରାବ ସ୍ୱାସ୍ଥ୍ୟ ସ୍କୋର୍",
-  "insightsMhsDelta": "ଗତ ସାଇକେଲ୍ ତୁଳନାରେ +6",
   "insightsVar": "ସାଇକେଲ୍ ପରିବର୍ତ୍ତନଶୀଳତା",
   "insightsAvgCycle": "ହାରାହାରି ସାଇକେଲ୍",
   "insightsRegular": "ନିୟମିତ",
@@ -327,8 +323,8 @@
   "deleteAccountConfirmationTitle": "ଆକାଉଣ୍ଟ୍ ଡିଲିଟ୍ କରିବେ?",
   "deleteAccountConfirmationDesc": "ଏହି କାର୍ଯ୍ୟ ସ୍ଥାୟୀ ଅଟେ ଏବଂ ଏହାକୁ ଫେରାଇ ନିଆଯାଇପାରିବ ନାହିଁ। ଆପଣଙ୍କର ସମସ୍ତ ଡାଟା ପୋଛି ଦିଆଯିବ।",
   "accountDeletedSuccess": "ଆକାଉଣ୍ଟ୍ ସଫଳତାର ସହ ଡିଲିଟ୍ ହୋଇଗଲା।",
-  "logFlowVeryHeavy": "Very Heavy",
-  "logFlowSpotting": "Spotting",
-  "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logFlowVeryHeavy": "ଅତ୍ୟଧିକ",
+  "logFlowSpotting": "ସ୍ପଟିଂ",
+  "logSympSeverePain": "ତୀବ୍ର ଯନ୍ତ୍ରଣା",
+  "logSympFainting": "ବେହୋସ ହେବା"
 }

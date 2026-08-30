@@ -60,6 +60,14 @@ Rhythma follows an **offline-first, privacy-first** architecture designed for lo
 - Firestore security rules restrict read/write to authenticated user's own documents
 - Backend never stores raw health data in logs
 
+## Security Model
+
+### Firebase Security
+Firebase API keys and Analytics measurement IDs in `firebase_options.dart` are public by design to identify the app to Firebase services. To prevent abuse, the following protections are enforced:
+- **App Check:** Enforced on initialization to ensure that only genuine app builds (Play Integrity on Android, DeviceCheck on iOS, ReCaptcha on Web) can call Firebase services.
+- **API Key Restrictions:** Web API keys are restricted to specific referrer domains in the Google Cloud Console.
+- **Security Rules:** Firestore rules ensure that even if an attacker has the API key, they cannot read or write data without a valid user authentication token.
+
 ### Data portability & erasure
 
 `services/data_privacy_service.py` owns both, and `api/privacy.py` exposes them under `/api/v1/privacy`. Every route operates strictly on `current_user["id"]` — none takes a user id from the path, so there is no authorization check to get wrong on an endpoint that hands out a full health export or destroys an account.

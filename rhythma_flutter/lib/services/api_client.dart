@@ -96,7 +96,7 @@ class ApiClient {
             );
             final response = await _dio.fetch(retryOptions);
             return handler.resolve(response);
-          } on DioException catch (refreshError) {
+          } on DioException catch (_) {
             // Refresh failed — clear everything and redirect to login.
             await SecureStorage.clearAuth();
             _onUnauthorized?.call();

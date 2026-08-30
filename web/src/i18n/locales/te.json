@@ -3,505 +3,504 @@
     "appName": "Rhythma",
     "home": {
       "title": "Rhythma",
-      "description": "Your cycle at a glance — where you are today, what's coming, and what your own logs show."
+      "description": "ఒక చూపులో మీ ఋతుక్రమం — మీరు ఈ రోజు ఎక్కడ ఉన్నారు, తర్వాత ఏమి జరగబోతోంది మరియు మీ లాగ్‌లు ఏమి చూపుతున్నాయి."
     },
     "cycle": {
-      "title": "Cycle",
-      "description": "Log today's period, flow, mood and symptoms, and browse your cycle calendar."
+      "title": "రుతుక్రమం",
+      "description": "ఈ రోజు నెలసరి, రక్తస్రావం, మానసిక స్థితి మరియు లక్షణాలను లాగ్ చేయండి మరియు మీ ఋతుక్రమ క్యాలెండర్‌ను బ్రౌజ్ చేయండి."
     },
     "assistant": {
-      "title": "Assistant",
-      "description": "Ask about periods, symptoms and reproductive health, and get answers grounded in sourced medical references."
+      "title": "అసిస్టెంట్",
+      "description": "ఋతుక్రమాలు, లక్షణాలు మరియు పునరుత్పత్తి ఆరోగ్యం గురించి అడగండి మరియు వైద్య సూచనల ఆధారంగా సమాధానాలు పొందండి."
     },
     "insights": {
-      "title": "Insights",
-      "description": "What your logged cycles actually show — average length, consistency, and patterns worth noticing."
+      "title": "అంతర్దృష్టులు",
+      "description": "మీరు లాగ్ చేసిన ఋతుక్రమాలు నిజంగా ఏమి చూపుతాయి — సగటు వ్యవధి, స్థిరత్వం మరియు గమనించదగ్గ నమూనాలు."
     },
     "profile": {
-      "title": "Profile",
-      "description": "Your cycle details and personal information."
+      "title": "ప్రొఫైల్",
+      "description": "మీ ఋతుక్రమ వివరాలు మరియు వ్యక్తిగత సమాచారం."
     },
     "settings": {
-      "title": "Settings",
-      "description": "Language, notifications and account preferences."
+      "title": "సెట్టింగ్‌లు",
+      "description": "భాష, నోటిఫికేషన్‌లు మరియు ఖాతా ప్రాధాన్యతలు."
     },
     "sharing": {
-      "title": "Sharing",
-      "description": "Choose which healthcare providers can see your data, and see who has viewed it."
+      "title": "షేరింగ్",
+      "description": "ఏ ఆరోగ్య సంరక్షణ ప్రదాతలు మీ డేటాను చూడవచ్చో ఎంచుకోండి మరియు దానిని ఎవరు చూశారో చూడండి."
     },
     "sms": {
-      "title": "SMS summaries",
-      "description": "Get your cycle summary by text message, for when you are offline."
+      "title": "SMS సారాంశాలు",
+      "description": "మీరు ఆఫ్‌లైన్‌లో ఉన్నప్పుడు మీ ఋతుక్రమ సారాంశాన్ని వచన సందేశం ద్వారా పొందండి."
     },
     "login": {
-      "title": "Sign in",
-      "description": "Sign in to Rhythma."
+      "title": "సైన్ ఇన్ చేయండి",
+      "description": "Rhythma కి సైన్ ఇన్ చేయండి."
     },
     "register": {
-      "title": "Create account",
-      "description": "Create your Rhythma account."
+      "title": "ఖాతా సృష్టించండి",
+      "description": "మీ Rhythma ఖాతాను సృష్టించండి."
     },
     "notFound": {
-      "title": "Page not found",
-      "description": "This page does not exist."
+      "title": "పేజీ కనుగొనబడలేదు",
+      "description": "ఈ పేజీ లేదు."
     },
     "providerDashboard": {
-      "title": "Patient dashboard",
-      "description": "Patients who have shared their data with you."
+      "title": "రోగి డాష్‌బోర్డ్",
+      "description": "తమ డేటాను మీతో పంచుకున్న రోగులు."
     },
     "providerPatient": {
-      "title": "Patient",
-      "description": "The cycle data this patient has shared with you."
+      "title": "రోగి",
+      "description": "ఈ రోగి మీతో పంచుకున్న ఋతుక్రమ డేటా."
     },
     "providerLogin": {
-      "title": "Provider sign in",
-      "description": "Sign in to the Rhythma provider dashboard."
+      "title": "ప్రొవైడర్ సైన్ ఇన్",
+      "description": "Rhythma ప్రొవైడర్ డాష్‌బోర్డ్‌కి సైన్ ఇన్ చేయండి."
     },
     "providerRegister": {
-      "title": "Provider registration",
-      "description": "Register as a healthcare provider on Rhythma."
+      "title": "ప్రొవైడర్ రిజిస్ట్రేషన్",
+      "description": "Rhythma లో హెల్త్‌కేర్ ప్రొవైడర్‌గా నమోదు చేసుకోండి."
     }
   },
   "a11y": {
-    "skipToContent": "Skip to content",
-    "scrollToTop": "Scroll to top",
-    "navigatedTo": "{{page}} page"
+    "skipToContent": "కంటెంట్‌కి వెళ్లండి",
+    "scrollToTop": "పైకి స్క్రోల్ చేయండి",
+    "navigatedTo": "{{page}} పేజీ"
   },
   "auth": {
-    "loginTitle": "Log in to Rhythma",
-    "registerTitle": "Create your account",
-    "username": "Username",
-    "email": "Email",
-    "fullName": "Full name (optional)",
-    "password": "Password",
-    "loginButton": "Log in",
-    "loggingIn": "Logging in…",
-    "registerButton": "Register",
-    "registering": "Creating account…",
-    "loginError": "Invalid username or password.",
-    "registerError": "Could not create your account. Please try again.",
-    "noAccount": "Don't have an account?",
-    "registerLink": "Register",
-    "haveAccount": "Already have an account?",
-    "loginLink": "Log in",
-    "providerLink": "Healthcare professional? Sign in here",
-    "passwordRequirementsTitle": "Your password should be:",
-    "passwordRejected": "Please choose a different password:",
+    "loginTitle": "Rhythma కు లాగ్ ఇన్ చేయండి",
+    "registerTitle": "మీ ఖాతాను సృష్టించండి",
+    "username": "వినియోగదారు పేరు",
+    "email": "ఇమెయిల్",
+    "fullName": "పూర్తి పేరు (ఐచ్ఛికం)",
+    "password": "పాస్‌వర్డ్",
+    "loginButton": "లాగ్ ఇన్ చేయండి",
+    "loggingIn": "లాగ్ ఇన్ అవుతోంది...",
+    "registerButton": "రిజిస్టర్ చేయండి",
+    "registering": "ఖాతాను సృష్టిస్తోంది...",
+    "loginError": "చెల్లని వినియోగదారు పేరు లేదా పాస్‌వర్డ్.",
+    "registerError": "మీ ఖాతాను సృష్టించలేకపోయాము. దయచేసి మళ్లీ ప్రయత్నించండి.",
+    "noAccount": "ఖాతా లేదా?",
+    "registerLink": "రిజిస్టర్ చేయండి",
+    "haveAccount": "ఇప్పటికే ఖాతా ఉందా?",
+    "loginLink": "లాగ్ ఇన్ చేయండి",
+    "providerLink": "హెల్త్‌కేర్ ప్రొఫెషనల్? ఇక్కడ సైన్ ఇన్ చేయండి",
+    "passwordRequirementsTitle": "మీ పాస్‌వర్డ్ ఇలా ఉండాలి:",
+    "passwordRejected": "దయచేసి మరొక పాస్‌వర్డ్‌ని ఎంచుకోండి:",
     "passwordRules": {
-      "too_short": "At least {{min}} characters long",
-      "too_long": "Short enough to store safely (up to {{bytes}} bytes — letters in Indian scripts take about three bytes each)",
-      "too_common": "Not one of the most commonly used passwords",
-      "contains_identifier": "Not your email address or username",
-      "not_varied_enough": "Made of more than a couple of repeated characters",
-      "sequential": "Free of long runs like 12345 or qwerty"
+      "too_short": "కనీసం {{min}} అక్షరాల పొడవు",
+      "too_long": "సురక్షితంగా నిల్వ చేయడానికి తగినంత చిన్నది ({{bytes}} బైట్‌ల వరకు)",
+      "too_common": "అత్యంత సాధారణంగా ఉపయోగించే పాస్‌వర్డ్‌లలో ఒకటి కాదు",
+      "contains_identifier": "మీ ఇమెయిల్ చిరునామా లేదా వినియోగదారు పేరు కాదు",
+      "not_varied_enough": "పదేపదే వచ్చే అక్షరాలతో కూడినది కాకూడదు",
+      "sequential": "12345 లేదా qwerty వంటి పొడవైన క్రమాల నుండి విముక్తి"
     }
   },
   "nav": {
-    "home": "Home",
-    "cycle": "Cycle",
-    "assistant": "Assistant",
-    "insights": "Insights",
-    "profile": "Profile",
-    "sharing": "Sharing",
-    "settings": "Settings",
-    "logout": "Log out"
+    "home": "హోమ్",
+    "cycle": "రుతుక్రమం",
+    "assistant": "అసిస్టెంట్",
+    "insights": "అంతర్దృష్టులు",
+    "profile": "ప్రొఫైల్",
+    "sharing": "షేరింగ్",
+    "settings": "సెట్టింగ్‌లు",
+    "logout": "లాగ్ అవుట్ చేయండి"
   },
   "common": {
-    "loading": "Loading…",
-    "retry": "Retry",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "today": "Today",
-    "days": "days",
-    "back": "Back"
+    "loading": "లోడ్ అవుతోంది...",
+    "retry": "మళ్లీ ప్రయత్నించండి",
+    "save": "సేవ్ చేయండి",
+    "cancel": "రద్దు చేయండి",
+    "delete": "తొలగించండి",
+    "today": "ఈ రోజు",
+    "days": "రోజులు",
+    "back": "వెనుకకు"
   },
   "home": {
-    "welcome": "Welcome, {{name}}",
-    "logout": "Log out",
-    "cycleDay": "Day {{day}} of {{total}}",
-    "nextPeriod": "Next period in",
-    "days": "days",
-    "fertileWindow": "Fertile window + High energy",
-    "fertileWindowDisclaimer": "ఇది మీరు నమోదు చేసిన డేటా ఆధారంగా ఒక అంచనా మాత్రమే, వైద్య లేదా గర్భనిరోధక సలహా కాదు.",
-    "avgCycle": "Avg Cycle",
-    "bleeding": "Bleeding",
-    "sleep": "Sleep",
-    "assistantTitle": "AI Assistant",
-    "assistantSubtitle": "Your personal health companion",
-    "askRhythma": "Ask Rhythma anything",
-    "todaysLog": "Today's log",
-    "logAll": "Log all",
-    "flow": "Flow",
-    "mood": "Mood",
-    "stress": "Stress",
-    "weeklyInsight": "Weekly insight",
-    "insightTitle": "Your cycle at a glance",
-    "failedToLoad": "Failed to load",
-    "logged": "{{label}} logged",
-    "savedOffline": "Couldn't reach the server. Please try again."
+    "welcome": "స్వాగతం, {{name}}",
+    "logout": "లాగ్ అవుట్ చేయండి",
+    "cycleDay": "{{total}} లో {{day}} వ రోజు",
+    "nextPeriod": "తదుపరి రుతుక్రమం",
+    "days": "రోజులు",
+    "fertileWindow": "ఫెర్టైల్ విండో",
+    "fertileWindowDisclaimer": "ఫెర్టైల్ విండో మీ రుతుక్రమం ఆధారంగా అంచనా వేయబడింది.",
+    "avgCycle": "సగటు రుతుక్రమం",
+    "bleeding": "రక్తస్రావం",
+    "sleep": "నిద్ర",
+    "assistantTitle": "AI అసిస్టెంట్",
+    "assistantSubtitle": "మీ వ్యక్తిగత ఆరోగ్య సహచరుడు",
+    "askRhythma": "Rhythma ను ఏదైనా అడగండి",
+    "todaysLog": "ఈ రోజు లాగ్",
+    "logAll": "అన్నింటినీ లాగ్ చేయండి",
+    "flow": "ప్రవాహం",
+    "mood": "మానసిక స్థితి",
+    "stress": "ఒత్తిడి",
+    "weeklyInsight": "వారపు అంతర్దృష్టి",
+    "insightTitle": "ఒక చూపులో మీ ఋతుక్రమం",
+    "failedToLoad": "లోడ్ చేయడంలో విఫలమైంది",
+    "logged": "{{label}} లాగ్ చేయబడింది",
+    "savedOffline": "సర్వర్‌కి కనెక్ట్ కాలేకపోయింది. దయచేసి మళ్లీ ప్రయత్నించండి."
   },
   "quickLog": {
-    "none": "None",
-    "light": "Light",
-    "medium": "Medium",
-    "heavy": "Heavy",
-    "happy": "Happy",
-    "neutral": "Neutral",
-    "sad": "Sad",
-    "frustrated": "Frustrated",
-    "loved": "Loved",
-    "sleep4": "4h",
-    "sleep6": "6h",
-    "sleep8": "8h",
-    "sleep9_5": "9.5h",
-    "stress1": "Low",
-    "stress3": "Moderate",
-    "stress5": "High"
+    "none": "ఏదీ లేదు",
+    "light": "తక్కువ",
+    "medium": "మధ్యస్థం",
+    "heavy": "ఎక్కువ",
+    "happy": "సంతోషం",
+    "neutral": "సాధారణం",
+    "sad": "బాధ",
+    "frustrated": "నిరాశ",
+    "loved": "ప్రేమ",
+    "sleep4": "4గ",
+    "sleep6": "6గ",
+    "sleep8": "8గ",
+    "sleep9_5": "9.5గ",
+    "stress1": "తక్కువ",
+    "stress3": "మధ్యస్థం",
+    "stress5": "ఎక్కువ"
   },
   "cycle": {
-    "title": "Cycle Tracker",
-    "today": "Today",
-    "logFor": "Log for {{date}}",
-    "period": "Period",
-    "follicular": "Follicular",
-    "ovulation": "Ovulation",
-    "luteal": "Luteal",
-    "flow": "Flow",
-    "mood": "Mood",
-    "energy": "Energy",
-    "sleep": "Sleep",
-    "symptoms": "Symptoms",
-    "saveLog": "Save Log",
-    "deleteLog": "Delete Log",
-    "savedToAccount": "Saved to your account",
-    "deleteConfirm": "Delete this log? This cannot be undone.",
-    "cramps": "Cramps",
-    "headache": "Headache",
-    "bloating": "Bloating",
-    "fatigue": "Fatigue",
-    "nausea": "Nausea",
-    "acne": "Acne",
-    "backPain": "Back Pain",
-    "loadFailed": "Couldn't load your logs for this month.",
-    "retry": "Try again"
+    "title": "రుతుక్రమం",
+    "today": "ఈ రోజు",
+    "logFor": "{{date}} కోసం లాగ్",
+    "period": "రుతుక్రమం",
+    "follicular": "ఫొలిక్యులర్",
+    "ovulation": "అండోత్సర్గం",
+    "luteal": "లూటియల్",
+    "flow": "ప్రవాహం",
+    "mood": "మానసిక స్థితి",
+    "energy": "శక్తి",
+    "sleep": "నిద్ర",
+    "symptoms": "లక్షణాలు",
+    "saveLog": "లాగ్‌ను సేవ్ చేయండి",
+    "deleteLog": "లాగ్‌ను తొలగించండి",
+    "savedToAccount": "మీ ఖాతాలో సేవ్ చేయబడింది",
+    "deleteConfirm": "ఈ లాగ్‌ను తొలగించాలా? దీన్ని వెనక్కి తీసుకోలేము.",
+    "cramps": "నొప్పులు",
+    "headache": "తలనొప్పి",
+    "bloating": "ఉబ్బరం",
+    "fatigue": "అలసట",
+    "nausea": "వికారం",
+    "acne": "మొటిమలు",
+    "backPain": "వెన్నునొప్పి",
+    "loadFailed": "ఈ నెల కోసం మీ లాగ్‌లను లోడ్ చేయలేకపోయాము.",
+    "retry": "మళ్లీ ప్రయత్నించండి"
   },
   "prediction": {
-    "outlookLabel": "సైకిల్ అంచనా",
-    "cycleDay": "సైకిల్ రోజు",
+    "outlookLabel": "అంచనా",
+    "cycleDay": "రుతుక్రమం రోజు",
     "estimatedLength": "అంచనా పొడవు",
-    "overdueLabel": "పీరియడ్ ఆలస్యం",
-    "daysLate": "{{count}} రోజులు ఆలస్యం",
-    "dueToday": "ఈరోజు అంచనా",
-    "range": "{{from}} నుండి {{to}} మధ్య",
-    "ovulation": "అండోత్సర్గం సుమారు {{date}} నాటికి అంచనా",
-    "fertileWindow": "సంతానోత్పత్తి కాలం {{from}} – {{to}} (అంచనా, గర్భనిరోధకం కాదు)",
-    "upcoming": "తర్వాత అంచనా",
+    "overdueLabel": "ఆలస్యం",
+    "daysLate": "{{count}} రోజుల ఆలస్యం",
+    "dueToday": "ఈ రోజు రావచ్చు",
+    "range": "{{from}} మరియు {{to}} మధ్య",
+    "ovulation": "{{date}} నాటికి అండోత్సర్గం అంచనా వేయబడింది",
+    "fertileWindow": "ఫెర్టైల్ విండో {{from}} — {{to}} (అంచనా, గర్భనిరోధకం కాదు)",
+    "upcoming": "రాబోయే",
     "phase": {
-      "period": "పీరియడ్",
-      "follicular": "ఫోలిక్యులర్",
+      "period": "రుతుక్రమం",
+      "follicular": "ఫొలిక్యులర్",
       "ovulation": "అండోత్సర్గం",
       "luteal": "లూటియల్",
-      "late": "సాధారణం కంటే పొడవు",
-      "unknown": "తగినంత డేటా లేదు"
+      "late": "ఆలస్యం",
+      "unknown": "తెలియదు"
     },
     "confidence": {
-      "high": "అధిక విశ్వాసం",
-      "medium": "మధ్యస్థ విశ్వాసం",
-      "low": "తక్కువ విశ్వాసం"
+      "high": "ఎక్కువ",
+      "medium": "మధ్యస్థం",
+      "low": "తక్కువ"
     },
     "source": {
-      "logged_history": "మీరు నమోదు చేసిన సైకిల్‌ల ఆధారంగా",
-      "declared_cycle_length": "మీరు ఇచ్చిన సైకిల్ పొడవు ఆధారంగా",
-      "population_default": "సాధారణ 28-రోజుల సైకిల్ ఆధారంగా — దీన్ని మీదిగా చేయడానికి ఒక పీరియడ్ నమోదు చేయండి"
+      "logged_history": "లాగ్ చేయబడిన చరిత్ర",
+      "declared_cycle_length": "డిక్లేర్డ్ రుతుక్రమ పొడవు",
+      "population_default": "జనాభా డిఫాల్ట్"
     }
   },
   "assistant": {
-    "title": "AI Assistant",
-    "subtitle": "Your personal health companion",
-    "inputPlaceholder": "Ask Rhythma anything…",
-    "send": "Send",
-    "welcome": "Hi {{name}}! I'm Rhythma, your personal menstrual health companion. Ask me anything about your cycle, symptoms, or wellness.",
-    "suggest1": "What is a normal cycle length?",
-    "suggest2": "How can I reduce period cramps?",
-    "suggest3": "What should I eat during my period?",
-    "suggest4": "Why is my period irregular?",
-    "suggest5": "How do I track my ovulation?",
-    "errorPrefix": "Error",
-    "disclaimer": "Please consult a healthcare professional for medical advice.",
-    "rateLimited": "You're sending messages too quickly. Please wait a moment.",
-    "storedOnDevice": "ఈ సంభాషణ ఈ పరికరంలోనే ఉంచబడుతుంది, లాగ్ అవుట్ చేసినప్పుడు తొలగించబడుతుంది.",
-    "clearConversation": "సంభాషణను తొలగించు"
+    "title": "అసిస్టెంట్",
+    "subtitle": "మీ ఆరోగ్య సహచరుడు",
+    "inputPlaceholder": "Rhythmaను ఏదైనా అడగండి...",
+    "send": "పంపు",
+    "welcome": "నమస్తే {{name}}! నేను Rhythma, మీ వ్యక్తిగత రుతుక్రమ ఆరోగ్య సహచరుడు. మీ రుతుక్రమం, లక్షణాలు లేదా ఆరోగ్యం గురించి నన్ను ఏదైనా అడగండి.",
+    "suggest1": "సాధారణ ఋతుక్రమ వ్యవధి ఎంత?",
+    "suggest2": "ఋతుక్రమ నొప్పిని నేను ఎలా తగ్గించుకోవాలి?",
+    "suggest3": "నా ఋతుక్రమ సమయంలో నేను ఏమి తినాలి?",
+    "suggest4": "నా ఋతుక్రమం ఎందుకు క్రమరహితంగా ఉంది?",
+    "suggest5": "నా అండోత్సర్గం (ovulation) ఎలా ట్రాక్ చేయాలి?",
+    "errorPrefix": "లోపం",
+    "disclaimer": "ఈ సమాచారం కేవలం విద్యా ప్రయోజనాల కోసం మాత్రమే.",
+    "rateLimited": "మీరు చాలా వేగంగా సందేశాలను పంపుతున్నారు. దయచేసి కాసేపు వేచి ఉండండి.",
+    "storedOnDevice": "ఈ సంభాషణ ఈ పరికరంలోనే ఉంచబడుతుంది మరియు మీరు లాగ్ అవుట్ చేసినప్పుడు క్లియర్ చేయబడుతుంది.",
+    "clearConversation": "సంభాషణను క్లియర్ చేయండి"
   },
   "insights": {
-    "title": "Insights",
-    "subtitle": "Patterns from your own logged data",
-    "notEnoughData": "Log a few more cycles to unlock your full insights.",
-    "cycleStatsLabel": "Cycle stats",
-    "avgCycleLength": "Avg cycle length",
-    "cyclesAnalyzed": "Cycles analyzed",
-    "consistencyLabel": "Cycle consistency",
+    "title": "అంతర్దృష్టులు",
+    "subtitle": "మీ రుతుక్రమం విశ్లేషణ",
+    "notEnoughData": "మీ పూర్తి అంతర్దృష్టులను అన్‌లాక్ చేయడానికి మరికొన్ని ఋతుక్రమాలను లాగ్ చేయండి.",
+    "cycleStatsLabel": "ఋతుక్రమ గణాంకాలు",
+    "avgCycleLength": "సగటు ఋతుక్రమ వ్యవధి",
+    "cyclesAnalyzed": "విశ్లేషించబడిన ఋతుక్రమాలు",
+    "consistencyLabel": "ఋతుక్రమ స్థిరత్వం",
     "consistency": {
       "unknown": {
-        "pill": "Not enough data",
-        "description": "Log a couple more cycles to see how consistent your cycle length has been."
+        "pill": "తగినంత డేటా లేదు",
+        "description": "మీ ఋతుక్రమ వ్యవధి ఎంత స్థిరంగా ఉందో చూడటానికి మరికొన్ని ఋతుక్రమాలను లాగ్ చేయండి."
       },
       "consistent": {
-        "pill": "Consistent",
-        "description": "Your cycle length has stayed within a few days across your recent cycles."
+        "pill": "స్థిరమైనది",
+        "description": "మీ ఋతుక్రమ వ్యవధి మీ ఇటీవలి ఋతుక్రమాలలో కొన్ని రోజుల వ్యవధిలోనే ఉంది."
       },
       "slightly_variable": {
-        "pill": "Slightly variable",
-        "description": "Your cycle length has varied a bit across your recent cycles."
+        "pill": "కొద్దిగా మారుతూ ఉంది",
+        "description": "మీ ఋతుక్రమ వ్యవధి మీ ఇటీవలి ఋతుక్రమాలలో కొద్దిగా మారుతూ ఉంది."
       },
       "variable": {
-        "pill": "Variable",
-        "description": "Your cycle length has varied noticeably across your recent cycles."
+        "pill": "మారుతూ ఉంది",
+        "description": "మీ ఋతుక్రమ వ్యవధి మీ ఇటీవలి ఋతుక్రమాలలో గణనీయంగా మారుతూ ఉంది."
       }
     },
-    "observationsLabel": "What your logs show",
-    "noObservations": "Nothing stands out in your recent logs — everything looks consistent with your own patterns.",
+    "observationsLabel": "మీ లాగ్‌లు ఏమి చూపుతున్నాయి",
+    "noObservations": "మీ ఇటీవలి లాగ్‌లలో అసాధారణమైనది ఏమీ లేదు — అంతా మీ నమూనాలకు అనుగుణంగా ఉన్నట్లు కనిపిస్తోంది.",
     "severity": {
-      "info": "Info",
-      "attention": "Worth noting",
-      "seek_care": "Consider medical advice"
+      "info": "సమాచారం",
+      "attention": "గమనించదగ్గది",
+      "seek_care": "వైద్య సలహా తీసుకోవడాన్ని పరిగణించండి"
     },
-    "disclaimer": "These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional.",
-    "loadError": "Couldn't load your insights."
+    "disclaimer": "అంతర్దృష్టులు మీ లాగ్‌ల ఆధారంగా ఉంటాయి.",
+    "loadError": "మీ అంతర్దృష్టులను లోడ్ చేయలేకపోయాము."
   },
   "profile": {
-    "title": "Profile",
-    "yearsOld": "{{age}} years old",
-    "cycleDay": "Cycle day {{day}}",
-    "menstrual": "Menstrual Phase",
-    "follicular": "Follicular Phase",
-    "ovulation": "Ovulation Phase",
-    "luteal": "Luteal Phase",
-    "avgCycleLength": "Avg cycle length",
-    "avgBleeding": "Avg bleeding",
-    "cycleVariability": "Cycle variability",
-    "lastCycleLength": "Last cycle length",
-    "editInfo": "Edit Info",
-    "emergencyContacts": "Emergency Contacts",
-    "appSettings": "App Settings",
-    "name": "Name",
-    "age": "Age",
-    "cycleLength": "Cycle length (days)",
-    "saveChanges": "Save Changes",
-    "nameRequired": "Name is required",
-    "ageInvalid": "Age must be between 10 and 120",
-    "cycleInvalid": "Cycle length must be between 15 and 45",
-    "days": "days"
+    "title": "ప్రొఫైల్",
+    "yearsOld": "{{age}} సంవత్సరాలు",
+    "cycleDay": "ఋతుక్రమం రోజు {{day}}",
+    "menstrual": "ఋతు దశ (Menstrual)",
+    "follicular": "ఫోలిక్యులర్ దశ",
+    "ovulation": "అండోత్సర్గ దశ (Ovulation)",
+    "luteal": "ల్యూటియల్ దశ (Luteal)",
+    "avgCycleLength": "సగటు రుతుక్రమ పొడవు",
+    "avgBleeding": "సగటు రక్తస్రావం",
+    "cycleVariability": "రుతుక్రమం వైవిధ్యం",
+    "lastCycleLength": "గత రుతుక్రమ పొడవు",
+    "editInfo": "సమాచారాన్ని సవరించండి",
+    "emergencyContacts": "అత్యవసర పరిచయాలు",
+    "appSettings": "యాప్ సెట్టింగ్‌లు",
+    "name": "పేరు",
+    "age": "వయస్సు",
+    "cycleLength": "ఋతుక్రమ వ్యవధి (రోజులు)",
+    "saveChanges": "మార్పులను సేవ్ చేయండి",
+    "nameRequired": "పేరు అవసరం",
+    "ageInvalid": "వయస్సు 10 మరియు 120 మధ్య ఉండాలి",
+    "cycleInvalid": "ఋతుక్రమ వ్యవధి 15 మరియు 45 మధ్య ఉండాలి",
+    "days": "రోజులు"
   },
   "privacy": {
     "title": "మీ డేటా",
-    "subtitle": "మీ ఖాతా గురించి Rhythma నిల్వ చేసే ప్రతిదీ, మరియు దానితో మీరు ఏమి చేయవచ్చు.",
-    "loadError": "మీ ఖాతా కోసం నిల్వ చేసిన సమాచారాన్ని లోడ్ చేయలేకపోయాము. దయచేసి మళ్లీ ప్రయత్నించండి.",
-    "storedLabel": "ఏమి నిల్వ చేయబడింది",
+    "subtitle": "Rhythma మీ ఖాతా గురించి సేవ్ చేసే ప్రతిదీ, మరియు మీరు దానితో ఏమి చేయగలరు.",
+    "loadError": "మీ ఖాతా కోసం సేవ్ చేయబడిన డేటాను లోడ్ చేయలేకపోయాము. దయచేసి మళ్లీ ప్రయత్నించండి.",
+    "storedLabel": "ఏమి సేవ్ చేయబడింది",
     "storedTotal": "మొత్తం {{count}} రికార్డులు.",
     "dateRange": "{{from}} నుండి {{to}} వరకు",
     "fields": "ఫీల్డ్‌లు",
     "exportLabel": "మీ డేటాను డౌన్‌లోడ్ చేయండి",
-    "exportBody": "సర్వర్‌లో ఉన్న ప్రతిదానికీ పూర్తి కాపీ. JSON ఫైల్ పూర్తి బండిల్; CSVలో మీ సైకిల్ లాగ్‌లు స్ప్రెడ్‌షీట్‌లు మరియు ఇతర ట్రాకర్లు చదవగల రూపంలో ఉంటాయి.",
+    "exportBody": "సర్వర్‌లోని ప్రతిదాని యొక్క పూర్తి కాపీ. JSON ఫైల్ పూర్తి బండిల్; CSV లో మీ ఋతుక్రమ లాగ్‌లు స్ప్రెడ్‌షీట్‌లు మరియు ఇతర ట్రాకర్‌లు చదవగలిగే రూపంలో ఉంటాయి.",
     "exportJson": "JSON డౌన్‌లోడ్ చేయండి",
     "exportCsv": "CSV డౌన్‌లోడ్ చేయండి",
     "exportReady": "{{filename}} గా సేవ్ చేయబడింది",
-    "exportError": "డౌన్‌లోడ్‌ను సిద్ధం చేయలేకపోయాము. దయచేసి మళ్లీ ప్రయత్నించండి.",
+    "exportError": "డౌన్‌లోడ్‌ని సిద్ధం చేయలేకపోయాము. దయచేసి మళ్లీ ప్రయత్నించండి.",
     "deleteLabel": "మీ ఖాతాను తొలగించండి",
-    "deleteBody": "ఇది మీ సైకిల్ లాగ్‌లు, ప్రొఫైల్ మరియు అసిస్టెంట్ సంభాషణను శాశ్వతంగా తొలగిస్తుంది. దీన్ని తిరిగి పొందలేరు.",
-    "deleteStart": "నా ఖాతాను తొలగించు",
-    "deleteConfirm": "అన్నీ తొలగించు",
+    "deleteBody": "ఇది మీ ఋతుక్రమ లాగ్‌లు, ప్రొఫైల్ మరియు అసిస్టెంట్ సంభాషణను శాశ్వతంగా తీసివేస్తుంది. ఇది వెనక్కి తీసుకోబడదు.",
+    "deleteStart": "నా ఖాతాను తొలగించండి",
+    "deleteConfirm": "అంతా తొలగించండి",
     "deleteError": "మీ ఖాతా తొలగించబడలేదు. ఏదీ తీసివేయబడలేదు — దయచేసి మళ్లీ ప్రయత్నించండి.",
     "willDelete": "{{count}} × {{label}}",
-    "exportFirst": "కాపీ ఉంచుకోవాలనుకుంటే ముందుగా మీ డేటాను డౌన్‌లోడ్ చేయండి — ఇదే చివరి అవకాశం.",
-    "typeToConfirm": "నిర్ధారించడానికి {{word}} టైప్ చేయండి",
-    "backToSettings": "సెట్టింగ్‌లకు తిరిగి వెళ్లు"
+    "exportFirst": "మీరు ఒక కాపీని ఉంచుకోవాలనుకుంటే ముందుగా మీ డేటాను డౌన్‌లోడ్ చేయండి — ఇది మీ ఆఖరి అవకాశం.",
+    "typeToConfirm": "నిర్ధారించడానికి {{word}} అని టైప్ చేయండి",
+    "backToSettings": "సెట్టింగ్‌లకు తిరిగి వెళ్లండి"
   },
   "settings": {
-    "title": "Settings",
-    "language": "Language",
-    "languageSubtitle": "Choose your preferred language",
-    "sharing": "Data sharing",
-    "sharingSubtitle": "Choose which healthcare providers can see your data",
-    "sms": "SMS Cycle Summaries",
-    "smsSubtitle": "Get a text summary sent to your phone",
-    "logOut": "Log out",
-    "deleteAccount": "Delete account",
-    "contactUs": "Contact Us",
+    "title": "సెట్టింగ్‌లు",
+    "language": "భాష",
+    "languageSubtitle": "మీకు నచ్చిన భాషను ఎంచుకోండి",
+    "sharing": "డేటా షేరింగ్",
+    "sharingSubtitle": "ఏ ఆరోగ్య సంరక్షణ ప్రదాతలు మీ డేటాను చూడవచ్చో ఎంచుకోండి",
+    "sms": "SMS ఋతుక్రమ సారాంశాలు",
+    "smsSubtitle": "మీ ఫోన్‌కు టెక్స్ట్ సారాంశాన్ని పొందండి",
+    "logOut": "లాగ్ అవుట్ చేయండి",
+    "deleteAccount": "ఖాతాను తొలగించండి",
+    "contactUs": "మమ్మల్ని సంప్రదించండి",
     "english": "English",
-    "hindi": "Hindi",
-    "tamil": "Tamil",
-    "telugu": "Telugu",
-    "marathi": "Marathi",
-    "kannada": "Kannada",
-    "malayalam": "Malayalam",
+    "hindi": "హిందీ",
+    "tamil": "తమిళం",
+    "telugu": "తెలుగు",
+    "marathi": "మరాఠీ",
+    "kannada": "కన్నడ",
+    "malayalam": "మలయాళం",
     "dataPrivacy": "మీ డేటా",
-    "dataPrivacySubtitle": "ఏమి నిల్వ చేయబడిందో చూడండి, డౌన్‌లోడ్ చేయండి, లేదా మీ ఖాతాను తొలగించండి"
+    "dataPrivacySubtitle": "ఏమి సేవ్ చేయబడిందో చూడండి, డౌన్‌లోడ్ చేయండి లేదా మీ ఖాతాను తొలగించండి"
   },
   "sms": {
-    "title": "SMS Summaries",
-    "infoTitle": "Get cycle summaries by SMS",
-    "infoBody": "In areas with low connectivity, get a weekly text summary of your cycle predictions and logging reminders.",
-    "settings": "Settings",
-    "phoneNumber": "Phone number",
-    "enableWeekly": "Enable weekly SMS summaries",
-    "saveSettings": "Save Settings",
-    "sendNow": "Send a summary right now",
-    "noPhone": "No phone number saved yet",
-    "send": "Send",
-    "phoneRequired": "A phone number is required to enable SMS summaries.",
-    "phoneInvalid": "Phone number must be in E.164 format, e.g. +919876543210."
+    "title": "SMS సారాంశాలు",
+    "infoTitle": "SMS ద్వారా ఋతుక్రమ సారాంశాలను పొందండి",
+    "infoBody": "తక్కువ కనెక్టివిటీ ఉన్న ప్రాంతాల్లో, మీ ఋతుక్రమ అంచనాలు మరియు లాగింగ్ రిమైండర్‌ల వారపు టెక్స్ట్ సారాంశాన్ని పొందండి.",
+    "settings": "SMS సెట్టింగ్‌లు",
+    "phoneNumber": "ఫోన్ నంబర్",
+    "enableWeekly": "వారపు SMS సారాంశాలను ప్రారంభించండి",
+    "saveSettings": "సెట్టింగ్‌లను సేవ్ చేయండి",
+    "sendNow": "ఇప్పుడే ఒక సారాంశాన్ని పంపండి",
+    "noPhone": "ఇంకా ఫోన్ నంబర్ ఏదీ సేవ్ చేయబడలేదు",
+    "send": "పంపు",
+    "phoneRequired": "SMS సారాంశాలను ప్రారంభించడానికి ఫోన్ నంబర్ అవసరం.",
+    "phoneInvalid": "ఫోన్ నంబర్ E.164 ఆకృతిలో ఉండాలి, ఉదా. +919876543210."
   },
   "provider": {
-    "loginTitle": "Healthcare provider sign in",
-    "registerTitle": "Create a provider account",
-    "subtitle": "For healthcare professionals only",
-    "email": "Work email",
-    "fullName": "Full name",
-    "specialty": "Specialty",
-    "specialtyPlaceholder": "e.g. Gynecology",
-    "licenseNumber": "Medical license number (optional)",
-    "password": "Password",
-    "loginButton": "Sign in",
-    "loggingIn": "Signing in…",
-    "registerButton": "Create account",
-    "registering": "Creating account…",
-    "loginError": "Invalid email or password.",
-    "registerError": "Could not create your provider account. Please try again.",
-    "noAccount": "Don't have a provider account?",
-    "registerLink": "Register",
-    "haveAccount": "Already have a provider account?",
-    "loginLink": "Sign in",
-    "patientLogin": "Patient? Log in here"
+    "loginTitle": "ఆరోగ్య సంరక్షణ ప్రదాత సైన్ ఇన్",
+    "registerTitle": "ప్రొవైడర్ ఖాతాను సృష్టించండి",
+    "subtitle": "హెల్త్‌కేర్ ప్రొఫెషనల్స్ కోసం మాత్రమే",
+    "email": "పని ఇమెయిల్",
+    "fullName": "పూర్తి పేరు",
+    "specialty": "స్పెషాలిటీ",
+    "specialtyPlaceholder": "ఉదా. గైనకాలజీ",
+    "licenseNumber": "మెడికల్ లైసెన్స్ నంబర్ (ఐచ్ఛికం)",
+    "password": "పాస్‌వర్డ్",
+    "loginButton": "సైన్ ఇన్ చేయండి",
+    "loggingIn": "సైన్ ఇన్ అవుతోంది...",
+    "registerButton": "ఖాతా సృష్టించండి",
+    "registering": "ఖాతాను సృష్టిస్తోంది...",
+    "loginError": "చెల్లని ఇమెయిల్ లేదా పాస్‌వర్డ్.",
+    "registerError": "మీ ప్రొవైడర్ ఖాతాను సృష్టించలేకపోయాము. దయచేసి మళ్లీ ప్రయత్నించండి.",
+    "noAccount": "ప్రొవైడర్ ఖాతా లేదా?",
+    "registerLink": "రిజిస్టర్ చేయండి",
+    "haveAccount": "ఇప్పటికే ప్రొవైడర్ ఖాతా ఉందా?",
+    "loginLink": "సైన్ ఇన్ చేయండి",
+    "patientLogin": "రోగివా? ఇక్కడ లాగ్ ఇన్ చేయండి"
   },
   "providerNav": {
-    "dashboard": "Patients",
-    "logout": "Log out"
+    "dashboard": "రోగులు",
+    "logout": "లాగ్ అవుట్ చేయండి"
   },
   "providerDashboard": {
-    "title": "Patient Dashboard",
-    "welcome": "Welcome, {{name}}",
-    "empty": "You don't have any patients yet. When a patient shares her data with you, she will appear here.",
+    "title": "రోగి డాష్‌బోర్డ్",
+    "welcome": "స్వాగతం, {{name}}",
+    "empty": "మీకు ఇంకా రోగులు ఎవరూ లేరు. ఒక రోగి తన డేటాను మీతో షేర్ చేసినప్పుడు, ఆమె ఇక్కడ కనిపిస్తుంది.",
     "mhs": "MHS",
     "cvi": "CVI",
-    "cyclesLogged": "{{count}} cycles",
-    "viewPatient": "View patient",
-    "loadMore": "Load more patients",
-    "loadError": "Couldn't load your patients."
+    "cyclesLogged": "{{count}} ఋతుక్రమాలు",
+    "viewPatient": "రోగిని చూడండి",
+    "loadMore": "మరింత మంది రోగులను లోడ్ చేయండి",
+    "loadError": "మీ రోగులను లోడ్ చేయలేకపోయాము."
   },
   "providerPatient": {
-    "back": "Back to patients",
-    "notFound": "Patient not found, or you no longer have consent to view their data.",
-    "profile": "Profile",
-    "age": "Age",
-    "location": "Location",
-    "cycleLength": "Avg cycle length",
-    "periodDuration": "Period duration",
-    "lastPeriod": "Last period",
-    "summary": "Health summary",
-    "sleep": "Avg sleep",
-    "cycleLogs": "Cycle history",
-    "date": "Date",
-    "flow": "Flow",
-    "mood": "Mood",
-    "symptoms": "Symptoms",
-    "sleepHours": "Sleep",
-    "notes": "Notes",
-    "noLogs": "No cycle logs shared yet.",
-    "grantedOn": "Shared since {{date}}"
+    "back": "రోగులకు తిరిగి వెళ్లండి",
+    "notFound": "రోగి కనుగొనబడలేదు, లేదా వారి డేటాను చూడటానికి మీకు ఇకపై సమ్మతి లేదు.",
+    "profile": "ప్రొఫైల్",
+    "age": "వయస్సు",
+    "location": "స్థానం",
+    "cycleLength": "సగటు ఋతుక్రమ వ్యవధి",
+    "periodDuration": "నెలసరి వ్యవధి",
+    "lastPeriod": "చివరి నెలసరి",
+    "summary": "ఆరోగ్య సారాంశం",
+    "sleep": "సగటు నిద్ర",
+    "cycleLogs": "ఋతుక్రమ చరిత్ర",
+    "date": "తేదీ",
+    "flow": "ప్రవాహం",
+    "mood": "మానసిక స్థితి",
+    "symptoms": "లక్షణాలు",
+    "sleepHours": "నిద్ర",
+    "notes": "గమనికలు",
+    "noLogs": "ఇంకా ఎలాంటి ఋతుక్రమ లాగ్‌లు షేర్ చేయబడలేదు.",
+    "grantedOn": "{{date}} నుండి షేర్ చేయబడింది"
   },
   "sharing": {
-    "title": "Data Sharing",
-    "subtitle": "Share your health data with a healthcare professional",
-    "intro": "Only share data with a provider you trust. You can revoke access at any time.",
-    "addTitle": "Add a provider",
-    "providerEmail": "Provider email",
-    "addButton": "Share my data",
-    "adding": "Sharing…",
-    "added": "Data shared with {{name}}.",
-    "notFound": "No provider account found with that email.",
-    "active": "Active",
-    "revoked": "Revoked",
-    "revoke": "Revoke access",
-    "revokeConfirm": "Revoke {{name}}'s access to your data?",
-    "revokedMsg": "Access revoked.",
-    "empty": "You haven't shared your data with anyone yet.",
-    "grantedOn": "Shared since {{date}}",
-    "loadError": "Couldn't load your sharing settings.",
-    "accessLogTitle": "Who has viewed your data",
-    "accessLogSubtitle": "A record of every time a provider opened your records. Rhythma never stores a copy of what they saw.",
-    "accessLogEmpty": "No provider has viewed your data yet.",
-    "viewedFullRecord": "Opened your full record",
-    "viewedSummaryCard": "Saw your summary card",
-    "neverViewed": "Has not viewed your data yet",
-    "viewedSummary": "Viewed {{count}} times · last on {{date}}",
-    "unknownProvider": "A provider who has since closed their account"
+    "title": "డేటా షేరింగ్",
+    "subtitle": "హెల్త్‌కేర్ ప్రొఫెషనల్‌తో మీ ఆరోగ్య డేటాను షేర్ చేయండి",
+    "intro": "మీరు విశ్వసించే ప్రదాతతో మాత్రమే డేటాను షేర్ చేయండి. మీరు ఎప్పుడైనా యాక్సెస్‌ను రద్దు చేయవచ్చు.",
+    "addTitle": "ప్రొవైడర్‌ను జోడించండి",
+    "providerEmail": "ప్రొవైడర్ ఇమెయిల్",
+    "addButton": "నా డేటాను షేర్ చేయండి",
+    "adding": "షేర్ చేస్తోంది...",
+    "added": "{{name}} తో డేటా షేర్ చేయబడింది.",
+    "notFound": "ఆ ఇమెయిల్‌తో ఏ ప్రొవైడర్ ఖాతా కనుగొనబడలేదు.",
+    "active": "యాక్టివ్",
+    "revoked": "రద్దు చేయబడింది",
+    "revoke": "యాక్సెస్ రద్దు చేయండి",
+    "revokeConfirm": "మీ డేటాకి {{name}} యాక్సెస్‌ను రద్దు చేయాలా?",
+    "revokedMsg": "యాక్సెస్ రద్దు చేయబడింది.",
+    "empty": "మీరు ఇంకా మీ డేటాను ఎవరితోనూ షేర్ చేయలేదు.",
+    "grantedOn": "{{date}} నుండి షేర్ చేయబడింది",
+    "loadError": "మీ షేరింగ్ సెట్టింగ్‌లను లోడ్ చేయలేకపోయాము.",
+    "accessLogTitle": "మీ డేటాను ఎవరు చూశారు",
+    "accessLogSubtitle": "ప్రొవైడర్ మీ రికార్డులను తెరిచిన ప్రతిసారీ రికార్డ్. వారు చూసిన వాటి కాపీని Rhythma ఎప్పుడూ నిల్వ చేయదు.",
+    "accessLogEmpty": "ఇంకా ఏ ప్రొవైడర్ మీ డేటాను చూడలేదు.",
+    "viewedFullRecord": "మీ పూర్తి రికార్డును తెరిచారు",
+    "viewedSummaryCard": "మీ సారాంశ కార్డును చూశారు",
+    "neverViewed": "ఇంకా మీ డేటాను చూడలేదు",
+    "viewedSummary": "{{count}} సార్లు చూడబడింది — చివరిగా {{date}} న",
+    "unknownProvider": "తమ ఖాతాను మూసివేసిన ప్రొవైడర్"
   },
   "errors": {
-    "boundaryTitle": "Something went wrong on this screen",
-    "boundaryBody": "Your data is safe. You can try again, or go back to the home screen.",
-    "retry": "Try again",
-    "goHome": "Go to home",
-    "requestId": "Reference",
-    "notFoundTitle": "This page doesn't exist",
-    "notFoundBody": "The link may be out of date, or the address may have a typo."
+  "boundaryTitle": "ఈ స్క్రీన్‌లో ఏదో తప్పు జరిగింది",
+  "boundaryBody": "మీ డేటా సురక్షితం. మీరు మళ్లీ ప్రయత్నించవచ్చు లేదా హోమ్ స్క్రీన్‌కి తిరిగి వెళ్లవచ్చు.",
+  "retry": "మళ్లీ ప్రయత్నించండి",
+  "goHome": "హోమ్‌కు వెళ్లండి",
+  "requestId": "రిఫరెన్స్",
+  "notFoundTitle": "ఈ పేజీ లేదు",
+  "notFoundBody": "లింక్ పాతబడి ఉండవచ్చు లేదా అడ్రస్‌లో తప్పు ఉండవచ్చు."
+},
+"observations": {
+  "insufficient_data": {
+    "title": "మీ నమూనాలను చూడటానికి నమోదు చేస్తూ ఉండండి",
+    "body": "మీరు ఇప్పటివరకు {{logged_cycles}} నమోదు చేశారు. పోల్చడానికి {{needed}} చక్రాలు అయిన తర్వాత, ఈ పేజీ మీ స్వంత నమూనాలను వివరించగలదు."
   },
-  "observations": {
-    "insufficient_data": {
-      "title": "మీ నమూనాలను చూడటానికి నమోదు చేస్తూ ఉండండి",
-      "body": "మీరు ఇప్పటివరకు {{logged_cycles}} నమోదు చేశారు. పోల్చడానికి {{needed}} చక్రాలు అయిన తర్వాత, ఈ పేజీ మీ స్వంత నమూనాలను వివరించగలదు."
-    },
-    "no_recent_period_logged": {
-      "title": "ఇటీవల ఏ రుతుస్రావం నమోదు కాలేదు",
-      "body": "మీ చివరి నమోదైన రుతుస్రావం {{days_since_last_start}} రోజుల క్రితం మొదలైంది. ఆ తర్వాత రుతుస్రావం వచ్చి ఉంటే, దాన్ని నమోదు చేయాల్సి ఉండవచ్చు. లేకపోతే, దయచేసి అర్హత గల ఆరోగ్య నిపుణులతో మాట్లాడటాన్ని పరిగణించండి."
-    },
-    "prolonged_bleeding": {
-      "title": "సాధారణం కంటే ఎక్కువ కాలం కొనసాగిన రుతుస్రావం",
-      "body": "{{start_date}} నుండి {{bleeding_days}} రోజుల రక్తస్రావాన్ని నమోదు చేశారు. దయచేసి అర్హత గల ఆరోగ్య నిపుణులతో మాట్లాడటాన్ని పరిగణించండి."
-    },
-    "repeated_heavy_flow": {
-      "title": "ఇటీవల ఒకటి కంటే ఎక్కువసార్లు అధిక రక్తస్రావం నమోదైంది",
-      "body": "మీ చివరి {{window}} నమోదైన చక్రాలలో {{heavy_cycles}} లో ప్రవాహం అధికంగా ఉందని తెలిపారు. ఇది మీకు సాధారణం కంటే భిన్నంగా అనిపిస్తే, ఆరోగ్య నిపుణులకు చెప్పడం మంచిది."
-    },
-    "short_cycle_observed": {
-      "title": "చాలా వాటి కంటే తక్కువ నిడివి గల చక్రం",
-      "body": "మీ ఇటీవలి చక్రాలలో ఒకటి {{shortest_cycle_days}} రోజులు, ఇది చాలా చక్రాలు కొనసాగే {{threshold_days}} రోజుల కంటే తక్కువ. ఇది మీకు కొత్తగా ఉంటే, తదుపరి పరీక్షలో దీన్ని ప్రస్తావించడాన్ని పరిగణించండి."
-    },
-    "long_cycle_observed": {
-      "title": "చాలా వాటి కంటే ఎక్కువ నిడివి గల చక్రం",
-      "body": "మీ ఇటీవలి చక్రాలలో ఒకటి {{longest_cycle_days}} రోజులు, ఇది చాలా చక్రాలు ఉండే {{threshold_days}} రోజుల కంటే ఎక్కువ. ఇది మీకు కొత్తగా ఉంటే, తదుపరి పరీక్షలో దీన్ని ప్రస్తావించడాన్ని పరిగణించండి."
-    },
-    "variable_cycle_lengths": {
-      "title": "మీ చక్రాల నిడివి మారుతూ వచ్చింది",
-      "body": "మీ చివరి {{cycles_compared}} చక్రాలలో చక్ర నిడివి {{shortest_cycle_days}} నుండి {{longest_cycle_days}} రోజుల వరకు ఉంది. ఇది మీకు సాధారణం కంటే భిన్నంగా అనిపిస్తే, లేదా మీకు ఆందోళనలు ఉంటే, ఆరోగ్య నిపుణులతో చర్చించడాన్ని పరిగణించండి."
-    },
-    "period_later_than_usual": {
-      "title": "మీ సాధారణ చక్రం కంటే ఆలస్యంగా నడుస్తోంది",
-      "body": "ఇది మీ ప్రస్తుత చక్రం యొక్క {{current_cycle_day}}వ రోజు, మీ ఇటీవలి సగటు {{average_cycle_days}} రోజులు. రోజువారీ అనేక కారణాల వల్ల చక్రాలు మారుతుంటాయి."
-    },
-    "symptom_increase": {
-      "title": "ఈ చక్రంలో ఎక్కువ లక్షణాలు నమోదయ్యాయి",
-      "body": "ఈ చక్రంలో మీరు {{latest_symptom_count}} లక్షణాలను నమోదు చేశారు, మునుపటి {{cycles_compared}} చక్రాలలో సగటు {{previous_average}} గా ఉండేది."
-    },
-    "sustained_high_stress": {
-      "title": "ఇటీవల ఒత్తిడి ఎక్కువగా ఉంది",
-      "body": "మీ చివరి {{entries}} నమోదులలో నమోదైన ఒత్తిడి సగటు {{scale_max}} లో {{average_stress}} గా ఉంది."
-    },
-    "short_sleep_trend": {
-      "title": "నిద్ర కొంచెం తక్కువగా ఉంది",
-      "body": "మీ చివరి {{entries}} నమోదులలో సగటున {{average_sleep_hours}} గంటల నిద్రను నమోదు చేశారు."
-    },
-    "severe_pain_pattern": {
-      "title": "నొప్పి లక్షణాలు పదేపదే నమోదయ్యాయి",
-      "body": "మీ చివరి {{window}} చక్రాలలో {{pain_cycles}} లో నొప్పికి సంబంధించిన లక్షణాలను నమోదు చేశారు. తీవ్రమైన లేదా నిరంతర నొప్పి ఉంటే, దయచేసి అర్హత గల ఆరోగ్య నిపుణులను సంప్రదించండి."
-    },
-    "repeated_heavy_flow_concern": {
-      "title": "అధిక రక్తస్రావానికి వైద్య సహాయం అవసరం కావచ్చు",
-      "body": "మీ చివరి {{window}} నమోదైన చక్రాలలో {{heavy_cycles}} లో ప్రవాహం అధికంగా ఉందని తెలిపారు. చాలా అధికమైన లేదా దీర్ఘకాలిక రక్తస్రావం కొన్నిసార్లు పరీక్ష అవసరమనే సంకేతం కావచ్చు. దయచేసి అర్హత గల ఆరోగ్య నిపుణులను సంప్రదించండి."
-    },
-    "frequent_bleeding_pattern": {
-      "title": "ఇటీవల చక్రాలు సాధారణం కంటే తక్కువగా ఉన్నాయి",
-      "body": "మీ చివరి {{consecutive_short_cycles}} చక్రాలు {{threshold_days}} రోజుల కంటే తక్కువగా ఉన్నాయి. తరచుగా లేదా దగ్గరగా వచ్చే రుతుస్రావాలకు కొన్నిసార్లు వైద్య సహాయం అవసరం. దయచేసి అర్హత గల ఆరోగ్య నిపుణులను సంప్రదించండి."
-    }
+  "no_recent_period_logged": {
+    "title": "ఇటీవల ఏ రుతుస్రావం నమోదు కాలేదు",
+    "body": "మీ చివరి నమోదైన రుతుస్రావం {{days_since_last_start}} రోజుల క్రితం మొదలైంది. ఆ తర్వాత రుతుస్రావం వచ్చి ఉంటే, దాన్ని నమోదు చేయాల్సి ఉండవచ్చు. లేకపోతే, దయచేసి అర్హత గల ఆరోగ్య నిపుణులతో మాట్లాడటాన్ని పరిగణించండి."
+  },
+  "prolonged_bleeding": {
+    "title": "సాధారణం కంటే ఎక్కువ కాలం కొనసాగిన రుతుస్రావం",
+    "body": "{{start_date}} నుండి {{bleeding_days}} రోజుల రక్తస్రావాన్ని నమోదు చేశారు. దయచేసి అర్హత గల ఆరోగ్య నిపుణులతో మాట్లాడటాన్ని పరిగణించండి."
+  },
+  "repeated_heavy_flow": {
+    "title": "ఇటీవల ఒకటి కంటే ఎక్కువసార్లు అధిక రక్తస్రావం నమోదైంది",
+    "body": "మీ చివరి {{window}} నమోదైన చక్రాలలో {{heavy_cycles}} లో ప్రవాహం అధికంగా ఉందని తెలిపారు. ఇది మీకు సాధారణం కంటే భిన్నంగా అనిపిస్తే, ఆరోగ్య నిపుణులకు చెప్పడం మంచిది."
+  },
+  "short_cycle_observed": {
+    "title": "చాలా వాటి కంటే తక్కువ నిడివి గల చక్రం",
+    "body": "మీ ఇటీవలి చక్రాలలో ఒకటి {{shortest_cycle_days}} రోజులు, ఇది చాలా చక్రాలు కొనసాగే {{threshold_days}} రోజుల కంటే తక్కువ. ఇది మీకు కొత్తగా ఉంటే, తదుపరి పరీక్షలో దీన్ని ప్రస్తావించడాన్ని పరిగణించండి."
+  },
+  "long_cycle_observed": {
+    "title": "చాలా వాటి కంటే ఎక్కువ నిడివి గల చక్రం",
+    "body": "మీ ఇటీవలి చక్రాలలో ఒకటి {{longest_cycle_days}} రోజులు, ఇది చాలా చక్రాలు ఉండే {{threshold_days}} రోజుల కంటే ఎక్కువ. ఇది మీకు కొత్తగా ఉంటే, తదుపరి పరీక్షలో దీన్ని ప్రస్తావించడాన్ని పరిగణించండి."
+  },
+  "variable_cycle_lengths": {
+    "title": "మీ చక్రాల నిడివి మారుతూ వచ్చింది",
+    "body": "మీ చివరి {{cycles_compared}} చక్రాలలో చక్ర నిడివి {{shortest_cycle_days}} నుండి {{longest_cycle_days}} రోజుల వరకు ఉంది. ఇది మీకు సాధారణం కంటే భిన్నంగా అనిపిస్తే, లేదా మీకు ఆందోళనలు ఉంటే, ఆరోగ్య నిపుణులతో చర్చించడాన్ని పరిగణించండి."
+  },
+  "period_later_than_usual": {
+    "title": "మీ సాధారణ చక్రం కంటే ఆలస్యంగా నడుస్తోంది",
+    "body": "ఇది మీ ప్రస్తుత చక్రం యొక్క {{current_cycle_day}}వ రోజు, మీ ఇటీవలి సగటు {{average_cycle_days}} రోజులు. రోజువారీ అనేక కారణాల వల్ల చక్రాలు మారుతుంటాయి."
+  },
+  "symptom_increase": {
+    "title": "ఈ చక్రంలో ఎక్కువ లక్షణాలు నమోదయ్యాయి",
+    "body": "ఈ చక్రంలో మీరు {{latest_symptom_count}} లక్షణాలను నమోదు చేశారు, మునుపటి {{cycles_compared}} చక్రాలలో సగటు {{previous_average}} గా ఉండేది."
+  },
+  "sustained_high_stress": {
+    "title": "ఇటీవల ఒత్తిడి ఎక్కువగా ఉంది",
+    "body": "మీ చివరి {{entries}} నమోదులలో నమోదైన ఒత్తిడి సగటు {{scale_max}} లో {{average_stress}} గా ఉంది."
+  },
+  "short_sleep_trend": {
+    "title": "నిద్ర కొంచెం తక్కువగా ఉంది",
+    "body": "మీ చివరి {{entries}} నమోదులలో సగటున {{average_sleep_hours}} గంటల నిద్రను నమోదు చేశారు."
+  },
+  "severe_pain_pattern": {
+    "title": "నొప్పి లక్షణాలు పదేపదే నమోదయ్యాయి",
+    "body": "మీ చివరి {{window}} చక్రాలలో {{pain_cycles}} లో నొప్పికి సంబంధించిన లక్షణాలను నమోదు చేశారు. తీవ్రమైన లేదా నిరంతర నొప్పి ఉంటే, దయచేసి అర్హత గల ఆరోగ్య నిపుణులను సంప్రదించండి."
+  },
+  "repeated_heavy_flow_concern": {
+    "title": "అధిక రక్తస్రావానికి వైద్య సహాయం అవసరం కావచ్చు",
+    "body": "మీ చివరి {{window}} నమోదైన చక్రాలలో {{heavy_cycles}} లో ప్రవాహం అధికంగా ఉందని తెలిపారు. చాలా అధికమైన లేదా దీర్ఘకాలిక రక్తస్రావం కొన్నిసార్లు పరీక్ష అవసరమనే సంకేతం కావచ్చు. దయచేసి అర్హత గల ఆరోగ్య నిపుణులను సంప్రదించండి."
+  },
+  "frequent_bleeding_pattern": {
+    "title": "ఇటీవల చక్రాలు సాధారణం కంటే తక్కువగా ఉన్నాయి",
+    "body": "మీ చివరి {{consecutive_short_cycles}} చక్రాలు {{threshold_days}} రోజుల కంటే తక్కువగా ఉన్నాయి. తరచుగా లేదా దగ్గరగా వచ్చే రుతుస్రావాలకు కొన్నిసార్లు వైద్య సహాయం అవసరం. దయచేసి అర్హత గల ఆరోగ్య నిపుణులను సంప్రదించండి."
   }
 }

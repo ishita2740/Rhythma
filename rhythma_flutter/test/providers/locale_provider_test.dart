@@ -1,13 +1,30 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rhythma/providers/locale_provider.dart';
 import 'package:rhythma/services/local_storage_service.dart';
 
 void main() {
+  late Directory tempDir;
+
   setUp(() async {
+    LocalStorageService.testReset();
+    TestWidgetsFlutterBinding.ensureInitialized();
+    FlutterSecureStorage.setMockInitialValues({});
     SharedPreferences.setMockInitialValues({});
-    await LocalStorageService.init();
+    
+    tempDir = await Directory.systemTemp.createTemp('hive_test_dir_locale');
+    await LocalStorageService.init(testPath: tempDir.path);
+  });
+
+  tearDown(() async {
+    await Hive.close();
+    if (tempDir.existsSync()) {
+      tempDir.deleteSync(recursive: true);
+    }
   });
 
   group('LocaleProvider', () {
