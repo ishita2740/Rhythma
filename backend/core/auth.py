@@ -91,6 +91,13 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 def _hash_token(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
 
+def cleanup_expired_refresh_tokens():
+    now = datetime.now(timezone.utc)
+    expired = [k for k, v in refresh_token_store.items() if now > v.get("expires_at", now)]
+    for k in expired:
+        refresh_token_store.pop(k, None)
+
+
 def create_refresh_token(user_id: str) -> str:
     """Mint a refresh token and record it where every worker can see it.
 
@@ -98,6 +105,7 @@ def create_refresh_token(user_id: str) -> str:
     ``revoke_all_user_refresh_tokens`` can find every session for an
     account instead of only the ones this process happens to remember.
     """
+    cleanup_expired_refresh_tokens()
     token = secrets.token_urlsafe(48)
     token_store.put(
         token_store.KIND_REFRESH,

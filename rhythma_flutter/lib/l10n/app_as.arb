@@ -52,8 +52,6 @@
   "homeArticle": "প্ৰবন্ধ",
   "homeFailedLoad": "ডেচব'ৰ্ড ল'ড কৰাত ব্যৰ্থ",
   "homeRetry": "পুনৰ চেষ্টা কৰক",
-  "homeMhs": "MHS",
-  "homeCvi": "CVI",
   "homeSleep": "টোপনি",
   "homeComingSoon": "অতি শীঘ্ৰে আহি আছে",
   "homeUnderDevelopment": "{topic} বৰ্তমান বিকাশৰ পৰ্যায়ত আছে।",
@@ -141,8 +139,6 @@
   "assistantSug5": "মোৰ ঋতুস্ৰাৱ অনিয়মিত — এইটো স্বাভাৱিক নে?",
   "insightsTitle": "স্বাস্থ্যৰ অন্তৰ্দৃষ্টি",
   "insightsSubtitle": "যোৱা 90 দিন",
-  "insightsMhsLabel": "ঋতুচক্ৰ স্বাস্থ্যৰ স্ক'ৰ",
-  "insightsMhsDelta": "যোৱা ঋতুচক্ৰৰ তুলনাত +6",
   "insightsVar": "ঋতুচক্ৰৰ পৰিৱৰ্তনশীলতা",
   "insightsAvgCycle": "গড় ঋতুচক্ৰ",
   "insightsRegular": "নিয়মিত",
@@ -327,8 +323,8 @@
   "deleteAccountConfirmationTitle": "একাউণ্ট মচি পেলাব নেকি?",
   "deleteAccountConfirmationDesc": "এই কাৰ্য স্থায়ী আৰু ইয়াক ঘূৰাই আনিব নোৱাৰি। আপোনাৰ সকলো তথ্য মচি পেলোৱা হ'ব।",
   "accountDeletedSuccess": "একাউণ্ট সফলতাৰে মচি পেলোৱা হ'ল।",
-  "logFlowVeryHeavy": "Very Heavy",
-  "logFlowSpotting": "Spotting",
-  "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logFlowVeryHeavy": "অতি বেছি",
+  "logFlowSpotting": "সামান্য ৰক্তপাত",
+  "logSympSeverePain": "তীব্ৰ বিষ",
+  "logSympFainting": "মূৰ্ছা যোৱা"
 }

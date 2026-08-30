@@ -1,72 +1,4 @@
 {
-  "meta": {
-    "appName": "Rhythma",
-    "home": {
-      "title": "Rhythma",
-      "description": "Your cycle at a glance — where you are today, what's coming, and what your own logs show."
-    },
-    "cycle": {
-      "title": "Cycle",
-      "description": "Log today's period, flow, mood and symptoms, and browse your cycle calendar."
-    },
-    "assistant": {
-      "title": "Assistant",
-      "description": "Ask about periods, symptoms and reproductive health, and get answers grounded in sourced medical references."
-    },
-    "insights": {
-      "title": "Insights",
-      "description": "What your logged cycles actually show — average length, consistency, and patterns worth noticing."
-    },
-    "profile": {
-      "title": "Profile",
-      "description": "Your cycle details and personal information."
-    },
-    "settings": {
-      "title": "Settings",
-      "description": "Language, notifications and account preferences."
-    },
-    "sharing": {
-      "title": "Sharing",
-      "description": "Choose which healthcare providers can see your data, and see who has viewed it."
-    },
-    "sms": {
-      "title": "SMS summaries",
-      "description": "Get your cycle summary by text message, for when you are offline."
-    },
-    "login": {
-      "title": "Sign in",
-      "description": "Sign in to Rhythma."
-    },
-    "register": {
-      "title": "Create account",
-      "description": "Create your Rhythma account."
-    },
-    "notFound": {
-      "title": "Page not found",
-      "description": "This page does not exist."
-    },
-    "providerDashboard": {
-      "title": "Patient dashboard",
-      "description": "Patients who have shared their data with you."
-    },
-    "providerPatient": {
-      "title": "Patient",
-      "description": "The cycle data this patient has shared with you."
-    },
-    "providerLogin": {
-      "title": "Provider sign in",
-      "description": "Sign in to the Rhythma provider dashboard."
-    },
-    "providerRegister": {
-      "title": "Provider registration",
-      "description": "Register as a healthcare provider on Rhythma."
-    }
-  },
-  "a11y": {
-    "skipToContent": "Skip to content",
-    "scrollToTop": "Scroll to top",
-    "navigatedTo": "{{page}} page"
-  },
   "auth": {
     "loginTitle": "Rhythma ಗೆ ಲಾಗಿನ್ ಆಗಿ",
     "registerTitle": "ನಿಮ್ಮ ಖಾತೆಯನ್ನು ರಚಿಸಿ",
@@ -84,7 +16,6 @@
     "registerLink": "ನೋಂದಾಯಿಸಿ",
     "haveAccount": "ಈಗಾಗಲೇ ಖಾತೆ ಇದೆಯೇ?",
     "loginLink": "ಲಾಗಿನ್",
-    "providerLink": "Healthcare professional? Sign in here",
     "passwordRequirementsTitle": "ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ಹೀಗಿರಬೇಕು:",
     "passwordRejected": "ದಯವಿಟ್ಟು ಬೇರೆ ಪಾಸ್‌ವರ್ಡ್ ಆಯ್ಕೆಮಾಡಿ:",
     "passwordRules": {
@@ -99,92 +30,7 @@
   "home": {
     "welcome": "ಸ್ವಾಗತ, {{name}}",
     "logout": "ಲಾಗ್ ಔಟ್",
-    "cycleDay": "Day {{day}} of {{total}}",
-    "nextPeriod": "Next period in",
-    "days": "days",
-    "fertileWindow": "Fertile window + High energy",
-    "fertileWindowDisclaimer": "ಇದು ನೀವು ದಾಖಲಿಸಿದ ಡೇಟಾ ಆಧಾರಿತ ಅಂದಾಜು ಮಾತ್ರ, ವೈದ್ಯಕೀಯ ಅಥವಾ ಗರ್ಭನಿರೋಧಕ ಸಲಹೆ ಅಲ್ಲ.",
-    "avgCycle": "Avg Cycle",
-    "bleeding": "Bleeding",
-    "sleep": "Sleep",
-    "assistantTitle": "AI Assistant",
-    "assistantSubtitle": "Your personal health companion",
-    "askRhythma": "Ask Rhythma anything",
-    "todaysLog": "Today's log",
-    "logAll": "Log all",
-    "flow": "Flow",
-    "mood": "Mood",
-    "stress": "Stress",
-    "weeklyInsight": "Weekly insight",
-    "insightTitle": "Your cycle at a glance",
-    "failedToLoad": "Failed to load",
-    "logged": "{{label}} logged",
-    "savedOffline": "Couldn't reach the server. Please try again."
-  },
-  "nav": {
-    "home": "Home",
-    "cycle": "Cycle",
-    "assistant": "Assistant",
-    "insights": "Insights",
-    "profile": "Profile",
-    "sharing": "Sharing",
-    "settings": "Settings",
-    "logout": "Log out"
-  },
-  "common": {
-    "loading": "Loading…",
-    "retry": "Retry",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "today": "Today",
-    "days": "days",
-    "back": "Back"
-  },
-  "quickLog": {
-    "none": "None",
-    "light": "Light",
-    "medium": "Medium",
-    "heavy": "Heavy",
-    "happy": "Happy",
-    "neutral": "Neutral",
-    "sad": "Sad",
-    "frustrated": "Frustrated",
-    "loved": "Loved",
-    "sleep4": "4h",
-    "sleep6": "6h",
-    "sleep8": "8h",
-    "sleep9_5": "9.5h",
-    "stress1": "Low",
-    "stress3": "Moderate",
-    "stress5": "High"
-  },
-  "cycle": {
-    "title": "Cycle Tracker",
-    "today": "Today",
-    "logFor": "Log for {{date}}",
-    "period": "Period",
-    "follicular": "Follicular",
-    "ovulation": "Ovulation",
-    "luteal": "Luteal",
-    "flow": "Flow",
-    "mood": "Mood",
-    "energy": "Energy",
-    "sleep": "Sleep",
-    "symptoms": "Symptoms",
-    "saveLog": "Save Log",
-    "deleteLog": "Delete Log",
-    "savedToAccount": "Saved to your account",
-    "deleteConfirm": "Delete this log? This cannot be undone.",
-    "cramps": "Cramps",
-    "headache": "Headache",
-    "bloating": "Bloating",
-    "fatigue": "Fatigue",
-    "nausea": "Nausea",
-    "acne": "Acne",
-    "backPain": "Back Pain",
-    "loadFailed": "Couldn't load your logs for this month.",
-    "retry": "Try again"
+    "fertileWindowDisclaimer": "ಇದು ನೀವು ದಾಖಲಿಸಿದ ಡೇಟಾ ಆಧಾರಿತ ಅಂದಾಜು ಮಾತ್ರ, ವೈದ್ಯಕೀಯ ಅಥವಾ ಗರ್ಭನಿರೋಧಕ ಸಲಹೆ ಅಲ್ಲ."
   },
   "prediction": {
     "outlookLabel": "ಸೈಕಲ್ ಮುನ್ನೋಟ",
@@ -217,81 +63,8 @@
     }
   },
   "assistant": {
-    "title": "AI Assistant",
-    "subtitle": "Your personal health companion",
-    "inputPlaceholder": "Ask Rhythma anything…",
-    "send": "Send",
-    "welcome": "Hi {{name}}! I'm Rhythma, your personal menstrual health companion. Ask me anything about your cycle, symptoms, or wellness.",
-    "suggest1": "What is a normal cycle length?",
-    "suggest2": "How can I reduce period cramps?",
-    "suggest3": "What should I eat during my period?",
-    "suggest4": "Why is my period irregular?",
-    "suggest5": "How do I track my ovulation?",
-    "errorPrefix": "Error",
-    "disclaimer": "Please consult a healthcare professional for medical advice.",
-    "rateLimited": "You're sending messages too quickly. Please wait a moment.",
     "storedOnDevice": "ಈ ಸಂಭಾಷಣೆ ಈ ಸಾಧನದಲ್ಲೇ ಇರಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ಲಾಗ್ ಔಟ್ ಮಾಡಿದಾಗ ಅಳಿಸಲಾಗುತ್ತದೆ.",
     "clearConversation": "ಸಂಭಾಷಣೆಯನ್ನು ಅಳಿಸಿ"
-  },
-  "insights": {
-    "title": "Insights",
-    "subtitle": "Patterns from your own logged data",
-    "notEnoughData": "Log a few more cycles to unlock your full insights.",
-    "cycleStatsLabel": "Cycle stats",
-    "avgCycleLength": "Avg cycle length",
-    "cyclesAnalyzed": "Cycles analyzed",
-    "consistencyLabel": "Cycle consistency",
-    "consistency": {
-      "unknown": {
-        "pill": "Not enough data",
-        "description": "Log a couple more cycles to see how consistent your cycle length has been."
-      },
-      "consistent": {
-        "pill": "Consistent",
-        "description": "Your cycle length has stayed within a few days across your recent cycles."
-      },
-      "slightly_variable": {
-        "pill": "Slightly variable",
-        "description": "Your cycle length has varied a bit across your recent cycles."
-      },
-      "variable": {
-        "pill": "Variable",
-        "description": "Your cycle length has varied noticeably across your recent cycles."
-      }
-    },
-    "observationsLabel": "What your logs show",
-    "noObservations": "Nothing stands out in your recent logs — everything looks consistent with your own patterns.",
-    "severity": {
-      "info": "Info",
-      "attention": "Worth noting",
-      "seek_care": "Consider medical advice"
-    },
-    "disclaimer": "These insights are based on the information you log and are intended for personal tracking only. They are not a medical diagnosis and should not replace advice from a qualified healthcare professional.",
-    "loadError": "Couldn't load your insights."
-  },
-  "profile": {
-    "title": "Profile",
-    "yearsOld": "{{age}} years old",
-    "cycleDay": "Cycle day {{day}}",
-    "menstrual": "Menstrual Phase",
-    "follicular": "Follicular Phase",
-    "ovulation": "Ovulation Phase",
-    "luteal": "Luteal Phase",
-    "avgCycleLength": "Avg cycle length",
-    "avgBleeding": "Avg bleeding",
-    "cycleVariability": "Cycle variability",
-    "lastCycleLength": "Last cycle length",
-    "editInfo": "Edit Info",
-    "emergencyContacts": "Emergency Contacts",
-    "appSettings": "App Settings",
-    "name": "Name",
-    "age": "Age",
-    "cycleLength": "Cycle length (days)",
-    "saveChanges": "Save Changes",
-    "nameRequired": "Name is required",
-    "ageInvalid": "Age must be between 10 and 120",
-    "cycleInvalid": "Cycle length must be between 15 and 45",
-    "days": "days"
   },
   "privacy": {
     "title": "ನಿಮ್ಮ ಡೇಟಾ",
@@ -312,130 +85,13 @@
     "deleteStart": "ನನ್ನ ಖಾತೆಯನ್ನು ಅಳಿಸಿ",
     "deleteConfirm": "ಎಲ್ಲವನ್ನೂ ಅಳಿಸಿ",
     "deleteError": "ನಿಮ್ಮ ಖಾತೆ ಅಳಿಸಲಾಗಿಲ್ಲ. ಏನನ್ನೂ ತೆಗೆದುಹಾಕಲಾಗಿಲ್ಲ — ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
-    "willDelete": "{{count}} × {{label}}",
     "exportFirst": "ಪ್ರತಿಯನ್ನು ಇಟ್ಟುಕೊಳ್ಳಲು ಬಯಸಿದರೆ ಮೊದಲು ನಿಮ್ಮ ಡೇಟಾವನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ — ಇದೇ ಕೊನೆಯ ಅವಕಾಶ.",
     "typeToConfirm": "ದೃಢೀಕರಿಸಲು {{word}} ಎಂದು ಟೈಪ್ ಮಾಡಿ",
     "backToSettings": "ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಗೆ ಹಿಂತಿರುಗಿ"
   },
   "settings": {
-    "title": "Settings",
-    "language": "Language",
-    "languageSubtitle": "Choose your preferred language",
-    "sharing": "Data sharing",
-    "sharingSubtitle": "Choose which healthcare providers can see your data",
-    "sms": "SMS Cycle Summaries",
-    "smsSubtitle": "Get a text summary sent to your phone",
-    "logOut": "Log out",
-    "deleteAccount": "Delete account",
-    "contactUs": "Contact Us",
-    "english": "English",
-    "hindi": "Hindi",
-    "tamil": "Tamil",
-    "telugu": "Telugu",
-    "marathi": "Marathi",
-    "kannada": "Kannada",
-    "malayalam": "Malayalam",
     "dataPrivacy": "ನಿಮ್ಮ ಡೇಟಾ",
     "dataPrivacySubtitle": "ಏನು ಸಂಗ್ರಹವಾಗಿದೆ ಎಂದು ನೋಡಿ, ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ, ಅಥವಾ ನಿಮ್ಮ ಖಾತೆಯನ್ನು ಅಳಿಸಿ"
-  },
-  "sms": {
-    "title": "SMS Summaries",
-    "infoTitle": "Get cycle summaries by SMS",
-    "infoBody": "In areas with low connectivity, get a weekly text summary of your cycle predictions and logging reminders.",
-    "settings": "Settings",
-    "phoneNumber": "Phone number",
-    "enableWeekly": "Enable weekly SMS summaries",
-    "saveSettings": "Save Settings",
-    "sendNow": "Send a summary right now",
-    "noPhone": "No phone number saved yet",
-    "send": "Send",
-    "phoneRequired": "A phone number is required to enable SMS summaries.",
-    "phoneInvalid": "Phone number must be in E.164 format, e.g. +919876543210."
-  },
-  "provider": {
-    "loginTitle": "Healthcare provider sign in",
-    "registerTitle": "Create a provider account",
-    "subtitle": "For healthcare professionals only",
-    "email": "Work email",
-    "fullName": "Full name",
-    "specialty": "Specialty",
-    "specialtyPlaceholder": "e.g. Gynecology",
-    "licenseNumber": "Medical license number (optional)",
-    "password": "Password",
-    "loginButton": "Sign in",
-    "loggingIn": "Signing in…",
-    "registerButton": "Create account",
-    "registering": "Creating account…",
-    "loginError": "Invalid email or password.",
-    "registerError": "Could not create your provider account. Please try again.",
-    "noAccount": "Don't have a provider account?",
-    "registerLink": "Register",
-    "haveAccount": "Already have a provider account?",
-    "loginLink": "Sign in",
-    "patientLogin": "Patient? Log in here"
-  },
-  "providerNav": {
-    "dashboard": "Patients",
-    "logout": "Log out"
-  },
-  "providerDashboard": {
-    "title": "Patient Dashboard",
-    "welcome": "Welcome, {{name}}",
-    "empty": "You don't have any patients yet. When a patient shares her data with you, she will appear here.",
-    "mhs": "MHS",
-    "cvi": "CVI",
-    "cyclesLogged": "{{count}} cycles",
-    "viewPatient": "View patient",
-    "loadMore": "Load more patients",
-    "loadError": "Couldn't load your patients."
-  },
-  "providerPatient": {
-    "back": "Back to patients",
-    "notFound": "Patient not found, or you no longer have consent to view their data.",
-    "profile": "Profile",
-    "age": "Age",
-    "location": "Location",
-    "cycleLength": "Avg cycle length",
-    "periodDuration": "Period duration",
-    "lastPeriod": "Last period",
-    "summary": "Health summary",
-    "sleep": "Avg sleep",
-    "cycleLogs": "Cycle history",
-    "date": "Date",
-    "flow": "Flow",
-    "mood": "Mood",
-    "symptoms": "Symptoms",
-    "sleepHours": "Sleep",
-    "notes": "Notes",
-    "noLogs": "No cycle logs shared yet.",
-    "grantedOn": "Shared since {{date}}"
-  },
-  "sharing": {
-    "title": "Data Sharing",
-    "subtitle": "Share your health data with a healthcare professional",
-    "intro": "Only share data with a provider you trust. You can revoke access at any time.",
-    "addTitle": "Add a provider",
-    "providerEmail": "Provider email",
-    "addButton": "Share my data",
-    "adding": "Sharing…",
-    "added": "Data shared with {{name}}.",
-    "notFound": "No provider account found with that email.",
-    "active": "Active",
-    "revoked": "Revoked",
-    "revoke": "Revoke access",
-    "revokeConfirm": "Revoke {{name}}'s access to your data?",
-    "revokedMsg": "Access revoked.",
-    "empty": "You haven't shared your data with anyone yet.",
-    "grantedOn": "Shared since {{date}}",
-    "loadError": "Couldn't load your sharing settings.",
-    "accessLogTitle": "Who has viewed your data",
-    "accessLogSubtitle": "A record of every time a provider opened your records. Rhythma never stores a copy of what they saw.",
-    "accessLogEmpty": "No provider has viewed your data yet.",
-    "viewedFullRecord": "Opened your full record",
-    "viewedSummaryCard": "Saw your summary card",
-    "neverViewed": "Has not viewed your data yet",
-    "viewedSummary": "Viewed {{count}} times · last on {{date}}",
-    "unknownProvider": "A provider who has since closed their account"
   },
   "errors": {
     "boundaryTitle": "ಈ ಪರದೆಯಲ್ಲಿ ಏನೋ ತಪ್ಪಾಗಿದೆ",
@@ -445,5 +101,63 @@
     "requestId": "ಉಲ್ಲೇಖ",
     "notFoundTitle": "ಈ ಪುಟ ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ",
     "notFoundBody": "ಲಿಂಕ್ ಹಳೆಯದಾಗಿರಬಹುದು ಅಥವಾ ವಿಳಾಸದಲ್ಲಿ ತಪ್ಪಿರಬಹುದು."
+  },
+  "observations": {
+    "insufficient_data": {
+      "title": "ನಿಮ್ಮ ಮಾದರಿಗಳನ್ನು ನೋಡಲು ದಾಖಲಿಸುತ್ತಿರಿ",
+      "body": "ನೀವು ಇಲ್ಲಿಯವರೆಗೆ {{logged_cycles}} ದಾಖಲಿಸಿದ್ದೀರಿ. ಹೋಲಿಸಲು {{needed}} ಚಕ್ರಗಳಾದ ನಂತರ, ಈ ಪುಟವು ನಿಮ್ಮದೇ ಮಾದರಿಗಳನ್ನು ವಿವರಿಸಬಲ್ಲದು."
+    },
+    "no_recent_period_logged": {
+      "title": "ಇತ್ತೀಚೆಗೆ ಯಾವುದೇ ಮುಟ್ಟು ದಾಖಲಾಗಿಲ್ಲ",
+      "body": "ನಿಮ್ಮ ಕೊನೆಯ ದಾಖಲಾದ ಮುಟ್ಟು {{days_since_last_start}} ದಿನಗಳ ಹಿಂದೆ ಆರಂಭವಾಗಿತ್ತು. ಆ ನಂತರ ಮುಟ್ಟಾಗಿದ್ದರೆ, ಅದನ್ನು ದಾಖಲಿಸಬೇಕಷ್ಟೆ. ಇಲ್ಲದಿದ್ದರೆ, ದಯವಿಟ್ಟು ಅರ್ಹ ಆರೋಗ್ಯ ವೃತ್ತಿಪರರೊಂದಿಗೆ ಮಾತನಾಡುವುದನ್ನು ಪರಿಗಣಿಸಿ."
+    },
+    "prolonged_bleeding": {
+      "title": "ಎಂದಿನದಕ್ಕಿಂತ ದೀರ್ಘ ಮುಟ್ಟು",
+      "body": "{{start_date}} ರಿಂದ {{bleeding_days}} ದಿನಗಳ ರಕ್ತಸ್ರಾವವನ್ನು ದಾಖಲಿಸಿದ್ದೀರಿ. ದಯವಿಟ್ಟು ಅರ್ಹ ಆರೋಗ್ಯ ವೃತ್ತಿಪರರೊಂದಿಗೆ ಮಾತನಾಡುವುದನ್ನು ಪರಿಗಣಿಸಿ."
+    },
+    "repeated_heavy_flow": {
+      "title": "ಇತ್ತೀಚೆಗೆ ಒಂದಕ್ಕಿಂತ ಹೆಚ್ಚು ಬಾರಿ ಹೆಚ್ಚಿನ ಸ್ರಾವ ದಾಖಲಾಗಿದೆ",
+      "body": "ನಿಮ್ಮ ಕೊನೆಯ {{window}} ದಾಖಲಾದ ಚಕ್ರಗಳಲ್ಲಿ {{heavy_cycles}} ರಲ್ಲಿ ಸ್ರಾವ ಹೆಚ್ಚಿತ್ತೆಂದು ತಿಳಿಸಿದ್ದೀರಿ. ಇದು ನಿಮಗೆ ಎಂದಿನದಕ್ಕಿಂತ ಭಿನ್ನವೆನಿಸಿದರೆ, ಆರೋಗ್ಯ ವೃತ್ತಿಪರರಿಗೆ ತಿಳಿಸುವುದು ಒಳ್ಳೆಯದು."
+    },
+    "short_cycle_observed": {
+      "title": "ಹೆಚ್ಚಿನವುಗಳಿಗಿಂತ ಚಿಕ್ಕ ಚಕ್ರ",
+      "body": "ನಿಮ್ಮ ಇತ್ತೀಚಿನ ಚಕ್ರಗಳಲ್ಲಿ ಒಂದು {{shortest_cycle_days}} ದಿನಗಳಾಗಿತ್ತು, ಇದು ಹೆಚ್ಚಿನ ಚಕ್ರಗಳು ನಡೆಯುವ {{threshold_days}} ದಿನಗಳಿಗಿಂತ ಕಡಿಮೆ. ಇದು ನಿಮಗೆ ಹೊಸದಾಗಿದ್ದರೆ, ಮುಂದಿನ ತಪಾಸಣೆಯಲ್ಲಿ ಪ್ರಸ್ತಾಪಿಸುವುದನ್ನು ಪರಿಗಣಿಸಿ."
+    },
+    "long_cycle_observed": {
+      "title": "ಹೆಚ್ಚಿನವುಗಳಿಗಿಂತ ದೊಡ್ಡ ಚಕ್ರ",
+      "body": "ನಿಮ್ಮ ಇತ್ತೀಚಿನ ಚಕ್ರಗಳಲ್ಲಿ ಒಂದು {{longest_cycle_days}} ದಿನಗಳಾಗಿತ್ತು, ಇದು ಹೆಚ್ಚಿನ ಚಕ್ರಗಳು ಇರುವ {{threshold_days}} ದಿನಗಳಿಗಿಂತ ಹೆಚ್ಚು. ಇದು ನಿಮಗೆ ಹೊಸದಾಗಿದ್ದರೆ, ಮುಂದಿನ ತಪಾಸಣೆಯಲ್ಲಿ ಪ್ರಸ್ತಾಪಿಸುವುದನ್ನು ಪರಿಗಣಿಸಿ."
+    },
+    "variable_cycle_lengths": {
+      "title": "ನಿಮ್ಮ ಚಕ್ರಗಳ ಉದ್ದ ಬದಲಾಗುತ್ತಿದೆ",
+      "body": "ನಿಮ್ಮ ಕೊನೆಯ {{cycles_compared}} ಚಕ್ರಗಳಲ್ಲಿ ಚಕ್ರದ ಉದ್ದ {{shortest_cycle_days}} ರಿಂದ {{longest_cycle_days}} ದಿನಗಳವರೆಗೆ ಇತ್ತು. ಇದು ನಿಮಗೆ ಎಂದಿನದಕ್ಕಿಂತ ಭಿನ್ನವೆನಿಸಿದರೆ, ಅಥವಾ ನಿಮಗೆ ಆತಂಕವಿದ್ದರೆ, ಆರೋಗ್ಯ ವೃತ್ತಿಪರರೊಂದಿಗೆ ಚರ್ಚಿಸುವುದನ್ನು ಪರಿಗಣಿಸಿ."
+    },
+    "period_later_than_usual": {
+      "title": "ನಿಮ್ಮ ಎಂದಿನ ಚಕ್ರಕ್ಕಿಂತ ತಡವಾಗಿ ನಡೆಯುತ್ತಿದೆ",
+      "body": "ಇದು ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಚಕ್ರದ {{current_cycle_day}}ನೇ ದಿನ, ಮತ್ತು ನಿಮ್ಮ ಇತ್ತೀಚಿನ ಸರಾಸರಿ {{average_cycle_days}} ದಿನಗಳು. ದೈನಂದಿನ ಹಲವು ಕಾರಣಗಳಿಂದ ಚಕ್ರಗಳು ಬದಲಾಗುತ್ತವೆ."
+    },
+    "symptom_increase": {
+      "title": "ಈ ಚಕ್ರದಲ್ಲಿ ಹೆಚ್ಚು ಲಕ್ಷಣಗಳು ದಾಖಲಾಗಿವೆ",
+      "body": "ಈ ಚಕ್ರದಲ್ಲಿ ನೀವು {{latest_symptom_count}} ಲಕ್ಷಣಗಳನ್ನು ದಾಖಲಿಸಿದ್ದೀರಿ, ಹಿಂದಿನ {{cycles_compared}} ಚಕ್ರಗಳಲ್ಲಿ ಸರಾಸರಿ {{previous_average}} ಇತ್ತು."
+    },
+    "sustained_high_stress": {
+      "title": "ಇತ್ತೀಚೆಗೆ ಒತ್ತಡ ಹೆಚ್ಚಿದೆ",
+      "body": "ನಿಮ್ಮ ಕೊನೆಯ {{entries}} ನಮೂದುಗಳಲ್ಲಿ ದಾಖಲಾದ ಒತ್ತಡದ ಸರಾಸರಿ {{scale_max}} ರಲ್ಲಿ {{average_stress}} ಆಗಿದೆ."
+    },
+    "short_sleep_trend": {
+      "title": "ನಿದ್ರೆ ಸ್ವಲ್ಪ ಕಡಿಮೆಯಾಗಿದೆ",
+      "body": "ನಿಮ್ಮ ಕೊನೆಯ {{entries}} ನಮೂದುಗಳಲ್ಲಿ ಸರಾಸರಿ {{average_sleep_hours}} ಗಂಟೆಗಳ ನಿದ್ರೆಯನ್ನು ದಾಖಲಿಸಿದ್ದೀರಿ."
+    },
+    "severe_pain_pattern": {
+      "title": "ನೋವಿನ ಲಕ್ಷಣಗಳು ಪದೇ ಪದೇ ದಾಖಲಾಗಿವೆ",
+      "body": "ನಿಮ್ಮ ಕೊನೆಯ {{window}} ಚಕ್ರಗಳಲ್ಲಿ {{pain_cycles}} ರಲ್ಲಿ ನೋವಿಗೆ ಸಂಬಂಧಿಸಿದ ಲಕ್ಷಣಗಳನ್ನು ದಾಖಲಿಸಿದ್ದೀರಿ. ತೀವ್ರ ಅಥವಾ ನಿರಂತರ ನೋವಿದ್ದರೆ, ದಯವಿಟ್ಟು ಅರ್ಹ ಆರೋಗ್ಯ ವೃತ್ತಿಪರರನ್ನು ಸಂಪರ್ಕಿಸಿ."
+    },
+    "repeated_heavy_flow_concern": {
+      "title": "ಹೆಚ್ಚಿನ ರಕ್ತಸ್ರಾವಕ್ಕೆ ವೈದ್ಯಕೀಯ ಗಮನ ಬೇಕಾಗಬಹುದು",
+      "body": "ನಿಮ್ಮ ಕೊನೆಯ {{window}} ದಾಖಲಾದ ಚಕ್ರಗಳಲ್ಲಿ {{heavy_cycles}} ರಲ್ಲಿ ಸ್ರಾವ ಹೆಚ್ಚಿತ್ತೆಂದು ತಿಳಿಸಿದ್ದೀರಿ. ಅತಿಯಾದ ಅಥವಾ ದೀರ್ಘಕಾಲದ ರಕ್ತಸ್ರಾವ ಕೆಲವೊಮ್ಮೆ ಪರೀಕ್ಷೆ ಬೇಕಾದ ಸೂಚನೆಯಾಗಿರಬಹುದು. ದಯವಿಟ್ಟು ಅರ್ಹ ಆರೋಗ್ಯ ವೃತ್ತಿಪರರನ್ನು ಸಂಪರ್ಕಿಸಿ."
+    },
+    "frequent_bleeding_pattern": {
+      "title": "ಇತ್ತೀಚೆಗೆ ಚಕ್ರಗಳು ಎಂದಿನದಕ್ಕಿಂತ ಚಿಕ್ಕದಾಗಿವೆ",
+      "body": "ನಿಮ್ಮ ಕೊನೆಯ {{consecutive_short_cycles}} ಚಕ್ರಗಳು {{threshold_days}} ದಿನಗಳಿಗಿಂತ ಚಿಕ್ಕದಾಗಿವೆ. ಪದೇ ಪದೇ ಅಥವಾ ಹತ್ತಿರ ಹತ್ತಿರ ಬರುವ ಮುಟ್ಟಿಗೆ ಕೆಲವೊಮ್ಮೆ ವೈದ್ಯಕೀಯ ಗಮನ ಬೇಕಾಗುತ್ತದೆ. ದಯವಿಟ್ಟು ಅರ್ಹ ಆರೋಗ್ಯ ವೃತ್ತಿಪರರನ್ನು ಸಂಪರ್ಕಿಸಿ."
+    }
   }
 }

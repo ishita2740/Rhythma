@@ -25,12 +25,26 @@ no longer sent. That is a stronger guarantee than length-bounding one
 would be — there is no text to bound — and it costs nothing real: the
 only thing this endpoint is for is the cycle summary, and the summary is
 built from data the server already holds.
+
+*What* that generated body says now lives in
+``services/sms_summary_service.py`` (issue #483). This module used to
+compute its own cycle-length average and its own clamped
+``max(avg - day, 0)`` countdown — the calculation
+``services/prediction_service.py`` exists to replace — so the SMS could
+not express a late period and disagreed with the Home screen of the same
+account. Routing decisions (who may send, where it goes, how often) stay
+here; the sentence is somebody else's job.
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from core.auth import get_current_user
 from services.firestore_service import UserService
 from services.rate_limit_service import RateLimitService
+from services.sms_summary_service import (
+    GSM7_SINGLE_SEGMENT,
+    build_summary,
+    fit_to_budget,
+)
 from pydantic import BaseModel, Field
 from typing import Any, Dict, Optional
 import os
@@ -38,9 +52,15 @@ import re
 
 PHONE_PATTERN = r"^\+[1-9]\d{1,14}$"
 
-#: The single-segment GSM-7 ceiling. A message past this is split and
-#: billed as several, so the summary is built to fit inside one.
-SMS_MAX_CHARS = 160
+#: The single-segment GSM-7 ceiling, re-exported so the name keeps
+#: working for callers written before the summary moved out.
+#:
+#: It is no longer *the* ceiling. A Devanagari or Tamil summary cannot be
+#: sent in GSM-7 at all, and a UCS-2 segment holds 70 characters — too
+#: few for a summary and its safety disclaimer together. The real budget
+#: is per-message and depends on the text's own encoding; see
+#: ``sms_summary_service.segment_budget``.
+SMS_MAX_CHARS = GSM7_SINGLE_SEGMENT
 
 
 class SMSRequest(BaseModel):
@@ -87,68 +107,41 @@ def registered_phone(user: Optional[Dict[str, Any]]) -> Optional[str]:
     return candidate or None
 
 
-def _fit_to_one_segment(text: str) -> str:
-    """Trim ``text`` to one SMS segment without cutting a word in half.
-
-    The old code did ``summary[:160]``, which can slice through a number —
-    "in ~12 days" becoming "in ~1" is not a shorter summary, it is a
-    different and wrong one, and a cycle length is exactly the sort of
-    figure that lands near the boundary. Cutting at the last whole word
-    and marking the cut is honest about having dropped something.
-
-    In practice this never fires: the generated sentence is well under
-    160 characters for any plausible cycle. It is here so that if the
-    wording is ever changed, the failure is a visibly shortened message
-    rather than a mangled number.
-    """
-    if len(text) <= SMS_MAX_CHARS:
-        return text
-
-    clipped = text[: SMS_MAX_CHARS - 1]
-    if " " in clipped:
-        clipped = clipped[: clipped.rindex(" ")]
-    return clipped.rstrip(" .,") + "…"
+#: Kept as a name because tests and older callers import it. The
+#: implementation moved to ``sms_summary_service.fit_to_budget``, which
+#: differs in one respect: the ceiling it trims to is derived from the
+#: text's own encoding rather than fixed at 160, so a Tamil summary is
+#: measured against a UCS-2 budget instead of a GSM-7 one it could never
+#: have been sent under.
+_fit_to_one_segment = fit_to_budget
 
 
 def generate_cycle_sms_summary(user_id: str) -> str:
-    from services.scoring_service import get_user_scores, as_date, DEFAULT_CYCLE_LENGTH
+    """This user's summary, in her own language, as one SMS body.
+
+    A thin adapter now: it fetches, and ``sms_summary_service`` decides
+    what to say. The cycle arithmetic that used to live here — an
+    unweighted mean over the last ten *day* documents, and a
+    ``max(avg - day, 0)`` countdown that clamped "five days late" to
+    "~0 days" — is gone in favour of ``prediction_service.predict()``,
+    which is what every other surface of the app already reads (#483).
+
+    ``get_user_scores`` is called rather than ``CycleService`` directly
+    because it returns the logs *and* the profile from one pass, and the
+    profile is needed twice over: for the declared cycle length the
+    prediction falls back to, and for the language to write in.
+    """
     from datetime import date
 
+    from services.scoring_service import get_user_scores
+
     score_data = get_user_scores(user_id)
-    logs = score_data.get("logs") or []
 
-    avg_cycle_length = DEFAULT_CYCLE_LENGTH
-    cycle_day = 1
-    next_period_days = 28
-
-    if logs:
-        most_recent_start = as_date(logs[0].get("start_date"))
-        if most_recent_start:
-            raw_day = (date.today() - most_recent_start).days + 1
-            cycle_day = max(1, raw_day)
-
-        if len(logs) >= 2:
-            deltas = []
-            for i in range(len(logs) - 1):
-                newer = as_date(logs[i].get("start_date"))
-                older = as_date(logs[i + 1].get("start_date"))
-                if newer and older and (newer - older).days > 0:
-                    deltas.append((newer - older).days)
-            if deltas:
-                avg_cycle_length = round(sum(deltas) / len(deltas))
-
-        next_period_days = max(avg_cycle_length - cycle_day, 0)
-
-    summary = f"Rhythma Summary: Cycle Day {cycle_day}/{avg_cycle_length}. Next period expected in ~{next_period_days} days."
-    disclaimer = " Estimate only, not medical/contraceptive advice."
-
-    # The disclaimer is all-or-nothing. Half of "not medical/contraceptive
-    # advice" is worse than none of it — a sentence cut after "not
-    # medical" says something the full sentence does not.
-    combined = summary + disclaimer
-    if len(combined) <= SMS_MAX_CHARS:
-        return combined
-    return _fit_to_one_segment(summary)
+    return build_summary(
+        score_data.get("logs") or [],
+        profile=score_data.get("profile"),
+        today=date.today(),
+    )
 
 
 class SMSSettings(BaseModel):

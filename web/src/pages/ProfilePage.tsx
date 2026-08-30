@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../auth/useAuth';
+import { Modal } from '../components/Modal';
 import { fetchDashboard, fetchProfile, patchProfile, type DashboardData, type Profile } from '../api/endpoints';
 import { cycleSpread, formatSpread } from '../lib/cycleStats';
 import { useDocumentMeta } from '../lib/useDocumentMeta';
@@ -158,51 +159,55 @@ export function ProfilePage() {
         </Link>
       </section>
 
-      {editing ? (
-        <div className="modal-backdrop" role="presentation" onClick={() => setEditing(false)}>
-          <form className="edit-panel" role="dialog" aria-label={t('profile.editInfo')} onClick={(e) => e.stopPropagation()} onSubmit={submitEdit}>
-            <h3>{t('profile.editInfo')}</h3>
-
-            <div className="avatar-picker">
-              {AVATAR_COLORS.map((color) => (
-                <button
-                  key={color}
-                  type="button"
-                  className={`avatar-option${avatar === color ? ' selected' : ''}`}
-                  style={{ background: color }}
-                  onClick={() => setAvatar(color)}
-                  aria-label={color}
-                />
-              ))}
-            </div>
-
-            <label>
-              {t('profile.name')}
-              <input value={name} onChange={(e) => setName(e.target.value)} required />
-              {formErrors.name ? <span className="error-text">{formErrors.name}</span> : null}
-            </label>
-
-            <label>
-              {t('profile.age')}
-              <input type="number" value={age} onChange={(e) => setAge(e.target.value)} min={10} max={120} />
-              {formErrors.age ? <span className="error-text">{formErrors.age}</span> : null}
-            </label>
-
-            <label>
-              {t('profile.cycleLength')}
-              <input type="number" value={cycleLength} onChange={(e) => setCycleLength(e.target.value)} min={15} max={45} />
-              {formErrors.cycle ? <span className="error-text">{formErrors.cycle}</span> : null}
-            </label>
-
-            <button type="submit" className="primary-btn full" disabled={saving}>
-              {saving ? t('common.loading') : t('profile.saveChanges')}
-            </button>
-            <button type="button" className="ghost-btn full" onClick={() => setEditing(false)}>
-              {t('common.cancel')}
-            </button>
-          </form>
+      {/* Same dialog behaviour as Home's quick-log panel, from the same
+          component (#502). This one previously had no Escape handler at
+          all, which is what happens when the behaviour lives in the page:
+          one screen gets it and the next one does not. */}
+      <Modal
+        open={editing}
+        onClose={() => setEditing(false)}
+        panelClassName="edit-panel"
+        title={t('profile.editInfo')}
+        onSubmit={submitEdit}
+      >
+        <div className="avatar-picker">
+          {AVATAR_COLORS.map((color) => (
+            <button
+              key={color}
+              type="button"
+              className={`avatar-option${avatar === color ? ' selected' : ''}`}
+              style={{ background: color }}
+              onClick={() => setAvatar(color)}
+              aria-label={color}
+            />
+          ))}
         </div>
-      ) : null}
+
+        <label>
+          {t('profile.name')}
+          <input value={name} onChange={(e) => setName(e.target.value)} required />
+          {formErrors.name ? <span className="error-text">{formErrors.name}</span> : null}
+        </label>
+
+        <label>
+          {t('profile.age')}
+          <input type="number" value={age} onChange={(e) => setAge(e.target.value)} min={10} max={120} />
+          {formErrors.age ? <span className="error-text">{formErrors.age}</span> : null}
+        </label>
+
+        <label>
+          {t('profile.cycleLength')}
+          <input type="number" value={cycleLength} onChange={(e) => setCycleLength(e.target.value)} min={15} max={45} />
+          {formErrors.cycle ? <span className="error-text">{formErrors.cycle}</span> : null}
+        </label>
+
+        <button type="submit" className="primary-btn full" disabled={saving}>
+          {saving ? t('common.loading') : t('profile.saveChanges')}
+        </button>
+        <button type="button" className="ghost-btn full" onClick={() => setEditing(false)}>
+          {t('common.cancel')}
+        </button>
+      </Modal>
     </div>
   );
 }
