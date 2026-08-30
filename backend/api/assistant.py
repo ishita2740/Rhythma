@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field, field_validator
 
 from core.auth import get_current_user
+from core.model_response import ANSWER_STATUSES, interpret
 from services.firestore_service import AssistantConversationService
 from services.medical_knowledge_service import MedicalKnowledgeService
 from services.rate_limit_service import RateLimitService
@@ -67,6 +68,18 @@ SUPPORTED_LANGUAGE_CODES = frozenset(lang["code"] for lang in SUPPORTED_LANGUAGE
 ASSISTANT_MAX_MESSAGE_CHARS = int(os.getenv("ASSISTANT_MAX_MESSAGE_CHARS", "2000"))
 ASSISTANT_MAX_HISTORY_MESSAGES = int(os.getenv("ASSISTANT_MAX_HISTORY_MESSAGES", "20"))
 ASSISTANT_MAX_HISTORY_CHARS = int(os.getenv("ASSISTANT_MAX_HISTORY_CHARS", "2000"))
+
+#: Ceiling on what the model may generate in one reply.
+#:
+#: Previously unset, so the answer ran to whatever the model's own default
+#: was and the truncation that followed was an accident nobody had chosen.
+#: Setting it makes the cut a decision: 1024 output tokens is a long
+#: answer in English and a comfortable one in Devanagari or Tamil, which
+#: cost substantially more tokens per character and were truncating first.
+#: `core/model_response.py` returns the shortened text rather than
+#: discarding it, so reaching this ceiling degrades the answer instead of
+#: replacing it.
+ASSISTANT_MAX_OUTPUT_TOKENS = int(os.getenv("ASSISTANT_MAX_OUTPUT_TOKENS", "1024"))
 
 
 def to_single_line(value: str) -> str:
@@ -186,6 +199,15 @@ class AssistantResponse(BaseModel):
     #: The sources the answer was grounded on; empty when no medical
     #: reference matched the message.
     sources: List[AssistantSource] = Field(default_factory=list)
+    #: True when the model hit the output ceiling and the answer above is
+    #: the shortened version rather than the whole one.
+    #:
+    #: Additive and defaulted, so a client written before this field
+    #: existed is unaffected. It exists because the alternative to telling
+    #: the client is what this endpoint used to do: throw the shortened
+    #: answer away and claim a safety block instead (issue #508). A client
+    #: that renders nothing for this field still shows a real answer.
+    wasShortened: bool = False
 
 
 SYSTEM_PROMPT = """
@@ -307,22 +329,40 @@ async def chat(
 
     try:
         model = genai.GenerativeModel("models/gemini-2.5-flash")
-        response = model.generate_content("\n".join(prompt_parts))
-        
-        reply = None
-        if hasattr(response, "candidates") and response.candidates:
-            first_candidate = response.candidates[0]
-            finish_reason = str(getattr(first_candidate, "finish_reason", ""))
-            if "SAFETY" in finish_reason or finish_reason == "2":
-                reply = "I cannot process this request as it triggered safety guidelines. Please consult a healthcare professional."
-        
-        if reply is None:
-            try:
-                reply = response.text.strip() if response.text else "I'm sorry, I couldn't process that."
-            except Exception as val_err:
-                logger.warning("Could not read response.text due to filter/exception: %s", val_err)
-                reply = "I'm sorry, I couldn't generate a response. Please rephrase your query or consult a healthcare professional."
-        
+        response = model.generate_content(
+            "\n".join(prompt_parts),
+            # An explicit ceiling, so where a long answer gets cut is a
+            # decision rather than whatever the model default happened to
+            # be. See ASSISTANT_MAX_OUTPUT_TOKENS.
+            generation_config={"max_output_tokens": ASSISTANT_MAX_OUTPUT_TOKENS},
+        )
+
+        # One reading of what the model did, in `core/model_response.py`.
+        # It used to be four lines here that matched `finish_reason` as a
+        # string against `"SAFETY"` and against `"2"` — and 2 is
+        # MAX_TOKENS, not SAFETY, so a merely-long answer was discarded and
+        # the user was told her question had tripped a safety filter
+        # (issue #508). `interpret` reads the reason by value and always
+        # returns showable text, so this route no longer has to decide what
+        # to say when the model said nothing.
+        outcome = interpret(response)
+
+        if outcome.status not in ANSWER_STATUSES:
+            # Not an error to the caller — she still gets a reply — but the
+            # reason belongs in the log, named, so a recitation block can be
+            # told apart from an empty candidate without reproducing it.
+            logger.warning(
+                "The assistant returned no usable answer (status=%s, finish_reason=%s)",
+                outcome.status,
+                outcome.finish_reason,
+                extra={
+                    "assistant_status": outcome.status,
+                    "assistant_finish_reason": outcome.finish_reason,
+                },
+            )
+
+        reply = outcome.text
+
         # Persist exchange to Firestore
         AssistantConversationService.add_messages(user_id, [
             {"role": "user", "content": request.message},
@@ -334,6 +374,7 @@ async def chat(
             language=request.language or "en",
             disclaimer="Please consult a healthcare professional for medical advice.",
             sources=medical_knowledge_service.source_list(references),
+            wasShortened=outcome.was_shortened,
         )
     except Exception as exc:
         logger.error("Gemini API error: %s", exc, exc_info=True)
