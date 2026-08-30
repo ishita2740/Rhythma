@@ -103,8 +103,6 @@
   "assistantDisclaimer": "ಈ ಸಹಾಯಕ ಸಾಮಾನ್ಯ ಆರೋಗ್ಯ ಮಾಹಿತಿಯನ್ನು ಮಾತ್ರ ಒದಗಿಸುತ್ತದೆ ಮತ್ತು ವೃತ್ತಿಪರ ವೈದ್ಯಕೀಯ ಸಲಹೆಗೆ ಬದಲಿಯಲ್ಲ.",
   "insightsTitle": "ಆರೋಗ್ಯ ಒಳನೋಟಗಳು",
   "insightsSubtitle": "ಕಳೆದ 90 ದಿನಗಳು",
-  "insightsMhsLabel": "ಋತುಚಕ್ರ ಆರೋಗ್ಯ ಸ್ಕೋರ್",
-  "insightsMhsDelta": "ಕಳೆದ ಚಕ್ರಕ್ಕಿಂತ +6",
   "insightsVar": "ಋತುಚಕ್ರದ ಏರಿಳಿತ",
   "insightsAvgCycle": "ಸರಾಸರಿ ಋತುಚಕ್ರ",
   "insightsRegular": "ನಿಯಮಿತ",

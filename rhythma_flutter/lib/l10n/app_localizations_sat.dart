@@ -161,12 +161,6 @@ class AppLocalizationsSat extends AppLocalizations {
   String get homeRetry => 'ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ';
 
   @override
-  String get homeMhs => 'MHS';
-
-  @override
-  String get homeCvi => 'CVI';
-
-  @override
   String get homeSleep => 'ᱡᱟᱹᱯᱤᱫ';
 
   @override
@@ -350,12 +344,6 @@ class AppLocalizationsSat extends AppLocalizations {
 
   @override
   String get insightsSubtitle => 'ᱢᱩᱪᱟᱹᱫ 90 ᱫᱤᱱ';
-
-  @override
-  String get insightsMhsLabel => 'ᱢᱮᱱᱥᱴᱨᱩᱣᱟᱞ ᱦᱮᱞᱛᱷ ᱥᱠᱳᱨ';
-
-  @override
-  String get insightsMhsDelta => 'ᱢᱩᱪᱟᱹᱫ ᱥᱟᱭᱠᱮᱞ ᱥᱟᱞᱟᱜ ᱛᱮ +6';
 
   @override
   String get insightsVar => 'ᱥᱟᱭᱠᱮᱞ ᱵᱷᱮᱨᱤᱭᱟᱵᱤᱞᱤᱴᱤ';
@@ -671,6 +659,222 @@ class AppLocalizationsSat extends AppLocalizations {
       'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱦᱟᱢᱟᱞ ᱮᱢ ᱢᱮ (20–300 kg)';
 
   @override
+  String get onboardingPhoneInvalid =>
+      'ᱤᱱᱴᱟᱨᱱᱮᱥᱱᱟᱞ ᱯᱷᱚᱨᱢᱮᱴ ᱵᱮᱵᱷᱟᱨ ᱢᱮ, ᱡᱮᱞᱮᱠᱟ +919876543210';
+
+  @override
+  String get onboardingTapToSelectDate => 'ᱢᱟᱹᱦᱤᱛ ᱵᱟᱪᱷᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱴᱮᱯ ᱢᱮ';
+
+  @override
+  String get langGujarati => 'ગુજરાતી (Gujarati)';
+
+  @override
+  String get deleteAccount => 'ᱮᱠᱟᱣᱩᱱᱴ ᱰᱤᱞᱤᱴ ᱢᱮ';
+
+  @override
+  String get deleteAccountConfirmationDesc =>
+      'ᱱᱚᱣᱟ ᱠᱟᱹᱢᱤ ᱫᱚ ᱯᱟᱨᱢᱟᱱᱮᱱᱴ ᱠᱟᱱᱟ ᱟᱨ ᱱᱚᱣᱟ ᱫᱚ ᱟᱨᱦᱚᱸ ᱨᱩᱣᱟᱹᱲ ᱵᱟᱝ ᱜᱟᱱᱚᱜ-ᱟ᱾ ᱟᱢᱟᱜ ᱥᱟᱱᱟᱢ ᱰᱟᱴᱟ ᱢᱮᱴᱟᱣ ᱜᱤᱰᱤᱜ-ᱟ᱾';
+
+  @override
+  String get accountDeletedSuccess => 'ᱮᱠᱟᱣᱩᱱᱴ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱰᱤᱞᱤᱴ ᱮᱱᱟ᱾';
+
+  @override
+  String get smsErrorGeneric =>
+      'ᱡᱟᱦᱟᱸ ᱵᱟᱹᱲᱤᱡ ᱦᱩᱭᱮᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
+
+  @override
+  String get smsErrorEnterPhone => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱮᱢ ᱢᱮ';
+
+  @override
+  String get smsErrorInvalidPhone =>
+      'ᱤᱱᱴᱟᱨᱱᱮᱥᱱᱟᱞ ᱯᱷᱚᱨᱢᱮᱴ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱮᱢ ᱢᱮ, ᱡᱮᱞᱮᱠᱟ +919876543210';
+
+  @override
+  String get smsSuccessSaved => 'SMS ᱥᱮᱴᱤᱝᱥ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱥᱮᱵᱷ ᱮᱱᱟ!';
+
+  @override
+  String get smsErrorAddPhoneFirst =>
+      'ᱢᱟᱲᱟᱝ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱥᱮᱞᱮᱫ ᱢᱮ ᱟᱨ ᱥᱮᱵᱷ ᱢᱮ';
+
+  @override
+  String get smsSummaryMessage =>
+      '🌸 Rhythma ᱦᱮᱞᱛᱷ ᱥᱟᱢᱟᱨᱤ\nᱱᱚᱣᱟ ᱫᱚ Rhythma ᱠᱷᱚᱱ ᱟᱢᱟᱜ ᱚᱱ-ᱰᱤᱢᱟᱱᱰ ᱥᱟᱢᱟᱨᱤ ᱠᱟᱱᱟ᱾\nᱟᱢᱟᱜ ᱞᱮᱴᱮᱥᱴ ᱥᱟᱭᱠᱮᱞ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱞᱟᱹᱜᱤᱫ ᱮᱯ ᱠᱷᱩᱞᱟᱹᱣ ᱢᱮ᱾\nᱟᱱᱥᱟᱵᱽᱥᱠᱨᱟᱭᱤᱵᱽ ᱞᱟᱹᱜᱤᱫ STOP ᱨᱤᱯᱞᱟᱭ ᱢᱮ᱾';
+
+  @override
+  String get smsSuccessSent => 'ᱟᱢᱟᱜ ᱯᱷᱳᱱ ᱨᱮ ᱥᱟᱢᱟᱨᱤ ᱵᱷᱮᱡᱟ ᱮᱱᱟ!';
+
+  @override
+  String get smsErrorRateLimit =>
+      'ᱟᱢ ᱢᱤᱫ ᱢᱤᱱᱤᱴ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱢᱟᱨᱤᱢ ᱵᱷᱮᱡᱟ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ, ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱠᱤᱪᱷᱩ ᱚᱠᱛᱚ ᱛᱟᱺᱜᱤ ᱢᱮ ᱟᱨ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
+
+  @override
+  String get smsErrorSessionExpired =>
+      'ᱟᱢᱟᱜ ᱥᱮᱥᱚᱱ ᱢᱩᱪᱟᱹᱫ ᱟᱠᱟᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱞᱚᱜ ᱤᱱ ᱢᱮ᱾';
+
+  @override
+  String get smsErrorNetwork =>
+      'ᱥᱟᱨᱵᱷᱟᱨ ᱥᱟᱶ ᱠᱟᱱᱮᱠᱴ ᱵᱟᱝ ᱦᱩᱭ ᱞᱮᱱᱟ᱾ ᱟᱢᱟᱜ ᱠᱟᱱᱮᱠᱥᱚᱱ ᱪᱮᱠ ᱢᱮ ᱟᱨ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
+
+  @override
+  String get smsScreenTitle => 'SMS ᱥᱟᱢᱟᱨᱤᱠᱚ';
+
+  @override
+  String get smsScreenSubtitle => 'ᱮᱯ ᱵᱮᱜᱚᱨ ᱦᱚᱸ ᱟᱯᱰᱮᱴ ᱛᱟᱦᱮᱸᱱ ᱢᱮ';
+
+  @override
+  String get smsInfoCardTitle => 'ᱣᱤᱠᱞᱤ ᱦᱮᱞᱛᱷ ᱥᱟᱢᱟᱨᱤ';
+
+  @override
+  String get smsInfoCardBody =>
+      'ᱦᱟᱯᱛᱟ ᱯᱤᱪᱷᱤ, Rhythma ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ ᱥᱴᱮᱴᱟᱥ, ᱦᱮᱞᱛᱷ ᱥᱠᱳᱨ ᱟᱨ ᱡᱟᱦᱟᱸᱱᱟᱜ ᱞᱟᱹᱠᱛᱤᱭᱟᱱ ᱯᱮᱴᱟᱨᱱ ᱨᱮᱭᱟᱜ ᱢᱤᱫᱴᱟᱹᱝ ᱠᱷᱟᱴᱚ ᱥᱟᱢᱟᱨᱤ SMS ᱛᱟᱞᱟ ᱛᱮ ᱥᱚᱡᱷᱮ ᱟᱢᱟᱜ ᱯᱷᱳᱱ ᱨᱮ ᱵᱷᱮᱡᱟᱭᱟᱭ᱾ ᱰᱟᱴᱟ ᱥᱮ ᱮᱯ ᱵᱮᱜᱚᱨ ᱠᱟᱹᱢᱤᱭᱟ᱾';
+
+  @override
+  String get smsConfigTitle => 'ᱠᱚᱱᱯᱷᱤᱜᱟᱨᱮᱥᱚᱱ';
+
+  @override
+  String get smsPhoneLabel => 'ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ';
+
+  @override
+  String get smsPhoneHint => '+91 98765 43210';
+
+  @override
+  String get smsEnableWeekly => 'ᱣᱤᱠᱞᱤ SMS ᱮᱱᱮᱵᱚᱞ ᱢᱮ';
+
+  @override
+  String get smsSaveSettings => 'ᱥᱮᱴᱤᱝᱥ ᱥᱮᱵᱷ ᱢᱮ';
+
+  @override
+  String get smsSendSectionTitle => 'ᱱᱤᱛᱚᱜ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱢᱟᱨᱤ ᱵᱷᱮᱡᱟᱭ ᱢᱮ';
+
+  @override
+  String get smsSendRecipientPrefix => 'ᱞᱟᱛᱟᱨ ᱨᱮᱭᱟᱜ ᱢᱮᱥᱮᱡᱽ ᱵᱷᱮᱡᱟᱭᱮᱫᱟᱭ:';
+
+  @override
+  String get smsSendNoPhone =>
+      'ᱢᱟᱲᱟᱝ ᱪᱮᱛᱟᱱ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱥᱮᱞᱮᱫ ᱢᱮ ᱟᱨ ᱥᱮᱵᱷ ᱢᱮ᱾';
+
+  @override
+  String get smsSendButton => 'ᱱᱤᱛᱚᱜ ᱥᱟᱢᱟᱨᱤ ᱵᱷᱮᱡᱟᱭ ᱢᱮ';
+
+  @override
+  String get insightsNotEnoughData =>
+      'ᱟᱢᱟᱜ ᱯᱩᱨᱟᱹ ᱦᱮᱞᱛᱷ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱟᱱᱞᱚᱠ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱠᱮᱞ ᱴᱮᱵᱽ ᱨᱮ ᱟᱨᱦᱚᱸ ᱠᱤᱪᱷᱩ ᱥᱟᱭᱠᱮᱞ ᱞᱚᱜ ᱢᱮ᱾';
+
+  @override
+  String get insightsNoSymptomsYet =>
+      'ᱱᱤᱛ ᱫᱷᱟᱹᱵᱤᱡ ᱡᱟᱦᱟᱸᱱᱟᱜ ᱞᱚᱠᱷᱚᱱ ᱵᱟᱝ ᱞᱚᱜ ᱟᱠᱟᱱᱟ — ᱱᱚᱸᱰᱮ ᱯᱮᱴᱟᱨᱱᱠᱚ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱠᱮᱞ ᱴᱮᱵᱽ ᱨᱮ ᱠᱤᱪᱷᱩ ᱞᱚᱜ ᱢᱮ᱾';
+
+  @override
+  String get insightsNotEnoughTrendData =>
+      'ᱱᱚᱸᱰᱮ ᱟᱢᱟᱜ ᱴᱨᱮᱱᱰ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱠᱚᱢ ᱠᱷᱚᱱ ᱠᱚᱢ ᱵᱟᱨᱭᱟ ᱥᱟᱭᱠᱮᱞ ᱞᱚᱜ ᱢᱮ᱾';
+
+  @override
+  String insightsLoadError(String error) {
+    return 'ᱟᱢᱟᱜ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱞᱳᱰ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ: $error';
+  }
+
+  @override
+  String get assistantAccessibilitySuggestedPrompt => 'ᱥᱟᱡᱮᱥᱴᱮᱰ ᱯᱨᱚᱢᱯᱴ';
+
+  @override
+  String get assistantAccessibilityMessageInput => 'ᱢᱮᱥᱮᱡᱽ ᱤᱱᱯᱩᱴ';
+
+  @override
+  String get assistantAccessibilityMessageInputHint =>
+      'ᱟᱢᱟᱜ ᱠᱩᱠᱞᱤ ᱱᱚᱸᱰᱮ ᱴᱟᱭᱤᱯ ᱢᱮ';
+
+  @override
+  String get assistantAccessibilitySendMessage => 'ᱢᱮᱥᱮᱡᱽ ᱵᱷᱮᱡᱟᱭ ᱢᱮ';
+
+  @override
+  String get assistantAccessibilitySendMessageHint =>
+      'ᱟᱢᱟᱜ ᱢᱮᱥᱮᱡᱽ ᱟᱥᱤᱥᱴᱮᱱᱴ ᱴᱷᱮᱱ ᱵᱷᱮᱡᱟᱭᱟᱭ';
+
+  @override
+  String get assistantAccessibilityTyping => 'ᱟᱥᱤᱥᱴᱮᱱᱴ ᱴᱟᱭᱤᱯᱮᱫᱟᱭ';
+
+  @override
+  String get languageSelectionError =>
+      'ᱯᱟᱹᱨᱥᱤ ᱥᱮᱵᱷ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
+
+  @override
+  String get pleaseEnterPhoneNumber => 'Please enter your phone number';
+
+  @override
+  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number';
+
+  @override
+  String get verificationFailed => 'Verification failed';
+
+  @override
+  String otpSentTo(String phoneNumber) {
+    return 'OTP sent to $phoneNumber';
+  }
+
+  @override
+  String get pleaseEnterOtp => 'Please enter the OTP';
+
+  @override
+  String get invalidOtp => 'Invalid OTP';
+
+  @override
+  String get failedToGetIdToken => 'Failed to get authentication token';
+
+  @override
+  String get welcomeToRhythma => 'Welcome to Rhythma';
+
+  @override
+  String get enterOtpSentToPhone => 'Enter the OTP sent to your phone';
+
+  @override
+  String get loginOrSignUpWithPhone =>
+      'Login or sign up with your phone number';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get sendingOtp => 'Sending OTP...';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get otp => 'OTP';
+
+  @override
+  String get verifying => 'Verifying...';
+
+  @override
+  String get verifyOtp => 'Verify OTP';
+
+  @override
+  String get useDifferentPhoneNumber => 'Use a different phone number';
+
+  @override
+  String get nudgeCompleteProfileTitle =>
+      'ᱟᱨᱦᱚᱸ ᱥᱚᱴᱷᱤᱠ ᱯᱨᱮᱰᱤᱠᱥᱚᱱ ᱥᱟᱱᱟᱭᱮᱫ ᱢᱮᱭᱟ?';
+
+  @override
+  String get nudgeCompleteProfileBody =>
+      'ᱥᱟᱭᱠᱮᱞ ᱯᱨᱮᱰᱤᱠᱥᱚᱱ ᱵᱷᱟᱹᱜᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱢᱟᱜ ᱢᱩᱪᱟᱹᱫ ᱯᱤᱨᱤᱭᱚᱰ ᱮᱦᱚᱵᱚᱜ ᱨᱮᱭᱟᱜ ᱥᱚᱴᱷᱤᱠ ᱢᱟᱹᱦᱤᱛ ᱥᱮᱞᱮᱫ ᱢᱮ᱾';
+
+  @override
+  String get nudgeCompleteProfileAction => 'ᱟᱯᱰᱮᱴ';
+
+  @override
+  String get nudgeCompleteProfileDismiss => 'ᱯᱟᱞᱮᱱ ᱛᱟᱭᱚᱢ ᱛᱮ';
+
+  @override
+  String get cycleHistory => 'Cycle History';
+
+  @override
+  String get noLogsYet => 'No logs yet';
+
+  @override
+  String get dayCycle => 'Day cycle';
+
+  @override
   String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
 
   @override
@@ -718,87 +922,6 @@ class AppLocalizationsSat extends AppLocalizations {
   String get logSympFainting => 'Fainting';
 
   @override
-  String get accountDeletedSuccess => 'ᱮᱠᱟᱣᱩᱱᱴ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱰᱤᱞᱤᱴ ᱮᱱᱟ᱾';
-
-  @override
-  String get assistantAccessibilityMessageInput => 'ᱢᱮᱥᱮᱡᱽ ᱤᱱᱯᱩᱴ';
-
-  @override
-  String get assistantAccessibilityMessageInputHint =>
-      'ᱟᱢᱟᱜ ᱠᱩᱠᱞᱤ ᱱᱚᱸᱰᱮ ᱴᱟᱭᱤᱯ ᱢᱮ';
-
-  @override
-  String get assistantAccessibilitySendMessage => 'ᱢᱮᱥᱮᱡᱽ ᱵᱷᱮᱡᱟᱭ ᱢᱮ';
-
-  @override
-  String get assistantAccessibilitySendMessageHint =>
-      'ᱟᱢᱟᱜ ᱢᱮᱥᱮᱡᱽ ᱟᱥᱤᱥᱴᱮᱱᱴ ᱴᱷᱮᱱ ᱵᱷᱮᱡᱟᱭᱟᱭ';
-
-  @override
-  String get assistantAccessibilitySuggestedPrompt => 'ᱥᱟᱡᱮᱥᱴᱮᱰ ᱯᱨᱚᱢᱯᱴ';
-
-  @override
-  String get assistantAccessibilityTyping => 'ᱟᱥᱤᱥᱴᱮᱱᱴ ᱴᱟᱭᱤᱯᱮᱫᱟᱭ';
-
-  @override
-  String get deleteAccount => 'ᱮᱠᱟᱣᱩᱱᱴ ᱰᱤᱞᱤᱴ ᱢᱮ';
-
-  @override
-  String get deleteAccountConfirmationDesc =>
-      'ᱱᱚᱣᱟ ᱠᱟᱹᱢᱤ ᱫᱚ ᱯᱟᱨᱢᱟᱱᱮᱱᱴ ᱠᱟᱱᱟ ᱟᱨ ᱱᱚᱣᱟ ᱫᱚ ᱟᱨᱦᱚᱸ ᱨᱩᱣᱟᱹᱲ ᱵᱟᱝ ᱜᱟᱱᱚᱜ-ᱟ᱾ ᱟᱢᱟᱜ ᱥᱟᱱᱟᱢ ᱰᱟᱴᱟ ᱢᱮᱴᱟᱣ ᱜᱤᱰᱤᱜ-ᱟ᱾';
-
-  @override
-  String get enterOtpSentToPhone => 'Enter the OTP sent to your phone';
-
-  @override
-  String get failedToGetIdToken => 'Failed to get authentication token';
-
-  @override
-  String get getOtp => 'Get OTP';
-
-  @override
-  String insightsLoadError(String error) {
-    return 'ᱟᱢᱟᱜ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱞᱳᱰ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ: $error';
-  }
-
-  @override
-  String get insightsNoSymptomsYet =>
-      'ᱱᱤᱛ ᱫᱷᱟᱹᱵᱤᱡ ᱡᱟᱦᱟᱸᱱᱟᱜ ᱞᱚᱠᱷᱚᱱ ᱵᱟᱝ ᱞᱚᱜ ᱟᱠᱟᱱᱟ — ᱱᱚᱸᱰᱮ ᱯᱮᱴᱟᱨᱱᱠᱚ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱠᱮᱞ ᱴᱮᱵᱽ ᱨᱮ ᱠᱤᱪᱷᱩ ᱞᱚᱜ ᱢᱮ᱾';
-
-  @override
-  String get insightsNotEnoughData =>
-      'ᱟᱢᱟᱜ ᱯᱩᱨᱟᱹ ᱦᱮᱞᱛᱷ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱟᱱᱞᱚᱠ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱠᱮᱞ ᱴᱮᱵᱽ ᱨᱮ ᱟᱨᱦᱚᱸ ᱠᱤᱪᱷᱩ ᱥᱟᱭᱠᱮᱞ ᱞᱚᱜ ᱢᱮ᱾';
-
-  @override
-  String get insightsNotEnoughTrendData =>
-      'ᱱᱚᱸᱰᱮ ᱟᱢᱟᱜ ᱴᱨᱮᱱᱰ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱠᱚᱢ ᱠᱷᱚᱱ ᱠᱚᱢ ᱵᱟᱨᱭᱟ ᱥᱟᱭᱠᱮᱞ ᱞᱚᱜ ᱢᱮ᱾';
-
-  @override
-  String get invalidOtp => 'Invalid OTP';
-
-  @override
-  String get languageSelectionError =>
-      'ᱯᱟᱹᱨᱥᱤ ᱥᱮᱵᱷ ᱵᱟᱝ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱫ-ᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
-
-  @override
-  String get loginOrSignUpWithPhone =>
-      'Login or sign up with your phone number';
-
-  @override
-  String get nudgeCompleteProfileAction => 'ᱟᱯᱰᱮᱴ';
-
-  @override
-  String get nudgeCompleteProfileBody =>
-      'ᱥᱟᱭᱠᱮᱞ ᱯᱨᱮᱰᱤᱠᱥᱚᱱ ᱵᱷᱟᱹᱜᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱢᱟᱜ ᱢᱩᱪᱟᱹᱫ ᱯᱤᱨᱤᱭᱚᱰ ᱮᱦᱚᱵᱚᱜ ᱨᱮᱭᱟᱜ ᱥᱚᱴᱷᱤᱠ ᱢᱟᱹᱦᱤᱛ ᱥᱮᱞᱮᱫ ᱢᱮ᱾';
-
-  @override
-  String get nudgeCompleteProfileDismiss => 'ᱯᱟᱞᱮᱱ ᱛᱟᱭᱚᱢ ᱛᱮ';
-
-  @override
-  String get nudgeCompleteProfileTitle =>
-      'ᱟᱨᱦᱚᱸ ᱥᱚᱴᱷᱤᱠ ᱯᱨᱮᱰᱤᱠᱥᱚᱱ ᱥᱟᱱᱟᱭᱮᱫ ᱢᱮᱭᱟ?';
-
-  @override
   String get onboardingAgeHint => 'ᱟᱢᱟᱜ ᱩᱢᱮᱨ ᱮᱢ ᱢᱮ';
 
   @override
@@ -832,13 +955,6 @@ class AppLocalizationsSat extends AppLocalizations {
   String get onboardingNotSure => 'ᱥᱤᱣᱚᱨ ᱵᱟᱹᱱᱩᱜ-ᱟ';
 
   @override
-  String get onboardingPhoneInvalid =>
-      'ᱤᱱᱴᱟᱨᱱᱮᱥᱱᱟᱞ ᱯᱷᱚᱨᱢᱮᱴ ᱵᱮᱵᱷᱟᱨ ᱢᱮ, ᱡᱮᱞᱮᱠᱟ +919876543210';
-
-  @override
-  String get onboardingTapToSelectDate => 'ᱢᱟᱹᱦᱤᱛ ᱵᱟᱪᱷᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱴᱮᱯ ᱢᱮ';
-
-  @override
   String get onboardingWeightHint => 'ᱟᱢᱟᱜ ᱦᱟᱢᱟᱞ ᱮᱢ ᱢᱮ';
 
   @override
@@ -849,118 +965,8 @@ class AppLocalizationsSat extends AppLocalizations {
   String get onboardingWeightUnit => 'kg';
 
   @override
-  String get otp => 'OTP';
+  String get logSaved => 'Log saved';
 
   @override
-  String otpSentTo(String phoneNumber) {
-    return 'OTP sent to $phoneNumber';
-  }
-
-  @override
-  String get phoneNumber => 'Phone Number';
-
-  @override
-  String get pleaseEnterOtp => 'Please enter the OTP';
-
-  @override
-  String get pleaseEnterPhoneNumber => 'Please enter your phone number';
-
-  @override
-  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number';
-
-  @override
-  String get sendingOtp => 'Sending OTP...';
-
-  @override
-  String get smsConfigTitle => 'ᱠᱚᱱᱯᱷᱤᱜᱟᱨᱮᱥᱚᱱ';
-
-  @override
-  String get smsEnableWeekly => 'ᱣᱤᱠᱞᱤ SMS ᱮᱱᱮᱵᱚᱞ ᱢᱮ';
-
-  @override
-  String get smsErrorAddPhoneFirst =>
-      'ᱢᱟᱲᱟᱝ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱥᱮᱞᱮᱫ ᱢᱮ ᱟᱨ ᱥᱮᱵᱷ ᱢᱮ';
-
-  @override
-  String get smsErrorEnterPhone => 'ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱮᱢ ᱢᱮ';
-
-  @override
-  String get smsErrorGeneric =>
-      'ᱡᱟᱦᱟᱸ ᱵᱟᱹᱲᱤᱡ ᱦᱩᱭᱮᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
-
-  @override
-  String get smsErrorInvalidPhone =>
-      'ᱤᱱᱴᱟᱨᱱᱮᱥᱱᱟᱞ ᱯᱷᱚᱨᱢᱮᱴ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱚᱴᱷᱤᱠ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱮᱢ ᱢᱮ, ᱡᱮᱞᱮᱠᱟ +919876543210';
-
-  @override
-  String get smsErrorNetwork =>
-      'ᱥᱟᱨᱵᱷᱟᱨ ᱥᱟᱶ ᱠᱟᱱᱮᱠᱴ ᱵᱟᱝ ᱦᱩᱭ ᱞᱮᱱᱟ᱾ ᱟᱢᱟᱜ ᱠᱟᱱᱮᱠᱥᱚᱱ ᱪᱮᱠ ᱢᱮ ᱟᱨ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
-
-  @override
-  String get smsErrorRateLimit =>
-      'ᱟᱢ ᱢᱤᱫ ᱢᱤᱱᱤᱴ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱢᱟᱨᱤᱢ ᱵᱷᱮᱡᱟ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ, ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱠᱤᱪᱷᱩ ᱚᱠᱛᱚ ᱛᱟᱺᱜᱤ ᱢᱮ ᱟᱨ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾';
-
-  @override
-  String get smsErrorSessionExpired =>
-      'ᱟᱢᱟᱜ ᱥᱮᱥᱚᱱ ᱢᱩᱪᱟᱹᱫ ᱟᱠᱟᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱟᱨᱦᱚᱸ ᱞᱚᱜ ᱤᱱ ᱢᱮ᱾';
-
-  @override
-  String get smsInfoCardBody =>
-      'ᱦᱟᱯᱛᱟ ᱯᱤᱪᱷᱤ, Rhythma ᱟᱢᱟᱜ ᱥᱟᱭᱠᱮᱞ ᱥᱴᱮᱴᱟᱥ, ᱦᱮᱞᱛᱷ ᱥᱠᱳᱨ ᱟᱨ ᱡᱟᱦᱟᱸᱱᱟᱜ ᱞᱟᱹᱠᱛᱤᱭᱟᱱ ᱯᱮᱴᱟᱨᱱ ᱨᱮᱭᱟᱜ ᱢᱤᱫᱴᱟᱹᱝ ᱠᱷᱟᱴᱚ ᱥᱟᱢᱟᱨᱤ SMS ᱛᱟᱞᱟ ᱛᱮ ᱥᱚᱡᱷᱮ ᱟᱢᱟᱜ ᱯᱷᱳᱱ ᱨᱮ ᱵᱷᱮᱡᱟᱭᱟᱭ᱾ ᱰᱟᱴᱟ ᱥᱮ ᱮᱯ ᱵᱮᱜᱚᱨ ᱠᱟᱹᱢᱤᱭᱟ᱾';
-
-  @override
-  String get smsInfoCardTitle => 'ᱣᱤᱠᱞᱤ ᱦᱮᱞᱛᱷ ᱥᱟᱢᱟᱨᱤ';
-
-  @override
-  String get smsPhoneHint => '+91 98765 43210';
-
-  @override
-  String get smsPhoneLabel => 'ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ';
-
-  @override
-  String get smsSaveSettings => 'ᱥᱮᱴᱤᱝᱥ ᱥᱮᱵᱷ ᱢᱮ';
-
-  @override
-  String get smsScreenSubtitle => 'ᱮᱯ ᱵᱮᱜᱚᱨ ᱦᱚᱸ ᱟᱯᱰᱮᱴ ᱛᱟᱦᱮᱸᱱ ᱢᱮ';
-
-  @override
-  String get smsScreenTitle => 'SMS ᱥᱟᱢᱟᱨᱤᱠᱚ';
-
-  @override
-  String get smsSendButton => 'ᱱᱤᱛᱚᱜ ᱥᱟᱢᱟᱨᱤ ᱵᱷᱮᱡᱟᱭ ᱢᱮ';
-
-  @override
-  String get smsSendNoPhone =>
-      'ᱢᱟᱲᱟᱝ ᱪᱮᱛᱟᱱ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱷᱳᱱ ᱱᱚᱢᱵᱚᱨ ᱥᱮᱞᱮᱫ ᱢᱮ ᱟᱨ ᱥᱮᱵᱷ ᱢᱮ᱾';
-
-  @override
-  String get smsSendRecipientPrefix => 'ᱞᱟᱛᱟᱨ ᱨᱮᱭᱟᱜ ᱢᱮᱥᱮᱡᱽ ᱵᱷᱮᱡᱟᱭᱮᱫᱟᱭ:';
-
-  @override
-  String get smsSendSectionTitle => 'ᱱᱤᱛᱚᱜ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱢᱟᱨᱤ ᱵᱷᱮᱡᱟᱭ ᱢᱮ';
-
-  @override
-  String get smsSuccessSaved => 'SMS ᱥᱮᱴᱤᱝᱥ ᱥᱟᱠᱥᱮᱥᱯᱷᱩᱞᱤ ᱥᱮᱵᱷ ᱮᱱᱟ!';
-
-  @override
-  String get smsSuccessSent => 'ᱟᱢᱟᱜ ᱯᱷᱳᱱ ᱨᱮ ᱥᱟᱢᱟᱨᱤ ᱵᱷᱮᱡᱟ ᱮᱱᱟ!';
-
-  @override
-  String get smsSummaryMessage =>
-      '🌸 Rhythma ᱦᱮᱞᱛᱷ ᱥᱟᱢᱟᱨᱤ\nᱱᱚᱣᱟ ᱫᱚ Rhythma ᱠᱷᱚᱱ ᱟᱢᱟᱜ ᱚᱱ-ᱰᱤᱢᱟᱱᱰ ᱥᱟᱢᱟᱨᱤ ᱠᱟᱱᱟ᱾\nᱟᱢᱟᱜ ᱞᱮᱴᱮᱥᱴ ᱥᱟᱭᱠᱮᱞ ᱤᱱᱥᱟᱭᱤᱴᱥ ᱞᱟᱹᱜᱤᱫ ᱮᱯ ᱠᱷᱩᱞᱟᱹᱣ ᱢᱮ᱾\nᱟᱱᱥᱟᱵᱽᱥᱠᱨᱟᱭᱤᱵᱽ ᱞᱟᱹᱜᱤᱫ STOP ᱨᱤᱯᱞᱟᱭ ᱢᱮ᱾';
-
-  @override
-  String get useDifferentPhoneNumber => 'Use a different phone number';
-
-  @override
-  String get verificationFailed => 'Verification failed';
-
-  @override
-  String get verifying => 'Verifying...';
-
-  @override
-  String get verifyOtp => 'Verify OTP';
-
-  @override
-  String get welcomeToRhythma => 'Welcome to Rhythma';
+  String get logDeleted => 'Log deleted';
 }

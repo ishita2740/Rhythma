@@ -9,12 +9,32 @@ from api.sms import generate_cycle_sms_summary
 
 
 def test_generate_cycle_sms_summary_formatting():
-    # Verify generated SMS summary is valid string under 160 chars
+    # Verify generated SMS summary is a valid string under 160 chars.
+    #
+    # `test_mock_user_id` has no logs and no profile, so there is nothing
+    # to anchor a prediction on. This used to produce "Rhythma Summary:
+    # Cycle Day 1/28. Next period expected in ~28 days." — three numbers,
+    # none of them measured from this user, presented exactly as they
+    # would be for someone with a year of history. Since #483 the
+    # no-anchor case says so instead, so the assertions here are on the
+    # sender and the length rather than on a countdown that should not
+    # exist. The "Cycle Day N/M ... Next period expected" wording is
+    # still covered, against a user who actually has history, in
+    # test_sms_summary_prediction.py.
     summary = generate_cycle_sms_summary("test_mock_user_id")
     assert isinstance(summary, str)
     assert len(summary) <= 160
-    assert "Rhythma Summary" in summary
-    assert "Next period expected" in summary
+    assert summary.startswith("Rhythma")
+    assert "Log your last period" in summary
+
+
+def test_generate_cycle_sms_summary_invents_no_countdown_without_data():
+    # The regression this file exists to catch, stated directly: a user
+    # with nothing logged must not be texted a number derived from the
+    # population default as though it were a measurement of her.
+    summary = generate_cycle_sms_summary("test_mock_user_id")
+    assert "~" not in summary
+    assert "Next period expected" not in summary
 
 
 def test_generate_cycle_sms_summary_includes_disclaimer():

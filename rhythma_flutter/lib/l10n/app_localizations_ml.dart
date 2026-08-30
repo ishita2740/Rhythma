@@ -161,12 +161,6 @@ class AppLocalizationsMl extends AppLocalizations {
   String get homeRetry => 'വീണ്ടും ശ്രമിക്കുക';
 
   @override
-  String get homeMhs => 'MHS';
-
-  @override
-  String get homeCvi => 'CVI';
-
-  @override
   String get homeSleep => 'ഉറക്കം';
 
   @override
@@ -350,12 +344,6 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get insightsSubtitle => 'അവസാന 90 ദിവസങ്ങൾ';
-
-  @override
-  String get insightsMhsLabel => 'ആർത്തവ ആരോഗ്യ സ്കോർ';
-
-  @override
-  String get insightsMhsDelta => 'കഴിഞ്ഞ ചക്രത്തേക്കാൾ +6 കൂടുതൽ';
 
   @override
   String get insightsVar => 'ചക്രത്തിലെ വ്യത്യാസങ്ങൾ';
@@ -671,6 +659,219 @@ class AppLocalizationsMl extends AppLocalizations {
       'ദയവായി സാധുവായ ഭാരം നൽകുക (20–300 കി.ഗ്രാം)';
 
   @override
+  String get onboardingPhoneInvalid => 'ദയവായി സാധുവായ ഫോൺ നമ്പർ നൽകുക';
+
+  @override
+  String get onboardingTapToSelectDate => 'തീയതി തിരഞ്ഞെടുക്കാൻ ടാപ്പ് ചെയ്യുക';
+
+  @override
+  String get langGujarati => 'Gujarati';
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get deleteAccountConfirmationDesc =>
+      'This action is permanent and cannot be undone. All your data will be wiped.';
+
+  @override
+  String get accountDeletedSuccess => 'Account deleted successfully.';
+
+  @override
+  String get smsErrorGeneric =>
+      'എന്തോ തകരാർ സംഭവിച്ചു. ദയവായി വീണ്ടും ശ്രമിക്കുക.';
+
+  @override
+  String get smsErrorEnterPhone => 'ദയവായി ഒരു ഫോൺ നമ്പർ നൽകുക';
+
+  @override
+  String get smsErrorInvalidPhone =>
+      'രാജ്യ കോഡ് ഉൾപ്പെടെ സാധുവായ ഫോൺ നമ്പർ നൽകുക, ഉദാ: +919876543210';
+
+  @override
+  String get smsSuccessSaved => 'SMS സെറ്റിംഗ്സ് വിജയകരമായി സേവ് ചെയ്തു!';
+
+  @override
+  String get smsErrorAddPhoneFirst =>
+      'ആദ്യം ഒരു ഫോൺ നമ്പർ ചേർത്ത് സേവ് ചെയ്യുക';
+
+  @override
+  String get smsSummaryMessage =>
+      '🌸 Rhythma ആരോഗ്യ വിവരങ്ങൾ\nRhythma-യിൽ നിന്നുള്ള നിങ്ങളുടെ തത്സമയ വിവരങ്ങളാണിത്.\nകൂടുതൽ വിവരങ്ങൾക്കായി ആപ്പ് തുറക്കുക.\nസേവനം അവസാനിപ്പിക്കാൻ STOP എന്ന് മറുപടി അയക്കുക.';
+
+  @override
+  String get smsSuccessSent => 'വിവരങ്ങൾ നിങ്ങളുടെ ഫോണിലേക്ക് അയച്ചിട്ടുണ്ട്!';
+
+  @override
+  String get smsErrorRateLimit =>
+      'ഒരു മിനിറ്റിൽ ഒരു സന്ദേശം മാത്രമേ അയക്കാൻ സാധിക്കൂ, ദയവായി കുറച്ച് കഴിഞ്ഞ് ശ്രമിക്കുക.';
+
+  @override
+  String get smsErrorSessionExpired =>
+      'നിങ്ങളുടെ സെഷൻ കാലാവധി കഴിഞ്ഞു. ദയവായി വീണ്ടും ലോഗിൻ ചെയ്യുക.';
+
+  @override
+  String get smsErrorNetwork =>
+      'സെർവറുമായി ബന്ധപ്പെടാൻ കഴിഞ്ഞില്ല. ഇന്റർനെറ്റ് പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക.';
+
+  @override
+  String get smsScreenTitle => 'SMS വിവരങ്ങൾ';
+
+  @override
+  String get smsScreenSubtitle => 'ആപ്പ് ഇല്ലാതെ തന്നെ വിവരങ്ങൾ അറിയൂ';
+
+  @override
+  String get smsInfoCardTitle => 'ആഴ്ചയിലെ ആരോഗ്യ വിവരങ്ങൾ';
+
+  @override
+  String get smsInfoCardBody =>
+      'എല്ലാ ആഴ്ചയും നിങ്ങളുടെ ആർത്തവചക്ര വിവരം, ആരോഗ്യ സ്കോർ, മറ്റ് പ്രധാന മാറ്റങ്ങൾ എന്നിവ SMS വഴി ഫോണിലേക്ക് നേരിട്ട് അയക്കും. ഇന്റർനെറ്റോ ആപ്പോ ഇല്ലാതെ പ്രവർത്തിക്കും.';
+
+  @override
+  String get smsConfigTitle => 'ക്രമീകരണങ്ങൾ';
+
+  @override
+  String get smsPhoneLabel => 'ഫോൺ നമ്പർ';
+
+  @override
+  String get smsPhoneHint => '+91 98765 43210';
+
+  @override
+  String get smsEnableWeekly => 'വാരിക SMS സേവനം ഓൺ ചെയ്യുക';
+
+  @override
+  String get smsSaveSettings => 'സെറ്റിംഗ്സ് സേവ് ചെയ്യുക';
+
+  @override
+  String get smsSendSectionTitle => 'ഇപ്പോൾ തന്നെ വിവരങ്ങൾ അയക്കുക';
+
+  @override
+  String get smsSendRecipientPrefix =>
+      'താഴെ പറയുന്ന സന്ദേശം ഇതിലേക്ക് അയക്കുന്നു:';
+
+  @override
+  String get smsSendNoPhone => 'ആദ്യം മുകളിൽ ഫോൺ നമ്പർ ചേർത്ത് സേവ് ചെയ്യുക.';
+
+  @override
+  String get smsSendButton => 'വിവരങ്ങൾ ഇപ്പോൾ അയക്കുക';
+
+  @override
+  String get insightsNotEnoughData =>
+      'കൂടുതൽ ആരോഗ്യ വിവരങ്ങൾ ലഭിക്കാൻ ചക്ര ടാബിൽ കുറച്ച് ആർത്തവചക്രങ്ങൾ കൂടി രേഖപ്പെടുത്തുക.';
+
+  @override
+  String get insightsNoSymptomsYet =>
+      'ലക്ഷണങ്ങളൊന്നും ഇതുവരെ രേഖപ്പെടുത്തിയിട്ടില്ല — മാതൃകകൾ കാണാൻ ചക്ര ടാബിൽ രേഖപ്പെടുത്തുക.';
+
+  @override
+  String get insightsNotEnoughTrendData =>
+      'നിങ്ങളുടെ ട്രെൻഡ് കാണുന്നതിന് കുറഞ്ഞത് രണ്ട് ആർത്തവചക്രങ്ങളെങ്കിലും രേഖപ്പെടുത്തുക.';
+
+  @override
+  String insightsLoadError(String error) {
+    return 'നിങ്ങളുടെ വിവരങ്ങൾ ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല: $error';
+  }
+
+  @override
+  String get assistantAccessibilitySuggestedPrompt => 'Suggested prompt';
+
+  @override
+  String get assistantAccessibilityMessageInput => 'Message input';
+
+  @override
+  String get assistantAccessibilityMessageInputHint =>
+      'Type your message and press send';
+
+  @override
+  String get assistantAccessibilitySendMessage => 'Send message';
+
+  @override
+  String get assistantAccessibilitySendMessageHint => 'Double tap to send';
+
+  @override
+  String get assistantAccessibilityTyping => 'Assistant is typing';
+
+  @override
+  String get languageSelectionError =>
+      'ഭാഷ സേവ് ചെയ്യാൻ കഴിഞ്ഞില്ല. ദയവായി വീണ്ടും ശ്രമിക്കുക.';
+
+  @override
+  String get pleaseEnterPhoneNumber => 'Please enter your phone number';
+
+  @override
+  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number';
+
+  @override
+  String get verificationFailed => 'Verification failed';
+
+  @override
+  String otpSentTo(String phoneNumber) {
+    return 'OTP sent to $phoneNumber';
+  }
+
+  @override
+  String get pleaseEnterOtp => 'Please enter the OTP';
+
+  @override
+  String get invalidOtp => 'Invalid OTP';
+
+  @override
+  String get failedToGetIdToken => 'Failed to get authentication token';
+
+  @override
+  String get welcomeToRhythma => 'Welcome to Rhythma';
+
+  @override
+  String get enterOtpSentToPhone => 'Enter the OTP sent to your phone';
+
+  @override
+  String get loginOrSignUpWithPhone =>
+      'Login or sign up with your phone number';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get sendingOtp => 'Sending OTP...';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get otp => 'OTP';
+
+  @override
+  String get verifying => 'Verifying...';
+
+  @override
+  String get verifyOtp => 'Verify OTP';
+
+  @override
+  String get useDifferentPhoneNumber => 'Use a different phone number';
+
+  @override
+  String get nudgeCompleteProfileTitle => 'കൂടുതൽ കൃത്യമായ പ്രവചനങ്ങൾ വേണോ?';
+
+  @override
+  String get nudgeCompleteProfileBody =>
+      'സൈക്കിൾ പ്രവചനങ്ങൾ മെച്ചപ്പെടുത്താൻ നിങ്ങളുടെ അവസാന പിരീഡിന്റെ കൃത്യമായ ആരംഭ തീയതി ചേർക്കുക.';
+
+  @override
+  String get nudgeCompleteProfileAction => 'അപ്‌ഡേറ്റ്';
+
+  @override
+  String get nudgeCompleteProfileDismiss => 'പിന്നീട്';
+
+  @override
+  String get cycleHistory => 'Cycle History';
+
+  @override
+  String get noLogsYet => 'No logs yet';
+
+  @override
+  String get dayCycle => 'Day cycle';
+
+  @override
   String get ayurvedaWellnessTitle => 'Ayurveda-inspired wellness';
 
   @override
@@ -718,85 +919,6 @@ class AppLocalizationsMl extends AppLocalizations {
   String get logSympFainting => 'Fainting';
 
   @override
-  String get accountDeletedSuccess => 'Account deleted successfully.';
-
-  @override
-  String get assistantAccessibilityMessageInput => 'Message input';
-
-  @override
-  String get assistantAccessibilityMessageInputHint =>
-      'Type your message and press send';
-
-  @override
-  String get assistantAccessibilitySendMessage => 'Send message';
-
-  @override
-  String get assistantAccessibilitySendMessageHint => 'Double tap to send';
-
-  @override
-  String get assistantAccessibilitySuggestedPrompt => 'Suggested prompt';
-
-  @override
-  String get assistantAccessibilityTyping => 'Assistant is typing';
-
-  @override
-  String get deleteAccount => 'Delete Account';
-
-  @override
-  String get deleteAccountConfirmationDesc =>
-      'This action is permanent and cannot be undone. All your data will be wiped.';
-
-  @override
-  String get enterOtpSentToPhone => 'Enter the OTP sent to your phone';
-
-  @override
-  String get failedToGetIdToken => 'Failed to get authentication token';
-
-  @override
-  String get getOtp => 'Get OTP';
-
-  @override
-  String insightsLoadError(String error) {
-    return 'നിങ്ങളുടെ വിവരങ്ങൾ ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല: $error';
-  }
-
-  @override
-  String get insightsNoSymptomsYet =>
-      'ലക്ഷണങ്ങളൊന്നും ഇതുവരെ രേഖപ്പെടുത്തിയിട്ടില്ല — മാതൃകകൾ കാണാൻ ചക്ര ടാബിൽ രേഖപ്പെടുത്തുക.';
-
-  @override
-  String get insightsNotEnoughData =>
-      'കൂടുതൽ ആരോഗ്യ വിവരങ്ങൾ ലഭിക്കാൻ ചക്ര ടാബിൽ കുറച്ച് ആർത്തവചക്രങ്ങൾ കൂടി രേഖപ്പെടുത്തുക.';
-
-  @override
-  String get insightsNotEnoughTrendData =>
-      'നിങ്ങളുടെ ട്രെൻഡ് കാണുന്നതിന് കുറഞ്ഞത് രണ്ട് ആർത്തവചക്രങ്ങളെങ്കിലും രേഖപ്പെടുത്തുക.';
-
-  @override
-  String get invalidOtp => 'Invalid OTP';
-
-  @override
-  String get languageSelectionError =>
-      'ഭാഷ സേവ് ചെയ്യാൻ കഴിഞ്ഞില്ല. ദയവായി വീണ്ടും ശ്രമിക്കുക.';
-
-  @override
-  String get loginOrSignUpWithPhone =>
-      'Login or sign up with your phone number';
-
-  @override
-  String get nudgeCompleteProfileAction => 'അപ്‌ഡേറ്റ്';
-
-  @override
-  String get nudgeCompleteProfileBody =>
-      'സൈക്കിൾ പ്രവചനങ്ങൾ മെച്ചപ്പെടുത്താൻ നിങ്ങളുടെ അവസാന പിരീഡിന്റെ കൃത്യമായ ആരംഭ തീയതി ചേർക്കുക.';
-
-  @override
-  String get nudgeCompleteProfileDismiss => 'പിന്നീട്';
-
-  @override
-  String get nudgeCompleteProfileTitle => 'കൂടുതൽ കൃത്യമായ പ്രവചനങ്ങൾ വേണോ?';
-
-  @override
   String get onboardingAgeHint => 'Enter your age';
 
   @override
@@ -828,12 +950,6 @@ class AppLocalizationsMl extends AppLocalizations {
   String get onboardingNotSure => 'Not sure';
 
   @override
-  String get onboardingPhoneInvalid => 'ദയവായി സാധുവായ ഫോൺ നമ്പർ നൽകുക';
-
-  @override
-  String get onboardingTapToSelectDate => 'തീയതി തിരഞ്ഞെടുക്കാൻ ടാപ്പ് ചെയ്യുക';
-
-  @override
   String get onboardingWeightHint => 'Enter your weight';
 
   @override
@@ -843,118 +959,8 @@ class AppLocalizationsMl extends AppLocalizations {
   String get onboardingWeightUnit => 'kg';
 
   @override
-  String get otp => 'OTP';
+  String get logSaved => 'Log saved';
 
   @override
-  String otpSentTo(String phoneNumber) {
-    return 'OTP sent to $phoneNumber';
-  }
-
-  @override
-  String get phoneNumber => 'Phone Number';
-
-  @override
-  String get pleaseEnterOtp => 'Please enter the OTP';
-
-  @override
-  String get pleaseEnterPhoneNumber => 'Please enter your phone number';
-
-  @override
-  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number';
-
-  @override
-  String get sendingOtp => 'Sending OTP...';
-
-  @override
-  String get smsConfigTitle => 'ക്രമീകരണങ്ങൾ';
-
-  @override
-  String get smsEnableWeekly => 'വാരിക SMS സേവനം ഓൺ ചെയ്യുക';
-
-  @override
-  String get smsErrorAddPhoneFirst =>
-      'ആദ്യം ഒരു ഫോൺ നമ്പർ ചേർത്ത് സേവ് ചെയ്യുക';
-
-  @override
-  String get smsErrorEnterPhone => 'ദയവായി ഒരു ഫോൺ നമ്പർ നൽകുക';
-
-  @override
-  String get smsErrorGeneric =>
-      'എന്തോ തകരാർ സംഭവിച്ചു. ദയവായി വീണ്ടും ശ്രമിക്കുക.';
-
-  @override
-  String get smsErrorInvalidPhone =>
-      'രാജ്യ കോഡ് ഉൾപ്പെടെ സാധുവായ ഫോൺ നമ്പർ നൽകുക, ഉദാ: +919876543210';
-
-  @override
-  String get smsErrorNetwork =>
-      'സെർവറുമായി ബന്ധപ്പെടാൻ കഴിഞ്ഞില്ല. ഇന്റർനെറ്റ് പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക.';
-
-  @override
-  String get smsErrorRateLimit =>
-      'ഒരു മിനിറ്റിൽ ഒരു സന്ദേശം മാത്രമേ അയക്കാൻ സാധിക്കൂ, ദയവായി കുറച്ച് കഴിഞ്ഞ് ശ്രമിക്കുക.';
-
-  @override
-  String get smsErrorSessionExpired =>
-      'നിങ്ങളുടെ സെഷൻ കാലാവധി കഴിഞ്ഞു. ദയവായി വീണ്ടും ലോഗിൻ ചെയ്യുക.';
-
-  @override
-  String get smsInfoCardBody =>
-      'എല്ലാ ആഴ്ചയും നിങ്ങളുടെ ആർത്തവചക്ര വിവരം, ആരോഗ്യ സ്കോർ, മറ്റ് പ്രധാന മാറ്റങ്ങൾ എന്നിവ SMS വഴി ഫോണിലേക്ക് നേരിട്ട് അയക്കും. ഇന്റർനെറ്റോ ആപ്പോ ഇല്ലാതെ പ്രവർത്തിക്കും.';
-
-  @override
-  String get smsInfoCardTitle => 'ആഴ്ചയിലെ ആരോഗ്യ വിവരങ്ങൾ';
-
-  @override
-  String get smsPhoneHint => '+91 98765 43210';
-
-  @override
-  String get smsPhoneLabel => 'ഫോൺ നമ്പർ';
-
-  @override
-  String get smsSaveSettings => 'സെറ്റിംഗ്സ് സേവ് ചെയ്യുക';
-
-  @override
-  String get smsScreenSubtitle => 'ആപ്പ് ഇല്ലാതെ തന്നെ വിവരങ്ങൾ അറിയൂ';
-
-  @override
-  String get smsScreenTitle => 'SMS വിവരങ്ങൾ';
-
-  @override
-  String get smsSendButton => 'വിവരങ്ങൾ ഇപ്പോൾ അയക്കുക';
-
-  @override
-  String get smsSendNoPhone => 'ആദ്യം മുകളിൽ ഫോൺ നമ്പർ ചേർത്ത് സേവ് ചെയ്യുക.';
-
-  @override
-  String get smsSendRecipientPrefix =>
-      'താഴെ പറയുന്ന സന്ദേശം ഇതിലേക്ക് അയക്കുന്നു:';
-
-  @override
-  String get smsSendSectionTitle => 'ഇപ്പോൾ തന്നെ വിവരങ്ങൾ അയക്കുക';
-
-  @override
-  String get smsSuccessSaved => 'SMS സെറ്റിംഗ്സ് വിജയകരമായി സേവ് ചെയ്തു!';
-
-  @override
-  String get smsSuccessSent => 'വിവരങ്ങൾ നിങ്ങളുടെ ഫോണിലേക്ക് അയച്ചിട്ടുണ്ട്!';
-
-  @override
-  String get smsSummaryMessage =>
-      '🌸 Rhythma ആരോഗ്യ വിവരങ്ങൾ\nRhythma-യിൽ നിന്നുള്ള നിങ്ങളുടെ തത്സമയ വിവരങ്ങളാണിത്.\nകൂടുതൽ വിവരങ്ങൾക്കായി ആപ്പ് തുറക്കുക.\nസേവനം അവസാനിപ്പിക്കാൻ STOP എന്ന് മറുപടി അയക്കുക.';
-
-  @override
-  String get useDifferentPhoneNumber => 'Use a different phone number';
-
-  @override
-  String get verificationFailed => 'Verification failed';
-
-  @override
-  String get verifying => 'Verifying...';
-
-  @override
-  String get verifyOtp => 'Verify OTP';
-
-  @override
-  String get welcomeToRhythma => 'Welcome to Rhythma';
+  String get logDeleted => 'Log deleted';
 }

@@ -277,7 +277,12 @@ def test_a_caller_supplied_message_is_never_sent(twilio):
     assert response.status_code == 200, response.text
     body = _sent(twilio)["body"]
     assert "evil.example" not in body
-    assert body.startswith("Rhythma Summary")
+    # `Rhythma` rather than `Rhythma Summary`: this account has no logs,
+    # and since #483 the summary service says so rather than emitting a
+    # fabricated "Cycle Day 1/28" line. The claim under test here is that
+    # the body is ours and not the caller's, which the sender prefix
+    # establishes either way.
+    assert body.startswith("Rhythma")
 
 
 def test_an_enormous_message_cannot_inflate_the_bill(twilio):
@@ -293,14 +298,22 @@ def test_an_enormous_message_cannot_inflate_the_bill(twilio):
 
 
 def test_the_sent_body_is_the_generated_summary(twilio):
+    """What reaches Twilio is what the summary service produced.
+
+    The account under test has no logged cycles, so since #483 that is
+    the no-anchor sentence rather than a countdown. The disclaimer
+    assertion is the one that matters and is unchanged — #317 requires it
+    on every surface, and it is the part most at risk of being dropped
+    for space.
+    """
     _, headers = _account()
 
     response = client.post(SEND_URL, json={}, headers=headers)
 
     assert response.status_code == 200, response.text
     body = _sent(twilio)["body"]
-    assert "Rhythma Summary" in body
-    assert "Next period expected" in body
+    assert body.startswith("Rhythma")
+    assert "Log your last period" in body
     assert "not medical/contraceptive advice" in body
 
 
@@ -331,6 +344,11 @@ def test_a_long_summary_is_cut_at_a_word_not_through_a_number():
     the helper directly because the real sentence never gets long
     enough, which is the point: this is insurance against the wording
     being changed later.
+
+    The marker is now `...` rather than `…` for GSM-7 text (#483):
+    U+2026 is not in the GSM-7 alphabet, so appending it re-encoded the
+    whole message as UCS-2 and cut the segment from 160 characters to
+    70 — the trim intended to fit one segment was what made it three.
     """
     from api.sms import _fit_to_one_segment
 
@@ -338,8 +356,8 @@ def test_a_long_summary_is_cut_at_a_word_not_through_a_number():
     fitted = _fit_to_one_segment(text)
 
     assert len(fitted) <= SMS_MAX_CHARS
-    assert fitted.endswith("…")
-    assert not fitted.rstrip("…").endswith("wor")
+    assert fitted.endswith("...")
+    assert not fitted.rstrip(".").endswith("wor")
 
 
 def test_a_short_summary_is_returned_untouched():

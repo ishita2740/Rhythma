@@ -97,7 +97,6 @@ class CycleProvider extends ChangeNotifier {
     return cycleDay + 1;
   }
 
-  // Phase logic
   String phaseKey(DateTime date) {
     final day = _getCycleDay(date);
     final periodEnd = _periodDuration;

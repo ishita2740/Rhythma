@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
@@ -62,8 +65,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   bool _showExactDatePicker = true;
   String? _lastPeriodError;
   int _selectedApproximateIndex = -1;
+  // ignore: prefer_final_fields
   int _cycleLength = 28;
+  // ignore: prefer_final_fields
   int _periodDuration = 5;
+  // ignore: prefer_final_fields
   bool _isRegular = true;
 
   // Step 4 – Optional Info
@@ -72,7 +78,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   final _stateController = TextEditingController();
 
   // Step 5 – Permissions
+  // ignore: prefer_final_fields
   bool _notificationsEnabled = false;
+  // ignore: prefer_final_fields
   bool _dataConsent = false;
   String? _consentError;
   String? _phoneError;
@@ -801,6 +809,12 @@ Semantics(
 
       if (picked != null) {
         setState(() => _lastPeriodDate = picked);
+
+        if (!mounted) return;
+        SemanticsService.announce(
+          'Date selected',
+          Directionality.of(context),
+        );
       }
     },
     child: Container(

@@ -107,8 +107,6 @@
   "assistantDisclaimer": "ఈ సహాయకుడు సాధారణ ఆరోగ్య సమాచారాన్ని మాత్రమే అందిస్తుంది మరియు వృత్తిపరమైన వైద్య సలహాకు ప్రత్యామ్నాయం కాదు.",
   "insightsTitle": "ఆరోగ్య అంతర్దృష్టులు",
   "insightsSubtitle": "గత 90 రోజులు",
-  "insightsMhsLabel": "రుతుక్రమ ఆరోగ్య స్కోర్",
-  "insightsMhsDelta": "మునుపటి చక్రంతో పోలిస్తే +6",
   "insightsVar": "సైకిల్ వేరియబిలిటీ",
   "insightsAvgCycle": "సగటు చక్రం",
   "insightsRegular": "సాధారణ",

@@ -7,6 +7,7 @@ import {
   type Observation,
   type ObservationsResponse,
 } from '../api/endpoints';
+import { observationBody, observationTitle } from '../lib/observationText';
 import { useDocumentMeta } from '../lib/useDocumentMeta';
 
 // No MHS/CVI score here — this page is built entirely against the factual
@@ -149,7 +150,18 @@ export function InsightsPage() {
 }
 
 function ObservationCard({ observation }: { observation: Observation }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  // `observation.title` / `.body` are the server's English fallbacks. The
+  // backend asks clients with a translation to render `titleKey`/`bodyKey`
+  // and interpolate `evidence` instead — which this page did not do, so
+  // every observation stayed English in all 17 locales (#485). The
+  // fallback lives inside these helpers: an observation code the client
+  // has no string for yet renders the English rather than a raw dotted
+  // key, which is the state that occurs every time the backend adds a
+  // rule ahead of the translations.
+  const title = observationTitle(t, i18n, observation);
+  const body = observationBody(t, i18n, observation);
+
   return (
     <div className={`glass-card observation-card severity-${observation.severity}`}>
       <div className="observation-heading">
@@ -158,10 +170,10 @@ function ObservationCard({ observation }: { observation: Observation }) {
         </span>
         <div>
           <p className="observation-severity-label">{t(`insights.severity.${observation.severity}`)}</p>
-          <p className="observation-title">{observation.title}</p>
+          <p className="observation-title">{title}</p>
         </div>
       </div>
-      <p className="observation-body">{observation.body}</p>
+      <p className="observation-body">{body}</p>
     </div>
   );
 }
