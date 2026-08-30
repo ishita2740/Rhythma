@@ -29,6 +29,7 @@ from api.sms import router as sms_router
 from api.dashboard import router as dashboard_router
 from api.privacy import router as privacy_router
 from api.provider import router as provider_router
+from api.goals import router as goals_router
 
 # Auth router lives in core (not in api) to avoid duplicate registration
 from core.auth_router import router as auth_router
@@ -192,6 +193,7 @@ app.include_router(dashboard_router, prefix="/api/v1",           tags=["Dashboar
 app.include_router(bot_router,       prefix="/api/v1/bot",       tags=["Chatbot Engine"])
 app.include_router(privacy_router,   prefix="/api/v1/privacy",   tags=["Privacy"])
 app.include_router(provider_router,  prefix="/api/v1/provider",  tags=["Provider Dashboard"])
+app.include_router(goals_router,     prefix="/api/v1",           tags=["Health Goals"])
 
 
 @app.get("/")
