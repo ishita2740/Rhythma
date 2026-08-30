@@ -445,5 +445,63 @@
     "requestId": "Reference",
     "notFoundTitle": "This page doesn't exist",
     "notFoundBody": "The link may be out of date, or the address may have a typo."
+  },
+  "observations": {
+    "insufficient_data": {
+      "title": "Keep logging to see your patterns",
+      "body": "You've logged {{logged_cycles}} so far. Once there are {{needed}} cycles to compare, this page can describe your own patterns."
+    },
+    "no_recent_period_logged": {
+      "title": "No period logged recently",
+      "body": "Your last logged period started {{days_since_last_start}} days ago. If a period has happened since then, it may simply need logging. If not, please consider speaking to a qualified healthcare professional."
+    },
+    "prolonged_bleeding": {
+      "title": "A longer period than usual",
+      "body": "You logged {{bleeding_days}} days of bleeding starting {{start_date}}. Please consider speaking to a qualified healthcare professional."
+    },
+    "repeated_heavy_flow": {
+      "title": "Heavy flow logged more than once recently",
+      "body": "You described your flow as heavy in {{heavy_cycles}} of your last {{window}} logged cycles. If this feels different from what's normal for you, it's worth mentioning to a healthcare professional."
+    },
+    "short_cycle_observed": {
+      "title": "A shorter cycle than most",
+      "body": "One of your recent cycles was {{shortest_cycle_days}} days, shorter than the {{threshold_days}} days most cycles run to. If this is new for you, consider mentioning it at your next check-up."
+    },
+    "long_cycle_observed": {
+      "title": "A longer cycle than most",
+      "body": "One of your recent cycles was {{longest_cycle_days}} days, longer than the {{threshold_days}} days most cycles stay within. If this is new for you, consider mentioning it at your next check-up."
+    },
+    "variable_cycle_lengths": {
+      "title": "Your cycle lengths have varied",
+      "body": "Your cycle length has ranged from {{shortest_cycle_days}} to {{longest_cycle_days}} days across your last {{cycles_compared}} cycles. If this feels different from what is normal for you, or you have concerns, consider discussing it with a healthcare professional."
+    },
+    "period_later_than_usual": {
+      "title": "Running later than your usual cycle",
+      "body": "It's day {{current_cycle_day}} of your current cycle, and your recent average is {{average_cycle_days}} days. Cycles vary for lots of everyday reasons."
+    },
+    "symptom_increase": {
+      "title": "More symptoms logged this cycle",
+      "body": "You logged {{latest_symptom_count}} symptoms this cycle, compared with an average of {{previous_average}} in your previous {{cycles_compared}} cycles."
+    },
+    "sustained_high_stress": {
+      "title": "Stress has been high lately",
+      "body": "Your logged stress has averaged {{average_stress}} out of {{scale_max}} across your last {{entries}} entries."
+    },
+    "short_sleep_trend": {
+      "title": "Sleep has been on the shorter side",
+      "body": "You've logged an average of {{average_sleep_hours}} hours of sleep across your last {{entries}} entries."
+    },
+    "severe_pain_pattern": {
+      "title": "Pain symptoms logged repeatedly",
+      "body": "You logged pain-related symptoms in {{pain_cycles}} of your last {{window}} cycles. If you are experiencing severe or persistent pain, please consult a qualified healthcare professional."
+    },
+    "repeated_heavy_flow_concern": {
+      "title": "Heavy bleeding may require medical attention",
+      "body": "You described your flow as heavy in {{heavy_cycles}} of your last {{window}} logged cycles. Very heavy or prolonged bleeding can sometimes be a sign that needs checking. Please consult a qualified healthcare professional."
+    },
+    "frequent_bleeding_pattern": {
+      "title": "Cycles have been shorter than usual recently",
+      "body": "Your last {{consecutive_short_cycles}} cycles have been shorter than {{threshold_days}} days. Frequent or closely spaced periods can sometimes need medical attention. Please consult a qualified healthcare professional."
+    }
   }
 }
