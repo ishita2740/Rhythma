@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -30,6 +28,25 @@ class ReportService {
         'Generate a short health summary based on my recent cycle data.',
       );
     } catch (_) {}
+
+    final history = dashboard['cycleHistory'] as List? ?? [];
+    final cycleLengthTrend = history
+        .map((e) => (e as Map)['cycle_length'])
+        .whereType<num>()
+        .map((n) => n.toInt())
+        .toList();
+
+    int variability = 0;
+    if (cycleLengthTrend.length >= 2) {
+      final mean = cycleLengthTrend.reduce((a, b) => a + b) / cycleLengthTrend.length;
+      final variance = cycleLengthTrend.map((v) => (v - mean) * (v - mean)).reduce((a, b) => a + b) / cycleLengthTrend.length;
+      variability = variance <= 0 ? 0 : variance.round();
+    }
+    final isStable = variability <= 3;
+    final consistencyDesc = cycleLengthTrend.length >= 2
+        ? (isStable ? 'Stable (Variability: $variability days)' : 'Moderate Variability ($variability days)')
+        : 'Not enough data for trend';
+
     final pdf = pw.Document();
 
     pdf.addPage(
@@ -110,7 +127,16 @@ class ReportService {
             'Avg Cycle Length: ${dashboard['insights']?['averageCycleLength'] ?? 'N/A'} days',
           ),
           pw.Text(
+            'Shortest Cycle: ${dashboard['insights']?['shortestCycleLength'] ?? 'N/A'} days',
+          ),
+          pw.Text(
+            'Longest Cycle: ${dashboard['insights']?['longestCycleLength'] ?? 'N/A'} days',
+          ),
+          pw.Text(
             'Avg Bleeding Duration: ${dashboard['insights']?['averageBleedingDuration'] ?? 'N/A'} days',
+          ),
+          pw.Text(
+            'Cycle Consistency: $consistencyDesc',
           ),
           pw.Text(
             'Sleep Hours: ${dashboard['insights']?['sleepHours'] ?? 'N/A'}',
