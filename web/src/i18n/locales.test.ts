@@ -34,6 +34,20 @@ const COMPLETE_LOCALES = [
 // All currently supported locales are expected to have complete translations.
 const KNOWN_INCOMPLETE: Record<string, number> = {};
 
+// Keys whose value is intentionally the same string in every locale — a brand
+// name, an initialism, or a pure interpolation template with no prose to
+// translate. A value matching English is only a placeholder if it is NOT one
+// of these, so both the general and the strict placeholder guards share this
+// list to stay in agreement.
+const SHARED_WITH_ENGLISH = new Set([
+  'meta.appName', // "Rhythma" — brand name
+  'meta.home.title', // "Rhythma" — brand name
+  'providerDashboard.mhs', // "MHS" — initialism
+  'providerDashboard.cvi', // "CVI" — initialism
+  'privacy.willDelete', // "{{count}} × {{label}}" — pure template
+  'settings.english', // "English" — the language's own endonym, left in Latin
+]);
+
 type Json = Record<string, unknown>;
 
 function flatten(value: Json, prefix = ''): string[] {
@@ -121,30 +135,53 @@ describe('locale coverage', () => {
 
   it.each(Object.keys(LOCALES))('%s has no English placeholder strings', (code) => {
     const locale = LOCALES[code as keyof typeof LOCALES] as Json;
-    const allowlist = new Set([
-      'meta.appName',
-      'meta.home.title',
-      'providerDashboard.mhs',
-      'providerDashboard.cvi',
-      'privacy.willDelete',
-      'settings.english'
-    ]);
-    
+
     const placeholders = flatten(locale).filter((key) => {
       const enValue = valueAt(en as Json, key);
       const locValue = valueAt(locale, key);
-      
-      if (allowlist.has(key) || typeof locValue !== 'string' || locValue !== enValue) {
+
+      if (SHARED_WITH_ENGLISH.has(key) || typeof locValue !== 'string' || locValue !== enValue) {
         return false;
       }
-      
+
       // We consider it an English placeholder if it matches English exactly
       // and contains English words (excluding short units like "4h").
       return /[a-z]{3,}/i.test(locValue);
     });
-    
+
     expect(placeholders, `${code} has English placeholder strings: ${placeholders.join(', ')}`).toEqual([]);
   });
+
+  // The original bug (issue #299) was not a *missing* key — the parity test
+  // above already catches those — but a *present* key whose value was still the
+  // untranslated English string. A locale that claims to be complete must not
+  // ship a single value byte-identical to English, other than the handful of
+  // brand names / initialisms / pure templates in SHARED_WITH_ENGLISH. This is
+  // stricter than the heuristic guard above (no `[a-z]{3,}` escape hatch), so a
+  // reintroduced placeholder in a finished locale fails the build rather than
+  // silently passing because its filler happened to dodge a regex.
+  it.each(COMPLETE_LOCALES)(
+    '%s ships no value left identical to English',
+    (code) => {
+      const locale = LOCALES[code] as Json;
+      const untranslated = flatten(locale).filter((key) => {
+        if (SHARED_WITH_ENGLISH.has(key)) return false;
+        const enValue = valueAt(en as Json, key);
+        const locValue = valueAt(locale, key);
+        return (
+          typeof locValue === 'string' &&
+          typeof enValue === 'string' &&
+          locValue === enValue
+        );
+      });
+      expect(
+        untranslated,
+        `${code} still carries untranslated English at: ${untranslated.join(', ')}. ` +
+          `A complete locale must translate every key (or add it to ` +
+          `SHARED_WITH_ENGLISH if it is a brand name / initialism / pure template).`,
+      ).toEqual([]);
+    },
+  );
 });
 
 describe('interpolation placeholders', () => {
