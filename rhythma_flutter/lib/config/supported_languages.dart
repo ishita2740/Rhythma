@@ -27,4 +27,5 @@ const List<SupportedLanguage> appSupportedLanguages = [
   SupportedLanguage(code: 'gu', nativeName: 'ગુજરાતી'),
   SupportedLanguage(code: 'kn', nativeName: 'ಕನ್ನಡ'),
   SupportedLanguage(code: 'ml', nativeName: 'മലയാളം'),
+  SupportedLanguage(code: 'pa', nativeName: 'ਪੰਜਾਬੀ'),
 ];

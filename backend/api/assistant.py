@@ -55,6 +55,7 @@ SUPPORTED_LANGUAGES = [
     {"code": "kn", "name": "Kannada"},
     {"code": "ml", "name": "Malayalam"},
     {"code": "gu", "name": "Gujarati"},
+    {"code": "pa", "name": "Punjabi"},
 ]
 
 SUPPORTED_LANGUAGE_CODES = frozenset(lang["code"] for lang in SUPPORTED_LANGUAGES)

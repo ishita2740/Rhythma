@@ -7,6 +7,7 @@ import hi from './locales/hi.json';
 import kn from './locales/kn.json';
 import ml from './locales/ml.json';
 import mr from './locales/mr.json';
+import pa from './locales/pa.json';
 import ta from './locales/ta.json';
 import te from './locales/te.json';
 
@@ -15,7 +16,7 @@ import te from './locales/te.json';
 // is invisible to tsc, to the linter, and to a build. It is only catchable
 // by comparing the locale files, which is what this file does.
 
-const LOCALES = { bn, gu, hi, kn, ml, mr, ta, te } as const;
+const LOCALES = { bn, gu, hi, kn, ml, mr, pa, ta, te } as const;
 
 // Locales that currently carry a full translation of en.json. These are
 // held to strict parity: a new English key that isn't translated here
@@ -27,6 +28,7 @@ const COMPLETE_LOCALES = [
   'kn',
   'ml',
   'mr',
+  'pa',
   'ta',
   'te',
 ] as const;
