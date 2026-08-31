@@ -4,8 +4,8 @@ import '../config/theme.dart';
 
 /// Circular progress ring — mirrors the SVG CycleRing in index.tsx
 class CycleRing extends StatelessWidget {
-  final int day;
-  final int total;
+  final int? day;
+  final int? total;
   final double size;
 
   const CycleRing({
@@ -36,7 +36,7 @@ class CycleRing extends StatelessWidget {
                 ),
               ),
               Text(
-                '$day',
+                '${day ?? '-'}',
                 style: TextStyle(
                   fontSize: size * 0.30,
                   fontWeight: FontWeight.w700,
@@ -53,8 +53,8 @@ class CycleRing extends StatelessWidget {
 }
 
 class _RingPainter extends CustomPainter {
-  final int day;
-  final int total;
+  final int? day;
+  final int? total;
 
   _RingPainter({required this.day, required this.total});
 
@@ -74,8 +74,10 @@ class _RingPainter extends CustomPainter {
 
     canvas.drawCircle(center, radius, trackPaint);
 
+    if (day == null || total == null || total! <= 0) return;
+
     // Progress arc with gradient
-    final sweepAngle = (day / total) * 2 * math.pi;
+    final sweepAngle = (day! / total!) * 2 * math.pi;
     final rect = Rect.fromCircle(center: center, radius: radius);
     final progressPaint = Paint()
       ..style = PaintingStyle.stroke

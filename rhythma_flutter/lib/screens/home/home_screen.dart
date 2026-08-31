@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic> _userData = {};
   Map<String, dynamic> _cycleData = {};
   Map<String, dynamic> _insights = {};
+  Map<String, dynamic> _prediction = {};
   bool _hasEnoughData = false;
   String _error = '';
 
@@ -47,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _userData = cached['user'] ?? {};
         _cycleData = cached['cycle'] ?? {};
         _insights = cached['insights'] ?? {};
+        _prediction = cached['prediction'] ?? {};
         _hasEnoughData = cached['hasEnoughDataForInsights'] == true;
         _loading = false;
       });
@@ -61,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'user': response.data['user'] ?? {},
         'cycle': response.data['cycle'] ?? {},
         'insights': response.data['insights'] ?? {},
+        'prediction': response.data['prediction'] ?? {},
         'hasEnoughDataForInsights': response.data['hasEnoughDataForInsights'] == true,
       };
       await LocalStorageService.saveCachedDashboard(data);
@@ -69,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _userData = data['user'] as Map<String, dynamic>;
         _cycleData = data['cycle'] as Map<String, dynamic>;
         _insights = data['insights'] as Map<String, dynamic>;
+        _prediction = data['prediction'] as Map<String, dynamic>;
         _hasEnoughData = data['hasEnoughDataForInsights'] as bool;
         _loading = false;
         _error = '';
@@ -163,7 +167,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        l10n.homePhaseDesc,
+                        (_prediction['phase'] != null && _prediction['phase'] != 'unknown')
+                            ? 'Day ${cycleDay ?? '-'} · ${_prediction['phase']}'
+                            : (cycleDay != null ? 'Day $cycleDay' : ''),
                         style: TextStyle(
                           fontSize: 13,
                           color: RhythmaColors.mutedFg,
@@ -249,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Row(
                       children: [
-                        CycleRing(day: cycleDay ?? 0, total: totalCycle ?? 28, size: 88),
+                        CycleRing(day: cycleDay, total: totalCycle, size: 88),
                         const SizedBox(width: 18),
                         Expanded(
                           child: Column(
@@ -554,7 +560,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          l10n.homeWeeklyInsightTitle,
+                          _hasEnoughData && _insights['weeklyTitle'] != null
+                              ? _insights['weeklyTitle']
+                              : l10n.insightsNotEnoughData,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
@@ -563,14 +571,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         const SizedBox(height: 6),
-                        Text(
-                          l10n.homeWeeklyInsightDesc,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: RhythmaColors.mutedFg,
-                            height: 1.4,
+                        if (_hasEnoughData && _insights['weeklyDesc'] != null)
+                          Text(
+                            _insights['weeklyDesc'],
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: RhythmaColors.mutedFg,
+                              height: 1.4,
+                            ),
+                          )
+                        else if (!_hasEnoughData)
+                          Text(
+                            l10n.insightsNotEnoughTrendData,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: RhythmaColors.mutedFg,
+                              height: 1.4,
+                            ),
                           ),
-                        ),
                       ],
                     ),
                   ),

@@ -75,7 +75,9 @@ void main() {
         return const MockDioResponse(200, {
           'user': {'name': 'Aarya Test'},
           'cycle': {'nextPeriodDays': 12, 'day': 3, 'total': 28},
-          'insights': {'averageCycleLength': 28, 'averageBleedingDuration': 5, 'sleepHours': '8.1h'},
+          'insights': {'averageCycleLength': 28, 'averageBleedingDuration': 5, 'sleepHours': '8.1h', 'weeklyTitle': 'Your sleep improved 12% this week — your cycle may thank you.'},
+          'prediction': {'phase': 'Ovulation phase'},
+          'hasEnoughDataForInsights': true,
         });
       }
       return const MockDioResponse(200, {});
@@ -94,6 +96,38 @@ void main() {
     expect(find.text('8.1h'), findsOneWidget); // Sleep
     expect(find.text('12'), findsOneWidget); // Next period in N days
     expect(find.text(l10n.homeWeeklyInsightLabel), findsOneWidget);
+    expect(find.text('Day 3 · Ovulation phase'), findsOneWidget); // Dynamic phase
+  });
+
+  testWidgets('renders empty state correctly when dashboard data is missing',
+      (WidgetTester tester) async {
+    installMockDioAdapter((options) {
+      if (options.path == '/dashboard') {
+        return const MockDioResponse(200, {
+          'user': {'name': 'Aarya Test'},
+          'cycle': {},
+          'insights': {},
+          'prediction': {},
+          'hasEnoughDataForInsights': false,
+        });
+      }
+      return const MockDioResponse(200, {});
+    });
+
+    await tester.runAsync(() => pumpHomeScreen(tester));
+
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(HomeScreen)),
+    )!;
+
+    expect(find.text('${l10n.homeGreeting}, Aarya Test'), findsOneWidget);
+    
+    // empty state strings
+    expect(find.text(l10n.insightsNotEnoughData), findsWidgets);
+    expect(find.text(l10n.insightsNotEnoughTrendData), findsWidgets);
+    
+    // cycleDay should be dash '-' in CycleRing
+    expect(find.text('-'), findsOneWidget); 
   });
 
   testWidgets('falls back to the cached dashboard when the API fails',
@@ -104,7 +138,9 @@ void main() {
       () => LocalStorageService.saveCachedDashboard({
         'user': {'name': 'Cached User'},
         'cycle': {'nextPeriodDays': 3, 'day': 5, 'total': 30},
-        'insights': {'averageCycleLength': 28, 'averageBleedingDuration': 5, 'sleepHours': '6.5h'},
+        'insights': {'averageCycleLength': 28, 'averageBleedingDuration': 5, 'sleepHours': '6.5h', 'weeklyTitle': 'Test Title', 'weeklyDesc': 'Test Desc'},
+        'prediction': {'phase': 'Luteal phase'},
+        'hasEnoughDataForInsights': true,
       }),
     );
     installMockDioAdapter((options) => const MockDioResponse(500, {
@@ -120,6 +156,7 @@ void main() {
     expect(find.text('28d'), findsOneWidget); // avg cycle
     expect(find.text('5d'), findsOneWidget); // avg bleeding
     expect(find.text('6.5h'), findsOneWidget);
+    expect(find.text('Day 5 · Luteal phase'), findsOneWidget);
   });
 
   testWidgets('shows an error state with retry when loading fails',
@@ -144,6 +181,8 @@ void main() {
         'user': {'name': 'Aarya Test'},
         'cycle': {'nextPeriodDays': 12, 'day': 3, 'total': 28},
         'insights': {'averageCycleLength': 28, 'averageBleedingDuration': 5, 'sleepHours': '8.1h'},
+        'prediction': {'phase': 'Ovulation'},
+        'hasEnoughDataForInsights': true,
       }),
     );
     installMockDioAdapter((options) {
@@ -192,6 +231,8 @@ void main() {
         'user': {'name': 'Aarya Test'},
         'cycle': {'nextPeriodDays': 12, 'day': 3, 'total': 28},
         'insights': {'averageCycleLength': 28, 'averageBleedingDuration': 5, 'sleepHours': '8.1h'},
+        'prediction': {'phase': 'Ovulation'},
+        'hasEnoughDataForInsights': true,
       }),
     );
     installMockDioAdapter((options) => const MockDioResponse(500, {
