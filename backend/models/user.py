@@ -4,6 +4,7 @@ from datetime import datetime
 import re
 
 from core.profile_validation import normalize_last_period
+from core.supported_languages import normalize_language
 
 class UserCreate(BaseModel):
     phone: str = Field(..., description="Phone number with country code")
@@ -79,6 +80,24 @@ class UserProfileUpdate(BaseModel):
         
     city: Optional[str] = None
     state: Optional[str] = None
+
+    @field_validator("language")
+    def validate_language(cls, value: Optional[str]) -> Optional[str]:
+        """Restrict `language` to a UI locale the app actually ships.
+
+        Every other constrained field on this model is bounded, but
+        `language` was free text (#136): a direct API call could store any
+        string on the user document, bypassing the client-side
+        `LocaleProvider.setLocale()` restriction and leaving downstream
+        code to handle a locale nothing else understands.
+
+        The allowlist lives in `core/supported_languages` — one shared
+        place the backend references — so it cannot drift from the set of
+        translation files the clients ship. Region tags (`en-US`) are
+        reduced to their base code; an unsupported value raises, which
+        Pydantic returns as a 422 naming the supported set.
+        """
+        return normalize_language(value)
 
     @field_validator("last_period")
     def validate_last_period(cls, value: Optional[str]) -> Optional[str]:
