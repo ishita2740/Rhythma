@@ -565,6 +565,51 @@ def test_predictions_route_is_not_shadowed_by_the_log_id_routes(
     assert client.get("/api/v1/cycle/predictions", headers=auth_headers).status_code == 200
 
 
+def test_predictions_endpoint_uses_onboarding_cycle_length(auth_headers, mock_cycle_service):
+    """Onboarding declares cycle_length=35; the endpoint must thread it
+    through UserService → predict() rather than silently dropping it and
+    falling back to the 28-day population default."""
+    mock_cycle_service.get_logs_for_user.return_value = []
+
+    user_profile = {
+        "id": "test-user-id-123",
+        "phone": "+1234567890",
+        "cycle_length": 35,
+        "last_period": "2026-05-20",
+    }
+    with patch("api.cycle.UserService") as mock_user_service:
+        mock_user_service.get_user_by_id.return_value = user_profile
+        body = client.get(
+            "/api/v1/cycle/predictions", headers=auth_headers
+        ).json()
+
+    assert body["cycleLength"]["days"] == 35
+    assert body["cycleLength"]["source"] == SOURCE_PROFILE
+
+
+def test_predictions_endpoint_ignores_implausible_onboarding_cycle_length(
+    auth_headers, mock_cycle_service
+):
+    """An out-of-range declared value (e.g. 400 days) must not produce a
+    nonsensical estimate; the endpoint should fall back to the default."""
+    mock_cycle_service.get_logs_for_user.return_value = []
+
+    user_profile = {
+        "id": "test-user-id-123",
+        "phone": "+1234567890",
+        "cycle_length": 400,
+        "last_period": "2026-05-20",
+    }
+    with patch("api.cycle.UserService") as mock_user_service:
+        mock_user_service.get_user_by_id.return_value = user_profile
+        body = client.get(
+            "/api/v1/cycle/predictions", headers=auth_headers
+        ).json()
+
+    assert body["cycleLength"]["days"] == DEFAULT_CYCLE_LENGTH
+    assert body["cycleLength"]["source"] == SOURCE_DEFAULT
+
+
 def test_dashboard_carries_the_prediction_summary(auth_headers):
     with patch("services.scoring_service.CycleService") as scoring_cycle_service, patch(
         "services.scoring_service.predict_cvi", return_value=40.0
