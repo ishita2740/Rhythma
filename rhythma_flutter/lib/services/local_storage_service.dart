@@ -26,10 +26,21 @@ class _Keys {
 /// Manages all on-device storage via Hive.
 class LocalStorageService {
   static bool _initialised = false;
+  static HiveAesCipher? _cipher;
+  static bool _needsMigration = false;
 
   static void testReset() {
     _initialised = false;
+    _cipher = null;
+    _needsMigration = false;
   }
+
+  /// The AES cipher used for Hive box encryption.
+  /// Available after [init] completes.
+  static HiveAesCipher? get cipher => _cipher;
+
+  static const _offlineQueueBoxName = 'offline_queue';
+  static const _pendingCycleSyncBoxName = 'pending_cycle_sync';
 
   /// Call once at app startup (after WidgetsFlutterBinding.ensureInitialized)
   static Future<void> init({String? testPath}) async {
@@ -53,6 +64,8 @@ class LocalStorageService {
     }
 
     final cipher = HiveAesCipher(base64Url.decode(encryptionKeyString));
+    _cipher = cipher;
+    _needsMigration = needsMigration;
 
     // 1. Handle migration for existing users for cycleBox
     if (needsMigration && await Hive.boxExists(_Keys.cycleBox)) {
@@ -80,10 +93,34 @@ class LocalStorageService {
       await Hive.openBox<Map>(_Keys.userBox, encryptionCipher: cipher);
     }
 
-    // 3. Open non-sensitive settings unencrypted
-    await Hive.openBox<dynamic>(_Keys.settingsBox);
+    // 3. Migrate and open settings box with encryption
+    await _openEncryptedBox<dynamic>(_Keys.settingsBox);
+
+    // 4. Migrate and open offline sync boxes with encryption
+    await _openEncryptedBox<Map>(_offlineQueueBoxName);
+    await _openEncryptedBox<Map>(_pendingCycleSyncBoxName);
 
     _initialised = true;
+  }
+
+  /// Opens a Hive box with encryption, migrating from plaintext if needed.
+  static Future<Box<T>> _openEncryptedBox<T>(String name) async {
+    final c = _cipher;
+    if (c == null) {
+      return Hive.openBox<T>(name);
+    }
+
+    if (_needsMigration && await Hive.boxExists(name)) {
+      final oldBox = await Hive.openBox<T>(name);
+      final oldData = oldBox.toMap();
+      await oldBox.close();
+      await Hive.deleteBoxFromDisk(name);
+      final newBox = await Hive.openBox<T>(name, encryptionCipher: c);
+      await newBox.putAll(oldData);
+      return newBox;
+    }
+
+    return Hive.openBox<T>(name, encryptionCipher: c);
   }
 
   // ── Per-account data scoping ──────────────────────────────────────────
@@ -394,11 +431,37 @@ class LocalStorageService {
 
     // Also remove the current user id marker
     await _settings.delete(_kCurrentUserId);
+
+    // Remove pending sync entries for this user
+    if (Hive.isBoxOpen(_offlineQueueBoxName)) {
+      final offlineBox = Hive.box<Map>(_offlineQueueBoxName);
+      final offlineKeys = offlineBox.keys
+          .where((k) => k.toString().contains('::$uid'))
+          .toList();
+      for (final k in offlineKeys) {
+        await offlineBox.delete(k);
+      }
+    }
+    if (Hive.isBoxOpen(_pendingCycleSyncBoxName)) {
+      final pendingBox = Hive.box<Map>(_pendingCycleSyncBoxName);
+      final pendingKeys = pendingBox.keys
+          .where((k) => k.toString().contains('::$uid'))
+          .toList();
+      for (final k in pendingKeys) {
+        await pendingBox.delete(k);
+      }
+    }
   }
 
   static Future<void> clearAll() async {
     await _cycleBox.clear();
     await _settings.clear();
     await _userBox.clear();
+    if (Hive.isBoxOpen(_offlineQueueBoxName)) {
+      await Hive.box<Map>(_offlineQueueBoxName).clear();
+    }
+    if (Hive.isBoxOpen(_pendingCycleSyncBoxName)) {
+      await Hive.box<Map>(_pendingCycleSyncBoxName).clear();
+    }
   }
 }
