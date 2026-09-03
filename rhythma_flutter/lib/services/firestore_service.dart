@@ -192,7 +192,7 @@ class FirestoreService {
   /// Queue cycle logs for retry when offline
   static Future<void> _queuePendingCycleLogs(
       String userId, List<Map<String, dynamic>> logs) async {
-    final pendingBox = await Hive.openBox<Map>('pending_cycle_sync');
+    final pendingBox = Hive.box<Map>('pending_cycle_sync');
     for (final log in logs) {
       final key = 'cycle::$userId::${log['start_date']}';
       await pendingBox.put(key, {
@@ -208,7 +208,7 @@ class FirestoreService {
   /// Queue a failed profile sync for retry when connectivity is restored
   static Future<void> _queuePendingProfile(
       String userId, Map<String, dynamic> profile) async {
-    final pendingBox = await Hive.openBox<Map>('pending_cycle_sync');
+    final pendingBox = Hive.box<Map>('pending_cycle_sync');
     final key = 'profile::$userId';
     await pendingBox.put(key, {
       ...profile,
@@ -224,7 +224,7 @@ class FirestoreService {
     if (!LocalStorageService.cloudSyncEnabled) return;
     if (_db == null) return;
 
-    final pendingBox = await Hive.openBox<Map>('pending_cycle_sync');
+    final pendingBox = Hive.box<Map>('pending_cycle_sync');
     final keys = pendingBox.keys
         .where((k) => k.toString().contains('::$userId'))
         .toList();

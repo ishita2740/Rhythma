@@ -37,7 +37,7 @@ class OfflineSyncService {
   static Future<void> init() async {
     if (_initialized) return;
 
-    _box = await Hive.openBox<Map>(_boxName);
+    _box = Hive.box<Map>(_boxName);
 
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen(
       _onConnectivityChanged,
