@@ -10,6 +10,7 @@ import '../../providers/theme_provider.dart';
 import '../../providers/cycle_provider.dart';
 import '../../services/cycle_service.dart';
 import '../../services/local_storage_service.dart';
+import '../../services/notification_service.dart';
 import '../../utils/date_utils.dart';
 import '../../utils/log_options.dart';
 import 'components/calendar_grid.dart';
@@ -25,9 +26,6 @@ class _CycleScreenState extends State<CycleScreen> {
   static const int _initialPageOffset = 12000;
   late final PageController _pageController;
 
-  // Save-button state for the backend sync. Local (Hive) saves on every
-  // log-row tap regardless of this ΓÇö this only tracks the explicit "Save"
-  // submission of the full day's log to the backend.
   bool _saving = false;
   bool _savedSuccessfully = false;
   String? _saveError;
@@ -68,9 +66,6 @@ class _CycleScreenState extends State<CycleScreen> {
     );
   }
 
-  /// Every edit after a successful save (or a day change) clears the
-  /// "Saved to your account" confirmation, since the on-screen selection
-  /// and the backend are out of sync again until Save is tapped.
   void _clearSaveStatus() {
     if (_savedSuccessfully || _saveError != null) {
       setState(() {
@@ -94,23 +89,15 @@ class _CycleScreenState extends State<CycleScreen> {
       }
       newValue = current;
     } else {
-      // Tapping the already-selected chip again clears that field.
       newValue =
           existing[field] == option.value ? null : _coerce(field, option.value);
     }
 
     await LocalStorageService.saveQuickLogField(date, field, newValue);
     _clearSaveStatus();
-    // Local-only state (the calendar's "logged" dot, the log rows below)
-    // lives in Hive, not this provider ΓÇö notify so watchers rebuild with
-    // the freshly-saved value.
     if (mounted) context.read<CycleProvider>().refresh();
   }
 
-  /// Builds a CycleLog from everything currently saved for [date] and
-  /// submits it to the backend via `POST /cycle/log`. If the network is
-  /// unreachable the mutation is queued in [OfflineSyncService] for
-  /// automatic retry on connectivity restore.
   Future<void> _saveToBackend(DateTime date) async {
     final log = LocalStorageService.getCycleLogForDate(date) ?? {};
     setState(() {
@@ -141,6 +128,10 @@ class _CycleScreenState extends State<CycleScreen> {
           _savedSuccessfully = false;
         }
       });
+
+      if (synced && LocalStorageService.periodPredictionReminders) {
+        NotificationService.instance.schedulePeriodPredictionReminder();
+      }
     } catch (e) {
       if (!mounted) return;
 
@@ -165,18 +156,12 @@ class _CycleScreenState extends State<CycleScreen> {
     }
   }
 
-  /// Converts a LogOption's canonical string value into the type the
-  /// backend's CycleLog model expects for that field.
   dynamic _coerce(String field, String value) {
     if (field == 'sleep_hours') return double.tryParse(value) ?? value;
     if (field == 'stress_level') return int.tryParse(value) ?? value;
     return value;
   }
 
-  /// LogOptions.sleep uses canonical strings like '4' and '9.5'. A value
-  /// round-tripped through Hive as a double (e.g. 6.0) wouldn't otherwise
-  /// match the option's value ("6") ΓÇö this reformats so a previously-saved
-  /// chip still shows as selected.
   String? _formatStoredValue(dynamic raw) {
     if (raw == null) return null;
     if (raw is num) {
@@ -240,7 +225,6 @@ class _CycleScreenState extends State<CycleScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -263,13 +247,10 @@ class _CycleScreenState extends State<CycleScreen> {
               ),
             ],
           ),
-
-          // Calendar card
           GlassCard(
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                // Month nav
                 Row(
                   children: [
                     _CircleBtn(
@@ -293,8 +274,6 @@ class _CycleScreenState extends State<CycleScreen> {
                   ],
                 ),
                 const SizedBox(height: 14),
-
-                // Weekday headers
                 Row(
                   children: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
                       .map((d) => Expanded(
@@ -312,18 +291,13 @@ class _CycleScreenState extends State<CycleScreen> {
                       .toList(),
                 ),
                 const SizedBox(height: 8),
-
-                // Days grid using the existing CalendarGrid
                 CalendarGrid(
                   pageController: _pageController,
                   initialPageOffset: _initialPageOffset,
                 ),
-
                 const SizedBox(height: 14),
                 Container(height: 1, color: RhythmaColors.border),
                 const SizedBox(height: 12),
-
-                // Legend
                 Wrap(
                   spacing: 14,
                   runSpacing: 6,
@@ -337,14 +311,11 @@ class _CycleScreenState extends State<CycleScreen> {
               ],
             ),
           ),
-
           const SizedBox(height: 18),
-
-          // Log section
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: Text(
-              '${l10n.logFor} ${DateFormat('MMM').format(selectedDate)} ${selectedDate.day} ┬╖ ${cycleProvider.phase(selectedDate, l10n)}',
+              '${l10n.logFor} ${DateFormat('MMM').format(selectedDate)} ${selectedDate.day} · ${cycleProvider.phase(selectedDate, l10n)}',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -398,7 +369,6 @@ class _CycleScreenState extends State<CycleScreen> {
                 List<String>.from(selectedLog['symptoms'] ?? const []),
             onSelect: (opt) => _onLogSelect(selectedDate, 'symptoms', opt),
           ),
-
           const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,

@@ -3,6 +3,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:permission_handler/permission_handler.dart';
 import 'local_storage_service.dart';
+import 'cycle_service.dart';
 
 class NotificationService {
   NotificationService._();
@@ -114,23 +115,36 @@ class NotificationService {
     );
   }
 
-  /// Schedule a notification N days before the predicted next period date.
-  /// Reads last_period and cycle_length from the profile stored on device.
+  /// Schedule a notification before the predicted next period date.
+  ///
+  /// Fetches the prediction from the backend `GET /cycle/predictions` so the
+  /// reminder uses the server's outlier-rejected cycle-length estimate
+  /// instead of naive `lastPeriod + cycleLength` math.  Falls back to the
+  /// local profile when the network is unavailable.
   Future<void> schedulePeriodPredictionReminder({int daysBefore = 2}) async {
-    final profile = LocalStorageService.getProfile();
-    if (profile == null) return;
+    DateTime? predictedDate;
+    int? confidence;
 
-    final lastPeriodStr = profile['last_period'] as String?;
-    if (lastPeriodStr == null) return;
+    try {
+      final prediction = await CycleService().getPrediction();
+      if (prediction != null) {
+        final dateStr = prediction['nextPeriodDate'] as String?;
+        if (dateStr != null) {
+          predictedDate = DateTime.tryParse(dateStr);
+        }
+        confidence = _confidenceToLevel(prediction['confidence'] as String?);
+      }
+    } catch (_) {
+      // Backend unreachable — fall through to local profile.
+    }
 
-    final lastPeriod = DateTime.tryParse(lastPeriodStr);
-    if (lastPeriod == null) return;
+    // Fallback: derive prediction from the local profile.
+    predictedDate ??= _localPrediction();
 
-    final cycleLength = (profile['cycle_length'] as num?)?.toInt() ?? 28;
-    final predictedDate = lastPeriod.add(Duration(days: cycleLength));
-    final reminderDate = predictedDate.subtract(Duration(days: daysBefore));
+    if (predictedDate == null) return;
+
     final now = DateTime.now();
-
+    final reminderDate = predictedDate.subtract(Duration(days: daysBefore));
     if (reminderDate.isBefore(now)) return;
 
     final tz.TZDateTime tzDate = tz.TZDateTime.from(reminderDate, tz.local);
@@ -148,15 +162,58 @@ class NotificationService {
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
+    final confidenceLabel = _confidenceLabel(confidence);
+    final body = confidenceLabel != null
+        ? 'Your period is expected to start in $daysBefore days '
+            '($confidenceLabel confidence). Get your supplies ready!'
+        : 'Your period is expected to start in $daysBefore days. '
+            'Get your supplies ready!';
+
     await _notificationsPlugin.zonedSchedule(
       id: _periodPredictionId,
       title: 'Period Expected Soon',
-      body: 'Your period is expected to start in $daysBefore days. '
-          'Get your supplies ready!',
+      body: body,
       scheduledDate: tzDate,
       notificationDetails: platformChannelSpecifics,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
+  }
+
+  /// Local fallback when the backend is unreachable.
+  DateTime? _localPrediction() {
+    final profile = LocalStorageService.getProfile();
+    if (profile == null) return null;
+
+    final lastPeriodStr = profile['last_period'] as String?;
+    if (lastPeriodStr == null) return null;
+
+    final lastPeriod = DateTime.tryParse(lastPeriodStr);
+    if (lastPeriod == null) return null;
+
+    final cycleLength = (profile['cycle_length'] as num?)?.toInt() ?? 28;
+    return lastPeriod.add(Duration(days: cycleLength));
+  }
+
+  static int? _confidenceToLevel(String? c) {
+    if (c == null) return null;
+    switch (c.toLowerCase()) {
+      case 'high':
+        return 3;
+      case 'medium':
+        return 2;
+      case 'low':
+        return 1;
+      default:
+        return null;
+    }
+  }
+
+  static String? _confidenceLabel(int? level) {
+    if (level == null) return null;
+    if (level >= 3) return 'high';
+    if (level >= 2) return 'medium';
+    if (level >= 1) return 'low';
+    return null;
   }
 
   /// Schedule a daily reminder to log cycle data if the user has not logged

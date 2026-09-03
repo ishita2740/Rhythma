@@ -74,4 +74,19 @@ class CycleService {
     );
     return response.data;
   }
+
+  /// Fetches the backend's predicted next-period date, fertile window, and
+  /// current phase from `GET /cycle/predictions`.
+  ///
+  /// Returns `null` on network errors so callers can fall back gracefully
+  /// rather than crashing the UI.
+  Future<Map<String, dynamic>?> getPrediction() async {
+    try {
+      final response = await _dio.get('/cycle/predictions');
+      return response.data as Map<String, dynamic>;
+    } on DioException catch (e) {
+      if (_isNetworkError(e)) return null;
+      rethrow;
+    }
+  }
 }
