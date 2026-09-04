@@ -1909,6 +1909,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log deleted'**
   String get logDeleted;
+
+  /// No description provided for @logWaterIntake.
+  ///
+  /// In en, this message translates to:
+  /// **'Water Intake'**
+  String get logWaterIntake;
+
+  /// No description provided for @logGlasses.
+  ///
+  /// In en, this message translates to:
+  /// **'glasses'**
+  String get logGlasses;
+
+  /// No description provided for @logMedications.
+  ///
+  /// In en, this message translates to:
+  /// **'Medications'**
+  String get logMedications;
+
+  /// No description provided for @logAddMedication.
+  ///
+  /// In en, this message translates to:
+  /// **'Add medication'**
+  String get logAddMedication;
 }
 
 class _AppLocalizationsDelegate

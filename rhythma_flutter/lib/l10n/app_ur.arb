@@ -326,5 +326,9 @@
   "logFlowVeryHeavy": "انتہائی زیادہ",
   "logFlowSpotting": "ہلکا دھبے دار خون آنا",
   "logSympSeverePain": "شدید درد",
-  "logSympFainting": "بے ہوشی"
+  "logSympFainting": "بے ہوشی",
+  "logWaterIntake": "Water Intake",
+  "logGlasses": "glasses",
+  "logMedications": "Medications",
+  "logAddMedication": "Add medication"
 }

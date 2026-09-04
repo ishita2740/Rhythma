@@ -403,5 +403,9 @@
   "verifyOtp": "Verify OTP",
   "welcomeToRhythma": "Welcome to Rhythma",
   "logSaved": "Log saved",
-  "logDeleted": "Log deleted"
+  "logDeleted": "Log deleted",
+  "logWaterIntake": "Water Intake",
+  "logGlasses": "glasses",
+  "logMedications": "Medications",
+  "logAddMedication": "Add medication"
 }
