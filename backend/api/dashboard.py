@@ -46,6 +46,7 @@ class DashboardInsights(BaseModel):
     longestCycleLength: Optional[int] = None
     averageBleedingDuration: Optional[float] = None
     sleepHours: Optional[str] = None
+    waterAvg: Optional[float] = None
 
 
 class CycleHistoryEntry(BaseModel):
@@ -277,6 +278,11 @@ async def get_dashboard(current_user: dict = Depends(get_current_user)):
     if sleep_values:
         avg_sleep = round(sum(sleep_values) / len(sleep_values), 1)
 
+    avg_water = None
+    water_values = [l.get("water_intake") for l in logs if l.get("water_intake") is not None]
+    if water_values:
+        avg_water = round(sum(water_values) / len(water_values), 1)
+
     cycle_history = []
     ordered = list(reversed(logs))
     for i in range(1, len(ordered)):
@@ -336,6 +342,7 @@ async def get_dashboard(current_user: dict = Depends(get_current_user)):
             "longestCycleLength": cycle_stats["longest_cycle_length"],
             "averageBleedingDuration": cycle_stats["average_bleeding_duration"],
             "sleepHours": f"{avg_sleep}h" if avg_sleep is not None else None,
+            "waterAvg": avg_water,
         },
         "hasEnoughDataForInsights": score_data["has_enough_data_for_insights"],
         "loggedCycleCount": score_data["logged_cycle_count"],
