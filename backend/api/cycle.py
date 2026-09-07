@@ -43,6 +43,8 @@ class _LoggableFields(BaseModel):
     sleep_hours: Optional[float] = None
     stress_level: Optional[int] = None
     notes: Optional[str] = None
+    water_intake: Optional[int] = None
+    medications: Optional[List[dict]] = None
 
     @field_validator("flow_intensity")
     @classmethod

@@ -326,5 +326,9 @@
   "logFlowVeryHeavy": "ଅତ୍ୟଧିକ",
   "logFlowSpotting": "ସ୍ପଟିଂ",
   "logSympSeverePain": "ତୀବ୍ର ଯନ୍ତ୍ରଣା",
-  "logSympFainting": "ବେହୋସ ହେବା"
+  "logSympFainting": "ବେହୋସ ହେବା",
+  "logWaterIntake": "Water Intake",
+  "logGlasses": "glasses",
+  "logMedications": "Medications",
+  "logAddMedication": "Add medication"
 }

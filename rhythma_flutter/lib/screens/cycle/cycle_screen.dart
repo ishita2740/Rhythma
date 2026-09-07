@@ -114,6 +114,12 @@ class _CycleScreenState extends State<CycleScreen> {
         symptoms: (log['symptoms'] as List?)?.cast<String>(),
         sleepHours: (log['sleep_hours'] as num?)?.toDouble(),
         stressLevel: (log['stress_level'] as num?)?.toInt(),
+        waterIntake: (log['water_intake'] as num?)?.toInt(),
+        medications: log['medications'] != null
+            ? List<Map<String, dynamic>>.from(
+                (log['medications'] as List)
+                    .map((m) => Map<String, dynamic>.from(m as Map)))
+            : null,
       ));
       if (!mounted) return;
       setState(() {
@@ -206,6 +212,55 @@ class _CycleScreenState extends State<CycleScreen> {
 
     if (!mounted) return;
     cycleProvider.refresh();
+  }
+
+  Future<void> _setWaterIntake(DateTime date, int glasses) async {
+    await LocalStorageService.saveQuickLogField(date, 'water_intake', glasses);
+    _clearSaveStatus();
+    if (mounted) context.read<CycleProvider>().refresh();
+  }
+
+  Future<void> _toggleMedication(DateTime date, String name, bool taken) async {
+    final existing = LocalStorageService.getCycleLogForDate(date) ?? {};
+    final current = List<Map<String, dynamic>>.from(
+        (existing['medications'] as List?)
+                ?.map((m) => Map<String, dynamic>.from(m as Map)) ??
+            []);
+    final idx = current.indexWhere((m) => m['name'] == name);
+    if (idx >= 0) {
+      current[idx]['taken'] = taken;
+    } else {
+      current.add({'name': name, 'taken': taken});
+    }
+    await LocalStorageService.saveQuickLogField(date, 'medications', current);
+    _clearSaveStatus();
+    if (mounted) context.read<CycleProvider>().refresh();
+  }
+
+  Future<void> _addMedication(DateTime date, String name) async {
+    if (name.trim().isEmpty) return;
+    final existing = LocalStorageService.getCycleLogForDate(date) ?? {};
+    final current = List<Map<String, dynamic>>.from(
+        (existing['medications'] as List?)
+                ?.map((m) => Map<String, dynamic>.from(m as Map)) ??
+            []);
+    if (current.any((m) => m['name'] == name.trim())) return;
+    current.add({'name': name.trim(), 'taken': false});
+    await LocalStorageService.saveQuickLogField(date, 'medications', current);
+    _clearSaveStatus();
+    if (mounted) context.read<CycleProvider>().refresh();
+  }
+
+  Future<void> _removeMedication(DateTime date, String name) async {
+    final existing = LocalStorageService.getCycleLogForDate(date) ?? {};
+    final current = List<Map<String, dynamic>>.from(
+        (existing['medications'] as List?)
+                ?.map((m) => Map<String, dynamic>.from(m as Map)) ??
+            []);
+    current.removeWhere((m) => m['name'] == name);
+    await LocalStorageService.saveQuickLogField(date, 'medications', current);
+    _clearSaveStatus();
+    if (mounted) context.read<CycleProvider>().refresh();
   }
 
   @override
@@ -369,6 +424,28 @@ class _CycleScreenState extends State<CycleScreen> {
                 List<String>.from(selectedLog['symptoms'] ?? const []),
             onSelect: (opt) => _onLogSelect(selectedDate, 'symptoms', opt),
           ),
+
+          const SizedBox(height: 16),
+
+          _WaterIntakeRow(
+            glasses: (selectedLog['water_intake'] as num?)?.toInt() ?? 0,
+            onChanged: (g) => _setWaterIntake(selectedDate, g),
+          ),
+
+          const SizedBox(height: 10),
+
+          _MedicationSection(
+            date: selectedDate,
+            medications: (selectedLog['medications'] as List?)
+                    ?.map((m) => Map<String, dynamic>.from(m as Map))
+                    .toList() ??
+                [],
+            onToggle: (name, taken) =>
+                _toggleMedication(selectedDate, name, taken),
+            onAdd: (name) => _addMedication(selectedDate, name),
+            onRemove: (name) => _removeMedication(selectedDate, name),
+          ),
+
           const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
@@ -563,8 +640,8 @@ class _Legend extends StatelessWidget {
 
 class _CircleBtn extends StatelessWidget {
   final IconData icon;
-  final VoidCallback onTap;
-  const _CircleBtn({required this.icon, required this.onTap});
+  final VoidCallback? onTap;
+  const _CircleBtn({required this.icon, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -606,6 +683,223 @@ class _ScreenHeader extends StatelessWidget {
             Text(subtitle!,
                 style: TextStyle(fontSize: 13, color: RhythmaColors.mutedFg)),
           ],
+        ],
+      ),
+    );
+  }
+}
+
+class _WaterIntakeRow extends StatelessWidget {
+  final int glasses;
+  final ValueChanged<int> onChanged;
+  const _WaterIntakeRow({required this.glasses, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: RhythmaColors.primary.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(Icons.water_drop_outlined,
+                    color: RhythmaColors.primary, size: 17),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                AppLocalizations.of(context)!.logWaterIntake,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: RhythmaColors.foreground,
+                ),
+              ),
+              const Spacer(),
+              _CircleBtn(
+                icon: Icons.remove_rounded,
+                onTap: glasses > 0 ? () => onChanged(glasses - 1) : null,
+              ),
+              const SizedBox(width: 10),
+              Text(
+                '$glasses',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: RhythmaColors.foreground,
+                ),
+              ),
+              const SizedBox(width: 4),
+              Text(
+                AppLocalizations.of(context)!.logGlasses,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: RhythmaColors.mutedFg,
+                ),
+              ),
+              const SizedBox(width: 10),
+              _CircleBtn(
+                icon: Icons.add_rounded,
+                onTap: () => onChanged(glasses + 1),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MedicationSection extends StatefulWidget {
+  final DateTime date;
+  final List<Map<String, dynamic>> medications;
+  final void Function(String name, bool taken) onToggle;
+  final void Function(String name) onAdd;
+  final void Function(String name) onRemove;
+
+  const _MedicationSection({
+    required this.date,
+    required this.medications,
+    required this.onToggle,
+    required this.onAdd,
+    required this.onRemove,
+  });
+
+  @override
+  State<_MedicationSection> createState() => _MedicationSectionState();
+}
+
+class _MedicationSectionState extends State<_MedicationSection> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return GlassCard(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: RhythmaColors.coral.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(Icons.medication_outlined,
+                    color: RhythmaColors.coral, size: 17),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                l10n.logMedications,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: RhythmaColors.foreground,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          ...widget.medications.map((med) {
+            final name = med['name'] as String;
+            final taken = med['taken'] as bool;
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Row(
+                children: [
+                  Checkbox(
+                    value: taken,
+                    onChanged: (v) =>
+                        widget.onToggle(name, v ?? false),
+                    activeColor: RhythmaColors.teal,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4)),
+                  ),
+                  Expanded(
+                    child: Text(
+                      name,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: RhythmaColors.foreground,
+                        decoration:
+                            taken ? TextDecoration.lineThrough : null,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => widget.onRemove(name),
+                    child: Icon(Icons.close_rounded,
+                        size: 18, color: RhythmaColors.mutedFg),
+                  ),
+                ],
+              ),
+            );
+          }),
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _controller,
+                  decoration: InputDecoration(
+                    hintText: l10n.logAddMedication,
+                    hintStyle: TextStyle(
+                        fontSize: 13, color: RhythmaColors.mutedFg),
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 10),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                    filled: true,
+                    fillColor: RhythmaColors.surfaceMuted,
+                  ),
+                  style: TextStyle(
+                      fontSize: 13, color: RhythmaColors.foreground),
+                  onSubmitted: (v) {
+                    widget.onAdd(v);
+                    _controller.clear();
+                  },
+                ),
+              ),
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: () {
+                  widget.onAdd(_controller.text);
+                  _controller.clear();
+                },
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: RhythmaColors.primary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.add_rounded,
+                      color: Colors.white, size: 20),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

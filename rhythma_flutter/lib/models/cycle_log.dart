@@ -13,6 +13,8 @@ class CycleLog {
   final double? sleepHours;
   final int? stressLevel;
   final String? notes;
+  final int? waterIntake;
+  final List<Map<String, dynamic>>? medications;
 
   const CycleLog({
     required this.startDate,
@@ -23,6 +25,8 @@ class CycleLog {
     this.sleepHours,
     this.stressLevel,
     this.notes,
+    this.waterIntake,
+    this.medications,
   });
 
   Map<String, dynamic> toJson() => {
@@ -34,6 +38,8 @@ class CycleLog {
         if (sleepHours != null) 'sleep_hours': sleepHours,
         if (stressLevel != null) 'stress_level': stressLevel,
         if (notes != null) 'notes': notes,
+        if (waterIntake != null) 'water_intake': waterIntake,
+        if (medications != null) 'medications': medications,
       };
 
   factory CycleLog.fromMap(Map<String, dynamic> map) => CycleLog(
@@ -49,6 +55,12 @@ class CycleLog {
         sleepHours: (map['sleep_hours'] as num?)?.toDouble(),
         stressLevel: (map['stress_level'] as num?)?.toInt(),
         notes: map['notes'] as String?,
+        waterIntake: (map['water_intake'] as num?)?.toInt(),
+        medications: map['medications'] != null
+            ? List<Map<String, dynamic>>.from(
+                (map['medications'] as List)
+                    .map((m) => Map<String, dynamic>.from(m as Map)))
+            : null,
       );
 
   /// A copy with one field overridden — handy for building up a day's log
@@ -61,6 +73,8 @@ class CycleLog {
     double? sleepHours,
     int? stressLevel,
     String? notes,
+    int? waterIntake,
+    List<Map<String, dynamic>>? medications,
   }) =>
       CycleLog(
         startDate: startDate,
@@ -71,6 +85,8 @@ class CycleLog {
         sleepHours: sleepHours ?? this.sleepHours,
         stressLevel: stressLevel ?? this.stressLevel,
         notes: notes ?? this.notes,
+        waterIntake: waterIntake ?? this.waterIntake,
+        medications: medications ?? this.medications,
       );
 
   static String _dateStr(DateTime d) =>

@@ -189,5 +189,9 @@
   ,"logFlowVeryHeavy": "Very Heavy",
   "logFlowSpotting": "Spotting",
   "logSympSeverePain": "Severe Pain",
-  "logSympFainting": "Fainting"
+  "logSympFainting": "Fainting",
+  "logWaterIntake": "Water Intake",
+  "logGlasses": "glasses",
+  "logMedications": "Medications",
+  "logAddMedication": "Add medication"
 }

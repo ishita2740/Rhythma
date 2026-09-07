@@ -946,4 +946,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logDeleted => 'Log deleted';
+
+  @override
+  String get logWaterIntake => 'Water Intake';
+
+  @override
+  String get logGlasses => 'glasses';
+
+  @override
+  String get logMedications => 'Medications';
+
+  @override
+  String get logAddMedication => 'Add medication';
 }
