@@ -60,16 +60,53 @@ export function daysBetween(a: Date, b: Date): number {
   return Math.round(ms / 86400000);
 }
 
-export function cycleDayFor(date: Date, lastPeriodIso?: string | null): number {
-  if (lastPeriodIso) {
-    const day = daysBetween(parseISODate(lastPeriodIso), date) + 1;
-    if (day >= 1) return day;
-  }
-  // Fallback matches the Flutter app: day-of-month when no last period set.
-  return date.getDate();
+/**
+ * Which day of the cycle `date` falls on, or `null` when that is unknowable.
+ *
+ * This used to answer every question, including the ones it had no basis
+ * for:
+ *
+ * ```ts
+ * if (lastPeriodIso) {
+ *   const day = daysBetween(parseISODate(lastPeriodIso), date) + 1;
+ *   if (day >= 1) return day;
+ * }
+ * // Fallback matches the Flutter app: day-of-month when no last period set.
+ * return date.getDate();
+ * ```
+ *
+ * The comment described one case — no anchor saved — but the code took
+ * that path in two, because `if (day >= 1)` also fails for any date
+ * *before* the anchor. Nothing downstream could tell the difference: a
+ * day-of-month is a perfectly well-formed cycle day, so `phaseFor` took
+ * 3 July as cycle day 3 and painted it as a period (#520).
+ *
+ * `null` is the honest answer in both cases, and it is the same answer
+ * the backend already gives — `prediction_service.predict` returns
+ * `PHASE_UNKNOWN` and null dates rather than inventing an anchor.
+ *
+ * The day-of-month fallback is gone rather than kept for the no-anchor
+ * case. It was just as unfounded there: a user who has logged nothing at
+ * all got the same invented cycle, keyed to the calendar month.
+ */
+export function cycleDayFor(date: Date, lastPeriodIso?: string | null): number | null {
+  if (!lastPeriodIso) return null;
+
+  const day = daysBetween(parseISODate(lastPeriodIso), date) + 1;
+  // Before the anchor. One anchor describes the cycle that started on it
+  // and the ones after; it says nothing about what came before, and
+  // counting backwards through assumed cycles of an assumed length is how
+  // the mobile provider ends up with the problem in #487.
+  return day >= 1 ? day : null;
 }
 
-export type CyclePhase = 'period' | 'follicular' | 'ovulation' | 'luteal' | 'late';
+export type CyclePhase =
+  | 'period'
+  | 'follicular'
+  | 'ovulation'
+  | 'luteal'
+  | 'late'
+  | 'unknown';
 
 /** Population default, used only when nothing better is known. */
 export const DEFAULT_CYCLE_LENGTH = 28;
@@ -114,6 +151,11 @@ export function phaseFor(
   periodDays: number = DEFAULT_PERIOD_DAYS,
 ): CyclePhase {
   const day = cycleDayFor(date, lastPeriodIso);
+  // No anchor, or a date that precedes it. `unknown` is the counterpart to
+  // `late` below: one says the cycle has run past what we know, the other
+  // that it starts before it.
+  if (day === null) return 'unknown';
+
   const length = cycleLength > 0 ? cycleLength : DEFAULT_CYCLE_LENGTH;
   const ovulationDay = length - lutealLengthFor(length);
 
@@ -132,6 +174,13 @@ export const PHASE_COLORS: Record<CyclePhase, string> = {
   // Deliberately muted rather than alarming. Running long is a fact about
   // the log, not a warning.
   late: '#8E8E93',
+  // Lighter still, and the only phase that must not read as a phase. A
+  // cell we know nothing about has to be visibly distinct from a logged
+  // period; painting it in any of the four cycle colours is exactly the
+  // invention #520 is about. A real colour rather than `transparent`,
+  // because the calendar also uses this value for the selected cell's
+  // background and today's border, and both need something to draw.
+  unknown: '#C7C7CC',
 };
 
 export function formatMonthYear(date: Date): string {
