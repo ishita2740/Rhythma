@@ -31,6 +31,16 @@ and the core cycle-tracking product does not. Firestore being mocked is
 *down*. That distinction belongs in the response, not in the head of
 whoever reads it.
 
+That distinction is declared in ``CHECK_SPECS`` and read on every path,
+which it was not always (issue #548). ``required`` used to live only
+inside the ``ComponentHealth`` a check returns, so on the paths where a
+check *didn't* return one — it timed out, or it raised — ``_run_one``
+invented ``required=True``. An optional dependency answering ``degraded``
+kept the instance in rotation; the same dependency hanging took it out.
+Readiness was decided by which branch a failure happened to take, and the
+timeout is three seconds by default, so one slow third party could empty
+the load balancer over a feature most users never touch.
+
 **A health check must not be the thing that hangs.** Every dependency probe
 runs with its own timeout, so a wedged Firestore turns into a fast "down"
 rather than a health endpoint that never answers — which would escalate a
@@ -48,7 +58,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from utils.logger import logger
 
@@ -282,21 +292,78 @@ def check_sms_config() -> ComponentHealth:
     )
 
 
+@dataclass(frozen=True)
+class CheckSpec:
+    """A check, plus the two facts about it that outlive its return value.
+
+    ``required`` used to live only inside the ``ComponentHealth`` each
+    check builds, which meant it existed only on the paths where the
+    check got as far as returning one. On the paths where it did not —
+    it timed out, or it raised — ``_run_one`` had to invent a value, and
+    it invented ``True`` for every check (issue #548). So an optional
+    dependency *returning* ``degraded`` kept the instance in rotation
+    while the same dependency *hanging* took it out, with readiness
+    decided by which branch the failure happened to take.
+
+    Whether a dependency is required is a property of the dependency. It
+    belongs next to the check, where every path can read it, not in one
+    of the check's possible outputs.
+
+    ``name`` is here for the same reason. ``_run_one`` used to recover it
+    from ``check.__name__.replace("check_", "")``, so ``check_auth_config``
+    was reported as ``auth`` when it succeeded and ``auth_config`` when it
+    timed out — one component under two names, depending on how it
+    failed, which is precisely when an operator is grepping for it.
+    """
+
+    name: str
+    required: bool
+    run: Callable[[], ComponentHealth]
+
+
 #: Every check, in the order they are reported. Firestore first because it
 #: is the one that matters; the config checks are cheap and cannot hang.
-CHECKS: List[Callable[[], ComponentHealth]] = [
-    check_firestore,
-    check_auth_config,
-    check_assistant_config,
-    check_sms_config,
-]
+#:
+#: The ``required`` column here is the single source of truth for
+#: readiness. ``test_declared_requiredness_matches_what_each_check_returns``
+#: asserts it against what each check builds, so the two cannot drift.
+CHECK_SPECS: Tuple[CheckSpec, ...] = (
+    CheckSpec("firestore", True, check_firestore),
+    CheckSpec("auth", True, check_auth_config),
+    CheckSpec("assistant", False, check_assistant_config),
+    CheckSpec("sms", False, check_sms_config),
+)
+
+#: The plain callables, in the same order. Kept because it is the shape
+#: this module exported before ``CheckSpec`` existed, and it reads better
+#: than ``[spec.run for spec in CHECK_SPECS]`` at every call site that
+#: only wants to run them.
+CHECKS: List[Callable[[], ComponentHealth]] = [spec.run for spec in CHECK_SPECS]
+
+
+def _spec_for(check: Callable[[], ComponentHealth]) -> CheckSpec:
+    """The declaration for ``check``, or a conservative stand-in.
+
+    A caller passing its own function — a test double, or a check added
+    to a list but not to ``CHECK_SPECS`` — gets ``required=True``. That is
+    the safe direction to be wrong in: a check nobody has classified
+    failing should stop an instance taking traffic, and being noticed, in
+    preference to being silently ignored.
+    """
+    for spec in CHECK_SPECS:
+        if spec.run is check:
+            return spec
+    name = getattr(check, "__name__", "check").replace("check_", "")
+    return CheckSpec(name=name, required=True, run=check)
 
 
 # ─── Running them ─────────────────────────────────────────────────────────
 
 
 def _run_one(
-    check: Callable[[], ComponentHealth], timeout: float
+    check: Callable[[], ComponentHealth],
+    timeout: float,
+    spec: Optional[CheckSpec] = None,
 ) -> ComponentHealth:
     """Run one check, bounded in time and incapable of raising.
 
@@ -319,10 +386,27 @@ def _run_one(
     the whole failure this function exists to prevent, and it is subtle
     enough that ``test_a_hanging_check_becomes_a_result_not_a_hang``
     asserts on elapsed wall-clock rather than on the returned status.
+
+    The ``name`` and ``required`` on the two failure results come from
+    ``spec`` rather than being invented here (issue #548). Both used to
+    be: the name from ``check.__name__``, and ``required`` from a
+    hardcoded ``True``. The second is the one that mattered — it made a
+    *hung* optional probe fail readiness where the same probe *returning*
+    ``down`` would not have, so a slow third party could pull every
+    healthy instance out of rotation on a three-second stopwatch.
     """
+    spec = spec or _spec_for(check)
     started = time.perf_counter()
-    name = getattr(check, "__name__", "check").replace("check_", "")
     pool = ThreadPoolExecutor(max_workers=1)
+
+    def _failed(detail: str) -> ComponentHealth:
+        return ComponentHealth(
+            name=spec.name,
+            status=STATUS_DOWN,
+            required=spec.required,
+            detail=detail,
+            duration_ms=(time.perf_counter() - started) * 1000,
+        )
 
     try:
         result = pool.submit(check).result(timeout=timeout)
@@ -331,27 +415,15 @@ def _run_one(
         return result
     except FutureTimeout:
         pool.shutdown(wait=False, cancel_futures=True)
-        logger.warning(f"Health check {name!r} timed out after {timeout}s")
-        return ComponentHealth(
-            name=name,
-            status=STATUS_DOWN,
-            required=True,
-            detail=f"Check did not respond within {timeout} seconds.",
-            duration_ms=(time.perf_counter() - started) * 1000,
-        )
+        logger.warning(f"Health check {spec.name!r} timed out after {timeout}s")
+        return _failed(f"Check did not respond within {timeout} seconds.")
     except Exception as exc:
         pool.shutdown(wait=False)
         # The exception text is logged, not returned. A raw Google API
         # error carries project ids, collection paths and index-creation
         # URLs — see the reasoning behind `upstream_error` in core/errors.
-        logger.exception(f"Health check {name!r} raised: {exc}")
-        return ComponentHealth(
-            name=name,
-            status=STATUS_DOWN,
-            required=True,
-            detail="Check failed. See server logs for details.",
-            duration_ms=(time.perf_counter() - started) * 1000,
-        )
+        logger.exception(f"Health check {spec.name!r} raised: {exc}")
+        return _failed("Check failed. See server logs for details.")
 
 
 def run_checks(timeout: Optional[float] = None) -> HealthReport:
@@ -363,7 +435,9 @@ def run_checks(timeout: Optional[float] = None) -> HealthReport:
     machinery than a sub-millisecond saving justifies.
     """
     limit = timeout if timeout is not None else DEFAULT_CHECK_TIMEOUT_SECONDS
-    components = [_run_one(check, limit) for check in CHECKS]
+    components = [
+        _run_one(spec.run, limit, spec=spec) for spec in CHECK_SPECS
+    ]
 
     overall = STATUS_OK
     for component in components:
