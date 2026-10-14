@@ -20,14 +20,24 @@ class CalendarGrid extends StatefulWidget {
 }
 
 class _CalendarGridState extends State<CalendarGrid> {
-  DateTime _monthForIndex(int index) {
-    final now = DateTime.now();
-    return DateTime(now.year, now.month + (index - widget.initialPageOffset));
+  /// The month at [index], counted from the month the user is in *now*.
+  ///
+  /// Takes "now" from the provider rather than calling `DateTime.now()`
+  /// here. Two components independently asking the clock is what let the
+  /// grid and the provider disagree about which day it was (issue #539):
+  /// the grid drew today's cell as tappable while the provider — holding a
+  /// day captured at app launch — rejected the tap as a future date, so
+  /// nothing happened at all.
+  DateTime _monthForIndex(int index, DateTime today) {
+    return DateTime(today.year, today.month + (index - widget.initialPageOffset));
   }
 
   @override
   Widget build(BuildContext context) {
     final cycleProvider = context.watch<CycleProvider>();
+    // One answer to "what day is it" for this whole build, resolved fresh
+    // rather than captured at construction.
+    final today = cycleProvider.today;
 
     // Calculate cell width based on screen size, similar to before
     final cellWidth = (MediaQuery.of(context).size.width - 40 - 32) / 7;
@@ -37,7 +47,7 @@ class _CalendarGridState extends State<CalendarGrid> {
       child: PageView.builder(
         controller: widget.pageController,
         onPageChanged: (index) {
-          final month = _monthForIndex(index);
+          final month = _monthForIndex(index, today);
           // Only update if it's different to avoid loops
           if (cycleProvider.displayedMonth.year != month.year ||
               cycleProvider.displayedMonth.month != month.month) {
@@ -46,13 +56,11 @@ class _CalendarGridState extends State<CalendarGrid> {
           }
         },
         itemBuilder: (context, index) {
-          final monthDate = _monthForIndex(index);
+          final monthDate = _monthForIndex(index, today);
           final monthDays =
               DateTime(monthDate.year, monthDate.month + 1, 0).day;
           final firstWeekday =
               DateTime(monthDate.year, monthDate.month, 1).weekday % 7;
-
-          final today = DateTime.now();
 
           return Wrap(
             children: [
@@ -79,9 +87,17 @@ class _CalendarGridState extends State<CalendarGrid> {
 
                 final hasLog = cycleProvider.hasLogsForDate(currentDate);
 
-                final isFuture = currentDate.isAfter(DateTime(today.year, today.month, today.day));
+                // `today` is already midnight-normalised by the provider, so
+                // this compares whole days rather than an instant.
+                final isFuture = currentDate.isAfter(today);
 
                 return GestureDetector(
+                  // Keyed by the date it represents so a test can address
+                  // one specific cell. `find.text('11')` is ambiguous — the
+                  // PageView may have built a neighbouring month that also
+                  // has an 11th — and the whole point of #539 was two
+                  // components disagreeing about which day a cell is.
+                  key: ValueKey(currentDate),
                   onTap: isFuture
                       ? null
                       : () {

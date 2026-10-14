@@ -114,4 +114,81 @@ void main() {
       expect(cycleProvider.hasLogsForDate(unloggedDate), isFalse);
     }
   });
+
+  testWidgets(
+      'the grid takes today from the provider, not its own clock (#539)',
+      (WidgetTester tester) async {
+    // The grid used to call `DateTime.now()` twice of its own — once for
+    // the month axis, once for the today ring and the future check — while
+    // the provider held a day captured at app launch. Two components
+    // independently asking the clock is what let them disagree: the grid
+    // drew today's cell as tappable and the provider rejected the tap as a
+    // future date, so nothing happened at all.
+    //
+    // Driving this through an injected clock is what pins it down. If the
+    // grid goes back to reading the wall clock, `isFuture` starts
+    // disagreeing with the provider again and the tap stops selecting.
+    var now = DateTime(2026, 3, 10, 23, 50);
+    final cycleProvider = CycleProvider(clock: () => now);
+    final pageController = PageController(initialPage: 12000);
+
+    await tester.pumpWidget(buildTestableWidget(
+      cycleProvider: cycleProvider,
+      child: CalendarGrid(
+        pageController: pageController,
+        initialPageOffset: 12000,
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    final eleventh = find.byKey(ValueKey(DateTime(2026, 3, 11)));
+    expect(eleventh, findsOneWidget,
+        reason: 'the grid should render the injected month, not the real one');
+
+    // 11 March is tomorrow: the cell is inert, so the tap lands on a
+    // GestureDetector with a null `onTap`. `warnIfMissed: false` is the
+    // documented way to tap something that may not take the hit — the
+    // assertion is that nothing was selected, not that something absorbed
+    // the gesture.
+    await tester.tap(eleventh, warnIfMissed: false);
+    await tester.pumpAndSettle();
+    expect(cycleProvider.selectedDate, DateTime(2026, 3, 10));
+
+    // Midnight passes with the screen still on top.
+    now = DateTime(2026, 3, 11, 0, 10);
+    cycleProvider.refreshIfDayChanged();
+    await tester.pumpAndSettle();
+
+    // The same cell is now today, and tapping it selects.
+    await tester.tap(find.byKey(ValueKey(DateTime(2026, 3, 11))));
+    await tester.pumpAndSettle();
+    expect(cycleProvider.selectedDate, DateTime(2026, 3, 11));
+  });
+
+  testWidgets('the month axis follows the injected clock (#539)',
+      (WidgetTester tester) async {
+    var now = DateTime(2026, 3, 31, 23, 55);
+    final cycleProvider = CycleProvider(clock: () => now);
+    final pageController = PageController(initialPage: 12000);
+
+    await tester.pumpWidget(buildTestableWidget(
+      cycleProvider: cycleProvider,
+      child: CalendarGrid(
+        pageController: pageController,
+        initialPageOffset: 12000,
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(ValueKey(DateTime(2026, 3, 31))), findsOneWidget);
+
+    now = DateTime(2026, 4, 1, 0, 5);
+    cycleProvider.refreshIfDayChanged();
+    await tester.pumpAndSettle();
+
+    // The page the user is on is derived from today, so it has moved to
+    // April — which has no 31st.
+    expect(find.byKey(ValueKey(DateTime(2026, 4, 30))), findsOneWidget);
+    expect(find.byKey(ValueKey(DateTime(2026, 3, 31))), findsNothing);
+  });
 }
