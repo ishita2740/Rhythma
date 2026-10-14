@@ -8,6 +8,7 @@ import hi from './locales/hi.json';
 import kn from './locales/kn.json';
 import ml from './locales/ml.json';
 import mr from './locales/mr.json';
+import pa from './locales/pa.json';
 import ta from './locales/ta.json';
 import te from './locales/te.json';
 import bn from './locales/bn.json';
@@ -32,6 +33,7 @@ i18n
       kn: { translation: kn },
       ml: { translation: ml },
       mr: { translation: mr },
+      pa: { translation: pa },
       ta: { translation: ta },
       te: { translation: te },
       bn: { translation: bn },
