@@ -426,19 +426,30 @@ async def list_patients(
     The slice is applied to the consents before that fan-out begins, so
     the cost of a page is the size of the page rather than the size of the
     roster.
+
+    ``hasMore`` and ``nextOffset`` both come from how many consents the
+    page consumed, which is not the same as how many summaries it produced
+    — see ``ProviderService.patient_summaries_page`` and issue #538.
     """
     _require_role(current_user, "provider")
-    patients, has_more = ProviderService.patient_summaries_page(
+    page = ProviderService.patient_summaries_page(
         current_user["id"], limit=limit, offset=offset
     )
     return {
-        "patients": patients,
+        "patients": page.summaries,
         "page": {
             "limit": limit,
             "offset": offset,
-            "count": len(patients),
-            "hasMore": has_more,
-            "nextOffset": offset + len(patients) if has_more else None,
+            "count": len(page.summaries),
+            "hasMore": page.has_more,
+            # Straight off the page, not recomputed from the summary list
+            # (issue #538). A consent whose patient has deleted her account
+            # is skipped, so `offset + len(page.summaries)` pointed *behind*
+            # where this page actually stopped — and the next request
+            # re-served consents this one had already consumed, duplicating
+            # cards and writing a second "your data was viewed" row for a
+            # view that happened once.
+            "nextOffset": page.next_offset,
         },
     }
 
