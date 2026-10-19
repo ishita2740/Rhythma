@@ -958,4 +958,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logAddMedication => 'Add medication';
+
+  @override
+  String get exportReportTitle => 'Export Health Report';
+
+  @override
+  String get exportReportSubtitle => 'Generate your health summary as a PDF';
+
+  @override
+  String get exportReportDialogTitle => 'Export Health Report';
+
+  @override
+  String get exportReportDialogSubtitle =>
+      'Customize options for your shareable health summary';
+
+  @override
+  String get exportIncludeAiSummary => 'Include AI Health Summary';
+
+  @override
+  String get exportIncludeAiSummaryDesc =>
+      'Uses Gemini AI to summarize recent cycle patterns. Requires internet.';
+
+  @override
+  String get exportIncludeEmergencyContacts => 'Include Emergency Contacts';
+
+  @override
+  String get exportIncludeEmergencyContactsDesc =>
+      'Disabled by default to protect third-party contact privacy.';
+
+  @override
+  String get exportButton => 'Export PDF';
+
+  @override
+  String get exportReportSuccess => 'Health report generated successfully';
+
+  @override
+  String get exportReportFailed => 'Failed to generate report';
+
+  @override
+  String get exportGenerating => 'Generating report...';
 }

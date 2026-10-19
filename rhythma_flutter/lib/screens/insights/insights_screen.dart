@@ -448,35 +448,13 @@ GlassCard(
       color: RhythmaColors.rose,
       size: 36,
     ),
-    title: const Text('Export Health Report'),
-    subtitle: const Text(
-      'Generate your health summary as a PDF',
-    ),
+    title: Text(l10n.exportReportTitle),
+    subtitle: Text(l10n.exportReportSubtitle),
     trailing: Icon(
       Icons.chevron_right_rounded,
       color: RhythmaColors.mutedFg,
     ),
-    onTap: () async {
-      try {
-        await ReportService.generateAndShareReport();
-
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Health report generated successfully'),
-            ),
-          );
-        }
-      } catch (e) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Report failed: $e'),
-            ),
-          );
-        }
-      }
-    },
+    onTap: () => _showExportOptionsSheet(context, l10n),
   ),
 ),
 
@@ -620,6 +598,212 @@ class _SymptomBar extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  void _showExportOptionsSheet(BuildContext screenContext, AppLocalizations l10n) {
+    bool includeAi = false;
+    bool includeContacts = false;
+    bool isGenerating = false;
+
+    showModalBottomSheet(
+      context: screenContext,
+      isScrollControlled: true,
+      backgroundColor: RhythmaColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (modalContext, setModalState) {
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: RhythmaColors.mutedFg.withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        const TintedIcon(
+                          icon: Icons.picture_as_pdf_rounded,
+                          color: RhythmaColors.rose,
+                          size: 28,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            l10n.exportReportDialogTitle,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: RhythmaColors.foreground,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      l10n.exportReportDialogSubtitle,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: RhythmaColors.mutedFg,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      activeColor: RhythmaColors.rose,
+                      title: Text(
+                        l10n.exportIncludeAiSummary,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: RhythmaColors.foreground,
+                        ),
+                      ),
+                      subtitle: Text(
+                        l10n.exportIncludeAiSummaryDesc,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: RhythmaColors.mutedFg,
+                        ),
+                      ),
+                      value: includeAi,
+                      onChanged: isGenerating
+                          ? null
+                          : (val) => setModalState(() => includeAi = val),
+                    ),
+                    const Divider(height: 16),
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      activeColor: RhythmaColors.rose,
+                      title: Text(
+                        l10n.exportIncludeEmergencyContacts,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: RhythmaColors.foreground,
+                        ),
+                      ),
+                      subtitle: Text(
+                        l10n.exportIncludeEmergencyContactsDesc,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: RhythmaColors.mutedFg,
+                        ),
+                      ),
+                      value: includeContacts,
+                      onChanged: isGenerating
+                          ? null
+                          : (val) => setModalState(() => includeContacts = val),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: isGenerating
+                                ? null
+                                : () => Navigator.of(sheetContext).pop(),
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: Text(l10n.cancel),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: isGenerating
+                                ? null
+                                : () async {
+                                    setModalState(() => isGenerating = true);
+                                    Navigator.of(sheetContext).pop();
+
+                                    if (screenContext.mounted) {
+                                      ScaffoldMessenger.of(screenContext).showSnackBar(
+                                        SnackBar(
+                                          content: Text(l10n.exportGenerating),
+                                          duration: const Duration(seconds: 1),
+                                        ),
+                                      );
+                                    }
+
+                                    try {
+                                      await ReportService.generateAndShareReport(
+                                        includeAiSummary: includeAi,
+                                        includeEmergencyContacts: includeContacts,
+                                        l10n: l10n,
+                                      );
+
+                                      if (mounted && screenContext.mounted) {
+                                        ScaffoldMessenger.of(screenContext)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              l10n.exportReportSuccess,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    } catch (e) {
+                                      if (mounted && screenContext.mounted) {
+                                        ScaffoldMessenger.of(screenContext)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              l10n.exportReportFailed,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: RhythmaColors.rose,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: isGenerating
+                                ? const SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Text(l10n.exportButton),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

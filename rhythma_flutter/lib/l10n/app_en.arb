@@ -407,5 +407,17 @@
   "logWaterIntake": "Water Intake",
   "logGlasses": "glasses",
   "logMedications": "Medications",
-  "logAddMedication": "Add medication"
+  "logAddMedication": "Add medication",
+  "exportReportTitle": "Export Health Report",
+  "exportReportSubtitle": "Generate your health summary as a PDF",
+  "exportReportDialogTitle": "Export Health Report",
+  "exportReportDialogSubtitle": "Customize options for your shareable health summary",
+  "exportIncludeAiSummary": "Include AI Health Summary",
+  "exportIncludeAiSummaryDesc": "Uses Gemini AI to summarize recent cycle patterns. Requires internet.",
+  "exportIncludeEmergencyContacts": "Include Emergency Contacts",
+  "exportIncludeEmergencyContactsDesc": "Disabled by default to protect third-party contact privacy.",
+  "exportButton": "Export PDF",
+  "exportReportSuccess": "Health report generated successfully",
+  "exportReportFailed": "Failed to generate report",
+  "exportGenerating": "Generating report..."
 }
