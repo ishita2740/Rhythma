@@ -173,4 +173,34 @@ void main() {
     final widget = tester.widget<Text>(disclaimerFinder);
     expect(widget.data, isNotEmpty);
   });
+
+  testWidgets(
+      'tapping Export Health Report opens options bottom sheet with AI off by default',
+      (WidgetTester tester) async {
+    await pumpInsightsScreen(tester, dashboard: fullDashboard);
+
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(InsightsScreen)),
+    )!;
+
+    final exportTileFinder = find.text(l10n.exportReportTitle);
+    await tester.ensureVisible(exportTileFinder);
+    await tester.tap(exportTileFinder);
+    await tester.pumpAndSettle();
+
+    expect(find.text(l10n.exportReportDialogTitle), findsWidgets);
+    expect(find.text(l10n.exportIncludeAiSummary), findsOneWidget);
+    expect(find.text(l10n.exportIncludeEmergencyContacts), findsOneWidget);
+
+    final switchFinders = find.byType(Switch);
+    expect(switchFinders, findsNWidgets(2));
+    for (final element in switchFinders.evaluate()) {
+      final switchWidget = element.widget as Switch;
+      expect(switchWidget.value, isFalse);
+    }
+
+    await tester.tap(find.text(l10n.cancel));
+    await tester.pumpAndSettle();
+    expect(find.text(l10n.exportIncludeAiSummary), findsNothing);
+  });
 }

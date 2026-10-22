@@ -1933,6 +1933,81 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add medication'**
   String get logAddMedication;
+
+  /// No description provided for @exportReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Health Report'**
+  String get exportReportTitle => 'Export Health Report';
+
+  /// No description provided for @exportReportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate your health summary as a PDF'**
+  String get exportReportSubtitle => 'Generate your health summary as a PDF';
+
+  /// No description provided for @exportReportDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Health Report'**
+  String get exportReportDialogTitle => 'Export Health Report';
+
+  /// No description provided for @exportReportDialogSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize options for your shareable health summary'**
+  String get exportReportDialogSubtitle =>
+      'Customize options for your shareable health summary';
+
+  /// No description provided for @exportIncludeAiSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Include AI Health Summary'**
+  String get exportIncludeAiSummary => 'Include AI Health Summary';
+
+  /// No description provided for @exportIncludeAiSummaryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses Gemini AI to summarize recent cycle patterns. Requires internet.'**
+  String get exportIncludeAiSummaryDesc =>
+      'Uses Gemini AI to summarize recent cycle patterns. Requires internet.';
+
+  /// No description provided for @exportIncludeEmergencyContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Include Emergency Contacts'**
+  String get exportIncludeEmergencyContacts => 'Include Emergency Contacts';
+
+  /// No description provided for @exportIncludeEmergencyContactsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled by default to protect third-party contact privacy.'**
+  String get exportIncludeEmergencyContactsDesc =>
+      'Disabled by default to protect third-party contact privacy.';
+
+  /// No description provided for @exportButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Export PDF'**
+  String get exportButton => 'Export PDF';
+
+  /// No description provided for @exportReportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Health report generated successfully'**
+  String get exportReportSuccess => 'Health report generated successfully';
+
+  /// No description provided for @exportReportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to generate report'**
+  String get exportReportFailed => 'Failed to generate report';
+
+  /// No description provided for @exportGenerating.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating report...'**
+  String get exportGenerating => 'Generating report...';
 }
 
 class _AppLocalizationsDelegate
