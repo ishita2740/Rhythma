@@ -6,7 +6,7 @@
 
 **A multilingual, offline-first, AI-powered menstrual & women's health companion — built from the ground up for Indian women.**
 
-[![Flutter](https://img.shields.io/badge/Flutter-3.x-blue?logo=flutter)](https://flutter.dev) [![FastAPI](https://img.shields.io/badge/FastAPI-0.111-green?logo=fastapi)](https://fastapi.tiangolo.com) [![Gemini API](https://img.shields.io/badge/Gemini-API-orange?logo=google)](https://ai.google.dev) [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](https://github.com/ishita2740/Rhythma/blob/main/LICENSE) [![Status](https://img.shields.io/badge/Status-Active%20Development-yellow)](#project-status)
+[![Flutter](https://img.shields.io/badge/Flutter-3.x-blue?logo=flutter)](https://flutter.dev) [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-green?logo=fastapi)](https://fastapi.tiangolo.com) [![Gemini API](https://img.shields.io/badge/Gemini-API-orange?logo=google)](https://ai.google.dev) [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](https://github.com/ishita2740/Rhythma/blob/main/LICENSE) [![Status](https://img.shields.io/badge/Status-Active%20Development-yellow)](#project-status)[![NSoC](https://img.shields.io/badge/Nexus%20Spring%20of%20Code-Participating-blueviolet)](#nexus-spring-of-code)
 
 ---
 
@@ -51,7 +51,7 @@
 
 ## ✨ What Rhythma Does
 
-Rhythma helps women **understand, track, and act** on their health privately, in their own language. Users log cycles, symptoms, mood, sleep, and lifestyle habits; Rhythma turns that data into personalized, on-device health insights instead of just raw charts.
+Rhythma helps women **understand, track, and act** on their health privately, in their own language. Users log cycles, symptoms, mood, sleep, and lifestyle habits; Rhythma turns that data into personalized health insights instead of just raw charts.
 
 Rhythma aims to be an offline-first, multilingual women's health companion for tier-2 and tier-3 Indian cities — supporting cycle tracking, an AI health assistant, and personalized wellness scoring in regional languages.
 
@@ -80,10 +80,10 @@ Rhythma is designed to grow into support for multiple groups of Indian women, ea
 
 | **Feature** | **Details** |
 | --- | --- |
-| **Languages** | Hindi, Marathi, Tamil, Telugu, English — more planned |
+| **Languages** | 17 Indian languages plus English (translation files in `rhythma_flutter/lib/l10n/`) |
 | **Cycle Metrics** | Factual cycle statistics (averages, shortest/longest cycles) and consistency trends |
 | **Connectivity** | Offline-first; core features work with zero internet, sync when available |
-| **Privacy** | 100% on-device processing and storage by default |
+| **Privacy** | Data stored encrypted on-device by default; cloud sync is opt-in |
 
 Contributors working on onboarding flows, content, or accessibility should keep these different personas in mind, especially the gap between the adult-focused experience and the teen-focused one.
 
@@ -146,18 +146,18 @@ The public landing page is live at **[rhythma-navy.vercel.app](https://rhythma-n
 | 📊 Cycle Variability Index (CVI)      | ✅     | Trained XGBoost model shipped in-repo, with a documented heuristic fallback.             |
 | ❤️ Menstrual Health Score (MHS)      | 🟡     | Live today as a hand-written weighted average (CVI + sleep + stress + symptoms + lifestyle). The planned Logistic Regression ensemble is not built yet, and the lifestyle component silently falls back to a default score until profile fields land (#112). |
 | 🏥 Hormonal Risk Indicator            | ✅     | 3-tier (Low/Medium/High) alerting derived from CVI.                                       |
-| 📱 Offline-First Architecture         | 🟡     | Hive local storage + Firestore sync and a sync-status indicator are implemented; automatic queue-and-retry on reconnect is not yet built (#229). |
+| 📱 Offline-First Architecture         | ✅     | Hive local storage, Firestore sync, a sync-status indicator, and automatic replay of queued writes on reconnect (`flushPendingQueue`). |
 | 🔒 Privacy-First Design               | ✅     | Auth, password policy, rate limiting, and a dedicated data-privacy/export service are implemented server-side. |
-| 🌍 Indian Regional Languages          | 🟡     | 17 languages have translation files, far beyond the 3 originally announced — but 4 of the `.arb` files (`hi`, `mr`, `ta`, `te`) currently contain invalid JSON (duplicate/malformed entries) that will break `flutter gen-l10n` codegen until fixed. The base `app_en.arb` file is valid. |
+| 🌍 Indian Regional Languages          | ✅     | 17 languages have valid `.arb` translation files plus English. Translation completeness varies by language. |
 | 📩 SMS Health Summaries               | ✅     | Real Twilio `Client` integration, gated on optional env credentials.                     |
 | 🌿 Ayurvedic Correlation Layer        | ✅     | Educational wellness content layer merged (PR #436).                                     |
 | 💬 WhatsApp / Telegram Bot            | ✅     | Full chat-linking + command engine (`status`, `link`, `unlink`, `help`) implemented — well ahead of the old roadmap's "Phase 4" label. |
 | 🩺 Provider Portal                    | ✅     | Provider registration/login, patient consent, access logs, and patient list endpoints are implemented server-side — most of the old "Phase 5" scope. |
 | 📄 PDF Health Report Export           | ✅     | Implemented client-side in Flutter via `pdf`/`printing`.                                 |
-| 🌐 Web Application                    | 🟡     | Real Vite + React + TypeScript app exists with its own auth flow and test suite — it is not "planned," but it's missing feature-parity pages (#247) and has no CI workflow yet (#248). |
+| 🌐 Web Application                    | ✅     | Vite + React + TypeScript app with auth, cycle tracking, AI Assistant, Insights, Profile, SMS, data-privacy and provider pages, a test suite, and CI (`web.yml`). |
  
 ---
-> **ML models run entirely on-device.** No sensitive health data leaves the phone unless the user explicitly enables cloud sync.
+> **Privacy:** Cycle data is stored on-device (encrypted Hive) by default and only syncs to the cloud if the user enables cloud sync. CVI/MHS scoring and the AI assistant run on the backend.
 
 ---
 
@@ -177,33 +177,36 @@ The public landing page is live at **[rhythma-navy.vercel.app](https://rhythma-n
 | firebase_core / cloud_firestore / firebase_auth | ^3.3.0 / ^5.2.1 / ^5.1.3 | Cloud sync | Initialized in `main.dart` (`Firebase.initializeApp()`) and wired to `FirestoreService` for client-side offline-first sync — see [Flutter Client Firebase Setup](#flutter-client-firebase-setup-client-side-firestore-sync) |
 | encrypt | ^5.0.3 | Local encryption | Present |
 | fl_chart | ^0.68.0 | Charts | Used in `components/charts.dart` |
-| flutter_localizations / intl | — / ^0.20.2 | i18n | Used, 5 languages generated |
+| flutter_localizations / intl | — / ^0.20.2 | i18n | Used, 17 languages generated |
 | permission_handler | ^12.0.3 | Runtime permissions | Used by notification service |
 | connectivity_plus | ^6.0.3 | Network state | Used in `firestore_service.dart` to detect connectivity and auto-trigger sync on restore |
 | shared_preferences | ^2.3.2 | Lightweight key-value storage | Present |
 | url_launcher | ^6.3.0 | Open external links | Present |
-| flutter_local_notifications / timezone | ^22.0.1 / ^0.11.1 | Local notifications | Used, but only wired to manual Settings toggles |
+| flutter_local_notifications / timezone | ^22.0.1 / ^0.11.1 | Local notifications | Used for period-prediction and logging reminders, plus Settings toggles |
 | email_validator | ^3.0.0 | Form validation | Present |
 | flutter_lints | ^4.0.0 (dev) | Linting | Used in CI |
 
 ### Backend — `backend/` (`requirements.txt`)
-| Package | Version | Purpose |
+Dependencies use minimum-version floors (`>=`), not exact pins.
+
+| Package | Minimum version | Purpose |
 |---|---|---|
-| fastapi | 0.111.0 | Web framework |
-| uvicorn[standard] | 0.30.1 | ASGI server |
-| pydantic / pydantic-settings | 2.7.4 / 2.3.3 | Validation |
-| firebase-admin | 6.5.0 | Server-side Firestore access |
-| google-generativeai | 0.7.2 | Gemini API (model: `models/gemini-2.5-flash`, hardcoded in `assistant.py`) |
-| xgboost | 2.0.3 | Used in experimental CVI scoring models (repointed to research-branch) |
-| scikit-learn | 1.5.0 | Used in experimental MHS scoring models (repointed to research-branch) |
-| numpy / pandas / joblib | 1.26.4 / 2.2.2 / 1.4.2 | Data handling / model I/O |
-| twilio | 9.2.3 | SMS delivery — real integration in `sms.py` |
-| python-jose[cryptography] | 3.3.0 | JWT |
-| passlib[bcrypt] / bcrypt | 1.7.4 / 4.1.3 | Password hashing |
-| httpx | 0.27.0 | Async HTTP client |
-| python-dotenv | 1.0.1 | Env config |
-| loguru | 0.7.2 | Logging |
-| pytest / pytest-asyncio | 8.2.2 / 0.23.7 | Testing (1 backend test file, auth only) |
+| fastapi | 0.115 | Web framework |
+| uvicorn[standard] | 0.30 | ASGI server |
+| pydantic / pydantic-settings | 2.9 / 2.5 | Validation |
+| firebase-admin | 6.6 | Server-side Firestore access |
+| google-generativeai | 0.8.3 | Gemini API (model: `models/gemini-2.5-flash`, hardcoded in `assistant.py`) |
+| google-api-core / grpcio / protobuf | 2.20 / 1.66 / 5.28 | Firestore errors; bounded to keep pip resolution shallow |
+| xgboost | 2.1 | CVI scoring model |
+| scikit-learn | 1.5 | ML utilities |
+| numpy / pandas / joblib | 1.26 / 2.2 / 1.4 | Data handling / model I/O |
+| twilio | 9.3 | SMS delivery — real integration in `sms.py` |
+| python-jose[cryptography] | 3.3 | JWT |
+| passlib[bcrypt] / bcrypt | 1.7.4 / 4.2 | Password hashing |
+| httpx | 0.27 | Async HTTP client |
+| python-dotenv | 1.0 | Env config |
+| loguru | 0.7 | Logging |
+| pytest / pytest-asyncio | 8.3 / 0.24 | Testing (54 test files) |
 
 ### Web App — `web/` (React, separate from landing page)
 React 19.2, Vite 8, TypeScript 6, react-router-dom 7, i18next + react-i18next + browser language detector, axios. No UI component library, no chart library yet.
@@ -212,17 +215,14 @@ React 19.2, Vite 8, TypeScript 6, react-router-dom 7, i18next + react-i18next + 
 Next.js 16, React 19, Tailwind CSS 4, shadcn/ui, class-variance-authority, lucide-react, @vercel/analytics. Deployed at `rhythma-navy.vercel.app`.
 
 ### CI/CD — `.github/workflows/`
-GitHub Actions already configured for **backend** (`pytest`, path-filtered) and **Flutter** (`flutter analyze` + `flutter test`, path-filtered). No workflow yet for `web/` or `landing-page/`.
+GitHub Actions is configured for **backend** (`pytest`), **Flutter** (`flutter analyze` + `flutter test`), **web** (`web.yml`) and **landing page** (`landing-page.yml`), all path-filtered.
 
 ---
 
 ## ⚠️ Known Issues (verified against current code)
- 
-- **Broken localization JSON**: `app_hi.arb`, `app_mr.arb`, `app_ta.arb`, and `app_te.arb` contain a duplicated/malformed entry that makes them invalid JSON — this will break Flutter's ARB-based codegen until fixed. (`app_en.arb`, the base English file, is now valid.)
-- **Cycle phase display bug**: `CycleProvider.phaseKey()` in `rhythma_flutter/lib/providers/cycle_provider.dart` computes the menstrual phase from the **calendar day of month** (`date.day`) instead of the user's actual cycle day, and is used by `cycle_screen.dart`. A separate, correct method (`phase()`, scaled to the user's real cycle length) exists in the same file but isn't the one wired into the Cycle screen.
-- **MHS is not yet ML-based**: despite the original "Logistic Regression" description, it currently runs as a documented hand-written weighted average, with the lifestyle sub-score defaulting to a flat fallback value until profile fields ship (#112).
-- **No offline auto-retry queue** (#229): the sync-status indicator exists, but reconnect-triggered replay of queued writes does not yet.
-- **Web app missing parity pages and CI** (#247, #248).
+
+- **MHS is not yet ML-based**: despite the original "Logistic Regression" description, it currently runs as a documented hand-written weighted average, with the lifestyle sub-score defaulting to a flat 70.0 until profile fields ship (#112).
+- **Landing page "Get Started" button** has an empty `href` and goes nowhere.
 
 ---
 
@@ -244,13 +244,13 @@ Legend: ✅ **Done** (real, working, verified against source) · 🟡 **Partial*
 | Insights / scores (`GET /insights/scores`) | ✅ | Calls the shared scoring service, which itself calls the CVI and MHS models — **these are exposed to the client**, not backend-only research code |
 | CVI model | ✅ | Trained XGBoost model shipped (`cvi_model.joblib`), heuristic fallback if the file is missing |
 | MHS model | 🟡 | Hand-written weighted composite, not the planned Logistic Regression ensemble; lifestyle sub-score defaults to a flat 70.0 until profile fields land (#112) |
-| AI Assistant (`POST /assistant/chat`) | 🟡 | Real Gemini call, real system prompt; conversation history is client-passed only (not persisted server-side), and it isn't grounded in a sourced medical dataset |
+| AI Assistant (`POST /assistant/chat`) | 🟡 | Real Gemini call, real system prompt; conversation history is persisted in Firestore (client-sent history is only a fallback). Not grounded in a sourced medical dataset |
 | SMS (`api/sms.py`) | ✅ | Real Twilio client, real rate limiting and phone validation |
 | WhatsApp/Telegram bot | ✅ | `api/bot.py` (280 lines) + `services/chatbot_service.py` (246 lines) — full webhook handling, chat-linking, and a command engine (`status`, `link`, `unlink`, `help`) |
 | Provider portal | ✅ | Register/login, consent grant/list/revoke, access log, patient list/detail |
 | Health check endpoint | ✅ | Wired into `main.py`, distinguishes mock-mode from real Firestore |
 | CORS config | 🟡 | Configurable via `ALLOWED_ORIGINS` env var, sane localhost defaults for dev — worth confirming this is actually set for prod deploys |
-| Backend test coverage | ✅ | 42 test modules across auth, cycle, dashboard, insights, CVI/MHS, SMS, bot, provider, privacy |
+| Backend test coverage | ✅ | 54 test files across auth, cycle, dashboard, insights, CVI/MHS, SMS, bot, provider, privacy |
 | API documentation (OpenAPI descriptions) | 🟡 | `/docs` auto-generates; several routes still lack full descriptions/response models (#245) |
  
 ### Mobile (Flutter)
@@ -263,14 +263,14 @@ Legend: ✅ **Done** (real, working, verified against source) · 🟡 **Partial*
 | Encryption at rest | ✅ | Hive boxes are opened with `HiveAesCipher`, not just listed as a dependency |
 | Firestore sync | ✅ | Offline-first via Hive, syncs when online |
 | Sync status indicator | ✅ | `SyncStatusProvider` — synced/syncing/pending/offline/error |
-| Automatic reconnect-and-retry queue | 🟡 | Status is tracked and shown; automatic replay of queued writes on reconnect isn't built yet (#229) |
+| Automatic reconnect-and-retry queue | ✅ | Pending writes are queued in Hive and flushed when connectivity returns |
+| Cycle phase calculation | ✅ | `phaseKey()` and `phase()` both use the user's actual cycle day and cycle length |
+| Localization — 17 Indian languages + English | ✅ | All 17 `.arb` files are valid JSON and generate localization classes |
+| Widget/unit tests | ✅ | 31 test files |
 | Local notifications | ✅ | `notification_service.dart` is wired to **both** period-prediction reminders and logging reminders, plus manual toggles in Settings |
 | First-period / age-gated onboarding | ✅ | `screens/education/first_period_education_screen.dart` exists as a dedicated flow |
 | Ayurvedic correlation content | ✅ | `lib/data/ayurveda_content.dart` — real content, merged via PR #436 |
-| Cycle phase calculation | 🟡 | Two implementations exist: `phase()` correctly scales to cycle length; `phaseKey()` — the one actually used by the Cycle screen — buggily uses calendar day-of-month instead |
-| Localization — 17 Indian languages + English | 🟡 | Real `.arb` files for all 17; `hi`, `mr`, `ta`, and `te` contain malformed JSON that will break `flutter gen-l10n` until fixed. The base English file is valid |
 | PDF report export | ✅ | `pw.Document` via `pdf`/`printing` |
-| Widget/unit tests | ✅ | 25 test files |
  
 ### Web (`web/` — React + TS + Vite)
  
@@ -281,7 +281,7 @@ Legend: ✅ **Done** (real, working, verified against source) · 🟡 **Partial*
 | Home / Dashboard, Cycle, Assistant, Insights, Profile, Settings, SMS, Data Privacy, Sharing pages | ✅ | All exist with real implementations (100–489 lines each), not placeholders |
 | Provider portal pages | ✅ | Login, register, dashboard, patient detail |
 | i18n setup | ✅ | Configured |
-| Test suite | ✅ | 34 test files, mocking at the API-client boundary and asserting on URL/payload |
+| Test suite | ✅ | 39 test files, mocking at the API-client boundary and asserting on URL/payload |
 | CI | ✅ | `.github/workflows/web.yml` exists |
  
 ### Landing Page (`landing-page/` — Next.js)
@@ -307,106 +307,43 @@ Legend: ✅ **Done** (real, working, verified against source) · 🟡 **Partial*
 
 ## Folder Structure
 
-```
-## 📂 Repository Structure
-
 ```text
 Rhythma/
 ├── backend/                              # FastAPI backend
-│   ├── api/                              # API routes
-│   │   ├── assistant/
-│   │   ├── bot/
-│   │   ├── cycle/
-│   │   ├── dashboard/
-│   │   ├── health/
-│   │   ├── insights/
-│   │   ├── privacy/
-│   │   ├── provider/
-│   │   └── sms/
-│   │
-│   ├── core/                             # Authentication, middleware, security & validation
+│   ├── api/                              # Route modules
+│   │   ├── assistant.py
+│   │   ├── bot.py
+│   │   ├── cycle.py
+│   │   ├── dashboard.py
+│   │   ├── health.py
+│   │   ├── insights.py
+│   │   ├── privacy.py
+│   │   ├── provider.py
+│   │   └── sms.py
+│   ├── core/                             # Auth, middleware, security & validation
 │   ├── data/                             # Medical reference datasets
-│   ├── models/                           # ML models & database models
+│   ├── models/                           # CVI/MHS models & user model
 │   ├── scripts/                          # Utility & training scripts
 │   ├── services/                         # Business logic & AI services
-│   ├── tests/                            # 42 backend test modules
-│   └── main.py                           # FastAPI application entrypoint
+│   ├── utils/                            # Shared helpers
+│   ├── tests/                            # 54 backend test files
+│   └── main.py                           # FastAPI entrypoint
 │
-├── rhythma_flutter/                      # Flutter mobile application
-│   ├── lib/
-│   │   ├── components/                   # Shared reusable widgets
-│   │   ├── config/                       # App configuration
-│   │   ├── data/                         # Static datasets (Ayurveda, etc.)
-│   │   ├── l10n/                         # 17 Indian language localizations
-│   │   ├── models/
-│   │   ├── providers/                    # State management
-│   │   ├── screens/
-│   │   │   ├── assistant/
-│   │   │   ├── auth/
-│   │   │   ├── cycle/
-│   │   │   ├── education/
-│   │   │   ├── home/
-│   │   │   ├── insights/
-│   │   │   ├── onboarding/
-│   │   │   ├── profile/
-│   │   │   ├── settings/
-│   │   │   └── sms/
-│   │   ├── services/                     # Storage, Firebase, notifications, reports
-│   │   ├── utils/
-│   │   └── main.dart
-│   └── test/                             # Flutter test suite (25 tests)
+├── rhythma_flutter/
+│   ├── lib/ ...                          
+│   └── test/                             # 31 test files
 │
-├── web/                                  # React + TypeScript + Vite application
-│   └── src/
-│       ├── api/
-│       ├── auth/
-│       ├── components/
-│       ├── i18n/
-│       ├── lib/
-│       ├── pages/
-│       │   ├── AssistantPage
-│       │   ├── CyclePage
-│       │   ├── DataPrivacyPage
-│       │   ├── HomePage
-│       │   ├── InsightsPage
-│       │   ├── LoginPage
-│       │   ├── ProfilePage
-│       │   ├── ProviderPages
-│       │   ├── SettingsPage
-│       │   ├── SharingPage
-│       │   └── SmsPage
-│       └── test/
-│
-├── landing-page/                         # Next.js marketing website
-│   └── app/
-│       ├── layout.tsx
-│       ├── page.tsx
-│       └── globals.css
-│
-├── docs/                                 # Project documentation
-│   ├── architecture.md
-│   ├── auth_refresh.md
-│   ├── deploy_backend.md
-│   ├── health-and-readiness.md
-│   ├── health-disclaimers.md
-│   ├── medical_sources.md
-│   ├── menstrual_insights_guidelines.md
-│   ├── phone_auth.md
-│   └── Rhythma_Blog.docx
-│
-├── .github/
-│   └── workflows/
-│       ├── backend.yml
-│       ├── flutter.yml
-│       ├── landing-page.yml
-│       └── web.yml
-│
-├── design-concepts/                      # UI prototypes & demo videos
-├── screenshots/                          # App screenshots
-├── requirements.txt                      # Python dependencies
+├── web/                                  
+├── landing-page/                        
+├── docs/                                 
+├── .github/workflows/                    # backend, flutter, landing-page, web
+├── design-concepts/
+├── screenshots/
+├── requirements.txt
 ├── LICENSE
 └── README.md
 ```
+
 ## Installation
 
 ### Prerequisites
@@ -570,14 +507,17 @@ This enables:
 
 ## Future Features
 
-These are explicitly **not built yet** — flagged here so contributors know what's scoped as future work rather than a current gap in an existing feature:
+These are **not built yet**:
 
-- **First Period Guidance** — a simplified, age-appropriate onboarding and education flow for first-time users (12–17), distinct from the current adult-focused onboarding (`onboarding_screen.dart`). Tracked in issue #42.
-- **WhatsApp Bot** — a Gemini-powered WhatsApp assistant via Twilio/Meta Cloud API, so users on shared or low-end devices can track cycles and ask health questions without installing the app. No code for this exists anywhere in the repo yet.
-- **Website feature parity** — cycle tracking, AI Assistant, and Insights pages for `web/`, matching what the Flutter app already does. Auth and scaffolding exist today; the feature pages don't.
-- **Ayurvedic correlation content** — the educational content layer connecting lifestyle/cycle data to Ayurvedic wellness concepts. Tracked in issue #43; no content assets exist yet.
-- **Provider-facing view** — a dashboard for healthcare professionals to view (consenting) patients' longitudinal health data.
+- **Regional language WhatsApp/Telegram expansion** — the bot's command engine exists (`status`, `link`, `unlink`, `help`); a full Gemini-powered conversational assistant over WhatsApp does not.
 - **India regional health map** — an anonymized, aggregated PCOD/PCOS risk heatmap for public-health and NGO use.
+- **ML-based MHS** — replacing the weighted-average score with the planned Logistic Regression ensemble (#112).
+
+---
+
+## Nexus Spring of Code
+
+Rhythma is an official participating project in **Nexus Spring of Code (NSoC)**. NSoC contributors are welcome to pick up issues from the [Project Status](#project-status) tables, and should read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
 ---
 
@@ -588,6 +528,7 @@ Contributions are very welcome — code, docs, translations, design, and bug rep
 Please read **[CONTRIBUTING.md](CONTRIBUTING.md)** before opening an issue or pull request. It covers project setup, branch naming, commit conventions, coding style, and the PR workflow in detail.
 
 If you're looking for a place to start, the [Project Status](#project-status) tables above double as a task list: anything marked ❌ or 🟡 is fair game.
+
 ---
 
 ## License
@@ -609,7 +550,7 @@ This project is licensed under the MIT License. See [LICENSE](https://github.com
 
 ## Disclaimer
 
-Rhythma is intended for **educational and preventive health awareness** purposes only. It is not a certified medical device and does not provide medical diagnoses, prescriptions, or treatment recommendations. The cycle statistics and consistency observations provided by the application are for informational purposes only. The CVI and MHS models are legacy/experimental concepts under research and are not active user-facing features of the primary application. Any future Ayurvedic content will be educational and non-prescriptive, not a substitute for medical advice. Always consult a qualified healthcare professional for medical advice.
+Rhythma is intended for **educational and preventive health awareness** purposes only. It is not a certified medical device and does not provide medical diagnoses, prescriptions, or treatment recommendations. The cycle statistics and consistency observations provided by the application are for informational purposes only. The CVI and MHS scores are experimental indicators for awareness only and are not diagnostic. The Ayurvedic content is educational and non-prescriptive, not a substitute for medical advice. Always consult a qualified healthcare professional for medical advice.
 
 ---
 
